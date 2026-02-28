@@ -4,10 +4,15 @@ namespace EventManager
 {
     public static class DependenciesInjection
     {
-        public static IServiceCollection AddScoppedServices(this IServiceCollection services)
+        public static IServiceCollection AddScopedDependencies(this IServiceCollection services)
+        {
+            return services.AddScopedServices();
+        }
+
+        private static IServiceCollection AddScopedServices(this IServiceCollection services)
         {
             return services
-                .AddScoped<IEventService, EventService>();
+               .AddScoped<IEventsService, EventsService>();
         }
     }
 }
