@@ -11,5 +11,33 @@ namespace EventManager.Services.Events
         /// <param name="request"></param>
         /// <returns></returns>
         public Task<Result> AddNew(NewEventDto request);
+
+        /// <summary>
+        /// Returns all Events from database
+        /// </summary>
+        /// <returns></returns>
+        public Task<IEnumerable<GetEventDto>> GetEvents();
+
+        /// <summary>
+        /// Returns event by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Task<Result> GetEventById(Guid id);
+
+        /// <summary>
+        /// Deletes event from database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Task<Result> Delete(Guid id);
+
+        /// <summary>
+        /// Updates every field of event
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="putEvent"></param>
+        /// <returns></returns>
+        public Task<(Result, int)> UpdateByPut(Guid id, NewEventDto putEvent);
     }
 }

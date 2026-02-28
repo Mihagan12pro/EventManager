@@ -32,5 +32,75 @@ namespace EventManager.Services.Events
 
             return new Result(true, null!);
         }
+
+        public async Task<Result> Delete(Guid id)
+        {
+            Event? eventById = _events.FirstOrDefault(e => e.Id == id);
+
+            if (eventById == null)
+                return new Result(false, $"Event with id = '{id}' was not found!");
+
+            _events.Remove(eventById);
+
+            return new Result(true, "Event had been deleted!");
+        }
+
+        public async Task<Result> GetEventById(Guid id)
+        {
+            Event? eventById = _events.FirstOrDefault(e => e.Id == id);
+
+            if (eventById == null)
+            {
+                return new Result(false, $"Event with id = '{id}' was not found!");
+            }
+
+            GetEventDto eventDto = new GetEventDto(
+                eventById.Title,
+                eventById.StartAt, 
+                eventById.EndAt,
+                eventById.Description);
+
+            return new Result(true, eventDto);
+        }
+
+        public async Task<IEnumerable<GetEventDto>> GetEvents()
+        {
+            var events = _events.Select(
+                e => new GetEventDto(
+                    e.Title, 
+                    e.StartAt,
+                    e.EndAt,
+                    e.Description))
+                .ToArray();
+
+            return events;
+        }
+
+        public async Task<(Result, int)> UpdateByPut(Guid id, NewEventDto putEvent)
+        {
+            Event? eventById = _events.FirstOrDefault(e => e.Id == id);
+
+            if (eventById == null)
+                return (new Result(
+                    false, 
+                    $"Event with id = '{id}' was not found!"),
+                    404);
+
+            if (putEvent.StartAt >= putEvent.EndAt)
+                return (new Result(
+                    false,
+                    $"End time must be greater than start time!"),
+                    400);
+
+            eventById.StartAt = putEvent.StartAt;
+            eventById.EndAt = putEvent.EndAt;
+            eventById.Title = putEvent.Title;
+            eventById.Description = putEvent.Description;
+
+            return (new Result(
+                true,
+                $"Event had been updated!"),
+                200);
+        }
     }
 }
