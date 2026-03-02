@@ -15,22 +15,23 @@ namespace EventManager.Services.Events
                 return new Result(false, "End time must be greater than start time!");
             }
 
-            Event createdEvent = new Event() 
-            {
-                Id = Guid.NewGuid(),
+            //Event createdEvent = new Event() 
+            //{
+            //    Id = Guid.NewGuid(),
 
-                Title = request.Title,
+            //    Title = request.Title,
 
-                StartAt = request.StartAt,
+            //    StartAt = request.StartAt,
 
-                EndAt = request.EndAt,
+            //    EndAt = request.EndAt,
 
-                Description = request.Description
-            };
+            //    Description = request.Description
+            //};
 
-            _events.Add(createdEvent);
+            //_events.Add(createdEvent);
 
-            return new Result(true, createdEvent.Id);
+            //return new Result(true, createdEvent.Id);
+            return new Result(true, Guid.NewGuid());
         }
 
         public async Task<Result> Delete(Guid id)
@@ -84,10 +85,10 @@ namespace EventManager.Services.Events
                     $"End time must be greater than start time!"),
                     400);
 
-            eventById.StartAt = putEvent.StartAt;
-            eventById.EndAt = putEvent.EndAt;
-            eventById.Title = putEvent.Title;
-            eventById.Description = putEvent.Description;
+            //eventById.StartAt = putEvent.StartAt;
+            //eventById.EndAt = putEvent.EndAt;
+            //eventById.Title = putEvent.Title;
+            //eventById.Description = putEvent.Description;
 
             return (new Result(
                 true,

@@ -1,8 +1,12 @@
-﻿namespace EventManager.DTOs.Events
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
+
+namespace EventManager.DTOs.Events
 {
     public record NewEventDto(
         string Title,
-        DateTime StartAt,
-        DateTime EndAt, 
+        [Required]DateTime? StartAt,
+        [Required]DateTime? EndAt, 
         string Description = "");
 }
