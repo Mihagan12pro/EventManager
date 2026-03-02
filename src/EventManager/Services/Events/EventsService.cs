@@ -15,23 +15,22 @@ namespace EventManager.Services.Events
                 return new Result(false, "End time must be greater than start time!");
             }
 
-            //Event createdEvent = new Event() 
-            //{
-            //    Id = Guid.NewGuid(),
+            Event createdEvent = new Event()
+            {
+                Id = Guid.NewGuid(),
 
-            //    Title = request.Title,
+                Title = request.Title,
 
-            //    StartAt = request.StartAt,
+                StartAt = request.StartAt!.Value,
 
-            //    EndAt = request.EndAt,
+                EndAt = request.EndAt!.Value,
 
-            //    Description = request.Description
-            //};
+                Description = request.Description
+            };
 
-            //_events.Add(createdEvent);
+            _events.Add(createdEvent);
 
-            //return new Result(true, createdEvent.Id);
-            return new Result(true, Guid.NewGuid());
+            return new Result(true, createdEvent.Id);
         }
 
         public async Task<Result> Delete(Guid id)
