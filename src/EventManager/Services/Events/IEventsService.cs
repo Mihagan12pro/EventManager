@@ -16,7 +16,7 @@ namespace EventManager.Services.Events
         /// Returns all Events from database
         /// </summary>
         /// <returns></returns>
-        public Task<IEnumerable<GetEventDto>> GetEvents();
+        public Task<Result> GetEvents();
 
         /// <summary>
         /// Returns event by id

@@ -30,7 +30,7 @@ namespace EventManager.Services.Events
 
             _events.Add(createdEvent);
 
-            return new Result(true, null!);
+            return new Result(true, createdEvent.Id);
         }
 
         public async Task<Result> Delete(Guid id)
@@ -63,17 +63,9 @@ namespace EventManager.Services.Events
             return new Result(true, eventDto);
         }
 
-        public async Task<IEnumerable<GetEventDto>> GetEvents()
+        public async Task<Result> GetEvents()
         {
-            var events = _events.Select(
-                e => new GetEventDto(
-                    e.Title, 
-                    e.StartAt,
-                    e.EndAt,
-                    e.Description))
-                .ToArray();
-
-            return events;
+            return new Result(true, _events.AsReadOnly());
         }
 
         public async Task<(Result, int)> UpdateByPut(Guid id, NewEventDto putEvent)

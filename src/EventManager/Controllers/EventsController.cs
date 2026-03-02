@@ -18,7 +18,7 @@ namespace EventManager.Controllers
             Result result = await _eventService.AddNew(newEvent);
 
             if (result.IsSuccess)
-                return Created();
+                return Ok(result.Output);
 
             return BadRequest(result.Output);
         }
