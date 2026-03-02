@@ -84,10 +84,10 @@ namespace EventManager.Services.Events
                     $"End time must be greater than start time!"),
                     400);
 
-            //eventById.StartAt = putEvent.StartAt;
-            //eventById.EndAt = putEvent.EndAt;
-            //eventById.Title = putEvent.Title;
-            //eventById.Description = putEvent.Description;
+            eventById.StartAt = putEvent.StartAt!.Value;
+            eventById.EndAt = putEvent.EndAt!.Value;
+            eventById.Title = putEvent.Title;
+            eventById.Description = putEvent.Description;
 
             return (new Result(
                 true,
