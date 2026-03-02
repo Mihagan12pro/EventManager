@@ -1,13 +1,12 @@
 ﻿using EventManager.DTOs.Events;
 using EventManager.Services.Events;
 using EventManager.Shared;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventManager.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("/[controller]")]
     public class EventsController : ControllerBase
     {
         private readonly IEventsService _eventService;
