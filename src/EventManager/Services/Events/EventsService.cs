@@ -63,9 +63,9 @@ namespace EventManager.Services.Events
             return new Result(true, eventDto);
         }
 
-        public async Task<Result> GetEvents()
+        public async Task<IEnumerable<Event>> GetEvents()
         {
-            return new Result(true, _events.AsReadOnly());
+            return _events.AsReadOnly();
         }
 
         public async Task<(Result, int)> UpdateByPut(Guid id, NewEventDto putEvent)

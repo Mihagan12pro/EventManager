@@ -1,4 +1,5 @@
-﻿using EventManager.DTOs.Events;
+﻿using EventManager.DomainModels;
+using EventManager.DTOs.Events;
 using EventManager.Shared;
 
 namespace EventManager.Services.Events
@@ -16,7 +17,7 @@ namespace EventManager.Services.Events
         /// Returns all Events from database
         /// </summary>
         /// <returns></returns>
-        public Task<Result> GetEvents();
+        public Task<IEnumerable<Event>> GetEvents();
 
         /// <summary>
         /// Returns event by id
