@@ -17,7 +17,13 @@ namespace EventManager.Controllers
             Result result = await _eventService.AddNew(newEvent);
 
             if (result.IsSuccess)
-                return Created(string.Empty, result.Output);
+            {
+                var output = result.Output;
+                var request = HttpContext.Request;
+
+                string uri = $"{request.Scheme}://{request.Host}{request.Path}/{output}";
+                return Created(uri, output);
+            }
 
             return BadRequest(result.Output);
         }
