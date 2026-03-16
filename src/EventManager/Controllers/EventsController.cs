@@ -1,4 +1,5 @@
-﻿using EventManager.DTOs.Events;
+﻿using EventManager.DomainModels.Events;
+using EventManager.DTOs.Events;
 using EventManager.Services.Events;
 using EventManager.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -29,9 +30,18 @@ namespace EventManager.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All(
+            [FromQuery] string? title,
+            [FromQuery] DateTime? from,
+            [FromQuery] DateTime? to)
         {
-            var events = await _eventService.GetEvents();
+            DateRange dateRange = new DateRange(
+                from,
+                false, 
+                to,
+                false);
+
+            var events = await _eventService.GetEvents(title, dateRange);
 
             return Ok(events);
         }
@@ -81,7 +91,6 @@ namespace EventManager.Controllers
                     return BadRequest();
             }
         }
-
 
         public EventsController(IEventsService eventsService)
         {

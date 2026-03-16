@@ -3,34 +3,34 @@
 namespace EventManager.DomainModels.Events
 {
     /// <summary>
-    /// Provides date and time validation
+    /// Provides start and end date times validation
     /// </summary>
     public class DateRange
     {
         /// <summary>
         /// Date and time can't be equal and lower than lower bound
         /// </summary>
-        public readonly bool StrictlyGreater;
+        public readonly bool StrictlyGreater = true;
 
         /// <summary>
         /// Date and time can't be equal and upper than upper bound
         /// </summary>
-        public readonly bool StrictlyLower;
+        public readonly bool StrictlyLower = true;
 
         public readonly DateTime? LowerBound;
 
         public readonly DateTime? UpperBound;
 
-        public Result CheckDateRange(DateTime dateTime)
+        public Result CheckDateRange(Event eventModel)
         {
             if (LowerBound.HasValue)
             {
-                if (StrictlyGreater && LowerBound >= dateTime)
+                if (StrictlyGreater && LowerBound >= eventModel.StartAt)
                     return new Result(
                         false, 
                         "date time must be strictly greater than lower bound!"
                         );
-                else if (!StrictlyGreater && LowerBound > dateTime)
+                else if (!StrictlyGreater && LowerBound > eventModel.StartAt)
                     return new Result(
                         false,
                         "date time must be greater than lower bound!"
@@ -39,12 +39,12 @@ namespace EventManager.DomainModels.Events
 
             if (UpperBound.HasValue)
             {
-                if (StrictlyLower && UpperBound <= dateTime)
+                if (StrictlyLower && UpperBound <= eventModel.EndAt)
                     return new Result(
                         false,
                         "date time must be strictly smaller than lower bound!"
                         );
-                else if (!StrictlyLower && UpperBound > dateTime)
+                else if (!StrictlyLower && UpperBound < eventModel.EndAt)
                     return new Result(
                         false,
                         "date time must be lower than upper bound!"
@@ -55,16 +55,19 @@ namespace EventManager.DomainModels.Events
         }
 
         public DateRange(
-            DateTime? LowerBound, 
+            DateTime? LowerBound,
+            bool? StrictlyGreater,
             DateTime? UpperBound,
-            bool StrictlyUpper = true,
-            bool StrictlyLower = true)
+            bool? StrictlyLower)
         {
             this.LowerBound = LowerBound;
             this.UpperBound = UpperBound;
 
-            this.LowerBound = LowerBound;
-            this.UpperBound = UpperBound;
+            if (StrictlyGreater.HasValue)
+                this.StrictlyGreater = StrictlyGreater.Value;
+
+            if (StrictlyLower.HasValue)
+                this.StrictlyLower = StrictlyLower.Value;
         }
     }
 }

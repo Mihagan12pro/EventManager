@@ -14,10 +14,14 @@ namespace EventManager.Services.Events
         public Task<Result> AddNew(NewEventDto request);
 
         /// <summary>
-        /// Returns all Events from database
+        /// Returns all Events from database with filters
         /// </summary>
+        /// <param name="title"></param>
+        /// <param name="dateRange"></param>
         /// <returns></returns>
-        public Task<IEnumerable<Event>> GetEvents();
+        public Task<IEnumerable<Event>> GetEvents(
+            string? title, 
+            DateRange dateRange);
 
         /// <summary>
         /// Returns event by id

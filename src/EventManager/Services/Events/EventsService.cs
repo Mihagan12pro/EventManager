@@ -63,9 +63,19 @@ namespace EventManager.Services.Events
             return new Result(true, eventDto);
         }
 
-        public async Task<IEnumerable<Event>> GetEvents()
+        public async Task<IEnumerable<Event>> GetEvents(string? title, DateRange dateRange)
         {
-            return _events.AsReadOnly();
+            var filteredEvents = _events
+                .Where(e => dateRange
+                    .CheckDateRange(e)
+                        .IsSuccess);
+
+            if (title != null)
+                filteredEvents = filteredEvents.Where(e => e.Title.ToLower() == title.ToLower());
+
+            return filteredEvents
+                .ToArray()
+                    .AsReadOnly();
         }
 
         public async Task<(Result, int)> UpdateByPut(Guid id, NewEventDto putEvent)
