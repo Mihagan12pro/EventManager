@@ -1,4 +1,4 @@
-﻿using EventManager.DomainModels;
+﻿using EventManager.DomainModels.Events;
 using EventManager.DTOs.Events;
 using EventManager.Shared;
 
