@@ -1,6 +1,7 @@
-﻿using EventManager.DomainModels.Events;
+﻿using CSharpFunctionalExtensions;
+using EventManager.DomainModels.Events;
 using EventManager.DTOs.Events;
-using CSharpFunctionalExtensions;
+using EventManager.DTOs.Shared;
 using EventManager.Shared;
 
 namespace EventManager.Services.Events
@@ -20,8 +21,9 @@ namespace EventManager.Services.Events
         /// <param name="title"></param>
         /// <param name="dateRange"></param>
         /// <returns></returns>
-        public Task<IEnumerable<Event>> GetEvents(
-            string? title, 
+        public Task<PaginatedEventsDto> GetEvents(
+            string? title,
+            PaginationDto pagination,
             DateRange dateRange);
 
         /// <summary>

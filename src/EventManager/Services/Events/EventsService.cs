@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using EventManager.DomainModels.Events;
 using EventManager.DTOs.Events;
+using EventManager.DTOs.Shared;
 using EventManager.Shared;
 
 namespace EventManager.Services.Events
@@ -62,19 +63,34 @@ namespace EventManager.Services.Events
             return eventDto;
         }
 
-        public async Task<IEnumerable<Event>> GetEvents(string? title, DateRange dateRange)
+        public async Task<PaginatedEventsDto> GetEvents(
+            string? title,
+            PaginationDto pagination,
+            DateRange dateRange)
         {
-            var filteredEvents = _events
-                .Where(e => dateRange
+            IEnumerable<Event> filteredEvents = _events;
+
+            if (dateRange.UpperBound.HasValue || dateRange.LowerBound.HasValue)
+                filteredEvents = filteredEvents.Where(e => dateRange
                     .CheckDateRange(e)
                         .IsSuccess);
 
             if (title != null)
                 filteredEvents = filteredEvents.Where(e => e.Title.ToLower() == title.ToLower());
 
-            return filteredEvents
-                .ToArray()
-                    .AsReadOnly();
+            int totalCount = filteredEvents.Count();
+
+
+            var eventsList = PaginationMaster<Event>.DoPagination(filteredEvents, pagination)
+                .ToList();
+
+            PaginatedEventsDto result = new PaginatedEventsDto(
+                totalCount, 
+                eventsList.AsReadOnly(),
+                pagination.Page,
+                pagination.PageSize);
+
+            return result;
         }
 
         public async Task<Result<string, Error>> UpdateByPut(Guid id, NewEventDto putEvent)

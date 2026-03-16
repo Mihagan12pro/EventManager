@@ -1,5 +1,6 @@
 ﻿using EventManager.DomainModels.Events;
 using EventManager.DTOs.Events;
+using EventManager.DTOs.Shared;
 using EventManager.Services.Events;
 using EventManager.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -33,15 +34,19 @@ namespace EventManager.Controllers
         public async Task<IActionResult> All(
             [FromQuery] string? title,
             [FromQuery] DateTime? from,
-            [FromQuery] DateTime? to)
+            [FromQuery] DateTime? to,
+            [FromQuery] int page = 1,
+            [FromQuery] int limit = 10)
         {
+            PaginationDto pagination = new PaginationDto(page, limit);
+
             DateRange dateRange = new DateRange(
                 from,
                 false, 
                 to,
                 false);
 
-            var events = await _eventService.GetEvents(title, dateRange);
+            var events = await _eventService.GetEvents(title, pagination, dateRange);
 
             return Ok(events);
         }
