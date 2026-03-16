@@ -1,4 +1,5 @@
-﻿using EventManager.DomainModels.Events;
+﻿using CSharpFunctionalExtensions;
+using EventManager.DomainModels.Events;
 using EventManager.DTOs.Events;
 using EventManager.Shared;
 
@@ -8,12 +9,10 @@ namespace EventManager.Services.Events
     {
         private static readonly List<Event> _events = new List<Event>();
 
-        public async Task<Result> AddNew(NewEventDto request)
+        public async Task<Result<Guid, string>> AddNew(NewEventDto request)
         {
             if (request.StartAt >= request.EndAt)
-            {
-                return new Result(false, "End time must be greater than start time!");
-            }
+                return "End time must be greater than start time!";
 
             Event createdEvent = new Event()
             {
@@ -30,28 +29,28 @@ namespace EventManager.Services.Events
 
             _events.Add(createdEvent);
 
-            return new Result(true, createdEvent.Id);
+            return createdEvent.Id;
         }
 
-        public async Task<Result> Delete(Guid id)
+        public async Task<Result<string, Error>> Delete(Guid id)
         {
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
-                return new Result(false, $"Event with id = '{id}' was not found!");
+                return Error.CreateError404($"Event with id = '{id}' was not found!");
 
             _events.Remove(eventById);
 
-            return new Result(true, "Event had been deleted!");
+            return "Event had been deleted!";
         }
 
-        public async Task<Result> GetEventById(Guid id)
+        public async Task<Result<GetEventDto, string>> GetEventById(Guid id)
         {
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
             {
-                return new Result(false, $"Event with id = '{id}' was not found!");
+                return $"Event with id = '{id}' was not found!";
             }
 
             GetEventDto eventDto = new GetEventDto(
@@ -60,7 +59,7 @@ namespace EventManager.Services.Events
                 eventById.EndAt,
                 eventById.Description);
 
-            return new Result(true, eventDto);
+            return eventDto;
         }
 
         public async Task<IEnumerable<Event>> GetEvents(string? title, DateRange dateRange)
@@ -78,31 +77,22 @@ namespace EventManager.Services.Events
                     .AsReadOnly();
         }
 
-        public async Task<(Result, int)> UpdateByPut(Guid id, NewEventDto putEvent)
+        public async Task<Result<string, Error>> UpdateByPut(Guid id, NewEventDto putEvent)
         {
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
-                return (new Result(
-                    false, 
-                    $"Event with id = '{id}' was not found!"),
-                    404);
+                return Error.CreateError404($"Event with id = '{id}' was not found!");
 
             if (putEvent.StartAt >= putEvent.EndAt)
-                return (new Result(
-                    false,
-                    $"End time must be greater than start time!"),
-                    400);
+                return Error.CreateError500("End time must be greater than start time!");
 
             eventById.StartAt = putEvent.StartAt!.Value;
             eventById.EndAt = putEvent.EndAt!.Value;
             eventById.Title = putEvent.Title;
             eventById.Description = putEvent.Description;
 
-            return (new Result(
-                true,
-                $"Event had been updated!"),
-                200);
+            return "Event had been updated!";
         }
     }
 }

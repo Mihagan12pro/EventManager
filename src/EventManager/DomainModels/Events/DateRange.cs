@@ -1,4 +1,5 @@
-﻿using EventManager.Shared;
+﻿using CSharpFunctionalExtensions;
+using EventManager.Shared;
 
 namespace EventManager.DomainModels.Events
 {
@@ -21,37 +22,25 @@ namespace EventManager.DomainModels.Events
 
         public readonly DateTime? UpperBound;
 
-        public Result CheckDateRange(Event eventModel)
+        public Result<string, Error> CheckDateRange(Event eventModel)
         {
             if (LowerBound.HasValue)
             {
                 if (StrictlyGreater && LowerBound >= eventModel.StartAt)
-                    return new Result(
-                        false, 
-                        "date time must be strictly greater than lower bound!"
-                        );
+                    return Error.CreateError400("Date time must be strictly greater than lower bound!");
                 else if (!StrictlyGreater && LowerBound > eventModel.StartAt)
-                    return new Result(
-                        false,
-                        "date time must be greater than lower bound!"
-                        );
+                    return Error.CreateError400("Date time must be greater than lower bound!");
             }
 
             if (UpperBound.HasValue)
             {
                 if (StrictlyLower && UpperBound <= eventModel.EndAt)
-                    return new Result(
-                        false,
-                        "date time must be strictly smaller than lower bound!"
-                        );
+                    return Error.CreateError400("Date time must be strictly smaller than lower bound!");
                 else if (!StrictlyLower && UpperBound < eventModel.EndAt)
-                    return new Result(
-                        false,
-                        "date time must be lower than upper bound!"
-                        );
+                    return Error.CreateError400("Date time must be lower than upper bound!");
             }
 
-            return new Result(true, "Everything is ok!");
+            return "Everything is ok!";
         }
 
         public DateRange(

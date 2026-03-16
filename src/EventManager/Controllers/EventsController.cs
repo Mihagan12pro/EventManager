@@ -15,18 +15,18 @@ namespace EventManager.Controllers
         [HttpPost]
         public async Task<IActionResult> New([FromBody] NewEventDto newEvent)
         {
-            Result result = await _eventService.AddNew(newEvent);
+            var result = await _eventService.AddNew(newEvent);
 
             if (result.IsSuccess)
             {
-                var output = result.Output;
+                var output = result.Value;
                 var request = HttpContext.Request;
 
                 string uri = $"{request.Scheme}://{request.Host}{request.Path}/{output}";
                 return Created(uri, output);
             }
 
-            return BadRequest(result.Output);
+            return BadRequest(result.Error);
         }
 
         [HttpGet]
@@ -52,9 +52,9 @@ namespace EventManager.Controllers
             var result = await _eventService.GetEventById(id);
 
             if (result.IsSuccess)
-                return Ok(result.Output);
+                return Ok(result.Value);
 
-            return NotFound(result.Output);
+            return NotFound(result.Error);
         }
 
         [HttpDelete("{id}")]
@@ -63,9 +63,9 @@ namespace EventManager.Controllers
             var result = await _eventService.Delete(id);
 
             if (result.IsSuccess)
-                return Ok(result.Output);
+                return Ok(result.Value);
 
-            return NotFound(result.Output);
+            return NotFound(result.Error.Message);
         }
 
         [HttpPut("{id}")]
@@ -73,23 +73,24 @@ namespace EventManager.Controllers
             [FromRoute] Guid id,
             [FromBody] NewEventDto newEvent)
         {
-            var codeResult = await _eventService.UpdateByPut(id, newEvent);
+            //var codeResult = await _eventService.UpdateByPut(id, newEvent);
 
-            Result result = codeResult.Item1;
-            int code = codeResult.Item2;
+            //Result result = codeResult.Item1;
+            //int code = codeResult.Item2;
 
-            if (result.IsSuccess)
-                return Ok(result.Output);
+            //if (result.IsSuccess)
+            //    return Ok(result.Output);
 
-            switch(code)
-            {
-                case 400:
-                    return BadRequest(result.Output);
-                case 404:
-                    return NotFound(result.Output);
-                default:
-                    return BadRequest();
-            }
+            //switch(code)
+            //{
+            //    case 400:
+            //        return BadRequest(result.Output);
+            //    case 404:
+            //        return NotFound(result.Output);
+            //    default:
+            //        return BadRequest();
+            //}
+            throw new NotImplementedException();
         }
 
         public EventsController(IEventsService eventsService)
