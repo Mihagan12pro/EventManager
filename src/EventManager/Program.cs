@@ -1,4 +1,5 @@
 using EventManager;
+using EventManager.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +15,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseMiddleware<CustomExceptionMiddleware>();
 
 app.MapControllers();
 

@@ -2,6 +2,7 @@
 using EventManager.DomainModels.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
+using EventManager.Exceptions;
 using EventManager.Shared;
 
 namespace EventManager.Services.Events
@@ -12,6 +13,12 @@ namespace EventManager.Services.Events
 
         public async Task<Result<Guid, string>> AddNew(NewEventDto request)
         {
+            if (request.StartAt < DateTime.Now)
+                throw new BadRequestException("Too late!");
+
+            if (request.EndAt < DateTime.Now)
+                throw new BadRequestException("Too late!");
+
             if (request.StartAt >= request.EndAt)
                 return "End time must be greater than start time!";
 

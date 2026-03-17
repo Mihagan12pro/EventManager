@@ -1,5 +1,4 @@
 ﻿using EventManager.Shared;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using StatusCodes = EventManager.Shared.StatusCodes;
 
