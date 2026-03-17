@@ -75,6 +75,9 @@ namespace EventManager.Services.Events
             PaginationDto pagination,
             DateRange dateRange)
         {
+            if (pagination.Page < 0 || pagination.PageSize < 0)
+                throw new BadRequestException("Pagination parameters must be greater than zero!");
+
             IEnumerable<Event> filteredEvents = _events;
 
             if (dateRange.UpperBound.HasValue || dateRange.LowerBound.HasValue)
