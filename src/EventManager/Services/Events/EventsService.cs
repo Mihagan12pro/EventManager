@@ -101,7 +101,7 @@ namespace EventManager.Services.Events
                 return Error.CreateError404($"Event with id = '{id}' was not found!");
 
             if (putEvent.StartAt >= putEvent.EndAt)
-                return Error.CreateError500("End time must be greater than start time!");
+                return Error.CreateError400("End time must be greater than start time!");
 
             eventById.StartAt = putEvent.StartAt!.Value;
             eventById.EndAt = putEvent.EndAt!.Value;

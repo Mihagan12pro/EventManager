@@ -8,9 +8,8 @@ namespace EventManager.Shared
             IEnumerable<T> collection, 
             PaginationDto paginationParameters)
         {
-            return collection.Skip(
-                (paginationParameters.Page - 1) * paginationParameters.PageSize)
-                    .Take(paginationParameters.PageSize);
+            return collection.Skip((paginationParameters.Page - 1) * paginationParameters.PageSize)
+                .Take(paginationParameters.PageSize);
         }
     }
 }

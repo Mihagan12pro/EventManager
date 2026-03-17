@@ -1,9 +1,11 @@
 ﻿using EventManager.DomainModels.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
+using EventManager.Extensions;
 using EventManager.Services.Events;
 using EventManager.Shared;
 using Microsoft.AspNetCore.Mvc;
+using StatusCodes = EventManager.Shared.StatusCodes;
 
 namespace EventManager.Controllers
 {
@@ -78,24 +80,13 @@ namespace EventManager.Controllers
             [FromRoute] Guid id,
             [FromBody] NewEventDto newEvent)
         {
-            //var codeResult = await _eventService.UpdateByPut(id, newEvent);
+            var result = await _eventService.UpdateByPut(id, newEvent);
 
-            //Result result = codeResult.Item1;
-            //int code = codeResult.Item2;
 
-            //if (result.IsSuccess)
-            //    return Ok(result.Output);
+            if (result.IsFailure)
+                return this.ErrorToActionResult(result.Error);
 
-            //switch(code)
-            //{
-            //    case 400:
-            //        return BadRequest(result.Output);
-            //    case 404:
-            //        return NotFound(result.Output);
-            //    default:
-            //        return BadRequest();
-            //}
-            throw new NotImplementedException();
+            return Ok(result.Value);
         }
 
         public EventsController(IEventsService eventsService)
