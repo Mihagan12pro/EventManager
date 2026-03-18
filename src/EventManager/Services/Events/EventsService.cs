@@ -13,14 +13,26 @@ namespace EventManager.Services.Events
 
         public async Task<Result<Guid, string>> AddNew(NewEventDto request)
         {
-            if (request.StartAt < DateTime.Now)
+            DateTime now = DateTime.Now;
+
+            if (!request.StartAt.HasValue || !request.EndAt.HasValue)
+                throw new BadRequestException("Start date time and End date time are required fields!");
+
+            DateTime start = request.StartAt.Value;
+            DateTime end = request.EndAt.Value;
+
+            DateSpan startSpan = new DateSpan(start, now);
+            DateSpan endSpan = new DateSpan(end, now);
+
+
+            if (startSpan.Day <= 0 && startSpan.Year <= 0 && startSpan.Month <= 0)
                 throw new BadRequestException("Too late!");
 
-            if (request.EndAt < DateTime.Now)
+            if (endSpan.Day <= 0 && endSpan.Year <= 0 && endSpan.Month <= 0)
                 throw new BadRequestException("Too late!");
 
-            if (request.StartAt >= request.EndAt)
-                return "End time must be greater than start time!";
+            if (start >= end)
+                return "Start date time must be greater than end date time!";
 
             Event createdEvent = new Event()
             {
@@ -28,9 +40,9 @@ namespace EventManager.Services.Events
 
                 Title = request.Title,
 
-                StartAt = request.StartAt!.Value,
+                StartAt = start,
 
-                EndAt = request.EndAt!.Value,
+                EndAt = end,
 
                 Description = request.Description
             };
