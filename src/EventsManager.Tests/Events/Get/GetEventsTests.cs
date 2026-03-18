@@ -1,6 +1,7 @@
 ﻿using EventManager.DomainModels.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
+using EventManager.Exceptions;
 
 namespace EventsManager.Tests.Events.Get
 {
@@ -12,11 +13,11 @@ namespace EventsManager.Tests.Events.Get
             DateTime datetime = DateTime.Now.AddDays(1);
 
             var newEvent = new NewEventDto(
-                        "Юбилей деда",
+                "Юбилей деда",
 
-                        datetime,
+                 datetime,
 
-                        datetime.AddHours(10));
+                 datetime.AddHours(10));
 
             var result1 = await _eventsService.AddNew(newEvent);
 
@@ -47,11 +48,37 @@ namespace EventsManager.Tests.Events.Get
                 IsSeedAdded = true;
             }
 
-            var result = await _eventsService.GetEvents(title, paginationDto, new DateRange(start, false, end, false));
+            var result = await _eventsService.GetEvents(
+                title,
+                paginationDto,
+                new DateRange(
+                    start,
+                    false, 
+                    end,
+                    false)
+                );
 
             Assert.Equal(expectedCountOnPage, result.Events.Count);
             Assert.Equal(expectedTotalCount, result.TotalCount);
         }
 
+        [Theory]
+        [MemberData(nameof(GetAllWithException))]
+        public async Task Test_Get_All_With_Exception(int page, int limit)
+        {
+            if (!IsSeedAdded)
+            {
+                await _eventsSeeder.AddSeedData();
+
+                IsSeedAdded = true;
+            }
+
+            await Assert.ThrowsAsync<BadRequestException>( () => _eventsService.GetEvents(
+                string.Empty,
+                new PaginationDto(page, limit),
+                new DateRange(null, false, null, false)
+                )
+            );
+        }
     }
 }

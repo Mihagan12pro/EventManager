@@ -1,10 +1,27 @@
 ﻿using EventManager.DTOs.Shared;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EventsManager.Tests.Events.Get
 {
     public partial class GetEventsTests
     {
         public static bool IsSeedAdded = false;
+
+        public static IEnumerable<object[]> GetAllWithException()
+        {
+            return
+            [
+                [
+                    -1, 1    
+                ],
+                [
+                    -1, -1    
+                ],
+                [
+                    1, -1    
+                ]
+            ];
+        }
 
         public static IEnumerable<object[]> GetAll()
         {
