@@ -97,6 +97,8 @@ namespace EventManager.Services.Events
                     .CheckDateRange(e)
                         .IsSuccess);
 
+            var a = filteredEvents.ToArray().Length;
+
             if (title != null)
                 filteredEvents = filteredEvents.Where(e => e.Title.ToLower() == title.ToLower());
 
