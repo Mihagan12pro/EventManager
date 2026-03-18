@@ -5,5 +5,7 @@
         Task AddSeedData();
 
         Task DeleteSeedData();
+
+        Task<bool> IsSeedEmpty();
     }
 }

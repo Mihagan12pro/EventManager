@@ -41,11 +41,9 @@ namespace EventsManager.Tests.Events.Get
             int expectedTotalCount,
             int expectedCountOnPage)
         {
-            if (!IsSeedAdded)
+            if (await _eventsSeeder.IsSeedEmpty())
             {
                 await _eventsSeeder.AddSeedData();
-
-                IsSeedAdded = true;
             }
 
             var result = await _eventsService.GetEvents(
@@ -66,11 +64,9 @@ namespace EventsManager.Tests.Events.Get
         [MemberData(nameof(GetAllWithException))]
         public async Task Test_Get_All_With_Exception(int page, int limit)
         {
-            if (!IsSeedAdded)
+            if (await _eventsSeeder.IsSeedEmpty())
             {
                 await _eventsSeeder.AddSeedData();
-
-                IsSeedAdded = true;
             }
 
             await Assert.ThrowsAsync<BadRequestException>( () => _eventsService.GetEvents(

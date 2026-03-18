@@ -1,9 +1,7 @@
 ﻿using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Services.Events;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using EventManager.DomainModels.Events;
 
 namespace EventsManager.Tests.Events
 {
@@ -52,6 +50,17 @@ namespace EventsManager.Tests.Events
             {
                 await EventsService.Delete(item.Id);
             }
+        }
+
+        public async Task<bool> IsSeedEmpty()
+        {
+            var result = (await EventsService.GetEvents(
+                null,
+                new PaginationDto(),
+                new DateRange(null, false, null, false)
+            )).Events;
+
+            return result.Count == 0;
         }
 
         public EventsSeeder()
