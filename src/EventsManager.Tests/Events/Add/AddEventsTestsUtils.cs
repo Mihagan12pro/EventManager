@@ -2,7 +2,7 @@
 
 namespace EventsManager.Tests.Events.Add
 {
-    public partial class AddEventsTests 
+    public partial class AddEventsTests
     {
         public static IEnumerable<object[]> AddEventsWithException()
         {

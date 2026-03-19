@@ -20,7 +20,7 @@ namespace EventManager.Services.Events
         /// </summary>
         /// <returns></returns>
         [Obsolete]
-        public Task<IEnumerable<Event>> GetEvents();
+        public Task<IReadOnlyCollection<Event>> GetEvents();
 
         /// <summary>
         /// Returns all Events from database with filters

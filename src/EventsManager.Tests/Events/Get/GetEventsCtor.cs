@@ -2,26 +2,28 @@
 
 namespace EventsManager.Tests.Events.Get
 {
-    [Collection("Events collection")]
     public partial class GetEventsTests : IAsyncLifetime
     {
         private readonly IEventsService _eventsService;
         private readonly EventsSeeder _eventsSeeder;
 
-        public GetEventsTests(EventsSeeder eventsSeeder)
+        public GetEventsTests()
         {
-            _eventsSeeder = eventsSeeder;
-            _eventsService = eventsSeeder.EventsService;
+            _eventsService = new EventsService();
+            _eventsSeeder = new EventsSeeder(_eventsService);
+        }
+
+        public async Task InitializeAsync()
+        {
+            var result = await _eventsSeeder.GetSeededData();
+
+            if (result.ToList().Count == 0)
+                await _eventsSeeder.AddSeedData();
         }
 
         public async Task DisposeAsync()
         {
             await _eventsSeeder.DeleteSeedData();
-        }
-
-        public async Task InitializeAsync()
-        {
-            await _eventsSeeder.AddSeedData();
         }
     }
 }

@@ -1,66 +1,36 @@
-﻿using EventManager.DTOs.Events;
+﻿using EventManager.DomainModels.Events;
+using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Services.Events;
-using EventManager.DomainModels.Events;
 
 namespace EventsManager.Tests.Events
 {
     public class EventsSeeder : ISeeder<IEnumerable<Event>>
     {
-        public IEventsService EventsService { get; }
+        private DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
+        private readonly IEventsService EventsService;
+        private NewEventDto[] dtos;
 
         public async Task AddSeedData()
         {
-            DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
-
-            await EventsService.AddNew(
-                new NewEventDto(
-                    "Юбилей",
-                    dateTime.AddDays(1),
-                    dateTime.AddDays(2))
-                );
-
-            await EventsService.AddNew(
-                new NewEventDto(
-                    "Юбилей",
-                    dateTime.AddDays(1),
-                    dateTime.AddDays(2))
-                );
-
-            await EventsService.AddNew(
-                new NewEventDto(
-                    "Юбилей",
-                    dateTime.AddDays(2),
-                    dateTime.AddDays(3))
-                );
-
-            await EventsService.AddNew(
-                new NewEventDto(
-                    "Корпоратив",
-                    dateTime.AddDays(2),
-                    dateTime.AddDays(3))
-                );
+            foreach (var d in dtos)
+            {
+                await EventsService.AddNew(d);
+            }
         }
 
         public async Task DeleteSeedData()
         {
-            var result = await EventsService.GetEvents(null, new PaginationDto(1, 4), new DateRange(null, false, null, false));
+            var result0 = await EventsService.GetEvents(null, new PaginationDto(1, 4), new DateRange(null, false, null, false));
+
+            int totalCount = result0.Events.Count;
+
+            var result = await EventsService.GetEvents(null, new PaginationDto(1, totalCount), new DateRange(null, false, null, false));
 
             foreach (var item in result.Events)
             {
                 await EventsService.Delete(item.Id);
             }
-        }
-
-        public async Task<bool> IsSeedEmpty()
-        {
-            var result = (await EventsService.GetEvents(
-                null,
-                new PaginationDto(),
-                new DateRange(null, false, null, false)
-            )).Events;
-
-            return result.Count == 0;
         }
 
         public async Task<IEnumerable<Event>> GetSeededData()
@@ -71,10 +41,31 @@ namespace EventsManager.Tests.Events
             return result;
         }
 
-        public EventsSeeder()
+        public EventsSeeder(IEventsService eventsService)
         {
-            EventsService = new EventsService();
+            EventsService = eventsService;
+
+            dtos = new NewEventDto[]
+            {
+                 new NewEventDto(
+                     "Юбилей",
+                     dateTime.AddDays(1),
+                     dateTime.AddDays(2)),
+
+                  new NewEventDto(
+                        "Юбилей",
+                        dateTime.AddDays(1),
+                        dateTime.AddDays(2)),
+
+                  new NewEventDto(
+                       "Юбилей",
+                       dateTime.AddDays(2),
+                       dateTime.AddDays(3)),
+                  new NewEventDto(
+                       "Корпоратив",
+                       dateTime.AddDays(2),
+                       dateTime.AddDays(3))
+            };
         }
     }
 }
-

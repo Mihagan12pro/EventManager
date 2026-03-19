@@ -117,7 +117,7 @@ namespace EventManager.Services.Events
             return result;
         }
 
-        public async Task<IEnumerable<Event>> GetEvents()
+        public async Task<IReadOnlyCollection<Event>> GetEvents()
         {
             return _events.AsReadOnly();
         }

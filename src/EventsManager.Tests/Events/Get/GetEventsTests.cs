@@ -29,6 +29,8 @@ namespace EventsManager.Tests.Events.Get
 
             Assert.Equal(typeof(GetEventDto), result2.GetType());
             Assert.Equal(typeof(string), result3.GetType());
+
+            await _eventsService.Delete(id);
         }
 
         [Theory]
@@ -41,6 +43,8 @@ namespace EventsManager.Tests.Events.Get
             int expectedTotalCount,
             int expectedCountOnPage)
         {
+            await _eventsSeeder.AddSeedData();
+
             DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
 
             var result = await _eventsService.GetEvents(
@@ -48,7 +52,7 @@ namespace EventsManager.Tests.Events.Get
                 paginationDto,
                 new DateRange(
                     start,
-                    false, 
+                    false,
                     end,
                     false)
                 );
@@ -61,7 +65,7 @@ namespace EventsManager.Tests.Events.Get
         [MemberData(nameof(GetAllWithException))]
         public async Task Test_Get_All_With_Exception(int page, int limit)
         {
-            await Assert.ThrowsAsync<BadRequestException>( () => _eventsService.GetEvents(
+            await Assert.ThrowsAsync<BadRequestException>(() => _eventsService.GetEvents(
                 string.Empty,
                 new PaginationDto(page, limit),
                 new DateRange(null, false, null, false)
@@ -70,3 +74,4 @@ namespace EventsManager.Tests.Events.Get
         }
     }
 }
+

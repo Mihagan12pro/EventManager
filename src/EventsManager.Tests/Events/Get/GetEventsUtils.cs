@@ -4,20 +4,18 @@ namespace EventsManager.Tests.Events.Get
 {
     public partial class GetEventsTests
     {
-        public static bool IsSeedAdded = false;
-
         public static IEnumerable<object[]> GetAllWithException()
         {
             return
             [
                 [
-                    -1, 1    
+                    -1, 1
                 ],
                 [
-                    -1, -1    
+                    -1, -1
                 ],
                 [
-                    1, -1    
+                    1, -1
                 ]
             ];
         }
@@ -112,4 +110,3 @@ namespace EventsManager.Tests.Events.Get
         }
     }
 }
-

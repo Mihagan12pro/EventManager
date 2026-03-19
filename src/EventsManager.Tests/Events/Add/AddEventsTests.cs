@@ -1,5 +1,4 @@
 ﻿using EventManager.DTOs.Events;
-using EventManager.Exceptions;
 
 namespace EventsManager.Tests.Events.Add
 {
@@ -12,7 +11,10 @@ namespace EventsManager.Tests.Events.Add
             if (newEventDto.StartAt.Value.CompareTo(newEventDto.EndAt.Value) < 0)
             {
                 var result = await _eventsService.AddNew(newEventDto);
+
                 Assert.True(result.IsSuccess);
+
+                await _eventsService.Delete(result.Value);
             }
         }
 
@@ -33,7 +35,7 @@ namespace EventsManager.Tests.Events.Add
         [MemberData(nameof(AddEventsWithException))]
         public async Task Test_Add_Events_With_Exception(NewEventDto dto, string expected)
         {
-            var result = await Assert.ThrowsAsync<BadRequestException>(() => _eventsService.AddNew(dto));
+            var result = await Assert.ThrowsAsync<EventManager.Exceptions.BadRequestException>(() => _eventsService.AddNew(dto));
             Assert.Equal(expected, result.Error.Message);
         }
     }
