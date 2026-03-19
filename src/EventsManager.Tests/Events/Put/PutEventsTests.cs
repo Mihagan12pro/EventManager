@@ -12,8 +12,6 @@ namespace EventsManager.Tests.Events.Put
             DateTime start,
             DateTime end)
         {
-            await _eventsSeeder.AddSeedData();
-
             Guid id = (await _eventsSeeder.GetSeededData())
                 .First().Id;
 
@@ -50,8 +48,6 @@ namespace EventsManager.Tests.Events.Put
         [MemberData(nameof(PutData))]
         public async Task Test_Putting(int index, NewEventDto eventDto)
         {
-            await _eventsSeeder.AddSeedData();
-
             Event oldModel = (await _eventsSeeder.GetSeededData()).First();
 
             DateTime start = oldModel.StartAt;
