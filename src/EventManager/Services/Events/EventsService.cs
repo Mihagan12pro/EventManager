@@ -117,6 +117,11 @@ namespace EventManager.Services.Events
             return result;
         }
 
+        public async Task<IEnumerable<Event>> GetEvents()
+        {
+            return _events.AsReadOnly();
+        }
+
         public async Task<Result<string, Error>> UpdateByPut(Guid id, NewEventDto putEvent)
         {
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);

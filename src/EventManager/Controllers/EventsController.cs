@@ -15,9 +15,8 @@ namespace EventManager.Controllers
     {
         private readonly IEventsService _eventService;
 
-        //[ApiVersion("2.0")]
-        //[ApiExplorerSettings(GroupName = "v2")]
         [HttpPost]
+        [ApiVersion("2.0")]
         public async Task<IActionResult> New([FromBody] NewEventDto newEvent)
         {
             var result = await _eventService.AddNew(newEvent);
@@ -34,9 +33,8 @@ namespace EventManager.Controllers
             return BadRequest(result.Error);
         }
 
-        //[ApiVersion("2.0")]
-        //[ApiExplorerSettings(GroupName = "v2")]
         [HttpGet]
+        [ApiVersion("2.0")]
         public async Task<IActionResult> All(
             [FromQuery] string? title,
             [FromQuery] DateTime? from,
@@ -57,9 +55,8 @@ namespace EventManager.Controllers
             return Ok(events);
         }
 
-        //[ApiVersion("2.0")]
-        //[ApiExplorerSettings(GroupName = "v2")]
         [HttpGet("{id}")]
+        [ApiVersion("2.0")]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
             var result = await _eventService.GetEventById(id);
@@ -70,9 +67,8 @@ namespace EventManager.Controllers
             return NotFound(result.Error);
         }
 
-        //[ApiVersion("2.0")]
-        //[ApiExplorerSettings(GroupName = "v2")]
         [HttpDelete("{id}")]
+        [ApiVersion("2.0")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var result = await _eventService.Delete(id);
@@ -83,9 +79,8 @@ namespace EventManager.Controllers
             return NotFound(result.Error.Message);
         }
 
-        //[ApiVersion("2.0")]
-        //[ApiExplorerSettings(GroupName = "v2")]
         [HttpPut("{id}")]
+        [ApiVersion("2.0")]
         public async Task<IActionResult> Put(
             [FromRoute] Guid id,
             [FromBody] NewEventDto newEvent)
