@@ -12,8 +12,7 @@ namespace EventsManager.Tests.Events.Put
             DateTime start,
             DateTime end)
         {
-            if (await _eventsSeeder.IsSeedEmpty())
-                await _eventsSeeder.AddSeedData();
+            await _eventsSeeder.AddSeedData();
 
             Guid id = (await _eventsSeeder.GetSeededData())
                 .First().Id;
@@ -49,10 +48,9 @@ namespace EventsManager.Tests.Events.Put
 
         [Theory]
         [MemberData(nameof(PutData))]
-        public async Task Test_Puttinng(int index, NewEventDto eventDto)
+        public async Task Test_Putting(int index, NewEventDto eventDto)
         {
-            if (await _eventsSeeder.IsSeedEmpty())
-                await _eventsSeeder.AddSeedData();
+            await _eventsSeeder.AddSeedData();
 
             Event oldModel = (await _eventsSeeder.GetSeededData()).First();
 

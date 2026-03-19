@@ -1,5 +1,4 @@
 ﻿using EventManager.DTOs.Shared;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EventsManager.Tests.Events.Get
 {

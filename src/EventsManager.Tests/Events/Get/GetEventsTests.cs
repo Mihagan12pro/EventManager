@@ -2,6 +2,7 @@
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Exceptions;
+using EventManager.Services.Events;
 
 namespace EventsManager.Tests.Events.Get
 {
@@ -41,10 +42,39 @@ namespace EventsManager.Tests.Events.Get
             int expectedTotalCount,
             int expectedCountOnPage)
         {
-            if (await _eventsSeeder.IsSeedEmpty())
-            {
-                await _eventsSeeder.AddSeedData();
-            }
+            //if (await _eventsSeeder.IsSeedEmpty())
+            //{
+            //    await _eventsSeeder.AddSeedData();
+            //}
+            DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
+
+            await _eventsService.AddNew(
+                new NewEventDto(
+                    "Юбилей",
+                    dateTime.AddDays(1),
+                    dateTime.AddDays(2))
+                );
+
+            await _eventsService.AddNew(
+                new NewEventDto(
+                    "Юбилей",
+                    dateTime.AddDays(1),
+                    dateTime.AddDays(2))
+                );
+
+            await _eventsService.AddNew(
+                new NewEventDto(
+                    "Юбилей",
+                    dateTime.AddDays(2),
+                    dateTime.AddDays(3))
+                );
+
+            await _eventsService.AddNew(
+                new NewEventDto(
+                    "Корпоратив",
+                    dateTime.AddDays(2),
+                    dateTime.AddDays(3))
+                );
 
             var result = await _eventsService.GetEvents(
                 title,
@@ -56,6 +86,8 @@ namespace EventsManager.Tests.Events.Get
                     false)
                 );
 
+            await _eventsSeeder.DeleteSeedData();
+
             Assert.Equal(expectedCountOnPage, result.Events.Count);
             Assert.Equal(expectedTotalCount, result.TotalCount);
         }
@@ -64,10 +96,7 @@ namespace EventsManager.Tests.Events.Get
         [MemberData(nameof(GetAllWithException))]
         public async Task Test_Get_All_With_Exception(int page, int limit)
         {
-            if (await _eventsSeeder.IsSeedEmpty())
-            {
-                await _eventsSeeder.AddSeedData();
-            }
+            //await _eventsSeeder.AddSeedData();
 
             await Assert.ThrowsAsync<BadRequestException>( () => _eventsService.GetEvents(
                 string.Empty,

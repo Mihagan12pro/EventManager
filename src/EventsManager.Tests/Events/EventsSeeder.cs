@@ -11,40 +11,44 @@ namespace EventsManager.Tests.Events
 
         public async Task AddSeedData()
         {
-            DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
+            if (await IsSeedEmpty())
+            {
+                DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
 
-            await EventsService.AddNew(
-                new NewEventDto(
-                    "Юбилей",
-                    dateTime.AddDays(1),
-                    dateTime.AddDays(2))
-                );
+                await EventsService.AddNew(
+                    new NewEventDto(
+                        "Юбилей",
+                        dateTime.AddDays(1),
+                        dateTime.AddDays(2))
+                    );
 
-            await EventsService.AddNew(
-                new NewEventDto(
-                    "Юбилей",
-                    dateTime.AddDays(1),
-                    dateTime.AddDays(2))
-                );
+                await EventsService.AddNew(
+                    new NewEventDto(
+                        "Юбилей",
+                        dateTime.AddDays(1),
+                        dateTime.AddDays(2))
+                    );
 
-            await EventsService.AddNew(
-                new NewEventDto(
-                    "Юбилей",
-                    dateTime.AddDays(2),
-                    dateTime.AddDays(3))
-                );
+                await EventsService.AddNew(
+                    new NewEventDto(
+                        "Юбилей",
+                        dateTime.AddDays(2),
+                        dateTime.AddDays(3))
+                    );
 
-            await EventsService.AddNew(
-                new NewEventDto(
-                    "Корпоратив",
-                    dateTime.AddDays(2),
-                    dateTime.AddDays(3))
-                );
+                await EventsService.AddNew(
+                    new NewEventDto(
+                        "Корпоратив",
+                        dateTime.AddDays(2),
+                        dateTime.AddDays(3))
+                    );
+            }
         }
 
         public async Task DeleteSeedData()
         {
-            var result = await EventsService.GetEvents(null, new PaginationDto(1, 4), null);
+            var count = (await GetSeededData()).Count();
+            var result = await EventsService.GetEvents(null, new PaginationDto(1, 4), new DateRange(null, false, null, false));
 
             foreach (var item in result.Events)
             {

@@ -1,4 +1,5 @@
-﻿using EventManager.Services.Events;
+﻿using EventManager.Middleware;
+using EventManager.Services.Events;
 
 namespace EventManager
 {
@@ -7,6 +8,11 @@ namespace EventManager
         public static IServiceCollection AddScopedDependencies(this IServiceCollection services)
         {
             return services.AddScopedServices();
+        }
+
+        public static IApplicationBuilder UseCustomMiddleware(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<CustomExceptionMiddleware>();
         }
 
         private static IServiceCollection AddScopedServices(this IServiceCollection services)
