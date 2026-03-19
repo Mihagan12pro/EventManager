@@ -5,7 +5,7 @@ using EventManager.DomainModels.Events;
 
 namespace EventsManager.Tests.Events
 {
-    public class EventsSeeder : ISeeder
+    public class EventsSeeder : ISeeder<IEnumerable<Event>>
     {
         public IEventsService EventsService { get; }
 
@@ -61,6 +61,14 @@ namespace EventsManager.Tests.Events
             )).Events;
 
             return result.Count == 0;
+        }
+
+        public async Task<IEnumerable<Event>> GetSeededData()
+        {
+            var result = (await EventsService.GetEvents(null, new PaginationDto(1, 4), new DateRange(null, false, null, false)))
+                .Events.Select(e => e);
+
+            return result;
         }
 
         public EventsSeeder()
