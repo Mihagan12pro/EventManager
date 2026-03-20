@@ -14,7 +14,6 @@ namespace EventManager.Controllers
         private readonly IEventsService _eventService;
 
         [HttpPost]
-        //[ApiVersion("v2")]
         public async Task<IActionResult> New([FromBody] NewEventDto newEvent)
         {
             var result = await _eventService.AddNew(newEvent);
@@ -32,7 +31,6 @@ namespace EventManager.Controllers
         }
 
         [HttpGet]
-        //[ApiVersion("v2")]
         public async Task<IActionResult> All(
             [FromQuery] string? title,
             [FromQuery] DateTime? from,
@@ -54,7 +52,6 @@ namespace EventManager.Controllers
         }
 
         [HttpGet("{id}")]
-        //[ApiVersion("v2")]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
             var result = await _eventService.GetEventById(id);
@@ -66,7 +63,6 @@ namespace EventManager.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[ApiVersion("v2")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var result = await _eventService.Delete(id);
@@ -78,7 +74,6 @@ namespace EventManager.Controllers
         }
 
         [HttpPut("{id}")]
-        //[ApiVersion("v2")]
         public async Task<IActionResult> Put(
             [FromRoute] Guid id,
             [FromBody] NewEventDto newEvent)

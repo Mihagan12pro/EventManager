@@ -18,7 +18,7 @@ namespace EventManager
         private static IServiceCollection AddScopedServices(this IServiceCollection services)
         {
             return services
-               .AddScoped<IEventsService, EventsService>();
+               .AddSingleton<IEventsService, EventsService>();//Making IEventsService singleton is a temporary solution!
         }
     }
 }

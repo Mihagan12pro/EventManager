@@ -15,3 +15,14 @@ Via Visual Studio 2026:
 4. Build -> Build solution (or use shortcut: ctrl + B or ctrl + Shift + B). If everything is ok, next step
 5. Press on the button "Start Without Debugging" (or use shortcut: Shift + F5)
 6. Have fun with my application!
+
+How to run tests?
+1. Open the EventsManager.Tests directory via cli
+2. Write: dotnet build. If everything is ok, press ENTER
+3. Then you will have 2 ways:
+3.1 If you want to run all tests, write:  dotnet test.
+3.2 If you want to run group of tests, write:  dotnet test --filter <Group tittle>.
+	For example: "dotnet test --filter GetEvents"
+
+WARNING! The EventsController.All() endpoint is obsolete! Use the EventsController.All([FromQuery] string? title, [FromQuery] DateTime? from, [FromQuery] DateTime? to, [FromQuery] int page = 1, [FromQuery] int limit = 10) instead.
+
