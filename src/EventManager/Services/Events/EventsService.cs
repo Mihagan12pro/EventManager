@@ -9,7 +9,7 @@ namespace EventManager.Services.Events
 {
     public class EventsService : IEventsService
     {
-        private static readonly List<Event> _events = new List<Event>();
+        private readonly List<Event> _events = new List<Event>();
 
         public async Task<Result<Guid, string>> AddNew(NewEventDto request)
         {

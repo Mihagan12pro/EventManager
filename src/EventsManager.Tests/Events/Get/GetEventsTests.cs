@@ -2,6 +2,7 @@
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Exceptions;
+using EventManager.Services.Events;
 
 namespace EventsManager.Tests.Events.Get
 {
@@ -10,6 +11,7 @@ namespace EventsManager.Tests.Events.Get
         [Fact]
         public async Task Test_Get_By_Id()
         {
+            var eventsService = new EventsService();
             DateTime datetime = DateTime.Now.AddDays(1);
 
             var newEvent = new NewEventDto(
@@ -19,18 +21,18 @@ namespace EventsManager.Tests.Events.Get
 
                  datetime.AddHours(10));
 
-            var result1 = await _eventsService.AddNew(newEvent);
+            var result1 = await eventsService.AddNew(newEvent);
 
             Guid id = result1.Value;
             Guid hiddenId = Guid.Empty;
 
-            var result2 = (await _eventsService.GetEventById(id)).Value;
-            var result3 = (await _eventsService.GetEventById(hiddenId)).Error;
+            var result2 = (await eventsService.GetEventById(id)).Value;
+            var result3 = (await eventsService.GetEventById(hiddenId)).Error;
 
             Assert.Equal(typeof(GetEventDto), result2.GetType());
             Assert.Equal(typeof(string), result3.GetType());
 
-            await _eventsService.Delete(id);
+            await eventsService.Delete(id);
         }
 
         [Theory]
@@ -43,19 +45,46 @@ namespace EventsManager.Tests.Events.Get
             int expectedTotalCount,
             int expectedCountOnPage)
         {
-            await _eventsSeeder.AddSeedData();
-
             DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
+            var eventsService = new EventsService();
 
-            var result = await _eventsService.GetEvents(
-                title,
-                paginationDto,
-                new DateRange(
-                    start,
-                    false,
-                    end,
-                    false)
+            await eventsService.AddNew(
+                 new NewEventDto(
+                     "Юбилей",
+                     dateTime.AddDays(1),
+                     dateTime.AddDays(2))
+                 );
+
+            await eventsService.AddNew(
+                new NewEventDto(
+                    "Юбилей",
+                    dateTime.AddDays(1),
+                    dateTime.AddDays(2))
                 );
+
+            await eventsService.AddNew(
+                new NewEventDto(
+                    "Юбилей",
+                    dateTime.AddDays(2),
+                    dateTime.AddDays(3))
+                );
+
+            await eventsService.AddNew(
+                new NewEventDto(
+                    "Корпоратив",
+                    dateTime.AddDays(2),
+                    dateTime.AddDays(3))
+                );
+
+            var result = await eventsService.GetEvents(
+              title,
+              paginationDto,
+              new DateRange(
+                  start,
+                  false,
+                  end,
+                  false)
+              );
 
             Assert.Equal(expectedCountOnPage, result.Events.Count);
             Assert.Equal(expectedTotalCount, result.TotalCount);
@@ -65,7 +94,9 @@ namespace EventsManager.Tests.Events.Get
         [MemberData(nameof(GetAllWithException))]
         public async Task Test_Get_All_With_Exception(int page, int limit)
         {
-            await Assert.ThrowsAsync<BadRequestException>(() => _eventsService.GetEvents(
+            var eventsService = new EventsService();
+
+            await Assert.ThrowsAsync<BadRequestException>(() => eventsService.GetEvents(
                 string.Empty,
                 new PaginationDto(page, limit),
                 new DateRange(null, false, null, false)

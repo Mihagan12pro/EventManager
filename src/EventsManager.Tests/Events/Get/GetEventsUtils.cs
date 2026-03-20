@@ -106,7 +106,7 @@ namespace EventsManager.Tests.Events.Get
                     0,
                     0
                 ]
-            ];
+    ];
         }
     }
 }

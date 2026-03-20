@@ -13,17 +13,23 @@ namespace EventsManager.Tests.Events.Delete
            DateTime start,
            DateTime end)
         {
-            await _eventsSeeder.AddSeedData();
-            Guid id = (await _eventsSeeder.GetSeededData())
-                .First().Id;
+            var dateTime = DateTime.Now.AddDays(1);
+            var eventsService = new EventsService();
 
-            NewEventDto eventDto = new NewEventDto(
+            var dto = new NewEventDto(
+                   "Юбилей",
+                   dateTime.AddDays(1),
+                   dateTime.AddDays(2));
+
+            Guid id = (await eventsService.AddNew(dto)).Value;
+
+            NewEventDto newDto = new NewEventDto(
                 string.Empty,
                 start,
                 end
             );
 
-            var result = await _eventsService.UpdateByPut(id, eventDto);
+            var result = await eventsService.UpdateByPut(id, newDto);
 
             Assert.False(result.IsSuccess);
             Assert.Equal(StatusCodes.BadRequest, result.Error.StatusCode);
@@ -32,15 +38,19 @@ namespace EventsManager.Tests.Events.Delete
         [Fact]
         public async Task Test_Putting_With_Error_404()
         {
+            var dateTime = DateTime.Now.AddDays(1);
+            var eventsService = new EventsService();
+
+
             Guid id = Guid.NewGuid();
 
-            NewEventDto eventDto = new NewEventDto(
+            NewEventDto dto = new NewEventDto(
                 string.Empty,
-                DateTime.Now.AddDays(1),
-                DateTime.Now.AddDays(2)
+                dateTime.AddDays(1),
+                dateTime.AddDays(2)
             );
 
-            var result = await _eventsService.UpdateByPut(id, eventDto);
+            var result = await eventsService.UpdateByPut(id, dto);
 
             Assert.False(result.IsSuccess);
             Assert.Equal(StatusCodes.NotFound, result.Error.StatusCode);
@@ -50,24 +60,26 @@ namespace EventsManager.Tests.Events.Delete
         [MemberData(nameof(PutData))]
         public async Task Test_Putting(int index, NewEventDto eventDto)
         {
-            await _eventsSeeder.AddSeedData();
-            Event oldModel = (await _eventsSeeder.GetSeededData()).First();
+            var dateTime = DateTime.Now.AddDays(1);
+            var eventsService = new EventsService();
 
-            DateTime start = oldModel.StartAt;
-            DateTime end = oldModel.EndAt;
+            var dto = new NewEventDto(
+                   "Юбилей",
+                   dateTime.AddDays(1),
+                   dateTime.AddDays(2));
 
-            string title = oldModel.Title;
-            string description = oldModel.Description;
+            Guid id = (await eventsService.AddNew(dto)).Value;
 
-            var result = (await _eventsService.UpdateByPut(oldModel.Id, eventDto));
-            Event putModel = (await _eventsSeeder.GetSeededData()).First();
+            var result = (await eventsService.UpdateByPut(id, eventDto));
+
+            var getDto = (await eventsService.GetEventById(id)).Value;
 
             Assert.True(result.IsSuccess);
 
-            Assert.False(title == putModel.Title);
-            Assert.False(description == putModel.Description);
-            Assert.False(start == putModel.StartAt);
-            Assert.False(end == putModel.EndAt);
+            Assert.False(dto.Title == getDto.Title);
+            Assert.False(dto.Description == getDto.Description);
+            Assert.False(dto.StartAt == getDto.StartAt);
+            Assert.False(dto.EndAt == getDto.EndAt);
         }
     }
 }
