@@ -6,6 +6,7 @@ using EventManager.Shared;
 
 namespace EventsManager.Tests.Events.Put
 {
+    [Collection("Put events collection")]
     public partial class PutEventsTests
     {
         [Theory]

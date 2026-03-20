@@ -5,6 +5,7 @@ using EventManager.Shared;
 
 namespace EventsManager.Tests.Events.Delete
 {
+    [Collection("Delete events collection")]
     public partial class DeleteEventsTests
     {
         [Theory]

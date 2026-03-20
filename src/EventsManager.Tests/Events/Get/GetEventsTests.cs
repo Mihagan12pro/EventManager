@@ -6,6 +6,7 @@ using EventManager.Services.Events;
 
 namespace EventsManager.Tests.Events.Get
 {
+    [Collection("Get events collection")]
     public partial class GetEventsTests
     {
         [Fact]
