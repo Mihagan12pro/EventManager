@@ -24,5 +24,5 @@ How to run tests?
 3.2 If you want to run group of tests, write:  dotnet test --filter <Group tittle>.
 	For example: "dotnet test --filter GetEvents"
 
-WARNING! The EventsController.All() endpoint is obsolete! Use the EventsController.All([FromQuery] string? title, [FromQuery] DateTime? from, [FromQuery] DateTime? to, [FromQuery] int page = 1, [FromQuery] int limit = 10) instead.
+WARNING! The EventsController.All() endpoint is obsolete! Use the EventsController.All([FromQuery] string? title, [FromQuery] DateTime? from, [FromQuery] DateTime? to, [FromQuery] int page = 1, [FromQuery] int pageSize = 10) instead.
 

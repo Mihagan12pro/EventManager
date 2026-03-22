@@ -93,13 +93,13 @@ namespace EventsManager.Tests.Events.Get
 
         [Theory]
         [MemberData(nameof(GetAllWithException))]
-        public async Task Test_Get_All_With_Exception(int page, int limit)
+        public async Task Test_Get_All_With_Exception(int page, int pageSize)
         {
             var eventsService = new EventsService();
 
             await Assert.ThrowsAsync<BadRequestException>(() => eventsService.GetEvents(
                 string.Empty,
-                new PaginationDto(page, limit),
+                new PaginationDto(page, pageSize),
                 new DateRange(null, false, null, false)
                 )
             );

@@ -36,9 +36,9 @@ namespace EventManager.Controllers
             [FromQuery] DateTime? from,
             [FromQuery] DateTime? to,
             [FromQuery] int page = 1,
-            [FromQuery] int limit = 10)
+            [FromQuery] int pageSize = 10)
         {
-            PaginationDto pagination = new PaginationDto(page, limit);
+            PaginationDto pagination = new PaginationDto(page, pageSize);
 
             DateRange dateRange = new DateRange(
                 from,
