@@ -100,7 +100,7 @@ namespace EventManager.Services.Events
             var a = filteredEvents.ToArray().Length;
 
             if (title != null)
-                filteredEvents = filteredEvents.Where(e => e.Title.ToLower() == title.ToLower());
+                filteredEvents = filteredEvents.Where(e => e.Title.ToLower().Contains(title.ToLower()));
 
             int totalCount = filteredEvents.Count();
 
