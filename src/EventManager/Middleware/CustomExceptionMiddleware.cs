@@ -43,7 +43,7 @@ namespace EventManager.Middleware
             response.ContentType = "application/json";
             response.StatusCode = (int)error.StatusCode;
 
-            await httpContext.Response.WriteAsJsonAsync(error.Message);
+            await httpContext.Response.WriteAsJsonAsync(error);
         }
 
         public CustomExceptionMiddleware(

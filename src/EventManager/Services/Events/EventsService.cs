@@ -124,6 +124,20 @@ namespace EventManager.Services.Events
 
         public async Task<Result<string, Error>> UpdateByPut(Guid id, NewEventDto putEvent)
         {
+            DateTime now = DateTime.Now;
+
+            DateTime start = putEvent.StartAt!.Value;
+            DateTime end = putEvent.EndAt!.Value;
+
+            DateSpan startSpan = new DateSpan(start, now);
+            DateSpan endSpan = new DateSpan(end, now);
+
+            if (startSpan.Day <= 0 && startSpan.Year <= 0 && startSpan.Month <= 0)
+                throw new BadRequestException("Too late!");
+
+            if (endSpan.Day <= 0 && endSpan.Year <= 0 && endSpan.Month <= 0)
+                throw new BadRequestException("Too late!");
+
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
