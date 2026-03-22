@@ -2,7 +2,6 @@
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Services.Events;
-using EventManager.Shared;
 
 namespace EventsManager.Tests.Events.Put
 {
@@ -69,7 +68,7 @@ namespace EventsManager.Tests.Events.Put
             var result = await eventsService.UpdateByPut(id, eventDto);
 
             Assert.False(result.IsSuccess);
-            Assert.Equal(StatusCodes.BadRequest, result.Error.StatusCode);
+            Assert.Equal(400, result.Error.StatusCode);
         }
 
         [Fact]
@@ -87,7 +86,7 @@ namespace EventsManager.Tests.Events.Put
             var result = await eventsService.UpdateByPut(id, eventDto);
 
             Assert.False(result.IsSuccess);
-            Assert.Equal(StatusCodes.NotFound, result.Error.StatusCode);
+            Assert.Equal(404, result.Error.StatusCode);
         }
 
         [Theory]
