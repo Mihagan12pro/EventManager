@@ -22,15 +22,13 @@ namespace EventsManager.Tests.Events.Delete
             var test2 = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.Delete(id));
         }
 
-        //[Theory]
-        //[MemberData(nameof(AddNotExistsDeleting))]
-        //public async Task Test_Not_Exists_Deleting(Guid id)
-        //{
-        //    var eventsService = new EventsService();
+        [Theory]
+        [MemberData(nameof(AddNotExistsDeleting))]
+        public async Task Test_Not_Exists_Deleting(Guid id)
+        {
+            var eventsService = new EventsService();
 
-        //    var test = await eventsService.Delete(id);
-
-        //    Assert.False(test.IsSuccess);
-        //}
+            var test = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.Delete(id));
+        }
     }
 }
