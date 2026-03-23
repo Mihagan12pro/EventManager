@@ -22,16 +22,14 @@ namespace EventsManager.Tests.Events.Get
 
                  datetime.AddHours(10));
 
-            var result1 = await eventsService.AddNew(newEvent);
-
-            Guid id = result1.Value;
+            Guid id = await eventsService.AddNew(newEvent);
             Guid hiddenId = Guid.Empty;
 
-            var result2 = (await eventsService.GetEventById(id)).Value;
-            var result3 = (await eventsService.GetEventById(hiddenId)).Error;
+            var resultSuccessful = (await eventsService.GetEventById(id));
+          
+            Assert.Equal(typeof(GetEventDto), resultSuccessful.GetType());
 
-            Assert.Equal(typeof(GetEventDto), result2.GetType());
-            Assert.Equal(typeof(string), result3.GetType());
+            var resultFailed = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.GetEventById(hiddenId));
 
             await eventsService.Delete(id);
         }
@@ -93,14 +91,14 @@ namespace EventsManager.Tests.Events.Get
 
         [Theory]
         [MemberData(nameof(GetAllWithException))]
-        public async Task Test_Get_All_With_Exception(int page, int pageSize)
+        public async Task Test_Fail_Pagination(int page, int pageSize)
         {
             var eventsService = new EventsService();
 
-            await Assert.ThrowsAsync<BadRequestException>(() => eventsService.GetEvents(
-                string.Empty,
-                new PaginationDto(page, pageSize),
-                new DateRange(null, false, null, false)
+            var exception = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.GetEvents(
+                    string.Empty,
+                    new PaginationDto(page, pageSize),
+                    new DateRange(null, false, null, false)
                 )
             );
         }

@@ -1,4 +1,5 @@
 ﻿using EventManager.DTOs.Shared;
+using EventManager.Exceptions;
 
 namespace EventsManager.Tests.Events.Get
 {
@@ -9,13 +10,16 @@ namespace EventsManager.Tests.Events.Get
             return
             [
                 [
-                    -1, 1
+                    -1, 
+                     1
                 ],
                 [
-                    -1, -1
+                    -1,
+                    -1
                 ],
                 [
-                    1, -1
+                     1,
+                    -1
                 ]
             ];
         }
