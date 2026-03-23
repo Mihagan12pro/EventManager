@@ -8,13 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Events\Delete\DeleteEventsTests.cs" />
-    <Compile Remove="Events\Delete\DeleteEventsTestsUtils.cs" />
-    <Compile Remove="Events\Put\PutEventsTests.cs" />
-    <Compile Remove="Events\Put\PutEventsUtils.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="xunit" Version="2.9.3" />
@@ -30,11 +23,6 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Events\Delete\" />
-    <Folder Include="Events\Put\" />
   </ItemGroup>
 
 </Project>

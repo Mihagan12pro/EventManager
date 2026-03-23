@@ -6,7 +6,21 @@ namespace EventsManager.Tests.Events.Put
     {
         public static IEnumerable<object[]> PutDataForBadRequest()
         {
-            DateTime dateTime = DateTime.Now;
+            DateTime now = DateTime.Now;
+
+            DateTime dateTime = new DateTime(
+                new DateOnly(
+                        now.Year,
+                        now.Month, 
+                        now.Day
+                    ),
+
+                new TimeOnly(
+                        0,
+                        0,
+                        0
+                    )
+                );
 
             return
             [
@@ -17,8 +31,15 @@ namespace EventsManager.Tests.Events.Put
                 [
                     dateTime.AddDays(1),
                     dateTime.AddDays(1)
+                ],
+                [
+                    dateTime,
+                    dateTime.AddHours(6)
+                ],
+                [
+                    dateTime.AddHours(23),
+                    dateTime.AddDays(1)
                 ]
-
             ];
         }
 

@@ -16,7 +16,7 @@ namespace EventsManager.Tests.Events.Delete
             ];
         }
 
-        public static IEnumerable<object[]> AddNotExistsEventsForDeleting()
+        public static IEnumerable<object[]> AddNotExistsDeleting()
         {
             return
             [

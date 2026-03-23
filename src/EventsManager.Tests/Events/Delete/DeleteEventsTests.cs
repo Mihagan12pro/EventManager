@@ -1,5 +1,6 @@
 ﻿using EventManager.DTOs.Events;
 using EventManager.Services.Events;
+using EventManager.Exceptions;
 
 namespace EventsManager.Tests.Events.Delete
 {
@@ -12,24 +13,24 @@ namespace EventsManager.Tests.Events.Delete
         {
             var eventsService = new EventsService();
 
-            Guid id = (await eventsService.AddNew(eventDto)).Value;
+            Guid id = await eventsService.AddNew(eventDto);
 
             var test1 = await eventsService.Delete(id);
-            var test2 = await eventsService.Delete(id);
+           
+            Assert.Equal(typeof(string), test1.GetType());
 
-            Assert.True(test1.IsSuccess);
-            Assert.False(test2.IsSuccess);
+            var test2 = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.Delete(id));
         }
 
-        [Theory]
-        [MemberData(nameof(AddNotExistsEventsForDeleting))]
-        public async Task Test_Not_Exists_Deleting(Guid id)
-        {
-            var eventsService = new EventsService();
+        //[Theory]
+        //[MemberData(nameof(AddNotExistsDeleting))]
+        //public async Task Test_Not_Exists_Deleting(Guid id)
+        //{
+        //    var eventsService = new EventsService();
 
-            var test = await eventsService.Delete(id);
+        //    var test = await eventsService.Delete(id);
 
-            Assert.False(test.IsSuccess);
-        }
+        //    Assert.False(test.IsSuccess);
+        //}
     }
 }

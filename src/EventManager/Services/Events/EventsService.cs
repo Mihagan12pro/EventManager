@@ -57,7 +57,7 @@ namespace EventManager.Services.Events
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
-                throw new BadRequestException($"Event with id = '{id}' was not found!");
+                throw new NotFoundException($"Event with id = '{id}' was not found!");
 
             _events.Remove(eventById);
 
