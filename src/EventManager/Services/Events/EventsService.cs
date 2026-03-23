@@ -11,7 +11,7 @@ namespace EventManager.Services.Events
     {
         private readonly List<Event> _events = new List<Event>();
 
-        public async Task<Result<Guid, string>> AddNew(NewEventDto request)
+        public async Task<Guid> AddNew(NewEventDto request)
         {
             DateTime now = DateTime.Now;
 
@@ -32,7 +32,7 @@ namespace EventManager.Services.Events
                 throw new BadRequestException("Too late!");
 
             if (start >= end)
-                return "Start date time must be greater than end date time!";
+                throw new BadRequestException("Start date time must be greater than end date time!");
 
             Event createdEvent = new Event()
             {
@@ -52,26 +52,24 @@ namespace EventManager.Services.Events
             return createdEvent.Id;
         }
 
-        public async Task<Result<string, Error>> Delete(Guid id)
+        public async Task<string> Delete(Guid id)
         {
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
-                return Error.CreateError404($"Event with id = '{id}' was not found!");
+                throw new BadRequestException($"Event with id = '{id}' was not found!");
 
             _events.Remove(eventById);
 
             return "Event had been deleted!";
         }
 
-        public async Task<Result<GetEventDto, string>> GetEventById(Guid id)
+        public async Task<GetEventDto> GetEventById(Guid id)
         {
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
-            {
-                return $"Event with id = '{id}' was not found!";
-            }
+                throw new BadRequestException($"Event with id = '{id}' was not found!");
 
             GetEventDto eventDto = new GetEventDto(
                 eventById.Title,
@@ -122,7 +120,7 @@ namespace EventManager.Services.Events
             return _events.AsReadOnly();
         }
 
-        public async Task<Result<string, Error>> UpdateByPut(Guid id, NewEventDto putEvent)
+        public async Task<string> UpdateByPut(Guid id, NewEventDto putEvent)
         {
             DateTime now = DateTime.Now;
 
@@ -141,10 +139,10 @@ namespace EventManager.Services.Events
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
-                return Error.CreateError404($"Event with id = '{id}' was not found!");
+                throw new NotFoundException($"Event with id = '{id}' was not found!");
 
             if (putEvent.StartAt >= putEvent.EndAt)
-                return Error.CreateError400("End time must be greater than start time!");
+                throw new BadRequestException("End time must be greater than start time!");
 
             eventById.StartAt = putEvent.StartAt!.Value;
             eventById.EndAt = putEvent.EndAt!.Value;

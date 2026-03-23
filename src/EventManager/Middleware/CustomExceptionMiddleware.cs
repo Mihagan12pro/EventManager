@@ -13,7 +13,7 @@ namespace EventManager.Middleware
             {
                 await next(httpContext);
             }
-            catch (WebApiExceptions ex)
+            catch (WebApiException ex)
             {
                 LogError(ex, httpContext);
 

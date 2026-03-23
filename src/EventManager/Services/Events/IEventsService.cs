@@ -13,7 +13,7 @@ namespace EventManager.Services.Events
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public Task<Result<Guid, string>> AddNew(NewEventDto request);
+        public Task<Guid> AddNew(NewEventDto request);
 
         /// <summary>
         /// Returns all Events from database
@@ -38,14 +38,14 @@ namespace EventManager.Services.Events
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<Result<GetEventDto, string>> GetEventById(Guid id);
+        public Task<GetEventDto> GetEventById(Guid id);
 
         /// <summary>
         /// Deletes event from database
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<Result<string, Error>> Delete(Guid id);
+        public Task<string> Delete(Guid id);
 
         /// <summary>
         /// Updates every field of event
@@ -53,6 +53,6 @@ namespace EventManager.Services.Events
         /// <param name="id"></param>
         /// <param name="putEvent"></param>
         /// <returns></returns>
-        public Task<Result<string, Error>> UpdateByPut(Guid id, NewEventDto putEvent);
+        public Task<string> UpdateByPut(Guid id, NewEventDto putEvent);
     }
 }

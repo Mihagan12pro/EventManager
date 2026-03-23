@@ -2,7 +2,7 @@
 
 namespace EventManager.Exceptions
 {
-    public class InternalServerErrorException : WebApiExceptions
+    public class InternalServerErrorException : WebApiException
     {
         public InternalServerErrorException(string message) : base(message)
         {

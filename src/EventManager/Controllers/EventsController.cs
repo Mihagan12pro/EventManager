@@ -1,7 +1,6 @@
 ﻿using EventManager.DomainModels.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
-using EventManager.Extensions;
 using EventManager.Services.Events;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,16 +17,11 @@ namespace EventManager.Controllers
         {
             var result = await _eventService.AddNew(newEvent);
 
-            if (result.IsSuccess)
-            {
-                var output = result.Value;
-                var request = HttpContext.Request;
+            var output = result;
+            var request = HttpContext.Request;
 
-                string uri = $"{request.Scheme}://{request.Host}{request.Path}/{output}";
-                return Created(uri, output);
-            }
-
-            return BadRequest(result.Error);
+            string uri = $"{request.Scheme}://{request.Host}{request.Path}/{output}";
+            return Created(uri, output);
         }
 
         [HttpGet]
@@ -56,10 +50,7 @@ namespace EventManager.Controllers
         {
             var result = await _eventService.GetEventById(id);
 
-            if (result.IsSuccess)
-                return Ok(result.Value);
-
-            return NotFound(result.Error);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
@@ -67,10 +58,7 @@ namespace EventManager.Controllers
         {
             var result = await _eventService.Delete(id);
 
-            if (result.IsSuccess)
-                return Ok(result.Value);
-
-            return NotFound(result.Error.Message);
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -80,11 +68,7 @@ namespace EventManager.Controllers
         {
             var result = await _eventService.UpdateByPut(id, newEvent);
 
-
-            if (result.IsFailure)
-                return this.ErrorToActionResult(result.Error);
-
-            return Ok(result.Value);
+            return Ok(result);
         }
 
         public EventsController(IEventsService eventsService)

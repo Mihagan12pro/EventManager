@@ -2,7 +2,7 @@
 
 namespace EventManager.Exceptions
 {
-    public class BadRequestException : WebApiExceptions
+    public class BadRequestException : WebApiException
     {
         public BadRequestException(string message) : base(message)
         {

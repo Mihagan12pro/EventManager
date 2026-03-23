@@ -2,11 +2,11 @@
 
 namespace EventManager.Exceptions
 {
-    public abstract class WebApiExceptions : Exception
+    public abstract class WebApiException : Exception
     {
         public Error Error { get; protected set; }
 
-        public WebApiExceptions(string message)
+        public WebApiException(string message)
         {
             
         }
