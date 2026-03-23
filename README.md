@@ -20,9 +20,24 @@ How to run tests?
 1. Open the EventsManager.Tests directory via cli
 2. Write: dotnet build. If everything is ok, press ENTER
 3. Then you will have 2 ways:
-3.1 If you want to run all tests, write:  dotnet test.
+3.1 If you want to run all tests, write:  'dotnet test' or 'dotnet test path_to_your_foler\EventManager\src\EventsManager.Tests\EventsManager.Tests.csproj"'.
 3.2 If you want to run group of tests, write:  dotnet test --filter <Group tittle>.
-	For example: "dotnet test --filter GetEvents"
+	For example: 'dotnet test --filter GetEvents' or 'dotnet test path_to_your_foler\EventManager\src\EventsManager.Tests\EventsManager.Tests.csproj" --filter GetEvents'
+							
+WARNING! 
+The EventsController.All() endpoint is obsolete! 
+Use the 
+	EventsController.All(
+		[FromQuery] string? title, 
+		[FromQuery] DateTime? from, 
+		[FromQuery] DateTime? to, 
+		[FromQuery] int page = 1,
+		[FromQuery] int pageSize = 10) 
+instead.
 
-WARNING! The EventsController.All() endpoint is obsolete! Use the EventsController.All([FromQuery] string? title, [FromQuery] DateTime? from, [FromQuery] DateTime? to, [FromQuery] int page = 1, [FromQuery] int pageSize = 10) instead.
+More about EventsController.All new parameters. 
+"title", "from" and "to" optional filers. In other words, these parameters can be null.
+We have to pay a little attention to the "title" parameter. This parameter helps to implement
+partial matching, i.e. user can set title = "day" and find e.g. "Son's birthday" or "Thanksgiving day".
+Last two parameters (page and pageSize) help to implement pagination.
 
