@@ -1,4 +1,5 @@
 ﻿using EventManager.DTOs.Events;
+using EventManager.Exceptions;
 using EventManager.Services.Events;
 
 namespace EventsManager.Tests.Events.Add
@@ -7,42 +8,24 @@ namespace EventsManager.Tests.Events.Add
     {
         [Theory]
         [MemberData(nameof(AddEvents))]
-        public async Task Test_Adding_New_Events_With_Correct_DateTime(NewEventDto newEventDto)
+        public async Task Test_Successful_Adding(NewEventDto newEventDto)
         {
             EventsService eventsService = new EventsService();
 
-            if (newEventDto.StartAt.Value.CompareTo(newEventDto.EndAt.Value) < 0)
-            {
-                var result = await eventsService.AddNew(newEventDto);
+            var result = await eventsService.AddNew(newEventDto);
+            var deletingResult = await eventsService.Delete(result);
 
-                Assert.True(result.IsSuccess);
-
-                await eventsService.Delete(result.Value);
-            }
+            Assert.Equal(typeof(Guid), result.GetType());
+            Assert.Equal(typeof(string), deletingResult.GetType());
         }
 
         [Theory]
-        [MemberData(nameof(AddEvents))]
-        public async Task Test_Adding_New_Events_With_InCorrect_DateTime(NewEventDto newEventDto)
+        [MemberData(nameof(AddBadRequest))]
+        public async Task Test_Bad_Request(NewEventDto dto, string expected)
         {
             EventsService eventsService = new EventsService();
 
-            var value = newEventDto.StartAt.Value.CompareTo(newEventDto.EndAt.Value);
-
-            if (newEventDto.StartAt.Value.CompareTo(newEventDto.EndAt.Value) >= 0)
-            {
-                var result = await eventsService.AddNew(newEventDto);
-                Assert.False(result.IsSuccess);
-            }
-        }
-
-        [Theory]
-        [MemberData(nameof(AddEventsWithException))]
-        public async Task Test_Add_Events_With_Exception(NewEventDto dto, string expected)
-        {
-            EventsService eventsService = new EventsService();
-
-            var result = await Assert.ThrowsAsync<EventManager.Exceptions.BadRequestException>(() => eventsService.AddNew(dto));
+            var result = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.AddNew(dto));
             Assert.Equal(expected, result.Error.Message);
         }
     }

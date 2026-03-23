@@ -4,7 +4,7 @@ namespace EventsManager.Tests.Events.Add
 {
     public partial class AddEventsTests
     {
-        public static IEnumerable<object[]> AddEventsWithException()
+        public static IEnumerable<object[]> AddBadRequest()
         {
             DateTime datetime = DateTime.Now.AddDays(1);
 
@@ -39,13 +39,23 @@ namespace EventsManager.Tests.Events.Add
                         datetime.AddDays(2)),
                     "Too late!"
                 ],
-                 [
+                [
                     new NewEventDto(
                         "Концерт",
                         datetime,
                         datetime.AddDays(-1)),
                     "Too late!"
-                ]
+                ],
+                [
+                    new NewEventDto(
+                        "Корпоратив",
+
+                        datetime.AddHours(6),
+
+
+                        datetime.AddHours(2)),
+                    "Start date time must be greater than end date time!"
+                ],
             ];
         }
 
@@ -85,16 +95,7 @@ namespace EventsManager.Tests.Events.Add
                         new DateTime(
                             new DateOnly(DateOnly.FromDateTime(datetime).Year + 1, 6, 22),
                             new TimeOnly(8, 0, 20)))
-                ],
-                 [
-                    new NewEventDto(
-                        "Корпоратив",
-
-                        datetime.AddHours(6),
-
-
-                        datetime.AddHours(2))
-                ],
+                ]
             ];
         }
     }
