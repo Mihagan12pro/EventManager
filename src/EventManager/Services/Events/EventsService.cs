@@ -125,16 +125,16 @@ namespace EventManager.Services.Events
             DateSpan startSpan = new DateSpan(start, now);
             DateSpan endSpan = new DateSpan(end, now);
 
+            Event? eventById = _events.FirstOrDefault(e => e.Id == id);
+
+            if (eventById == null)
+                throw new NotFoundException($"Event with id = '{id}' was not found!");
+
             if (startSpan.Day <= 0 && startSpan.Year <= 0 && startSpan.Month <= 0)
                 throw new BadRequestException("Too late!");
 
             if (endSpan.Day <= 0 && endSpan.Year <= 0 && endSpan.Month <= 0)
                 throw new BadRequestException("Too late!");
-
-            Event? eventById = _events.FirstOrDefault(e => e.Id == id);
-
-            if (eventById == null)
-                throw new NotFoundException($"Event with id = '{id}' was not found!");
 
             if (putEvent.StartAt >= putEvent.EndAt)
                 throw new BadRequestException("End time must be greater than start time!");
