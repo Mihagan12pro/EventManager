@@ -1,5 +1,7 @@
-﻿using EventManager.DomainModels;
+﻿using CSharpFunctionalExtensions;
+using EventManager.DomainModels.Events;
 using EventManager.DTOs.Events;
+using EventManager.DTOs.Shared;
 using EventManager.Shared;
 
 namespace EventManager.Services.Events
@@ -11,27 +13,33 @@ namespace EventManager.Services.Events
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public Task<Result> AddNew(NewEventDto request);
+        public Task<Guid> AddNew(NewEventDto request);
+
 
         /// <summary>
-        /// Returns all Events from database
+        /// Returns all Events from database with filters
         /// </summary>
+        /// <param name="title"></param>
+        /// <param name="dateRange"></param>
         /// <returns></returns>
-        public Task<IEnumerable<Event>> GetEvents();
+        public Task<PaginatedEventsDto> GetEvents(
+            string? title,
+            PaginationDto pagination,
+            DateRange dateRange);
 
         /// <summary>
         /// Returns event by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<Result> GetEventById(Guid id);
+        public Task<GetEventDto> GetEventById(Guid id);
 
         /// <summary>
         /// Deletes event from database
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<Result> Delete(Guid id);
+        public Task<string> Delete(Guid id);
 
         /// <summary>
         /// Updates every field of event
@@ -39,6 +47,6 @@ namespace EventManager.Services.Events
         /// <param name="id"></param>
         /// <param name="putEvent"></param>
         /// <returns></returns>
-        public Task<(Result, int)> UpdateByPut(Guid id, NewEventDto putEvent);
+        public Task<string> UpdateByPut(Guid id, NewEventDto putEvent);
     }
 }

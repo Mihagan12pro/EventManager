@@ -1,19 +1,38 @@
-﻿using EventManager.DomainModels;
+﻿using CSharpFunctionalExtensions;
+using EventManager.DomainModels.Events;
 using EventManager.DTOs.Events;
+using EventManager.DTOs.Shared;
+using EventManager.Exceptions;
 using EventManager.Shared;
 
 namespace EventManager.Services.Events
 {
     public class EventsService : IEventsService
     {
-        private static readonly List<Event> _events = new List<Event>();
+        private readonly List<Event> _events = new List<Event>();
 
-        public async Task<Result> AddNew(NewEventDto request)
+        public async Task<Guid> AddNew(NewEventDto request)
         {
-            if (request.StartAt >= request.EndAt)
-            {
-                return new Result(false, "End time must be greater than start time!");
-            }
+            DateTime now = DateTime.Now;
+
+            if (!request.StartAt.HasValue || !request.EndAt.HasValue)
+                throw new BadRequestException("Start date time and End date time are required fields!");
+
+            DateTime start = request.StartAt.Value;
+            DateTime end = request.EndAt.Value;
+
+            DateSpan startSpan = new DateSpan(start, now);
+            DateSpan endSpan = new DateSpan(end, now);
+
+
+            if (startSpan.Day <= 0 && startSpan.Year <= 0 && startSpan.Month <= 0)
+                throw new BadRequestException("Too late!");
+
+            if (endSpan.Day <= 0 && endSpan.Year <= 0 && endSpan.Month <= 0)
+                throw new BadRequestException("Too late!");
+
+            if (start >= end)
+                throw new BadRequestException("Start date time must be greater than end date time!");
 
             Event createdEvent = new Event()
             {
@@ -21,38 +40,36 @@ namespace EventManager.Services.Events
 
                 Title = request.Title,
 
-                StartAt = request.StartAt!.Value,
+                StartAt = start,
 
-                EndAt = request.EndAt!.Value,
+                EndAt = end,
 
                 Description = request.Description
             };
 
             _events.Add(createdEvent);
 
-            return new Result(true, createdEvent.Id);
+            return createdEvent.Id;
         }
 
-        public async Task<Result> Delete(Guid id)
+        public async Task<string> Delete(Guid id)
         {
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
-                return new Result(false, $"Event with id = '{id}' was not found!");
+                throw new NotFoundException($"Event with id = '{id}' was not found!");
 
             _events.Remove(eventById);
 
-            return new Result(true, "Event had been deleted!");
+            return "Event had been deleted!";
         }
 
-        public async Task<Result> GetEventById(Guid id)
+        public async Task<GetEventDto> GetEventById(Guid id)
         {
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
-            {
-                return new Result(false, $"Event with id = '{id}' was not found!");
-            }
+                throw new NotFoundException($"Event with id = '{id}' was not found!");
 
             GetEventDto eventDto = new GetEventDto(
                 eventById.Title,
@@ -60,39 +77,74 @@ namespace EventManager.Services.Events
                 eventById.EndAt,
                 eventById.Description);
 
-            return new Result(true, eventDto);
+            return eventDto;
         }
 
-        public async Task<IEnumerable<Event>> GetEvents()
+        public async Task<PaginatedEventsDto> GetEvents(
+            string? title,
+            PaginationDto pagination,
+            DateRange dateRange)
         {
-            return _events.AsReadOnly();
+            if (pagination.Page < 0 || pagination.PageSize < 0)
+                throw new BadRequestException("Pagination parameters must be greater than zero!");
+
+            IEnumerable<Event> filteredEvents = _events;
+
+            if (dateRange.UpperBound.HasValue || dateRange.LowerBound.HasValue)
+                filteredEvents = filteredEvents.Where(e => dateRange
+                    .CheckDateRange(e)
+                        .IsSuccess);
+
+            var a = filteredEvents.ToArray().Length;
+
+            if (title != null)
+                filteredEvents = filteredEvents.Where(e => e.Title.ToLower().Contains(title.ToLower()));
+
+            int totalCount = filteredEvents.Count();
+
+
+            var eventsList = PaginationMaster<Event>.DoPagination(filteredEvents, pagination)
+                .ToList();
+
+            PaginatedEventsDto result = new PaginatedEventsDto(
+                totalCount, 
+                eventsList.AsReadOnly(),
+                pagination.Page,
+                pagination.PageSize);
+
+            return result;
         }
 
-        public async Task<(Result, int)> UpdateByPut(Guid id, NewEventDto putEvent)
+        public async Task<string> UpdateByPut(Guid id, NewEventDto putEvent)
         {
+            DateTime now = DateTime.Now;
+
+            DateTime start = putEvent.StartAt!.Value;
+            DateTime end = putEvent.EndAt!.Value;
+
+            DateSpan startSpan = new DateSpan(start, now);
+            DateSpan endSpan = new DateSpan(end, now);
+
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
-                return (new Result(
-                    false, 
-                    $"Event with id = '{id}' was not found!"),
-                    404);
+                throw new NotFoundException($"Event with id = '{id}' was not found!");
+
+            if (startSpan.Day <= 0 && startSpan.Year <= 0 && startSpan.Month <= 0)
+                throw new BadRequestException("Too late!");
+
+            if (endSpan.Day <= 0 && endSpan.Year <= 0 && endSpan.Month <= 0)
+                throw new BadRequestException("Too late!");
 
             if (putEvent.StartAt >= putEvent.EndAt)
-                return (new Result(
-                    false,
-                    $"End time must be greater than start time!"),
-                    400);
+                throw new BadRequestException("End time must be greater than start time!");
 
             eventById.StartAt = putEvent.StartAt!.Value;
             eventById.EndAt = putEvent.EndAt!.Value;
             eventById.Title = putEvent.Title;
             eventById.Description = putEvent.Description;
 
-            return (new Result(
-                true,
-                $"Event had been updated!"),
-                200);
+            return "Event had been updated!";
         }
     }
 }

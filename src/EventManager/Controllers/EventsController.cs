@@ -1,6 +1,7 @@
-﻿using EventManager.DTOs.Events;
+﻿using EventManager.DomainModels.Events;
+using EventManager.DTOs.Events;
+using EventManager.DTOs.Shared;
 using EventManager.Services.Events;
-using EventManager.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventManager.Controllers
@@ -14,24 +15,32 @@ namespace EventManager.Controllers
         [HttpPost]
         public async Task<IActionResult> New([FromBody] NewEventDto newEvent)
         {
-            Result result = await _eventService.AddNew(newEvent);
+            var result = await _eventService.AddNew(newEvent);
 
-            if (result.IsSuccess)
-            {
-                var output = result.Output;
-                var request = HttpContext.Request;
+            var output = result;
+            var request = HttpContext.Request;
 
-                string uri = $"{request.Scheme}://{request.Host}{request.Path}/{output}";
-                return Created(uri, output);
-            }
-
-            return BadRequest(result.Output);
+            string uri = $"{request.Scheme}://{request.Host}{request.Path}/{output}";
+            return Created(uri, output);
         }
 
         [HttpGet]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All(
+            [FromQuery] string? title,
+            [FromQuery] DateTime? from,
+            [FromQuery] DateTime? to,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var events = await _eventService.GetEvents();
+            PaginationDto pagination = new PaginationDto(page, pageSize);
+
+            DateRange dateRange = new DateRange(
+                from,
+                false, 
+                to,
+                false);
+
+            var events = await _eventService.GetEvents(title, pagination, dateRange);
 
             return Ok(events);
         }
@@ -41,10 +50,7 @@ namespace EventManager.Controllers
         {
             var result = await _eventService.GetEventById(id);
 
-            if (result.IsSuccess)
-                return Ok(result.Output);
-
-            return NotFound(result.Output);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
@@ -52,10 +58,7 @@ namespace EventManager.Controllers
         {
             var result = await _eventService.Delete(id);
 
-            if (result.IsSuccess)
-                return Ok(result.Output);
-
-            return NotFound(result.Output);
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -63,25 +66,10 @@ namespace EventManager.Controllers
             [FromRoute] Guid id,
             [FromBody] NewEventDto newEvent)
         {
-            var codeResult = await _eventService.UpdateByPut(id, newEvent);
+            var result = await _eventService.UpdateByPut(id, newEvent);
 
-            Result result = codeResult.Item1;
-            int code = codeResult.Item2;
-
-            if (result.IsSuccess)
-                return Ok(result.Output);
-
-            switch(code)
-            {
-                case 400:
-                    return BadRequest(result.Output);
-                case 404:
-                    return NotFound(result.Output);
-                default:
-                    return BadRequest();
-            }
+            return Ok(result);
         }
-
 
         public EventsController(IEventsService eventsService)
         {
