@@ -1,6 +1,4 @@
 using EventManager;
-using EventManager.Middleware;
-using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
