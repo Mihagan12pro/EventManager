@@ -15,12 +15,6 @@ namespace EventManager.Services.Events
         /// <returns></returns>
         public Task<Guid> AddNew(NewEventDto request);
 
-        /// <summary>
-        /// Returns all Events from database
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete]
-        public Task<IReadOnlyCollection<Event>> GetEvents();
 
         /// <summary>
         /// Returns all Events from database with filters

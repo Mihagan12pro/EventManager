@@ -115,11 +115,6 @@ namespace EventManager.Services.Events
             return result;
         }
 
-        public async Task<IReadOnlyCollection<Event>> GetEvents()
-        {
-            return _events.AsReadOnly();
-        }
-
         public async Task<string> UpdateByPut(Guid id, NewEventDto putEvent)
         {
             DateTime now = DateTime.Now;
