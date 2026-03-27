@@ -15,7 +15,7 @@ namespace EventManager.Controllers
         [HttpPost]
         public async Task<IActionResult> New([FromBody] NewEventDto newEvent)
         {
-            var result = await _eventService.AddNew(newEvent);
+            var result = await _eventService.AddNewAsync(newEvent);
 
             var output = result;
             var request = HttpContext.Request;
@@ -40,7 +40,7 @@ namespace EventManager.Controllers
                 to,
                 false);
 
-            var events = await _eventService.GetEvents(title, pagination, dateRange);
+            var events = await _eventService.GetEventsAsync(title, pagination, dateRange);
 
             return Ok(events);
         }
@@ -48,7 +48,7 @@ namespace EventManager.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
-            var result = await _eventService.GetEventById(id);
+            var result = await _eventService.GetEventByIdAsync(id);
 
             return Ok(result);
         }
@@ -56,7 +56,7 @@ namespace EventManager.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var result = await _eventService.Delete(id);
+            var result = await _eventService.DeleteAsync(id);
 
             return Ok(result);
         }
@@ -66,7 +66,7 @@ namespace EventManager.Controllers
             [FromRoute] Guid id,
             [FromBody] NewEventDto newEvent)
         {
-            var result = await _eventService.UpdateByPut(id, newEvent);
+            var result = await _eventService.UpdateByPutAsync(id, newEvent);
 
             return Ok(result);
         }

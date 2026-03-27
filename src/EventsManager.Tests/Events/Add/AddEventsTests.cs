@@ -12,8 +12,8 @@ namespace EventsManager.Tests.Events.Add
         {
             EventsService eventsService = new EventsService();
 
-            var result = await eventsService.AddNew(newEventDto);
-            var deletingResult = await eventsService.Delete(result);
+            var result = await eventsService.AddNewAsync(newEventDto);
+            var deletingResult = await eventsService.DeleteAsync(result);
 
             Assert.Equal(typeof(Guid), result.GetType());
             Assert.Equal(typeof(string), deletingResult.GetType());
@@ -25,7 +25,7 @@ namespace EventsManager.Tests.Events.Add
         {
             EventsService eventsService = new EventsService();
 
-            var result = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.AddNew(dto));
+            var result = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.AddNewAsync(dto));
             Assert.Equal(expected, result.Error.Message);
         }
     }

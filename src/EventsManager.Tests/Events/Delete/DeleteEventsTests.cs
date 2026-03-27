@@ -13,13 +13,13 @@ namespace EventsManager.Tests.Events.Delete
         {
             var eventsService = new EventsService();
 
-            Guid id = await eventsService.AddNew(eventDto);
+            Guid id = await eventsService.AddNewAsync(eventDto);
 
-            var test1 = await eventsService.Delete(id);
+            var test1 = await eventsService.DeleteAsync(id);
            
             Assert.Equal(typeof(string), test1.GetType());
 
-            var test2 = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.Delete(id));
+            var test2 = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.DeleteAsync(id));
         }
 
         [Theory]
@@ -28,7 +28,7 @@ namespace EventsManager.Tests.Events.Delete
         {
             var eventsService = new EventsService();
 
-            var test = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.Delete(id));
+            var test = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.DeleteAsync(id));
         }
     }
 }

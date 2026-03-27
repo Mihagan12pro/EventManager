@@ -11,7 +11,7 @@ namespace EventManager.Services.Events
     {
         private readonly List<Event> _events = new List<Event>();
 
-        public async Task<Guid> AddNew(NewEventDto request)
+        public async Task<Guid> AddNewAsync(NewEventDto request)
         {
             DateTime now = DateTime.Now;
 
@@ -52,7 +52,7 @@ namespace EventManager.Services.Events
             return createdEvent.Id;
         }
 
-        public async Task<string> Delete(Guid id)
+        public async Task<string> DeleteAsync(Guid id)
         {
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
@@ -64,7 +64,7 @@ namespace EventManager.Services.Events
             return "Event had been deleted!";
         }
 
-        public async Task<GetEventDto> GetEventById(Guid id)
+        public async Task<GetEventDto> GetEventByIdAsync(Guid id)
         {
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
@@ -80,7 +80,7 @@ namespace EventManager.Services.Events
             return eventDto;
         }
 
-        public async Task<PaginatedEventsDto> GetEvents(
+        public async Task<PaginatedEventsDto> GetEventsAsync(
             string? title,
             PaginationDto pagination,
             DateRange dateRange)
@@ -115,7 +115,7 @@ namespace EventManager.Services.Events
             return result;
         }
 
-        public async Task<string> UpdateByPut(Guid id, NewEventDto putEvent)
+        public async Task<string> UpdateByPutAsync(Guid id, NewEventDto putEvent)
         {
             DateTime now = DateTime.Now;
 

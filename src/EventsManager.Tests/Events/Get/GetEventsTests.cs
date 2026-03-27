@@ -22,16 +22,16 @@ namespace EventsManager.Tests.Events.Get
 
                  datetime.AddHours(10));
 
-            Guid id = await eventsService.AddNew(newEvent);
+            Guid id = await eventsService.AddNewAsync(newEvent);
             Guid hiddenId = Guid.Empty;
 
-            var resultSuccessful = (await eventsService.GetEventById(id));
+            var resultSuccessful = (await eventsService.GetEventByIdAsync(id));
           
             Assert.Equal(typeof(GetEventDto), resultSuccessful.GetType());
 
-            var resultFailed = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.GetEventById(hiddenId));
+            var resultFailed = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.GetEventByIdAsync(hiddenId));
 
-            await eventsService.Delete(id);
+            await eventsService.DeleteAsync(id);
         }
 
         [Theory]
@@ -47,35 +47,35 @@ namespace EventsManager.Tests.Events.Get
             DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
             var eventsService = new EventsService();
 
-            await eventsService.AddNew(
+            await eventsService.AddNewAsync(
                  new NewEventDto(
                      "Юбилей",
                      dateTime.AddDays(1),
                      dateTime.AddDays(2))
                  );
 
-            await eventsService.AddNew(
+            await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Юбилей",
                     dateTime.AddDays(1),
                     dateTime.AddDays(2))
                 );
 
-            await eventsService.AddNew(
+            await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Юбилей",
                     dateTime.AddDays(2),
                     dateTime.AddDays(3))
                 );
 
-            await eventsService.AddNew(
+            await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Корпоратив",
                     dateTime.AddDays(2),
                     dateTime.AddDays(3))
                 );
 
-            var result = await eventsService.GetEvents(
+            var result = await eventsService.GetEventsAsync(
               title,
               paginationDto,
               new DateRange(
@@ -95,7 +95,7 @@ namespace EventsManager.Tests.Events.Get
         {
             var eventsService = new EventsService();
 
-            var exception = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.GetEvents(
+            var exception = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.GetEventsAsync(
                     string.Empty,
                     new PaginationDto(page, pageSize),
                     new DateRange(null, false, null, false)
