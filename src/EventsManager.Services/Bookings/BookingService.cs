@@ -21,8 +21,6 @@ namespace EventsManager.Services.Bookings
             {
                 GetEventDto eventById = await _eventsService.GetEventByIdAsync(eventId);
 
-                bookingAcceptedDto = new BookingAcceptedDto(eventId, "Your request is pending!");
-
                 Booking booking = new Booking()
                 { 
                     CreatedAt = DateTime.Now,
@@ -32,6 +30,8 @@ namespace EventsManager.Services.Bookings
                 };
 
                 _bookings.Add(booking);
+
+                bookingAcceptedDto = new BookingAcceptedDto(booking.Id, "Your request is pending!");
             }
             catch
             {

@@ -40,12 +40,12 @@ namespace EventsManager.Services.Background.Bookings
                 {
                     _logger.LogInformation(ex, "The operation had been canceled!");
                 }
-                catch 
+                catch (Exception ex)
                 {
-                    throw;
+                    _logger.LogError(ex, ex.Message);
                 }
 
-                await Task.Delay(500, stoppingToken);
+                await Task.Delay(3000, stoppingToken);
             }
         }
 
