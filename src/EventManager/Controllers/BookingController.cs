@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventManager.Controllers
 {
     [ApiController]
-    [Route("/booking")]
+    [Route("/bookings")]
     public class BookingController : ControllerBase
     {
         private readonly IBookingService _bookingService;

@@ -32,7 +32,10 @@ namespace EventsManager.Services.Background.Bookings
                             var booking = await bookingService.GetBookingByIdAsync(bookingTask.Id);
 
                             if (booking.Status == BookingStatus.Pending)
+                            {
                                 booking.Status = BookingStatus.Confirmed;
+                                booking.ProcessedAt = DateTime.Now;
+                            }
                         }
                     }
                 }
