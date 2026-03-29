@@ -1,6 +1,7 @@
 ﻿using EventManager.DomainModels.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
+using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace EventManager.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventsService _eventService;
+        private readonly IBookingService _bookingService;
 
         [HttpPost]
         public async Task<IActionResult> New([FromBody] NewEventDto newEvent)
@@ -71,9 +73,20 @@ namespace EventManager.Controllers
             return Ok(result);
         }
 
-        public EventsController(IEventsService eventsService)
+        [HttpPost("{id}/book")]
+        public async Task<IActionResult> Book(
+            [FromRoute] Guid id,
+            CancellationToken cancellationToken)
+        {
+            return Accepted();
+        }
+
+        public EventsController(
+            IEventsService eventsService,
+            IBookingService bookingService)
         {
             _eventService = eventsService;
+            _bookingService = bookingService;
         }
     }
 }

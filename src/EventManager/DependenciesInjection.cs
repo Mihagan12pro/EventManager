@@ -1,24 +1,19 @@
 ﻿using EventManager.Middleware;
-using EventManager.Services.Events;
+using EventsManager.Services;
 
 namespace EventManager
 {
     public static class DependenciesInjection
     {
-        public static IServiceCollection AddScopedDependencies(this IServiceCollection services)
+        public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            return services.AddScopedServices();
+            return services.AddScopedServices()
+                .AddBackgroundServices();
         }
 
         public static IApplicationBuilder UseCustomMiddleware(this IApplicationBuilder app)
         {
             return app.UseMiddleware<CustomExceptionMiddleware>();
-        }
-
-        private static IServiceCollection AddScopedServices(this IServiceCollection services)
-        {
-            return services
-               .AddSingleton<IEventsService, EventsService>();//Making IEventsService singleton is a temporary solution!
         }
     }
 }

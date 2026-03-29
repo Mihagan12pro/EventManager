@@ -3,7 +3,7 @@ using EventManager;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddScopedDependencies();
+builder.Services.AddServices();
 
 builder.Services.AddSwaggerGen();
 
