@@ -1,5 +1,4 @@
 ﻿using EventManager.Middleware;
-using EventManager.TasksManagers;
 using EventsManager.Services;
 
 namespace EventManager
@@ -9,7 +8,8 @@ namespace EventManager
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services.AddScopedServices()
-                .AddBackgroundServices();
+                .AddBackgroundServices()
+                    .AddSingletonServices();
         }
 
         public static IApplicationBuilder UseCustomMiddleware(this IApplicationBuilder app)

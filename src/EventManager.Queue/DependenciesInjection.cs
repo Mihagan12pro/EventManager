@@ -1,8 +1,7 @@
-﻿using EventManager.TasksManagers.Bookings;
+﻿using EventManager.Queues.Queues.Booking;
 using Microsoft.Extensions.DependencyInjection;
-using System.Runtime.CompilerServices;
 
-namespace EventManager.TasksManagers
+namespace EventManager.Queues
 {
     public static class DependenciesInjection
     {

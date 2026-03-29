@@ -1,4 +1,5 @@
-﻿using EventManager.Services.Bookings;
+﻿using EventManager.Queues;
+using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using EventsManager.Services.Background.Bookings;
 using EventsManager.Services.Bookings;
@@ -24,6 +25,13 @@ namespace EventsManager.Services
             backgroundServices.AddHostedService<BookingHandlingService>();
 
             return backgroundServices;
+        }
+
+        public static IServiceCollection AddSingletonServices(this IServiceCollection singletonServices)
+        {
+            singletonServices.AddQueues();
+
+            return singletonServices;
         }
     }
 }
