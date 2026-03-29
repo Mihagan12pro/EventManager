@@ -1,6 +1,8 @@
 ﻿using EventManager.DomainModels.Events;
+using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
+using EventManager.Extensions;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +24,8 @@ namespace EventManager.Controllers
             var output = result;
             var request = HttpContext.Request;
 
-            string uri = $"{request.Scheme}://{request.Host}{request.Path}/{output}";
+            string uri = request.ToUrl(new List<object> { output });
+
             return Created(uri, output);
         }
 
@@ -78,7 +81,15 @@ namespace EventManager.Controllers
             [FromRoute] Guid id,
             CancellationToken cancellationToken)
         {
-            return Accepted();
+            var bookingDto = await _bookingService.CreateBookingAsync(id);
+
+            var bookingWithUrlDto = new BookingAcceptedWithUrlDto(
+                bookingDto.Id, 
+                bookingDto.Message, 
+                HttpContext.Request.ToUrl(false, new List<object> { "bookings", bookingDto.Id })
+            );
+
+            return Accepted(bookingWithUrlDto);
         }
 
         public EventsController(

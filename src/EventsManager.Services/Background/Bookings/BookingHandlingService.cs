@@ -25,7 +25,7 @@ namespace EventsManager.Services.Background.Bookings
                     _logger.LogError("Thrown exception: {ex}", ex);
                 }
 
-                await Task.Delay(500, stoppingToken);
+                await Task.Delay(3000, stoppingToken);
             }
         }
 

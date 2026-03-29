@@ -9,8 +9,7 @@ namespace EventManager
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services.AddScopedServices()
-                .AddBackgroundServices()
-                    .AddQueues();
+                .AddBackgroundServices();
         }
 
         public static IApplicationBuilder UseCustomMiddleware(this IApplicationBuilder app)

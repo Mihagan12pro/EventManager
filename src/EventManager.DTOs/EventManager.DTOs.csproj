@@ -10,8 +10,4 @@
     <ProjectReference Include="..\EventManager.Domain\EventManager.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Bookings\" />
-  </ItemGroup>
-
 </Project>

@@ -1,19 +1,44 @@
 ﻿using EventManager.Domain.Bookings;
+using EventManager.Domain.Bookings.Enums;
+using EventManager.DTOs.Bookings;
+using EventManager.DTOs.Events;
 using EventManager.Exceptions;
 using EventManager.Services.Bookings;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using EventManager.Services.Events;
 
 namespace EventsManager.Services.Bookings
 {
     internal class BookingService : IBookingService
     {
+        private readonly IEventsService _eventsService;
         private readonly List<Booking> _bookings = new List<Booking>();
 
-        public Task<Guid> CreateBookingAsync(Guid eventId)
+        public async Task<BookingAcceptedDto> CreateBookingAsync(Guid eventId)
         {
-            throw new NotImplementedException();
+            BookingAcceptedDto bookingAcceptedDto;
+
+            try
+            {
+                GetEventDto eventById = await _eventsService.GetEventByIdAsync(eventId);
+
+                bookingAcceptedDto = new BookingAcceptedDto(eventId, "Your request is pending!");
+
+                Booking booking = new Booking()
+                { 
+                    CreatedAt = DateTime.Now,
+                    EventId = eventId,
+                    Id = Guid.NewGuid(), 
+                    Status = BookingStatus.Pending
+                };
+
+                _bookings.Add(booking);
+            }
+            catch
+            {
+                throw;
+            }
+
+            return bookingAcceptedDto;
         }
 
         public async Task<Booking> GetBookingByIdAsync(Guid bookingId)
@@ -24,6 +49,12 @@ namespace EventsManager.Services.Bookings
                 throw new NotFoundException($"Booking with id = {bookingId} was not found!");
 
             return booking;
+        }
+
+
+        public BookingService(IEventsService eventsService)
+        {
+            _eventsService = eventsService;
         }
     }
 }
