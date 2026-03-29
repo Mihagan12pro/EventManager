@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager.DTOs", "EventM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsManager.Services", "EventsManager.Services\EventsManager.Services.csproj", "{0D05A166-B4C1-4DA1-94F3-BAAC936C132B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager.TasksManagers", "EventManager.TasksManagers\EventManager.TasksManagers.csproj", "{5FD4FD2A-8CCB-4773-AA7B-7F2386C531ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{0D05A166-B4C1-4DA1-94F3-BAAC936C132B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D05A166-B4C1-4DA1-94F3-BAAC936C132B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D05A166-B4C1-4DA1-94F3-BAAC936C132B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FD4FD2A-8CCB-4773-AA7B-7F2386C531ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FD4FD2A-8CCB-4773-AA7B-7F2386C531ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FD4FD2A-8CCB-4773-AA7B-7F2386C531ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FD4FD2A-8CCB-4773-AA7B-7F2386C531ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

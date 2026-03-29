@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace EventsManager.Services.Background.Booking
+namespace EventsManager.Services.Background.Bookings
 {
     internal class BookingHandlingService : BackgroundService
     {

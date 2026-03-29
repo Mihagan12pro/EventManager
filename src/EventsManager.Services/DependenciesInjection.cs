@@ -1,6 +1,6 @@
 ﻿using EventManager.Services.Bookings;
 using EventManager.Services.Events;
-using EventsManager.Services.Background.Booking;
+using EventsManager.Services.Background.Bookings;
 using EventsManager.Services.Bookings;
 using Microsoft.Extensions.DependencyInjection;
 
