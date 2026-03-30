@@ -1,11 +1,10 @@
-﻿using EventManager.Domain.Bookings;
-using EventManager.Domain.Bookings.Enums;
+﻿using EventManager.Domain.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 
-namespace EventsManager.Tests.Booking.Create
+namespace EventManager.Tests.Booking.Create
 {
     public partial class CreateBookTests
     {

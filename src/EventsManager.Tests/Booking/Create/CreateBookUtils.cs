@@ -1,6 +1,6 @@
 ﻿using EventManager.DTOs.Events;
 
-namespace EventsManager.Tests.Booking.Create
+namespace EventManager.Tests.Booking.Create
 {
     public partial class CreateBookTests
     {

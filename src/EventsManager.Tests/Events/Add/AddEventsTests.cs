@@ -2,7 +2,7 @@
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions;
 
-namespace EventsManager.Tests.Events.Add
+namespace EventManager.Tests.Events.Add
 {
     public partial class AddEventsTests
     {
@@ -10,7 +10,7 @@ namespace EventsManager.Tests.Events.Add
         [MemberData(nameof(AddEvents))]
         public async Task Test_Successful_Adding(NewEventDto newEventDto)
         {
-            EventsService eventsService = new EventsService();
+            IEventsService eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
             var result = await eventsService.AddNewAsync(newEventDto);
             var deletingResult = await eventsService.DeleteAsync(result);
