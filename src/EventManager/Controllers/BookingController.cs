@@ -8,7 +8,7 @@ namespace EventManager.Controllers
     [Route("/bookings")]
     public class BookingController : ControllerBase
     {
-        private readonly IBookingService _bookingService;
+        private readonly IBookingsService _bookingService;
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
@@ -19,7 +19,7 @@ namespace EventManager.Controllers
         }
 
 
-        public BookingController(IBookingService bookingService)
+        public BookingController(IBookingsService bookingService)
         {
             _bookingService = bookingService;
         }

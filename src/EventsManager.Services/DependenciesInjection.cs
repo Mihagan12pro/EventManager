@@ -13,7 +13,7 @@ namespace EventManager.Services
             //scopedServices.AddScoped<IBookingService, BookingService>();
             //scopedServices.AddScoped<IEventsService, EventsService>();
 
-            scopedServices.AddSingleton<IBookingService, BookingService>();//It is a temporary solution!
+            scopedServices.AddSingleton<IBookingsService, BookingsService>();//It is a temporary solution!
             scopedServices.AddSingleton<IEventsService, EventsService>();//It is a temporary solution!
 
             return scopedServices;

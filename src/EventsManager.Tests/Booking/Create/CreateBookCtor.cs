@@ -1,17 +1,14 @@
-﻿using EventManager.Services.Bookings;
-using System.Reflection;
-
-namespace EventsManager.Tests.Booking.Create
+﻿namespace EventsManager.Tests.Booking.Create
 {
     public partial class CreateBookTests
     {
-        private readonly Type _bookingServiceType;
+        private readonly Type _bookingsServiceType;
+        private readonly Type _eventsServiceType;
 
         public CreateBookTests()
         {
-            _bookingServiceType = Type.GetType("EventManager.Services.Events.EventsService, EventManager.Services");
-
-            Type errorType = Type.GetType("Shared.Error, Shared");
+            _eventsServiceType = Type.GetType("EventManager.Services.Events.EventsService, EventManager.Services");
+            _bookingsServiceType = Type.GetType("EventManager.Services.Bookings.BookingsService, EventManager.Services");
         }
     }
 }

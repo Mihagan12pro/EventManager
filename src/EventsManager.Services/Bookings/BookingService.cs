@@ -7,7 +7,7 @@ using EventManager.Services.Exceptions;
 
 namespace EventManager.Services.Bookings
 {
-    internal class BookingService : IBookingService
+    internal class BookingsService : IBookingsService
     {
         private readonly IEventsService _eventsService;
         private readonly List<Booking> _bookings = new List<Booking>();
@@ -51,7 +51,7 @@ namespace EventManager.Services.Bookings
         }
 
 
-        public BookingService(IEventsService eventsService)
+        public BookingsService(IEventsService eventsService)
         {
             _eventsService = eventsService;
         }

@@ -92,12 +92,6 @@ namespace EventManager.Services.Events
 
             if (dateRange.UpperBound.HasValue || dateRange.LowerBound.HasValue)
                 filteredEvents = filteredEvents.Where(e => dateRange.CheckDateRange(e).IsSuccess);
-            //if (dateRange.UpperBound.HasValue || dateRange.LowerBound.HasValue)
-            //    filteredEvents = filteredEvents.Where(e => dateRange
-            //        .CheckDateRange(e)
-            //            .IsSuccess);
-
-            var a = filteredEvents.ToArray().Length;
 
             if (title != null)
                 filteredEvents = filteredEvents.Where(e => e.Title.ToLower().Contains(title.ToLower()));

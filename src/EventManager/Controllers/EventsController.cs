@@ -16,7 +16,7 @@ namespace EventManager.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventsService _eventService;
-        private readonly IBookingService _bookingService;
+        private readonly IBookingsService _bookingService;
         private readonly IBookingTaskQueue _bookingQueue;
 
         [HttpPost]
@@ -104,7 +104,7 @@ namespace EventManager.Controllers
 
         public EventsController(
             IEventsService eventsService,
-            IBookingService bookingService,
+            IBookingsService bookingService,
             IBookingTaskQueue bookingQueue)
         {
             _eventService = eventsService;

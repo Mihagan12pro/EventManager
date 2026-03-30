@@ -26,7 +26,7 @@ namespace EventManager.Services.Background.Bookings
 
                         using (var scope = _serviceScopeFactory.CreateScope())
                         {
-                            IBookingService bookingService = scope.ServiceProvider.GetRequiredService<IBookingService>();
+                            IBookingsService bookingService = scope.ServiceProvider.GetRequiredService<IBookingsService>();
 
 
                             var booking = await bookingService.GetBookingByIdAsync(bookingTask.Id);
