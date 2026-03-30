@@ -7,7 +7,7 @@ using Shared;
 
 namespace EventManager.Services.Events
 {
-    public class EventsService : IEventsService
+    internal class EventsService : IEventsService
     {
         private readonly List<Event> _events = new List<Event>();
 

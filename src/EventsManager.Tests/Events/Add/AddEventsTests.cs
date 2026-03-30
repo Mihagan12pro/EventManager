@@ -23,7 +23,7 @@ namespace EventManager.Tests.Events.Add
         [MemberData(nameof(AddBadRequest))]
         public async Task Test_Bad_Request(NewEventDto dto, string expected)
         {
-            EventsService eventsService = new EventsService();
+            IEventsService eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
             var result = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.AddNewAsync(dto));
             Assert.Equal(expected, result.Error.Message);

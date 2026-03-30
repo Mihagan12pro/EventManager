@@ -2,7 +2,7 @@
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions;
 
-namespace EventsManager.Tests.Events.Delete
+namespace EventManager.Tests.Events.Delete
 {
     [Collection("Delete events collection")]
     public partial class DeleteEventsTests
@@ -11,7 +11,7 @@ namespace EventsManager.Tests.Events.Delete
         [MemberData(nameof(AddEventsForDeleting))]
         public async Task Test_Basic_Deleting(NewEventDto eventDto)
         {
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
             Guid id = await eventsService.AddNewAsync(eventDto);
 
@@ -26,7 +26,7 @@ namespace EventsManager.Tests.Events.Delete
         [MemberData(nameof(AddNotExistsDeleting))]
         public async Task Test_Not_Exists_Deleting(Guid id)
         {
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
             var test = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.DeleteAsync(id));
         }

@@ -4,7 +4,7 @@ using EventManager.DTOs.Shared;
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions;
 
-namespace EventsManager.Tests.Events.Get
+namespace EventManager.Tests.Events.Get
 {
     [Collection("Get events collection")]
     public partial class GetEventsTests
@@ -12,7 +12,7 @@ namespace EventsManager.Tests.Events.Get
         [Fact]
         public async Task Test_Get_By_Id()
         {
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
             DateTime datetime = DateTime.Now.AddDays(1);
 
             var newEvent = new NewEventDto(
@@ -45,7 +45,7 @@ namespace EventsManager.Tests.Events.Get
             int expectedCountOnPage)
         {
             DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
             await eventsService.AddNewAsync(
                  new NewEventDto(
@@ -93,7 +93,7 @@ namespace EventsManager.Tests.Events.Get
         [MemberData(nameof(GetAllWithException))]
         public async Task Test_Fail_Pagination(int page, int pageSize)
         {
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
             var exception = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.GetEventsAsync(
                     string.Empty,

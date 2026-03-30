@@ -1,6 +1,6 @@
 ﻿using EventManager.DTOs.Shared;
 
-namespace EventsManager.Tests.Events.Get
+namespace EventManager.Tests.Events.Get
 {
     public partial class GetEventsTests
     {

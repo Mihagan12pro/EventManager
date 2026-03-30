@@ -4,7 +4,7 @@ using EventManager.DTOs.Shared;
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions;
 
-namespace EventsManager.Tests.Events.Put
+namespace EventManager.Tests.Events.Put
 {
     [Collection("Put events collection")]
     public partial class PutEventsTests
@@ -16,7 +16,7 @@ namespace EventsManager.Tests.Events.Put
             DateTime end)
         {
             DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
             Guid id = await eventsService.AddNewAsync(
                  new NewEventDto(
@@ -37,7 +37,7 @@ namespace EventsManager.Tests.Events.Put
         [Fact]
         public async Task Test_Putting_With_Error_404()
         {
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
             Guid id = Guid.NewGuid();
 
             NewEventDto eventDto = new NewEventDto(
@@ -54,7 +54,7 @@ namespace EventsManager.Tests.Events.Put
         public async Task Test_Putting(int index, NewEventDto eventDto)
         {
             DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
             await eventsService.AddNewAsync(
                  new NewEventDto(
