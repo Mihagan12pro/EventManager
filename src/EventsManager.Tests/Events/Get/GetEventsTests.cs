@@ -1,8 +1,8 @@
-﻿using EventManager.DomainModels.Events;
+﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
-using EventManager.Exceptions;
 using EventManager.Services.Events;
+using EventManager.Services.Exceptions;
 
 namespace EventsManager.Tests.Events.Get
 {

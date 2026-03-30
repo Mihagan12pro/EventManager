@@ -1,5 +1,5 @@
-﻿using EventManager.Shared;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Shared;
 
 namespace EventManager.Extensions
 {

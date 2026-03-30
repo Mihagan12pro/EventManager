@@ -1,6 +1,6 @@
 ﻿using EventManager.DTOs.Shared;
 
-namespace EventManager.Shared
+namespace EventManager.Services
 {
     public static class PaginationMaster<T>
     {

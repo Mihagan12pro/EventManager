@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
-using EventManager.Shared;
+using Shared;
 
-namespace EventManager.DomainModels.Events
+namespace EventManager.Domain.Events
 {
     /// <summary>
     /// Provides start and end date times validation

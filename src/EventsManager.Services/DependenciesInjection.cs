@@ -1,11 +1,10 @@
 ﻿using EventManager.Queues;
+using EventManager.Services.Background.Bookings;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
-using EventsManager.Services.Background.Bookings;
-using EventsManager.Services.Bookings;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EventsManager.Services
+namespace EventManager.Services
 {
     public static class DependenciesInjection
     {

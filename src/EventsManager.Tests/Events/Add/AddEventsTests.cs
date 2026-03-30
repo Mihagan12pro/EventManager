@@ -1,6 +1,6 @@
 ﻿using EventManager.DTOs.Events;
-using EventManager.Exceptions;
 using EventManager.Services.Events;
+using EventManager.Services.Exceptions;
 
 namespace EventsManager.Tests.Events.Add
 {

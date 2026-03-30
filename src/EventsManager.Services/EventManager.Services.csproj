@@ -15,7 +15,6 @@
     <ProjectReference Include="..\EventManager.Domain\EventManager.Domain.csproj" />
     <ProjectReference Include="..\EventManager.DTOs\EventManager.DTOs.csproj" />
     <ProjectReference Include="..\EventManager.Queue\EventManager.Queues.csproj" />
-    <ProjectReference Include="..\EventManager.TasksManagers\EventManager.TasksManagers.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 

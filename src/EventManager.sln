@@ -5,7 +5,7 @@ VisualStudioVersion = 18.5.11605.296
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager", "EventManager\EventManager.csproj", "{5E077F75-E197-E5E5-C20D-23F73F81D0A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsManager.Tests", "EventsManager.Tests\EventsManager.Tests.csproj", "{DD2E2470-530A-BA77-7260-C384718BB15C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager.Tests", "EventsManager.Tests\EventManager.Tests.csproj", "{DD2E2470-530A-BA77-7260-C384718BB15C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A925E8E2-C1B7-4C20-AB56-1F8DF04C9A37}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager.DTOs", "EventManager.DTOs\EventManager.DTOs.csproj", "{74A9D8EA-10FA-4746-B341-1636285B1019}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsManager.Services", "EventsManager.Services\EventsManager.Services.csproj", "{0D05A166-B4C1-4DA1-94F3-BAAC936C132B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager.Services", "EventsManager.Services\EventManager.Services.csproj", "{0D05A166-B4C1-4DA1-94F3-BAAC936C132B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager.Queues", "EventManager.Queue\EventManager.Queues.csproj", "{A0ED248B-8360-4A98-A787-866856AB10D2}"
 EndProject

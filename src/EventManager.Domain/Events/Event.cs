@@ -1,4 +1,4 @@
-﻿namespace EventManager.DomainModels.Events
+﻿namespace EventManager.Domain.Events
 {
     public class Event
     {

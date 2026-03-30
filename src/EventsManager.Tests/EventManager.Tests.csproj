@@ -19,10 +19,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EventManager\EventManager.csproj" />
+    <ProjectReference Include="..\EventsManager.Services\EventManager.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Booking\Get\" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,5 @@
-﻿using EventManager.Exceptions;
-using EventManager.Shared;
+﻿using EventManager.Services.Exceptions;
+using Shared;
 
 namespace EventManager.Middleware
 {

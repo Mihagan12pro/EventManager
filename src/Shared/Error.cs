@@ -1,4 +1,4 @@
-﻿namespace EventManager.Shared
+﻿namespace Shared
 {
     public class Error
     {

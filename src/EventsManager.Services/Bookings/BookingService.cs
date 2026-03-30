@@ -2,11 +2,10 @@
 using EventManager.Domain.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
-using EventManager.Exceptions;
-using EventManager.Services.Bookings;
 using EventManager.Services.Events;
+using EventManager.Services.Exceptions;
 
-namespace EventsManager.Services.Bookings
+namespace EventManager.Services.Bookings
 {
     internal class BookingService : IBookingService
     {

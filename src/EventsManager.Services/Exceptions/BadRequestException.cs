@@ -1,6 +1,6 @@
-﻿using EventManager.Shared;
+﻿using Shared;
 
-namespace EventManager.Exceptions
+namespace EventManager.Services.Exceptions
 {
     public class BadRequestException : WebApiException
     {

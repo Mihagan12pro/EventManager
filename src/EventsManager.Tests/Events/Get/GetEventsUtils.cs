@@ -1,5 +1,4 @@
 ﻿using EventManager.DTOs.Shared;
-using EventManager.Exceptions;
 
 namespace EventsManager.Tests.Events.Get
 {

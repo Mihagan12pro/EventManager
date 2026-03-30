@@ -1,9 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
-using EventManager.DomainModels.Events;
+using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
-using EventManager.Exceptions;
-using EventManager.Shared;
+using EventManager.Services.Exceptions;
+using Shared;
 
 namespace EventManager.Services.Events
 {
@@ -91,9 +91,11 @@ namespace EventManager.Services.Events
             IEnumerable<Event> filteredEvents = _events;
 
             if (dateRange.UpperBound.HasValue || dateRange.LowerBound.HasValue)
-                filteredEvents = filteredEvents.Where(e => dateRange
-                    .CheckDateRange(e)
-                        .IsSuccess);
+                filteredEvents = filteredEvents.Where(e => dateRange.CheckDateRange(e).IsSuccess);
+            //if (dateRange.UpperBound.HasValue || dateRange.LowerBound.HasValue)
+            //    filteredEvents = filteredEvents.Where(e => dateRange
+            //        .CheckDateRange(e)
+            //            .IsSuccess);
 
             var a = filteredEvents.ToArray().Length;
 

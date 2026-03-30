@@ -1,5 +1,5 @@
 ﻿using EventManager.Middleware;
-using EventsManager.Services;
+using EventManager.Services;
 
 namespace EventManager
 {
