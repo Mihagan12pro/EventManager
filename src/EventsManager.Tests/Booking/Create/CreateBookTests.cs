@@ -2,10 +2,11 @@
 using EventManager.Domain.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
+using EventManager.Services.Background.Bookings;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Booking.Create
 {
@@ -13,10 +14,21 @@ namespace EventManager.Tests.Booking.Create
     {
         [Theory]
         [MemberData(nameof(AddEvents))]
+        public async Task Test_Background_Service(NewEventDto eventDto)
+        {
+            IServiceCollection services = new ServiceCollection();
+
+            services.AddScoped<IEventsService, EventsService>();
+        }
+
+        [Theory]
+        [MemberData(nameof(AddEvents))]
         public async Task Test_Adding_Two_Books_For_Event(NewEventDto eventDto)
         {
-            IEventsService eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
-            IBookingsService bookingsService = (IBookingsService)Activator.CreateInstance(_bookingsServiceType, eventsService);
+            var provider = GetProviderService();
+
+            IEventsService eventsService = provider.GetRequiredService<IEventsService>();
+            IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
 
             Guid eventId = await eventsService.AddNewAsync(eventDto);
 
@@ -30,8 +42,10 @@ namespace EventManager.Tests.Booking.Create
         [MemberData(nameof(AddEvents))]
         public async Task Test_Booking_Pending_Status(NewEventDto eventDto)
         {
-            IEventsService eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
-            IBookingsService bookingsService = (IBookingsService)Activator.CreateInstance(_bookingsServiceType, eventsService);
+            var provider = GetProviderService();
+
+            IEventsService eventsService = provider.GetRequiredService<IEventsService>();
+            IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
 
             Guid eventId = await eventsService.AddNewAsync(eventDto);
 
@@ -45,8 +59,10 @@ namespace EventManager.Tests.Booking.Create
         [Fact]
         public async Task Test_Booking_Creating_Exceptions()
         {
-            IEventsService eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
-            IBookingsService bookingsService = (IBookingsService)Activator.CreateInstance(_bookingsServiceType, eventsService);
+            var provider = GetProviderService();
+
+            IEventsService eventsService = provider.GetRequiredService<IEventsService>();
+            IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
 
             Guid id = Guid.Empty;
 

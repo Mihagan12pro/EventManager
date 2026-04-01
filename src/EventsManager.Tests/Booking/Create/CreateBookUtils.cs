@@ -1,9 +1,27 @@
 ﻿using EventManager.DTOs.Events;
+using EventManager.Services.Background.Bookings;
+using EventManager.Services.Bookings;
+using EventManager.Services.Events;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace EventManager.Tests.Booking.Create
 {
     public partial class CreateBookTests
     {
+        public static IServiceProvider GetProviderService()
+        {
+            IServiceCollection services = new ServiceCollection();
+
+            services.AddScoped<IEventsService, EventsService>();
+            services.AddScoped<IBookingsService, BookingsService>();
+            services.AddHostedService<BookingHandlingService>();
+
+            ServiceProvider serviceProvider = services.BuildServiceProvider();
+
+            return serviceProvider;
+        }
+
         public static IEnumerable<object[]> AddEvents()
         {
             DateTime now = DateTime.Now.AddDays(1);
