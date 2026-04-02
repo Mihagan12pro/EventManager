@@ -50,6 +50,21 @@ namespace EventManager.Services.Bookings
             return booking;
         }
 
+        public async Task<IEnumerable<Booking>> GetAllAsync(BookingFiltersDto filtersDto)
+        {
+            var result = _bookings.Select(b => b);
+
+            if (filtersDto.ProcessedAt != null)
+                result = result.Where(b => b.ProcessedAt == filtersDto.ProcessedAt);
+
+            if (filtersDto.CreatedAt != null)
+                result = result.Where(b => b.CreatedAt == filtersDto.CreatedAt);
+
+            if (filtersDto.Status != null)
+                result = result.Where(b => b.Status == filtersDto.Status);
+
+            return result.ToArray();
+        }
 
         public BookingsService(IEventsService eventsService)
         {

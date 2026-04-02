@@ -1,4 +1,5 @@
 ﻿using EventManager.Domain.Bookings.Enums;
+using EventManager.DTOs.Bookings;
 using EventManager.Queues.ApplicationTasks.Booking;
 using EventManager.Queues.Queues.Booking;
 using EventManager.Services.Bookings;
@@ -21,22 +22,16 @@ namespace EventManager.Services.Background.Bookings
             {
                 try
                 {
-                    if (_bookingTaskQueue.TryDequeue(out BookingTask bookingTask))
+                    using (var scope = _serviceScopeFactory.CreateScope())
                     {
-                        await Task.Delay(2000);
+                        IBookingsService bookingService = scope.ServiceProvider.GetRequiredService<IBookingsService>();
 
-                        using (var scope = _serviceScopeFactory.CreateScope())
+                        var bookings = await bookingService.GetAllAsync(new BookingFiltersDto(BookingStatus.Pending, null, null));
+                        
+                        foreach(var booking in bookings)
                         {
-                            IBookingsService bookingService = scope.ServiceProvider.GetRequiredService<IBookingsService>();
-
-
-                            var booking = await bookingService.GetBookingByIdAsync(bookingTask.Id);
-
-                            if (booking.Status == BookingStatus.Pending)
-                            {
-                                booking.Status = BookingStatus.Confirmed;
-                                booking.ProcessedAt = DateTime.Now;
-                            }
+                            await Task.Delay(2000);
+                            booking.Status = BookingStatus.Confirmed;
                         }
                     }
                 }

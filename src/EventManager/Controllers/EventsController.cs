@@ -3,7 +3,6 @@ using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Extensions;
-using EventManager.Queues.ApplicationTasks.Booking;
 using EventManager.Queues.Queues.Booking;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
@@ -95,9 +94,6 @@ namespace EventManager.Controllers
                 bookingDto.Message, 
                 HttpContext.Request.ToUrl(false, new List<object> { "bookings", bookingDto.Id })
             );
-
-            BookingTask bookingTask = new BookingTask(bookingDto.Id);
-            _bookingQueue.Enqueue(bookingTask);
 
             return Accepted(bookingWithUrlDto);
         }

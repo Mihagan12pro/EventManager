@@ -8,5 +8,7 @@ namespace EventManager.Services.Bookings
         Task<BookingAcceptedDto> CreateBookingAsync(Guid eventId);
 
         Task<Booking> GetBookingByIdAsync(Guid bookingId);
+
+        Task<IEnumerable<Booking>> GetAllAsync(BookingFiltersDto filtersDto);
     }
 }
