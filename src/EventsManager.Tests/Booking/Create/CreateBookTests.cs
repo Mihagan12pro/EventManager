@@ -7,6 +7,7 @@ using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace EventManager.Tests.Booking.Create
 {
@@ -16,9 +17,50 @@ namespace EventManager.Tests.Booking.Create
         [MemberData(nameof(AddEvents))]
         public async Task Test_Background_Service(NewEventDto eventDto)
         {
-            IServiceCollection services = new ServiceCollection();
+            var provider = GetProviderService();
 
-            services.AddScoped<IEventsService, EventsService>();
+            var hostedServices = provider.GetServices<IHostedService>();
+            var cancellarationTokenSource = new CancellationTokenSource();
+
+            var startTasks = hostedServices.Select(s => s.StartAsync(cancellarationTokenSource.Token));
+            await Task.WhenAll(startTasks);
+
+            IEventsService eventsService = provider.GetRequiredService<IEventsService>();
+            IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
+
+            Guid eventId = await eventsService.AddNewAsync(eventDto);
+
+            BookingAcceptedDto accepted1 = await bookingsService.CreateBookingAsync(eventId);
+            BookingAcceptedDto accepted2 = await bookingsService.CreateBookingAsync(eventId);
+            BookingAcceptedDto accepted3 = await bookingsService.CreateBookingAsync(eventId);
+            BookingAcceptedDto accepted4 = await bookingsService.CreateBookingAsync(eventId);
+
+            var booking1Pending = await bookingsService.GetBookingByIdAsync(accepted1.Id);
+            var booking2Pending = await bookingsService.GetBookingByIdAsync(accepted2.Id);
+            var booking3Pending = await bookingsService.GetBookingByIdAsync(accepted3.Id);
+            var booking4Pending = await bookingsService.GetBookingByIdAsync(accepted4.Id);
+
+            Assert.Equal(BookingStatus.Pending, booking1Pending.Status);
+            Assert.Equal(BookingStatus.Pending, booking2Pending.Status);
+            Assert.Equal(BookingStatus.Pending, booking3Pending.Status);
+            Assert.Equal(BookingStatus.Pending, booking4Pending.Status);
+
+            await Task.Delay(3000);
+            var booking1Confirmed = await bookingsService.GetBookingByIdAsync(accepted1.Id);
+
+            await Task.Delay(3000);
+            var booking2Confirmed = await bookingsService.GetBookingByIdAsync(accepted2.Id);
+
+            await Task.Delay(3000);
+            var booking3Confirmed = await bookingsService.GetBookingByIdAsync(accepted3.Id);
+
+            await Task.Delay(3000);
+            var booking4Confirmed = await bookingsService.GetBookingByIdAsync(accepted4.Id);
+
+            Assert.Equal(BookingStatus.Confirmed, booking1Confirmed.Status);
+            Assert.Equal(BookingStatus.Confirmed, booking2Confirmed.Status);
+            Assert.Equal(BookingStatus.Confirmed, booking3Confirmed.Status);
+            Assert.Equal(BookingStatus.Confirmed, booking4Confirmed.Status);
         }
 
         [Theory]

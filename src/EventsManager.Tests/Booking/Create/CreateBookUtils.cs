@@ -1,9 +1,10 @@
 ﻿using EventManager.DTOs.Events;
+using EventManager.Queues.ApplicationTasks.Booking;
+using EventManager.Queues.Queues.Booking;
 using EventManager.Services.Background.Bookings;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace EventManager.Tests.Booking.Create
 {
@@ -13,9 +14,15 @@ namespace EventManager.Tests.Booking.Create
         {
             IServiceCollection services = new ServiceCollection();
 
-            services.AddScoped<IEventsService, EventsService>();
-            services.AddScoped<IBookingsService, BookingsService>();
+            //services.AddScoped<IEventsService, EventsService>();
+            //services.AddScoped<IBookingsService, BookingsService>();
+            services.AddSingleton<IEventsService, EventsService>();//Temporary solution
+            services.AddSingleton<IBookingsService, BookingsService>();//Temporary solution
+
+            services.AddSingleton<IBookingTaskQueue, MockBookingTaskQueue>();
             services.AddHostedService<BookingHandlingService>();
+
+            services.AddLogging();
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
 
@@ -43,6 +50,19 @@ namespace EventManager.Tests.Booking.Create
                         now.AddMonths(1).AddDays(1))
                 ]
             ];
+        }
+    }
+
+    class MockBookingTaskQueue : IBookingTaskQueue
+    {
+        public void Enqueue(BookingTask task)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TryDequeue(out BookingTask task)
+        {
+            throw new NotImplementedException();
         }
     }
 }

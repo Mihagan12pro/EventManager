@@ -1,12 +1,10 @@
 ﻿using EventManager.Domain.Bookings.Enums;
 using EventManager.DTOs.Bookings;
-using EventManager.Queues.ApplicationTasks.Booking;
 using EventManager.Queues.Queues.Booking;
 using EventManager.Services.Bookings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System.Runtime.CompilerServices;
 
 namespace EventManager.Services.Background.Bookings
 {
