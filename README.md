@@ -24,8 +24,8 @@ How to run tests?
 3.2 If you want to run group of tests, write:  dotnet test --filter <Group tittle>.
 	For example: 'dotnet test --filter GetEvents' or 'dotnet test path_to_your_foler\EventManager\src\EventsManager.Tests\EventsManager.Tests.csproj" --filter GetEvents'
 							
-New features:
-1. The EventsController.All got new parameters:
+Previous version features:
+1. The EventsController.All has parameters:
 
 	EventsController.All(
 		[FromQuery] string? title, 
