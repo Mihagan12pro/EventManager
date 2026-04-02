@@ -45,16 +45,14 @@ namespace EventManager.Tests.Booking.Create
             Assert.Equal(BookingStatus.Pending, booking3Pending.Status);
             Assert.Equal(BookingStatus.Pending, booking4Pending.Status);
 
-            await Task.Delay(3000);
+            await Task.Delay(9000);
+
             var booking1Confirmed = await bookingsService.GetBookingByIdAsync(accepted1.Id);
 
-            await Task.Delay(3000);
             var booking2Confirmed = await bookingsService.GetBookingByIdAsync(accepted2.Id);
 
-            await Task.Delay(3000);
             var booking3Confirmed = await bookingsService.GetBookingByIdAsync(accepted3.Id);
 
-            await Task.Delay(3000);
             var booking4Confirmed = await bookingsService.GetBookingByIdAsync(accepted4.Id);
 
             Assert.Equal(BookingStatus.Confirmed, booking1Confirmed.Status);
