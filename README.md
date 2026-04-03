@@ -68,5 +68,30 @@ Features of the current branch (sprint3):
 	b. Guid EventId - event id. Required field.
 	c. DateTime CreatedAt - date and time when booking had been created. Required field.
 	d. DateTime ProcessedAt - date and time when booking had been processed. Optional field.
-	e. BookingStatus Status - status of the booking. It can be "pending", "confirmed" and "rejected".
+	e. BookingStatus Status - status of the booking. Required field. The Booking class serializes this field to string
 
+	BookingStatus is enum with values:
+	-Pending = 0
+	-Confirmed = 1
+	-Rejected = 2
+	
+2. Add new (and first in this project) background service for handling booking. The service class extends the BackgroundService class. How does it works?
+	In the ExecuteAsync method service tryies to get all Bookings with Status = "Pending". After that it changes their status from "Pending" 
+	to "confirmed".
+
+3. Add new end point: EventsController.Book:
+	 Book(
+         [FromRoute] Guid id,
+         CancellationToken cancellationToken)
+	More about EventsController.Book parameters. Id - primary key of the Event that user is going to book.
+	The cancellationToken is the object of the structure CancellationToken (More about this structure you can learn here:
+    https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken?view=net-10.0) 
+				
+	Example of the response body:
+	{
+      "id": "196dae0b-2673-4e4d-b3c2-99ba915f73e6",
+      "message": "Your request is pending!",
+      "url": "https://localhost:7199/bookings/196dae0b-2673-4e4d-b3c2-99ba915f73e6"
+    }
+	
+	One important moment: status code is 202 (Accepted)
