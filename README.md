@@ -61,3 +61,12 @@ Features from the previous branch (sprint2):
 	Fields of the response:
 	1. statusCode - contains http status code of the response (In this example 404 or not found)
 	2. message - contains description of error
+
+Features of the current branch (sprint3):
+1. New domain model - Booking. It contains:
+	a. Guid Id - primary key. Required field.
+	b. Guid EventId - event id. Required field.
+	c. DateTime CreatedAt - date and time when booking had been created. Required field.
+	d. DateTime ProcessedAt - date and time when booking had been processed. Optional field.
+	e. BookingStatus Status - status of the booking. It can be "pending", "confirmed" and "rejected".
+
