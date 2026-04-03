@@ -100,3 +100,6 @@ Features of the current branch (sprint3):
 	GetById([FromRoute] Guid id)
 	More about EventsController.Book parameters. Id - primary key of the Booking that user is trying to get.
 
+5. Add new project - EventManager.Queues. This projects contains some classes for task queues. But
+	now you can't see samples of using classes from this library in this applications. In future branches
+	classes from this library will be used in the code.
