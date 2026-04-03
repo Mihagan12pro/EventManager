@@ -95,3 +95,8 @@ Features of the current branch (sprint3):
     }
 	
 	One important moment: status code is 202 (Accepted)
+
+4. Add new controller - BookingController. Now it has only one endpoint - BookingController.GetById :
+	GetById([FromRoute] Guid id)
+	More about EventsController.Book parameters. Id - primary key of the Booking that user is trying to get.
+
