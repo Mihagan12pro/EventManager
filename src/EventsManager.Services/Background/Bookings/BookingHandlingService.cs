@@ -30,6 +30,7 @@ namespace EventManager.Services.Background.Bookings
                         {
                             await Task.Delay(2000);
                             booking.Status = BookingStatus.Confirmed;
+                            booking.ProcessedAt = DateTime.Now;
                         }
                     }
                 }
