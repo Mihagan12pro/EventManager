@@ -5,7 +5,6 @@ using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace EventManager.Tests.Booking.Create
 {
@@ -14,7 +13,7 @@ namespace EventManager.Tests.Booking.Create
         [Theory]
         [MemberData(nameof(AddEvents))]
         [Trait("SubCategory", "Create")]
-        public async Task Test_CreateTwoBooksForOneEvent(NewEventDto eventDto)
+        public async Task Test_CreateTwoBookingsForOneEvent(NewEventDto eventDto)
         {
             var provider = GetProviderService();
 
