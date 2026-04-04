@@ -1,5 +1,8 @@
-﻿namespace EventManager.Domain.Bookings.Enums
+﻿using System.Text.Json.Serialization;
+
+namespace EventManager.Domain.Bookings.Enums
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum BookingStatus
     {
         /// <summary>

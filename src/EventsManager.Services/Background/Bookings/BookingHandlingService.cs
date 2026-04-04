@@ -6,7 +6,6 @@ using EventManager.Services.Bookings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System.Security.AccessControl;
 
 namespace EventManager.Services.Background.Bookings
 {

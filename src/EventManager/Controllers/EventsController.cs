@@ -2,7 +2,6 @@
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
-using EventManager.Extensions;
 using EventManager.Queues.Queues.Booking;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
@@ -92,13 +91,7 @@ namespace EventManager.Controllers
 
             var location = UrlMaster.CreateWithoutPath(HttpContext.Request, "bookings", bookingDto.Id);
 
-            var bookingWithUrlDto = new BookingAcceptedWithUrlDto(
-                bookingDto.Id, 
-                bookingDto.Message, 
-                location
-            );
-    
-            return Accepted(location, bookingWithUrlDto);
+            return Accepted(location, bookingDto);
         }
 
         public EventsController(

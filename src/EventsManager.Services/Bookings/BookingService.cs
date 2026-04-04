@@ -30,7 +30,11 @@ namespace EventManager.Services.Bookings
 
                 _bookings.Add(booking);
 
-                bookingAcceptedDto = new BookingAcceptedDto(booking.Id, "Your request is pending!");
+                bookingAcceptedDto = new BookingAcceptedDto(
+                    booking.Id,
+                    eventId,
+                    booking.Status
+                );
             }
             catch
             {
