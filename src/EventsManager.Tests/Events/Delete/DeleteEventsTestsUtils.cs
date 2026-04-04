@@ -1,6 +1,6 @@
 ﻿using EventManager.DTOs.Events;
 
-namespace EventsManager.Tests.Events.Delete
+namespace EventManager.Tests.Events.Delete
 {
     public partial class DeleteEventsTests
     {

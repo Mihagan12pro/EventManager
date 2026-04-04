@@ -1,6 +1,6 @@
 ﻿using EventManager.DTOs.Events;
 
-namespace EventsManager.Tests.Events.Add
+namespace EventManager.Tests.Events.Add
 {
     public partial class AddEventsTests
     {

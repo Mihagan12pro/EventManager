@@ -1,6 +1,9 @@
-﻿using EventManager.DomainModels.Events;
+﻿using EventManager.Domain.Events;
+using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
+using EventManager.Queues.Queues.Booking;
+using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,16 +14,20 @@ namespace EventManager.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventsService _eventService;
+        private readonly IBookingsService _bookingService;
+        private readonly IBookingTaskQueue _bookingQueue;
 
         [HttpPost]
         public async Task<IActionResult> New([FromBody] NewEventDto newEvent)
         {
-            var result = await _eventService.AddNew(newEvent);
+            var result = await _eventService.AddNewAsync(newEvent);
 
             var output = result;
             var request = HttpContext.Request;
 
-            string uri = $"{request.Scheme}://{request.Host}{request.Path}/{output}";
+            string uri = UrlMaster.CreateFromRequest(request);
+            uri = UrlMaster.AddElementToEnd(uri, output);
+
             return Created(uri, output);
         }
 
@@ -40,7 +47,11 @@ namespace EventManager.Controllers
                 to,
                 false);
 
-            var events = await _eventService.GetEvents(title, pagination, dateRange);
+            var events = await _eventService.GetEventsAsync(
+                title,
+                pagination,
+                dateRange);
+
 
             return Ok(events);
         }
@@ -48,7 +59,7 @@ namespace EventManager.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
-            var result = await _eventService.GetEventById(id);
+            var result = await _eventService.GetEventByIdAsync(id);
 
             return Ok(result);
         }
@@ -56,7 +67,7 @@ namespace EventManager.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var result = await _eventService.Delete(id);
+            var result = await _eventService.DeleteAsync(id);
 
             return Ok(result);
         }
@@ -66,14 +77,31 @@ namespace EventManager.Controllers
             [FromRoute] Guid id,
             [FromBody] NewEventDto newEvent)
         {
-            var result = await _eventService.UpdateByPut(id, newEvent);
+            var result = await _eventService.UpdateByPutAsync(id, newEvent);
 
             return Ok(result);
         }
 
-        public EventsController(IEventsService eventsService)
+        [HttpPost("{id}/book")]
+        public async Task<IActionResult> Book(
+            [FromRoute] Guid id,
+            CancellationToken cancellationToken)
+        {
+            var bookingDto = await _bookingService.CreateBookingAsync(id);
+
+            var location = UrlMaster.CreateWithoutPath(HttpContext.Request, "bookings", bookingDto.Id);
+
+            return Accepted(location, bookingDto);
+        }
+
+        public EventsController(
+            IEventsService eventsService,
+            IBookingsService bookingService,
+            IBookingTaskQueue bookingQueue)
         {
             _eventService = eventsService;
+            _bookingService = bookingService;
+            _bookingQueue = bookingQueue;
         }
     }
 }

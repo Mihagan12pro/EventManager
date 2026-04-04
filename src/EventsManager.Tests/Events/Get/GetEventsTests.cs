@@ -1,18 +1,18 @@
-﻿using EventManager.DomainModels.Events;
+﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
-using EventManager.Exceptions;
 using EventManager.Services.Events;
+using EventManager.Services.Exceptions;
 
-namespace EventsManager.Tests.Events.Get
+namespace EventManager.Tests.Events.Get
 {
-    [Collection("Get events collection")]
     public partial class GetEventsTests
     {
         [Fact]
+        [Trait("SubCategory", "Get")]
         public async Task Test_Get_By_Id()
         {
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
             DateTime datetime = DateTime.Now.AddDays(1);
 
             var newEvent = new NewEventDto(
@@ -22,20 +22,21 @@ namespace EventsManager.Tests.Events.Get
 
                  datetime.AddHours(10));
 
-            Guid id = await eventsService.AddNew(newEvent);
+            Guid id = await eventsService.AddNewAsync(newEvent);
             Guid hiddenId = Guid.Empty;
 
-            var resultSuccessful = (await eventsService.GetEventById(id));
+            var resultSuccessful = (await eventsService.GetEventByIdAsync(id));
           
             Assert.Equal(typeof(GetEventDto), resultSuccessful.GetType());
 
-            var resultFailed = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.GetEventById(hiddenId));
+            var resultFailed = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.GetEventByIdAsync(hiddenId));
 
-            await eventsService.Delete(id);
+            await eventsService.DeleteAsync(id);
         }
 
         [Theory]
         [MemberData(nameof(GetAll))]
+        [Trait("SubCategory", "Get")]
         public async Task Test_Get_All(
             string? title,
             PaginationDto paginationDto,
@@ -45,37 +46,37 @@ namespace EventsManager.Tests.Events.Get
             int expectedCountOnPage)
         {
             DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
-            await eventsService.AddNew(
+            await eventsService.AddNewAsync(
                  new NewEventDto(
                      "Юбилей",
                      dateTime.AddDays(1),
                      dateTime.AddDays(2))
                  );
 
-            await eventsService.AddNew(
+            await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Юбилей",
                     dateTime.AddDays(1),
                     dateTime.AddDays(2))
                 );
 
-            await eventsService.AddNew(
+            await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Юбилей",
                     dateTime.AddDays(2),
                     dateTime.AddDays(3))
                 );
 
-            await eventsService.AddNew(
+            await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Корпоратив",
                     dateTime.AddDays(2),
                     dateTime.AddDays(3))
                 );
 
-            var result = await eventsService.GetEvents(
+            var result = await eventsService.GetEventsAsync(
               title,
               paginationDto,
               new DateRange(
@@ -91,11 +92,12 @@ namespace EventsManager.Tests.Events.Get
 
         [Theory]
         [MemberData(nameof(GetAllWithException))]
+        [Trait("SubCategory", "Get")]
         public async Task Test_Fail_Pagination(int page, int pageSize)
         {
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
-            var exception = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.GetEvents(
+            var exception = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.GetEventsAsync(
                     string.Empty,
                     new PaginationDto(page, pageSize),
                     new DateRange(null, false, null, false)

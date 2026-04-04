@@ -24,8 +24,8 @@ How to run tests?
 3.2 If you want to run group of tests, write:  dotnet test --filter <Group tittle>.
 	For example: 'dotnet test --filter GetEvents' or 'dotnet test path_to_your_foler\EventManager\src\EventsManager.Tests\EventsManager.Tests.csproj" --filter GetEvents'
 							
-New features:
-1. The EventsController.All got new parameters:
+Features from the previous branch (sprint2):
+1. The EventsController.All has parameters:
 
 	EventsController.All(
 		[FromQuery] string? title, 
@@ -61,3 +61,45 @@ New features:
 	Fields of the response:
 	1. statusCode - contains http status code of the response (In this example 404 or not found)
 	2. message - contains description of error
+
+Features of the current branch (sprint3):
+1. New domain model - Booking. It contains:
+	a. Guid Id - primary key. Required field.
+	b. Guid EventId - event id. Required field.
+	c. DateTime CreatedAt - date and time when booking had been created. Required field.
+	d. DateTime ProcessedAt - date and time when booking had been processed. Optional field.
+	e. BookingStatus Status - status of the booking. Required field. The Booking class serializes this field to string
+
+	BookingStatus is enum with values:
+	-Pending = 0
+	-Confirmed = 1
+	-Rejected = 2
+	
+2. Add new (and first in this project) background service for handling booking. The service class extends the BackgroundService class. How does it works?
+	In the ExecuteAsync method service tryies to get all Bookings with Status = "Pending". After that it changes their status from "Pending" 
+	to "confirmed".
+
+3. Add new end point: EventsController.Book:
+	 Book(
+         [FromRoute] Guid id,
+         CancellationToken cancellationToken)
+	More about EventsController.Book parameters. Id - primary key of the Event that user is going to book.
+	The cancellationToken is the object of the structure CancellationToken (More about this structure you can learn here:
+    https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken?view=net-10.0) 
+				
+	Example of the response body:
+	{
+      "id": "196dae0b-2673-4e4d-b3c2-99ba915f73e6",
+      "message": "Your request is pending!",
+      "url": "https://localhost:7199/bookings/196dae0b-2673-4e4d-b3c2-99ba915f73e6"
+    }
+	
+	One important moment: status code is 202 (Accepted)
+
+4. Add new controller - BookingController. Now it has only one endpoint - BookingController.GetById :
+	GetById([FromRoute] Guid id)
+	More about EventsController.Book parameters. Id - primary key of the Booking that user is trying to get.
+
+5. Add new project - EventManager.Queues. This projects contains some classes for task queues. But
+	now you can't see samples of using classes from this library in this applications. In future branches
+	classes from this library will be used in the code.

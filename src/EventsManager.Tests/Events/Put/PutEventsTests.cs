@@ -1,12 +1,11 @@
-﻿using EventManager.DomainModels.Events;
+﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
-using EventManager.Exceptions;
 using EventManager.Services.Events;
+using EventManager.Services.Exceptions;
 
-namespace EventsManager.Tests.Events.Put
+namespace EventManager.Tests.Events.Put
 {
-    [Collection("Put events collection")]
     public partial class PutEventsTests
     {
         [Theory]
@@ -16,9 +15,9 @@ namespace EventsManager.Tests.Events.Put
             DateTime end)
         {
             DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
-            Guid id = await eventsService.AddNew(
+            Guid id = await eventsService.AddNewAsync(
                  new NewEventDto(
                      "Юбилей",
                      dateTime.AddDays(1),
@@ -31,13 +30,13 @@ namespace EventsManager.Tests.Events.Put
                 end
             );
 
-            var exception = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.UpdateByPut(id, eventDto));
+            var exception = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.UpdateByPutAsync(id, eventDto));
         }
 
         [Fact]
         public async Task Test_Putting_With_Error_404()
         {
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
             Guid id = Guid.NewGuid();
 
             NewEventDto eventDto = new NewEventDto(
@@ -46,7 +45,7 @@ namespace EventsManager.Tests.Events.Put
                 DateTime.Now.AddDays(2)
             );
 
-            var result = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.UpdateByPut(id, eventDto));
+            var result = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.UpdateByPutAsync(id, eventDto));
         }
 
         [Theory]
@@ -54,16 +53,16 @@ namespace EventsManager.Tests.Events.Put
         public async Task Test_Putting(int index, NewEventDto eventDto)
         {
             DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
-            var eventsService = new EventsService();
+            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
-            await eventsService.AddNew(
+            await eventsService.AddNewAsync(
                  new NewEventDto(
                      "Юбилей",
                      dateTime.AddDays(1),
                      dateTime.AddDays(2))
                  );
 
-            Event oldModel = (await eventsService.GetEvents(
+            Event oldModel = (await eventsService.GetEventsAsync(
                 null,
                 new PaginationDto(),
                 new DateRange(
@@ -79,8 +78,8 @@ namespace EventsManager.Tests.Events.Put
             string title = oldModel.Title;
             string description = oldModel.Description;
 
-            var result = (await eventsService.UpdateByPut(oldModel.Id, eventDto));
-            Event putModel = (await eventsService.GetEvents(
+            var result = (await eventsService.UpdateByPutAsync(oldModel.Id, eventDto));
+            Event putModel = (await eventsService.GetEventsAsync(
                 null,
                 new PaginationDto(),
                 new DateRange(
