@@ -55,10 +55,17 @@ namespace EventManager.Tests.Booking.Create
 
             var booking4Confirmed = await bookingsService.GetBookingByIdAsync(accepted4.Id);
 
-            Assert.Equal(BookingStatus.Confirmed, booking1Confirmed.Status);
-            Assert.Equal(BookingStatus.Confirmed, booking2Confirmed.Status);
-            Assert.Equal(BookingStatus.Confirmed, booking3Confirmed.Status);
-            Assert.Equal(BookingStatus.Confirmed, booking4Confirmed.Status);
+            Assert.True(booking1Confirmed.Status == BookingStatus.Rejected 
+                || booking1Confirmed.Status == BookingStatus.Confirmed);
+
+            Assert.True(booking2Confirmed.Status == BookingStatus.Rejected
+                || booking2Confirmed.Status == BookingStatus.Confirmed);
+
+            Assert.True(booking3Confirmed.Status == BookingStatus.Rejected || 
+                booking3Confirmed.Status == BookingStatus.Confirmed);
+
+            Assert.True(booking4Confirmed.Status == BookingStatus.Rejected ||
+                booking4Confirmed.Status == BookingStatus.Confirmed);
         }
 
         [Theory]

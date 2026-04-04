@@ -1,10 +1,12 @@
-﻿using EventManager.Domain.Bookings.Enums;
+﻿using EventManager.Domain.Bookings;
+using EventManager.Domain.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 using EventManager.Queues.Queues.Booking;
 using EventManager.Services.Bookings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Security.AccessControl;
 
 namespace EventManager.Services.Background.Bookings
 {
@@ -28,8 +30,8 @@ namespace EventManager.Services.Background.Bookings
                         
                         foreach(var booking in bookings)
                         {
-                            await Task.Delay(2000);
-                            booking.Status = BookingStatus.Confirmed;
+                            await RequestToRemoteSystemAsync(booking, stoppingToken);
+
                             booking.ProcessedAt = DateTime.Now;
                         }
                     }
@@ -43,6 +45,19 @@ namespace EventManager.Services.Background.Bookings
                     _logger.LogError(ex, ex.Message);
                 }
             }
+        }
+
+        private async Task RequestToRemoteSystemAsync(
+            Booking booking,
+            CancellationToken cancellationToken)
+        {
+            await Task.Delay(2000);
+
+            Random random = new Random(3);
+            if (random.Next() == 0)
+                booking.Status = BookingStatus.Rejected;
+            else
+                booking.Status = BookingStatus.Confirmed;
         }
 
         public BookingHandlingService(
