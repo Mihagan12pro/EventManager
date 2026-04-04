@@ -53,8 +53,10 @@ namespace EventManager.Services.Background.Bookings
         {
             await Task.Delay(2000);
 
-            Random random = new Random(3);
-            if (random.Next() == 0)
+            Random random = new Random();
+            int next = random.Next(2);
+
+            if (next == 1)
                 booking.Status = BookingStatus.Rejected;
             else
                 booking.Status = BookingStatus.Confirmed;

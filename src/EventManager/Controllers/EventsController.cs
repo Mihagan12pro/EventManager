@@ -26,7 +26,8 @@ namespace EventManager.Controllers
             var output = result;
             var request = HttpContext.Request;
 
-            string uri = request.ToUrl(new List<object> { output });
+            string uri = UrlMaster.CreateFromRequest(request);
+            uri = UrlMaster.AddElementToEnd(uri, output);
 
             return Created(uri, output);
         }
@@ -89,13 +90,15 @@ namespace EventManager.Controllers
         {
             var bookingDto = await _bookingService.CreateBookingAsync(id);
 
+            var location = UrlMaster.CreateWithoutPath(HttpContext.Request, "bookings", bookingDto.Id);
+
             var bookingWithUrlDto = new BookingAcceptedWithUrlDto(
                 bookingDto.Id, 
                 bookingDto.Message, 
-                HttpContext.Request.ToUrl(false, new List<object> { "bookings", bookingDto.Id })
+                location
             );
-
-            return Accepted(bookingWithUrlDto);
+    
+            return Accepted(location, bookingWithUrlDto);
         }
 
         public EventsController(
