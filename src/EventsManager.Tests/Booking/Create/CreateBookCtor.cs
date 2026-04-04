@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Booking.Create
 {
-    public partial class CreateBookTests
+    public partial class CreateBookTests : BookingsTests
     {
 
     }

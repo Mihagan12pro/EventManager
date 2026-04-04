@@ -1,6 +1,6 @@
 ﻿namespace EventManager.Tests.Events.Add
 {
-    public partial class AddEventsTests
+    public partial class AddEventsTests : EventsTests
     {
         private readonly Type _eventsServiceType;
 

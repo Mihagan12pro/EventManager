@@ -6,7 +6,6 @@ using EventManager.Services.Exceptions;
 
 namespace EventManager.Tests.Events.Get
 {
-    [Collection("Get events collection")]
     public partial class GetEventsTests
     {
         [Fact]

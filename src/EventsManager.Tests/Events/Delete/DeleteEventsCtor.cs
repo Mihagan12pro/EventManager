@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EventManager.Tests.Events.Delete
 {
-    public partial class DeleteEventsTests
+    public partial class DeleteEventsTests : EventsTests
     {
         private readonly Type _eventsServiceType;
 

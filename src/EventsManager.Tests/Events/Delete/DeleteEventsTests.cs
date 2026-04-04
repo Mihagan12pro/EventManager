@@ -4,7 +4,6 @@ using EventManager.Services.Exceptions;
 
 namespace EventManager.Tests.Events.Delete
 {
-    [Collection("Delete events collection")]
     public partial class DeleteEventsTests
     {
         [Theory]

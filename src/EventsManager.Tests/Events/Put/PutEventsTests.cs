@@ -6,7 +6,6 @@ using EventManager.Services.Exceptions;
 
 namespace EventManager.Tests.Events.Put
 {
-    [Collection("Put events collection")]
     public partial class PutEventsTests
     {
         [Theory]
