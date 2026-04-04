@@ -1,7 +1,6 @@
 ﻿using EventManager.DTOs.Events;
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions;
-using System.ComponentModel;
 
 namespace EventManager.Tests.Events.Add
 {
@@ -9,7 +8,7 @@ namespace EventManager.Tests.Events.Add
     {
         [Theory]
         [MemberData(nameof(AddEvents))]
-        [Category("Behavior")]
+        [Trait("SubCategory", "Add")]
         public async Task Test_Successful_Adding(NewEventDto newEventDto)
         {
             IEventsService eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
@@ -23,6 +22,7 @@ namespace EventManager.Tests.Events.Add
 
         [Theory]
         [MemberData(nameof(AddBadRequest))]
+        [Trait("SubCategory", "Add")]
         public async Task Test_Bad_Request(NewEventDto dto, string expected)
         {
             IEventsService eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);

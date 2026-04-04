@@ -9,6 +9,7 @@ namespace EventManager.Tests.Events.Get
     public partial class GetEventsTests
     {
         [Fact]
+        [Trait("SubCategory", "Get")]
         public async Task Test_Get_By_Id()
         {
             var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
@@ -35,6 +36,7 @@ namespace EventManager.Tests.Events.Get
 
         [Theory]
         [MemberData(nameof(GetAll))]
+        [Trait("SubCategory", "Get")]
         public async Task Test_Get_All(
             string? title,
             PaginationDto paginationDto,
@@ -90,6 +92,7 @@ namespace EventManager.Tests.Events.Get
 
         [Theory]
         [MemberData(nameof(GetAllWithException))]
+        [Trait("SubCategory", "Get")]
         public async Task Test_Fail_Pagination(int page, int pageSize)
         {
             var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);

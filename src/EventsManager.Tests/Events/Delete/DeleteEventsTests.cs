@@ -8,6 +8,7 @@ namespace EventManager.Tests.Events.Delete
     {
         [Theory]
         [MemberData(nameof(AddEventsForDeleting))]
+        [Trait("SubCategory", "Delete")]
         public async Task Test_Basic_Deleting(NewEventDto eventDto)
         {
             var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
@@ -23,6 +24,7 @@ namespace EventManager.Tests.Events.Delete
 
         [Theory]
         [MemberData(nameof(AddNotExistsDeleting))]
+        [Trait("SubCategory", "Delete")]
         public async Task Test_Not_Exists_Deleting(Guid id)
         {
             var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
