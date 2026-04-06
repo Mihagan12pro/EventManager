@@ -10,6 +10,11 @@ namespace EventManager.Controllers
     {
         private readonly IBookingsService _bookingService;
 
+        /// <summary>
+        /// Allows to get booking by id
+        /// </summary>
+        /// <param name="id">Booking id. Required field</param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
