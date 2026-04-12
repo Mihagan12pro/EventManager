@@ -72,22 +72,14 @@ namespace EventManager.Services.Events
             return "Event had been deleted!";
         }
 
-        public async Task<GetEventDto> GetEventByIdAsync(Guid id)
+        public async Task<Event> GetEventByIdAsync(Guid id)
         {
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
                 throw new NotFoundException($"Event with id = '{id}' was not found!");
 
-            GetEventDto eventDto = new GetEventDto(
-                eventById.Title,
-                eventById.StartAt, 
-                eventById.EndAt,
-                eventById.Description,
-                eventById.TotalSeats,
-                eventById.AvailableSeats);
-
-            return eventDto;
+            return eventById;
         }
 
         public async Task<PaginatedEventsDto> GetEventsAsync(

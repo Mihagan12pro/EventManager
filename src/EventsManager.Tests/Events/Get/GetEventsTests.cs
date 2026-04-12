@@ -27,7 +27,7 @@ namespace EventManager.Tests.Events.Get
 
             var resultSuccessful = (await eventsService.GetEventByIdAsync(id));
           
-            Assert.Equal(typeof(GetEventDto), resultSuccessful.GetType());
+            Assert.Equal(typeof(Event), resultSuccessful.GetType());
 
             var resultFailed = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.GetEventByIdAsync(hiddenId));
 

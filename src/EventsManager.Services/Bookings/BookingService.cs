@@ -18,7 +18,7 @@ namespace EventManager.Services.Bookings
 
             try
             {
-                GetEventDto eventById = await _eventsService.GetEventByIdAsync(eventId);
+                var eventById = await _eventsService.GetEventByIdAsync(eventId);
 
                 Booking booking = new Booking()
                 { 
