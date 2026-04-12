@@ -5,7 +5,7 @@ VisualStudioVersion = 18.5.11605.296
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager", "EventManager\EventManager.csproj", "{5E077F75-E197-E5E5-C20D-23F73F81D0A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Tests", "EventsManager.Tests\Services.Tests.csproj", "{DD2E2470-530A-BA77-7260-C384718BB15C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager.Services.Tests", "EventsManager.Tests\EventManager.Services.Tests.csproj", "{DD2E2470-530A-BA77-7260-C384718BB15C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A925E8E2-C1B7-4C20-AB56-1F8DF04C9A37}"
 	ProjectSection(SolutionItems) = preProject
