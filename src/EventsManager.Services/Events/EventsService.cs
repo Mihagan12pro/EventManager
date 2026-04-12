@@ -44,6 +44,8 @@ namespace EventManager.Services.Events
 
                 EndAt = end,
 
+                TotalSeats = request.TotalSeats,
+
                 Description = request.Description
             };
 

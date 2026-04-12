@@ -12,6 +12,7 @@ namespace EventManager.DTOs.Events
     public record NewEventDto(
         string Title,
         [Required] DateTime? StartAt,
-        [Required] DateTime? EndAt, 
+        [Required] DateTime? EndAt,
+        [Required, Range(1, int.MaxValue)] int TotalSeats,
         string Description = "");
 }
