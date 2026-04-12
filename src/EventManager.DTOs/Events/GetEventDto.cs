@@ -4,6 +4,8 @@
         string Title,
         DateTime StartAt, 
         DateTime EndAt,
-        string Description);
+        string Description,
+        int TotalSeats,
+        int AvalibleSeats);
 
 }

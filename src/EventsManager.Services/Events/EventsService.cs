@@ -50,6 +50,8 @@ namespace EventManager.Services.Events
 
                 TotalSeats = totalSeats,
 
+                AvailableSeats = totalSeats,
+
                 Description = request.Description
             };
 
@@ -81,7 +83,9 @@ namespace EventManager.Services.Events
                 eventById.Title,
                 eventById.StartAt, 
                 eventById.EndAt,
-                eventById.Description);
+                eventById.Description,
+                eventById.TotalSeats,
+                eventById.AvailableSeats);
 
             return eventDto;
         }
