@@ -40,7 +40,8 @@ namespace EventManager.Tests.Booking
                     new NewEventDto(
                         "Вечеринка",
                         now,
-                        now.AddHours(10),
+                        now.AddHours(10), 
+                        10,
                         "Только с 18 лет")
                 ],
 
@@ -48,7 +49,8 @@ namespace EventManager.Tests.Booking
                     new NewEventDto(
                         "Юбилей деда",
                         now.AddMonths(1),
-                        now.AddMonths(1).AddDays(1))
+                        now.AddMonths(1).AddDays(1),
+                        10)
                 ]
             ];
         }

@@ -20,7 +20,7 @@ namespace EventManager.Tests.Events.Get
 
                  datetime,
 
-                 datetime.AddHours(10));
+                 datetime.AddHours(10), 10);
 
             Guid id = await eventsService.AddNewAsync(newEvent);
             Guid hiddenId = Guid.Empty;
@@ -52,28 +52,28 @@ namespace EventManager.Tests.Events.Get
                  new NewEventDto(
                      "Юбилей",
                      dateTime.AddDays(1),
-                     dateTime.AddDays(2))
+                     dateTime.AddDays(2), 10)
                  );
 
             await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Юбилей",
                     dateTime.AddDays(1),
-                    dateTime.AddDays(2))
+                    dateTime.AddDays(2), 10)
                 );
 
             await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Юбилей",
                     dateTime.AddDays(2),
-                    dateTime.AddDays(3))
+                    dateTime.AddDays(3), 10)
                 );
 
             await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Корпоратив",
                     dateTime.AddDays(2),
-                    dateTime.AddDays(3))
+                    dateTime.AddDays(3), 10)
                 );
 
             var result = await eventsService.GetEventsAsync(

@@ -21,13 +21,14 @@ namespace EventManager.Tests.Events.Put
                  new NewEventDto(
                      "Юбилей",
                      dateTime.AddDays(1),
-                     dateTime.AddDays(2))
+                     dateTime.AddDays(2), 
+                     10)
                  );
 
             NewEventDto eventDto = new NewEventDto(
                 string.Empty,
                 start,
-                end
+                end, 10
             );
 
             var exception = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.UpdateByPutAsync(id, eventDto));
@@ -42,7 +43,8 @@ namespace EventManager.Tests.Events.Put
             NewEventDto eventDto = new NewEventDto(
                 string.Empty,
                 DateTime.Now.AddDays(1),
-                DateTime.Now.AddDays(2)
+                DateTime.Now.AddDays(2),
+                10
             );
 
             var result = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.UpdateByPutAsync(id, eventDto));
@@ -59,7 +61,8 @@ namespace EventManager.Tests.Events.Put
                  new NewEventDto(
                      "Юбилей",
                      dateTime.AddDays(1),
-                     dateTime.AddDays(2))
+                     dateTime.AddDays(2),
+                     10)
                  );
 
             Event oldModel = (await eventsService.GetEventsAsync(

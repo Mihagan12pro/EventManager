@@ -11,7 +11,7 @@ namespace EventManager.Tests.Events.Delete
             return 
             [
                 [
-                    new NewEventDto("Юбилей деда", now.AddDays(1), now.AddDays(1).AddHours(10))
+                    new NewEventDto("Юбилей деда", now.AddDays(1), now.AddDays(1).AddHours(10), 10)
                 ]
             ];
         }
