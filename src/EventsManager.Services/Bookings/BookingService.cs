@@ -4,6 +4,7 @@ using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions;
+using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 
 namespace EventManager.Services.Bookings
 {

@@ -3,6 +3,8 @@ using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Services.Exceptions;
+using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
+using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using Shared;
 
 namespace EventManager.Services.Events

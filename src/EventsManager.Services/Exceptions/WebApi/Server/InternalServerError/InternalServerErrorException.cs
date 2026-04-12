@@ -1,6 +1,6 @@
 ﻿using Shared;
 
-namespace EventManager.Services.Exceptions
+namespace EventManager.Services.Exceptions.WebApi.Server.InternalServerError
 {
     public class InternalServerErrorException : WebApiException
     {

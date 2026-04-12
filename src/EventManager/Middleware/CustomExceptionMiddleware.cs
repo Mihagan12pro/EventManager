@@ -1,4 +1,4 @@
-﻿using EventManager.Services.Exceptions;
+﻿using EventManager.Services.Exceptions.WebApi;
 using Shared;
 using System.ComponentModel.DataAnnotations;
 

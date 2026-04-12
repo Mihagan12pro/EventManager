@@ -3,7 +3,7 @@ using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
-using EventManager.Services.Exceptions;
+using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Booking.Create

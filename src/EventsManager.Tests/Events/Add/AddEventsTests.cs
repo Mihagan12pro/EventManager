@@ -1,6 +1,6 @@
 ﻿using EventManager.DTOs.Events;
 using EventManager.Services.Events;
-using EventManager.Services.Exceptions;
+using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
 
 namespace EventManager.Tests.Events.Add
 {
