@@ -45,7 +45,8 @@ namespace EventManager.Tests.Events.Add
                     new NewEventDto(
                         "Концерт",
                         datetime,
-                        datetime.AddDays(-1), 10),
+                        datetime.AddDays(-1), 
+                        10),
                     "Too late!"
                 ],
                 [
@@ -55,8 +56,20 @@ namespace EventManager.Tests.Events.Add
                         datetime.AddHours(6),
 
 
-                        datetime.AddHours(2), 10),
+                        datetime.AddHours(2), 
+                        10),
                     "Start date time must be greater than end date time!"
+                ],
+                [
+                    new NewEventDto(
+                        "Корпоратив",
+
+                        datetime.AddHours(6),
+
+
+                        datetime.AddHours(8),
+                        0),
+                    "Count of total seats must be greater than zero!"
                 ],
             ];
         }

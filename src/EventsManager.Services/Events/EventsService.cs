@@ -20,10 +20,10 @@ namespace EventManager.Services.Events
 
             DateTime start = request.StartAt.Value;
             DateTime end = request.EndAt.Value;
+            int totalSeats = request.TotalSeats.Value;
 
             DateSpan startSpan = new DateSpan(start, now);
             DateSpan endSpan = new DateSpan(end, now);
-
 
             if (startSpan.Day <= 0 && startSpan.Year <= 0 && startSpan.Month <= 0)
                 throw new BadRequestException("Too late!");
@@ -31,8 +31,12 @@ namespace EventManager.Services.Events
             if (endSpan.Day <= 0 && endSpan.Year <= 0 && endSpan.Month <= 0)
                 throw new BadRequestException("Too late!");
 
+            if (totalSeats < 1)
+                throw new BadRequestException("Count of total seats must be greater than zero!");
+
             if (start >= end)
                 throw new BadRequestException("Start date time must be greater than end date time!");
+
 
             Event createdEvent = new Event()
             {
@@ -44,7 +48,7 @@ namespace EventManager.Services.Events
 
                 EndAt = end,
 
-                TotalSeats = request.TotalSeats,
+                TotalSeats = totalSeats,
 
                 Description = request.Description
             };

@@ -4,6 +4,7 @@ namespace EventManager.Domain.Events
 {
     public class Event
     {
+
         public required Guid Id { get; set; }
 
         public required string Title { get; set; }
@@ -33,6 +34,12 @@ namespace EventManager.Domain.Events
             }
 
             return true;
+        }
+
+
+        public void ReleaseSeats(int count = 1)
+        {
+            throw new NotImplementedException();
         }
     }
 }

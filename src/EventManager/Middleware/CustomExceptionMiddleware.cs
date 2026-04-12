@@ -1,5 +1,6 @@
 ﻿using EventManager.Services.Exceptions;
 using Shared;
+using System.ComponentModel.DataAnnotations;
 
 namespace EventManager.Middleware
 {
