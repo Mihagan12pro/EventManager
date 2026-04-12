@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Shared;
+﻿using EventsManager.Failures;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace EventManager.Extensions
 {
@@ -7,26 +8,26 @@ namespace EventManager.Extensions
     {
         public static IActionResult ErrorToActionResult(
             this ControllerBase controllerBase, 
-            Error error)
+            HttpError error)
         {
             IActionResult result;
             string message = error.Message;
 
             switch (error.StatusCode)
             {
-                case 400:
+                case HttpStatusCode.BadRequest:
                     {
                         result = controllerBase.BadRequest(message);
                         break;
                     }
 
-                case 404:
+                case HttpStatusCode.NotFound:
                     {
                         result = controllerBase.NotFound(message);
                         break;
                     }
 
-                case 500:
+                case HttpStatusCode.InternalServerError:
                     {
                         result = controllerBase.StatusCode(500, message);
                         break;
@@ -34,7 +35,7 @@ namespace EventManager.Extensions
 
                 default:
                     {
-                        result = controllerBase.StatusCode(500, message);
+                        result = controllerBase.StatusCode((int)error.StatusCode, message);
                         break;
                     }
             }
