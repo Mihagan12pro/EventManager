@@ -22,6 +22,8 @@ namespace EventManager.Controllers
         /// Adds new event
         /// </summary>
         /// <param name="newEvent"></param>
+        /// <response code="201">If everyting is ok</response>
+        /// <response code="400">If data is invalid</response>
         [HttpPost]
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status201Created)]
         public async Task<IActionResult> New([FromBody] NewEventDto newEvent)
@@ -45,6 +47,8 @@ namespace EventManager.Controllers
         /// <param name="to">Start of event. Optional field</param>
         /// <param name="page">Number of page. Must be greater or equal to zero. Required field</param>
         /// <param name="pageSize">Size of page. Must be greater or equal to zero. Required field</param>
+        /// <response code="200">If everything is ok</response>
+        /// <response code="400">If page or page size is invalid</response>
         [HttpGet]
         public async Task<IActionResult> All(
             [FromQuery] string? title,
@@ -74,7 +78,8 @@ namespace EventManager.Controllers
         /// Allows to get event by id
         /// </summary>
         /// <param name="id">Event id. Required field</param>
-        /// <returns></returns>
+        /// <response code="200">If everything is ok</response>
+        /// <response code="404">If event does not exists</response>
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
@@ -87,7 +92,8 @@ namespace EventManager.Controllers
         /// Allows to delete event
         /// </summary>
         /// <param name="id">Event id. Required field</param>
-        /// <returns></returns>
+        /// <response code="200">If everything is ok</response>
+        /// <response code="404">If event does not exists</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
@@ -101,7 +107,9 @@ namespace EventManager.Controllers
         /// </summary>
         /// <param name="id">Event id. Required field</param>
         /// <param name="newEvent">New event parameters. Required field</param>
-        /// <returns></returns>
+        /// <response code="200">If everything is ok</response>
+        /// <response code="400">If update data is invalid</response>
+        /// <response code="404">If event does not exists</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(
             [FromRoute] Guid id,
@@ -117,8 +125,10 @@ namespace EventManager.Controllers
         /// </summary>
         /// <param name="id">Events id. Required field</param>
         /// <param name="cancellationToken"></param>
-        /// <response code="202"></response>
+        /// <response code="202">If everything is ok</response>
+        /// <response code="409">If there are no avaliable seats</response>
         [HttpPost("{id}/book")]
+        [ProducesResponseType(typeof(IActionResult), StatusCodes.Status202Accepted)]
         public async Task<IActionResult> Book(
             [FromRoute] Guid id,
             CancellationToken cancellationToken)

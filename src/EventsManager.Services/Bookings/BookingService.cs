@@ -1,9 +1,8 @@
 ﻿using EventManager.Domain.Bookings;
 using EventManager.Domain.Bookings.Enums;
 using EventManager.DTOs.Bookings;
-using EventManager.DTOs.Events;
 using EventManager.Services.Events;
-using EventManager.Services.Exceptions;
+using EventManager.Services.Exceptions.WebApi.Client.Conflict;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 
 namespace EventManager.Services.Bookings
@@ -13,6 +12,8 @@ namespace EventManager.Services.Bookings
         private readonly IEventsService _eventsService;
         private readonly List<Booking> _bookings = new List<Booking>();
 
+        private readonly object _bookingLock = new();
+
         public async Task<BookingAcceptedDto> CreateBookingAsync(Guid eventId)
         {
             BookingAcceptedDto bookingAcceptedDto;
@@ -20,6 +21,12 @@ namespace EventManager.Services.Bookings
             try
             {
                 var eventById = await _eventsService.GetEventByIdAsync(eventId);
+
+                lock(_bookingLock)
+                {
+                    if (!eventById.TryReverseSeats())
+                        throw new NoAvailableSeatsException();
+                }
 
                 Booking booking = new Booking()
                 { 

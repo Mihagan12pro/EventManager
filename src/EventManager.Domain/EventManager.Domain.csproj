@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EventsManager.Failures\EventsManager.Failures.csproj" />
-    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\Shared\EventsManager.Shared.csproj" />
   </ItemGroup>
 
 </Project>

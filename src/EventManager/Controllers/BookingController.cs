@@ -14,7 +14,8 @@ namespace EventManager.Controllers
         /// Allows to get booking by id
         /// </summary>
         /// <param name="id">Booking id. Required field</param>
-        /// <returns></returns>
+        /// <response code="200">If everyting is ok</response>
+        /// <response code="404">If book does not exists</response>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
