@@ -14,7 +14,7 @@ namespace EventManager.Services.Events
 
         public async Task<Guid> AddNewAsync(NewEventDto request)
         {
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.UtcNow;
 
             if (!request.StartAt.HasValue || !request.EndAt.HasValue)
                 throw new BadRequestException("Start date time and End date time are required fields!");
@@ -116,7 +116,7 @@ namespace EventManager.Services.Events
 
         public async Task<string> UpdateByPutAsync(Guid id, NewEventDto putEvent)
         {
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.UtcNow;
 
             DateTime start = putEvent.StartAt!.Value;
             DateTime end = putEvent.EndAt!.Value;

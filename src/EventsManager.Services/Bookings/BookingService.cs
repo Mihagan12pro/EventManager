@@ -30,7 +30,7 @@ namespace EventManager.Services.Bookings
 
                 Booking booking = new Booking()
                 { 
-                    CreatedAt = DateTime.Now,
+                    CreatedAt = DateTime.UtcNow,
                     EventId = eventId,
                     Id = Guid.NewGuid(), 
                     Status = BookingStatus.Pending
@@ -76,6 +76,11 @@ namespace EventManager.Services.Bookings
                 result = result.Where(b => b.Status == filtersDto.Status);
 
             return result.ToArray();
+        }
+
+        public async Task<IEnumerable<Booking>> GetPendingAsync()
+        {
+            return _bookings.Where(b => b.Status == BookingStatus.Pending);
         }
 
         public BookingsService(IEventsService eventsService)

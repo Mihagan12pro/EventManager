@@ -1,8 +1,10 @@
 ﻿using EventManager.Domain.Bookings;
 using EventManager.Domain.Bookings.Enums;
-using EventManager.DTOs.Bookings;
+using EventManager.Domain.Events;
 using EventManager.Queues.Queues.Booking;
 using EventManager.Services.Bookings;
+using EventManager.Services.Events;
+using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -25,14 +27,9 @@ namespace EventManager.Services.Background.Bookings
                     {
                         IBookingsService bookingService = scope.ServiceProvider.GetRequiredService<IBookingsService>();
 
-                        var bookings = await bookingService.GetAllAsync(new BookingFiltersDto(BookingStatus.Pending, null, null));
-                        
-                        foreach(var booking in bookings)
-                        {
-                            await RequestToRemoteSystemAsync(booking, stoppingToken);
-
-                            booking.ProcessedAt = DateTime.Now;
-                        }
+                        var bookings = await bookingService.GetPendingAsync();
+                        var tasks = bookings.Select(booking => ProcessBookingAsync(booking, stoppingToken));
+                        await Task.WhenAll(tasks);
                     }
                 }
                 catch (OperationCanceledException ex)
@@ -46,19 +43,34 @@ namespace EventManager.Services.Background.Bookings
             }
         }
 
-        private async Task RequestToRemoteSystemAsync(
+        private async Task ProcessBookingAsync(
             Booking booking,
-            CancellationToken cancellationToken)
+            CancellationToken stoppingToken)
         {
-            await Task.Delay(2000);
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                IEventsService eventsService = scope.ServiceProvider.GetRequiredService<IEventsService>();
 
-            Random random = new Random();
-            int next = random.Next(2);
-
-            if (next == 1)
-                booking.Status = BookingStatus.Rejected;
-            else
-                booking.Status = BookingStatus.Confirmed;
+                try
+                {
+                    Event eventById = await eventsService.GetEventByIdAsync(booking.EventId);
+                    booking.Status = BookingStatus.Confirmed;
+                }
+                catch(NotFoundException) 
+                {
+                    _logger.LogInformation("Event with id = {EventId} does not exists!", booking.EventId);
+                    booking.Status = BookingStatus.Rejected;
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    booking.Status = BookingStatus.Rejected;
+                }
+                finally
+                {
+                    booking.ProcessedAt = DateTime.UtcNow;
+                }
+            }
         }
 
         public BookingHandlingService(
