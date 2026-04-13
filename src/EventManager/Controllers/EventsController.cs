@@ -2,6 +2,7 @@
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
+using EventManager.Queues.ApplicationTasks.Booking;
 using EventManager.Queues.Queues.Booking;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
@@ -16,7 +17,7 @@ namespace EventManager.Controllers
     {
         private readonly IEventsService _eventService;
         private readonly IBookingsService _bookingService;
-        private readonly IBookingTaskQueue _bookingQueue;
+        private readonly IBookingPendingQueue _bookingQueue;
 
         /// <summary>
         /// Adds new event
@@ -136,6 +137,7 @@ namespace EventManager.Controllers
             var bookingDto = await _bookingService.CreateBookingAsync(id);
 
             var location = UrlMaster.CreateWithoutPath(HttpContext.Request, "bookings", bookingDto.Id);
+            _bookingQueue.Enqueue(new BookingPendingTask(bookingDto.EventId, bookingDto.Id));
 
             return Accepted(location, bookingDto);
         }
@@ -143,7 +145,7 @@ namespace EventManager.Controllers
         public EventsController(
             IEventsService eventsService,
             IBookingsService bookingService,
-            IBookingTaskQueue bookingQueue)
+            IBookingPendingQueue bookingQueue)
         {
             _eventService = eventsService;
             _bookingService = bookingService;

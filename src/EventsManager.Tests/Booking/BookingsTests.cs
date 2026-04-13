@@ -20,7 +20,7 @@ namespace EventManager.Tests.Booking
             services.AddSingleton<IEventsService, EventsService>();//Temporary solution
             services.AddSingleton<IBookingsService, BookingsService>();//Temporary solution
 
-            services.AddSingleton<IBookingTaskQueue, MockBookingTaskQueue>();
+            services.AddSingleton<IBookingPendingQueue, MockBookingTaskQueue>();
             services.AddHostedService<BookingHandlingService>();
 
             services.AddLogging();

@@ -1,10 +1,11 @@
 ﻿namespace EventManager.Queues.ApplicationTasks.Booking
 {
-    public class BookingTask : ApplicationTask
+    public class BookingPendingTask : ApplicationTask
     {
+        public readonly Guid EventId;
         public readonly Guid Id;
 
-        public BookingTask(Guid id)
+        public BookingPendingTask(Guid eventId, Guid id)
         {
             Id = id;
         }

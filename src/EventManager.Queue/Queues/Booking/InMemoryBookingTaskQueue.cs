@@ -3,16 +3,16 @@ using System.Collections.Concurrent;
 
 namespace EventManager.Queues.Queues.Booking
 {
-    internal class InMemoryBookingTaskQueue : IBookingTaskQueue
+    internal class InMemoryBookingPendingQueue : IBookingPendingQueue
     {
-        private readonly ConcurrentQueue<BookingTask> _taskQueue = new ConcurrentQueue<BookingTask>();
+        private readonly ConcurrentQueue<BookingPendingTask> _taskQueue = new ConcurrentQueue<BookingPendingTask>();
 
-        public void Enqueue(BookingTask task)
+        public void Enqueue(BookingPendingTask task)
         {
             _taskQueue.Enqueue(task);
         }
 
-        public bool TryDequeue(out BookingTask task)
+        public bool TryDequeue(out BookingPendingTask task)
         {
             return _taskQueue.TryDequeue(out task);
         }

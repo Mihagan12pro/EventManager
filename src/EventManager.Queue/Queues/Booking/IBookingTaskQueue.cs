@@ -2,7 +2,7 @@
 
 namespace EventManager.Queues.Queues.Booking
 {
-    public interface IBookingTaskQueue : ITaskQueue<BookingTask>
+    public interface IBookingPendingQueue : ITaskQueue<BookingPendingTask>
     {
     }
 }

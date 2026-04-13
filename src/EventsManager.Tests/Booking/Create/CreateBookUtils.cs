@@ -13,14 +13,14 @@ namespace EventManager.Tests.Booking.Create
         
     }
 
-    class MockBookingTaskQueue : IBookingTaskQueue
+    class MockBookingTaskQueue : IBookingPendingQueue
     {
-        public void Enqueue(BookingTask task)
+        public void Enqueue(BookingPendingTask task)
         {
             throw new NotImplementedException();
         }
 
-        public bool TryDequeue(out BookingTask task)
+        public bool TryDequeue(out BookingPendingTask task)
         {
             throw new NotImplementedException();
         }

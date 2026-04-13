@@ -7,7 +7,7 @@ namespace EventManager.Queues
     {
         public static IServiceCollection AddQueues(this IServiceCollection queuesCollection)
         {
-            queuesCollection.AddSingleton<IBookingTaskQueue, InMemoryBookingTaskQueue>();
+            queuesCollection.AddSingleton<IBookingPendingQueue, InMemoryBookingPendingQueue>();
 
             return queuesCollection;
         }
