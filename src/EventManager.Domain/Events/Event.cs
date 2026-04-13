@@ -35,9 +35,18 @@ namespace EventManager.Domain.Events
             return true;
         }
 
-        public void ReleaseSeats(int count = 1)
+        public bool TryReleaseSeats(int count = 1)
         {
-            throw new NotImplementedException();
+            if (count + AvailableSeats > TotalSeats)
+                return false;
+
+            lock(_lock)
+            {
+                AvailableSeats += count;
+            }
+
+            return true;
+
         }
     }
 }

@@ -51,26 +51,31 @@ namespace EventManager.Services.Background.Bookings
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 IEventsService eventsService = scope.ServiceProvider.GetRequiredService<IEventsService>();
-
+                Event? eventById = null;
                 try
                 {
                     _processingSemaphore.Wait();
-                    Event eventById = await eventsService.GetEventByIdAsync(booking.EventId);
+                    
+                    eventById = await eventsService.GetEventByIdAsync(booking.EventId);
                     booking.Status = BookingStatus.Confirmed;
                 }
                 catch(NotFoundException) 
                 {
                     _logger.LogInformation("Event with id = {EventId} does not exists!", booking.EventId);
+                    
                     booking.Status = BookingStatus.Rejected;
                 }
                 catch(Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
+                    
                     booking.Status = BookingStatus.Rejected;
+                    eventById?.TryReleaseSeats(1);
                 }
                 finally
                 {
                     booking.ProcessedAt = DateTime.UtcNow;
+                    
                     _processingSemaphore.Release();
                 }
             }
