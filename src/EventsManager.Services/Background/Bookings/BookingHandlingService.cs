@@ -13,6 +13,7 @@ namespace EventManager.Services.Background.Bookings
 {
     internal class BookingHandlingService : BackgroundService
     {
+        private readonly SemaphoreSlim _processingSemaphore = new(1, 1);
         private readonly IBookingTaskQueue _bookingTaskQueue;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger _logger;
@@ -53,6 +54,7 @@ namespace EventManager.Services.Background.Bookings
 
                 try
                 {
+                    _processingSemaphore.Wait();
                     Event eventById = await eventsService.GetEventByIdAsync(booking.EventId);
                     booking.Status = BookingStatus.Confirmed;
                 }
@@ -69,6 +71,7 @@ namespace EventManager.Services.Background.Bookings
                 finally
                 {
                     booking.ProcessedAt = DateTime.UtcNow;
+                    _processingSemaphore.Release();
                 }
             }
         }
