@@ -8,6 +8,7 @@ using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace EventManager.Services.Background.Bookings
 {
@@ -28,6 +29,7 @@ namespace EventManager.Services.Background.Bookings
                         IBookingsService bookingService = scope.ServiceProvider.GetRequiredService<IBookingsService>();
 
                         var pendingBookings = await bookingService.GetAllAsync(new BookingFiltersDto(BookingStatus.Pending, null, null));
+
                         var pendingTasks = pendingBookings.Select(pb => ProcessBookingsAsync(pb, stoppingToken)); 
 
                         await Task.WhenAll(pendingTasks);
@@ -70,6 +72,10 @@ namespace EventManager.Services.Background.Bookings
                     _logger.LogWarning("Event with id = {EventId} does not exists!", booking.EventId);
 
                     booking.Reject();
+                }
+                catch (OperationCanceledException)
+                {
+                    _logger.LogInformation("This booking can not be processed right now because the operation had been canceled!");
                 }
                 catch(Exception ex)
                 {

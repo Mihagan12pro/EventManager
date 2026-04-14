@@ -4,6 +4,7 @@ using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
+using EventManager.Services.Exceptions.WebApi.Client.Conflict;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -11,6 +12,52 @@ namespace EventManager.Tests.Booking.Background
 {
     public partial class BackgroundBookingHandlingTests
     {
+        [Fact]
+        [Trait("SubCategory", "BackgroundHandling")]
+        public async Task Test_NoAvaliableSeats()
+        {
+            var provider = GetProviderService();
+
+            var hostedServices = provider.GetServices<IHostedService>();
+            var cancellarationTokenSource = new CancellationTokenSource();
+
+            var startTasks = hostedServices.Select(s => s.StartAsync(cancellarationTokenSource.Token));
+            await Task.WhenAll(startTasks);
+
+            IEventsService eventsService = provider.GetRequiredService<IEventsService>();
+            IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
+
+            var eventDto = new NewEventDto(
+                "Хакатон",
+                DateTime.Now.AddMonths(5), 
+                DateTime.Now.AddMonths(5).AddHours(10),
+                5);
+
+            Guid eventId = await eventsService.AddNewAsync(eventDto);
+
+            ParallelOptions options = new ParallelOptions() { MaxDegreeOfParallelism = 20 };
+
+            await Parallel.ForAsync(0, 19, options, async (i, token) =>
+                {
+                    try
+                    {
+                        await bookingsService.CreateBookingAsync(eventId);
+                    }
+                    catch(Exception ex)
+                    {
+                        Assert.Equal(typeof(NoAvailableSeatsException), ex.GetType());
+                    }
+                });
+
+            var bookings = await bookingsService.GetAllAsync(new BookingFiltersDto(null, null, null));
+
+            await Task.Delay(3000);
+
+            var confirmed = bookings.Where(b => b.Status == BookingStatus.Confirmed);
+
+            Assert.Equal(5, confirmed.Count());
+        }
+
         [Theory]
         [MemberData(nameof(AddEvents))]
         [Trait("SubCategory", "BackgroundHandling")]
