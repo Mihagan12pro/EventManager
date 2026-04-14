@@ -2,7 +2,6 @@
 using EventManager.Domain.Bookings.Enums;
 using EventManager.Domain.Events;
 using EventManager.DTOs.Bookings;
-using EventManager.Queues.Queues.Booking;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
@@ -15,7 +14,6 @@ namespace EventManager.Services.Background.Bookings
     internal class BookingHandlingService : BackgroundService
     {
         private readonly SemaphoreSlim _processingSemaphore = new(1, 1);
-        private readonly IBookingPendingQueue _bookingTaskQueue;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger _logger;
 
@@ -82,17 +80,16 @@ namespace EventManager.Services.Background.Bookings
                 }
                 finally
                 {
+                    await bookingsService.Update(booking);
                     _processingSemaphore.Release();
                 }
             }
         }
 
         public BookingHandlingService(
-            IBookingPendingQueue bookingTaskQueue,
             IServiceScopeFactory serviceScopeFactory,
             ILogger<BookingHandlingService> logger)
         {
-            _bookingTaskQueue = bookingTaskQueue;
             _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
         }

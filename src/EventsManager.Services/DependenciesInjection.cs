@@ -1,5 +1,4 @@
-﻿using EventManager.Queues;
-using EventManager.Services.Background.Bookings;
+﻿using EventManager.Services.Background.Bookings;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,8 +30,6 @@ namespace EventManager.Services
 
         public static IServiceCollection AddSingletonServices(this IServiceCollection singletonServices)
         {
-            singletonServices.AddQueues();
-
             return singletonServices;
         }
     }

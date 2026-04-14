@@ -1,13 +1,9 @@
 ﻿using EventManager.Domain.Events;
-using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
-using EventManager.Queues.ApplicationTasks.Booking;
-using EventManager.Queues.Queues.Booking;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace EventManager.Controllers
 {
@@ -17,7 +13,6 @@ namespace EventManager.Controllers
     {
         private readonly IEventsService _eventService;
         private readonly IBookingsService _bookingService;
-        private readonly IBookingPendingQueue _bookingQueue;
 
         /// <summary>
         /// Adds new event
@@ -143,12 +138,10 @@ namespace EventManager.Controllers
 
         public EventsController(
             IEventsService eventsService,
-            IBookingsService bookingService,
-            IBookingPendingQueue bookingQueue)
+            IBookingsService bookingService)
         {
             _eventService = eventsService;
             _bookingService = bookingService;
-            _bookingQueue = bookingQueue;
         }
     }
 }

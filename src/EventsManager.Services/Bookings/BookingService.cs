@@ -10,6 +10,7 @@ namespace EventManager.Services.Bookings
     internal class BookingsService : IBookingsService
     {
         private readonly IEventsService _eventsService;
+
         private readonly List<Booking> _bookings = new List<Booking>();
 
         private readonly object _bookingLock = new();
@@ -30,7 +31,7 @@ namespace EventManager.Services.Bookings
 
                 Booking booking = new Booking()
                 { 
-                    CreatedAt = DateTime.UtcNow,
+                    CreatedAt = DateTime.Now,
                     EventId = eventId,
                     Id = Guid.NewGuid(), 
                     Status = BookingStatus.Pending
@@ -80,7 +81,7 @@ namespace EventManager.Services.Bookings
 
         public Task Update(Booking booking)
         {
-            booking.ProcessedAt = DateTime.UtcNow;
+            booking.ProcessedAt = DateTime.Now;
 
             return Task.CompletedTask;
         }

@@ -1,9 +1,7 @@
 ﻿using EventManager.DTOs.Events;
-using EventManager.Queues.Queues.Booking;
 using EventManager.Services.Background.Bookings;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
-using EventManager.Tests.Booking.Create;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Booking
@@ -20,7 +18,6 @@ namespace EventManager.Tests.Booking
             services.AddSingleton<IEventsService, EventsService>();//Temporary solution
             services.AddSingleton<IBookingsService, BookingsService>();//Temporary solution
 
-            services.AddSingleton<IBookingPendingQueue, MockBookingTaskQueue>();
             services.AddHostedService<BookingHandlingService>();
 
             services.AddLogging();
