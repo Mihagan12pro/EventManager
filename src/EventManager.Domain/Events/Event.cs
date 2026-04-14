@@ -20,7 +20,7 @@ namespace EventManager.Domain.Events
 
         private readonly Lock _lock = new Lock();
 
-        public bool TryReverseSeats([Range(1, int.MaxValue)] int count = 1)
+        public bool TryReverseSeats(int count = 1)
         {
             if (count > AvailableSeats)
             {

@@ -23,8 +23,10 @@ How to run tests?
 3.1 If you want to run all tests, write:  'dotnet test' or 'dotnet test path_to_your_foler\EventManager\src\EventsManager.Tests\EventsManager.Tests.csproj"'.
 3.2 If you want to run group of tests, write:  dotnet test --filter <Group tittle>.
 	For example: 'dotnet test --filter GetEvents' or 'dotnet test path_to_your_foler\EventManager\src\EventsManager.Tests\EventsManager.Tests.csproj" --filter GetEvents'
-							
-Features from the previous branch (sprint2):
+	
+	
+
+Features from the sprint2:
 1. The EventsController.All has parameters:
 
 	EventsController.All(
@@ -62,7 +64,15 @@ Features from the previous branch (sprint2):
 	1. statusCode - contains http status code of the response (In this example 404 or not found)
 	2. message - contains description of error
 
-Features of the current branch (sprint3):
+
+
+
+
+
+
+
+
+Features from the sprint3:
 1. New domain model - Booking. It contains:
 	a. Guid Id - primary key. Required field.
 	b. Guid EventId - event id. Required field.
@@ -103,3 +113,15 @@ Features of the current branch (sprint3):
 5. Add new project - EventManager.Queues. This projects contains some classes for task queues. But
 	now you can't see samples of using classes from this library in this applications. In future branches
 	classes from this library will be used in the code.
+
+
+
+
+Features from the last brunch (sprint4):
+1. Modify the Event
+	- Add TotalSeats property (shows total count of seats at this event)
+	- Add AvailableSeats property (shows count of free seats at this event)
+	- Add TryReverseSeats(int count = 1) method (provides decreasing in number of available seats)
+	- Add TryReleaseSeats(int count = 1) method (provides releasing seats)
+
+2. 
