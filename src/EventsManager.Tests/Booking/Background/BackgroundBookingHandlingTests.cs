@@ -14,6 +14,44 @@ namespace EventManager.Tests.Booking.Background
     {
         [Fact]
         [Trait("SubCategory", "BackgroundHandling")]
+        public async Task Test_Rejected()
+        {
+            var provider = GetProviderService();
+
+            var hostedServices = provider.GetServices<IHostedService>();
+            var cancellarationTokenSource = new CancellationTokenSource();
+
+            var startTasks = hostedServices.Select(s => s.StartAsync(cancellarationTokenSource.Token));
+            await Task.WhenAll(startTasks);
+
+            IEventsService eventsService = provider.GetRequiredService<IEventsService>();
+            IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
+
+            var eventDto = new NewEventDto(
+                "Хакатон",
+                DateTime.Now.AddMonths(5),
+                DateTime.Now.AddMonths(5).AddHours(10),
+                5);
+
+            Guid eventId = await eventsService.AddNewAsync(eventDto);
+
+            BookingAcceptedDto? bookingDto = null;
+
+            Task task1 = Task.Run(async () => { await Task.Delay(200); await eventsService.DeleteAsync(eventId); });
+            Task task2 = Task.Run( async () => bookingDto = await bookingsService.CreateBookingAsync(eventId));
+
+
+            await Task.WhenAll(task1, task2);
+            
+            await Task.Delay(3000);
+
+            var booking = await bookingsService.GetBookingByIdAsync(bookingDto.Id);
+
+            Assert.Equal(BookingStatus.Rejected, booking.Status);
+        }
+
+        [Fact]
+        [Trait("SubCategory", "BackgroundHandling")]
         public async Task Test_NoAvaliableSeats()
         {
             var provider = GetProviderService();
