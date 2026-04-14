@@ -1,4 +1,5 @@
 ﻿using EventManager.Domain.Bookings.Enums;
+using EventManager.Domain.Events;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.Services.Bookings;
@@ -10,6 +11,40 @@ namespace EventManager.Tests.Booking.Background
 {
     public partial class BackgroundBookingHandlingTests
     {
+        [Theory]
+        [MemberData(nameof(AddEvents))]
+        [Trait("SubCategory", "BackgroundHandling")]
+        public async Task Test_UniqueBookingId(NewEventDto eventDto)
+        {
+            var provider = GetProviderService();
+
+            var hostedServices = provider.GetServices<IHostedService>();
+            var cancellarationTokenSource = new CancellationTokenSource();
+
+            var startTasks = hostedServices.Select(s => s.StartAsync(cancellarationTokenSource.Token));
+            await Task.WhenAll(startTasks);
+
+            IEventsService eventsService = provider.GetRequiredService<IEventsService>();
+            IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
+
+            Guid eventId = await eventsService.AddNewAsync(eventDto);
+
+            HashSet<Guid> bookingsIds = new HashSet<Guid>();
+
+            int totalSeats = eventDto.TotalSeats!.Value;
+
+            for(int i = 0; i < totalSeats; i++)
+            {
+                var bookingAccepted = await bookingsService.CreateBookingAsync(eventId);
+                bookingsIds.Add(bookingAccepted.Id);
+            }
+
+            Event @event = await eventsService.GetEventByIdAsync(eventId);
+
+            Assert.Equal(0, @event.AvailableSeats);
+            Assert.Equal(@event.TotalSeats, bookingsIds.Count);
+        }
+
         [Theory]
         [MemberData(nameof(AddEvents))]
         [Trait("SubCategory", "BackgroundHandling")]
