@@ -137,7 +137,6 @@ namespace EventManager.Controllers
             var bookingDto = await _bookingService.CreateBookingAsync(id);
 
             var location = UrlMaster.CreateWithoutPath(HttpContext.Request, "bookings", bookingDto.Id);
-            _bookingQueue.Enqueue(new BookingPendingTask(bookingDto.EventId, bookingDto.Id));
 
             return Accepted(location, bookingDto);
         }

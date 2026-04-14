@@ -1,11 +1,10 @@
 ﻿using EventManager.Domain.Bookings;
 using EventManager.Domain.Bookings.Enums;
 using EventManager.Domain.Events;
-using EventManager.Queues.ApplicationTasks.Booking;
+using EventManager.DTOs.Bookings;
 using EventManager.Queues.Queues.Booking;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
-using EventManager.Services.Exceptions.WebApi.Client.Conflict;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,11 +29,10 @@ namespace EventManager.Services.Background.Bookings
                     {
                         IBookingsService bookingService = scope.ServiceProvider.GetRequiredService<IBookingsService>();
 
-                        var bookings = (await bookingService.GetConfirmedAsync()).GroupBy(s => s.EventId);
-                        var b = bookings.SelectMany(s => s);
+                        var pendingBookings = await bookingService.GetAllAsync(new BookingFiltersDto(BookingStatus.Pending, null, null));
+                        var pendingTasks = pendingBookings.Select(pb => ProcessBookingsAsync(pb, stoppingToken)); 
 
-                        //var tasks = bookings.Select(booking => ProcessBookingAsync(booking, stoppingToken));
-                        //await Task.WhenAll(tasks);
+                        await Task.WhenAll(pendingTasks);
                     }
                 }
                 catch (OperationCanceledException ex)
@@ -48,68 +46,40 @@ namespace EventManager.Services.Background.Bookings
             }
         }
 
-        private async Task ProcessPendingBooking(
-            BookingPendingTask task, 
-            CancellationToken stoppingToken)
-        {
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                IEventsService eventsService = scope.ServiceProvider.GetRequiredService<IEventsService>();
-                Event? eventById = null;
-                
-                try
-                {
-
-                }
-                catch
-                {
-
-                }
-                finally
-                {
-                    _processingSemaphore.Release();
-                }
-            }
-        }
-
-        private async Task ProcessConfirmedBookingAsync(
+        private async Task ProcessBookingsAsync(
             Booking booking,
             CancellationToken stoppingToken)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 IEventsService eventsService = scope.ServiceProvider.GetRequiredService<IEventsService>();
+
                 Event? eventById = null;
+                
                 try
                 {
                     await _processingSemaphore.WaitAsync();
-                    
+
                     eventById = await eventsService.GetEventByIdAsync(booking.EventId);
+
                     booking.Status = BookingStatus.Confirmed;
                 }
-                catch(NotFoundException) 
+                catch (NotFoundException)
                 {
                     _logger.LogInformation("Event with id = {EventId} does not exists!", booking.EventId);
-                    
-                    booking.Status = BookingStatus.Rejected;
-                }
-                catch(NoAvailableSeatsException)
-                {
-                    _logger.LogInformation("There are no avaliable seats for event with id = {EventId}!", booking.EventId);
 
                     booking.Status = BookingStatus.Rejected;
                 }
                 catch(Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
-                    
+
+                    eventById?.TryReleaseSeats();
                     booking.Status = BookingStatus.Rejected;
-                    eventById?.TryReleaseSeats(1);
                 }
                 finally
                 {
                     booking.ProcessedAt = DateTime.UtcNow;
-                    
                     _processingSemaphore.Release();
                 }
             }

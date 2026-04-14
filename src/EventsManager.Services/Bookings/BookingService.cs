@@ -78,21 +78,6 @@ namespace EventManager.Services.Bookings
             return result.ToArray();
         }
 
-        public async Task<IEnumerable<Booking>> GetConfirmedAsync()
-        {
-            return _bookings.Where(b => b.Status == BookingStatus.Confirmed);
-        }
-
-        public async Task UpdateStatusAsync(Guid bookingId, BookingStatus bookingStatus)
-        {
-            Booking? booking = _bookings.FirstOrDefault(b => b.Id == bookingId);
-
-            if (booking == null)
-                throw new NotFoundException($"Booking with id = {bookingId} was not found!");
-
-            booking.Status = bookingStatus;
-        }
-
         public BookingsService(IEventsService eventsService)
         {
             _eventsService = eventsService;

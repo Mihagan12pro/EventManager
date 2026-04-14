@@ -10,10 +10,6 @@ namespace EventManager.Services.Bookings
 
         Task<Booking> GetBookingByIdAsync(Guid bookingId);
 
-        Task UpdateStatusAsync(Guid bookingId, BookingStatus bookingStatus);
-
         Task<IEnumerable<Booking>> GetAllAsync(BookingFiltersDto filtersDto);
-
-        Task<IEnumerable<Booking>> GetConfirmedAsync();
     }
 }
