@@ -50,9 +50,12 @@ namespace EventManager.Services.Background.Bookings
             Booking booking,
             CancellationToken stoppingToken)
         {
+            await Task.Delay(500);
+
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 IEventsService eventsService = scope.ServiceProvider.GetRequiredService<IEventsService>();
+                IBookingsService bookingsService = scope.ServiceProvider.GetRequiredService<IBookingsService>();
 
                 Event? eventById = null;
                 
@@ -62,24 +65,23 @@ namespace EventManager.Services.Background.Bookings
 
                     eventById = await eventsService.GetEventByIdAsync(booking.EventId);
 
-                    booking.Status = BookingStatus.Confirmed;
+                    booking.Confirm();
                 }
                 catch (NotFoundException)
                 {
-                    _logger.LogInformation("Event with id = {EventId} does not exists!", booking.EventId);
+                    _logger.LogWarning("Event with id = {EventId} does not exists!", booking.EventId);
 
-                    booking.Status = BookingStatus.Rejected;
+                    booking.Reject();
                 }
                 catch(Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
 
                     eventById?.TryReleaseSeats();
-                    booking.Status = BookingStatus.Rejected;
+                    booking.Reject();
                 }
                 finally
                 {
-                    booking.ProcessedAt = DateTime.UtcNow;
                     _processingSemaphore.Release();
                 }
             }

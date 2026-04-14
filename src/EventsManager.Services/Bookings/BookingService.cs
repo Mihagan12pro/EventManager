@@ -78,6 +78,13 @@ namespace EventManager.Services.Bookings
             return result.ToArray();
         }
 
+        public Task Update(Booking booking)
+        {
+            booking.ProcessedAt = DateTime.UtcNow;
+
+            return Task.CompletedTask;
+        }
+
         public BookingsService(IEventsService eventsService)
         {
             _eventsService = eventsService;

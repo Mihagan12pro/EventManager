@@ -13,5 +13,11 @@ namespace EventManager.Domain.Bookings
         public required BookingStatus Status { get; set; }
 
         public DateTime? ProcessedAt { get; set; }
+
+        public void Confirm()
+            => Status = BookingStatus.Confirmed;
+
+        public void Reject() =>
+            Status = BookingStatus.Rejected;
     }
 }

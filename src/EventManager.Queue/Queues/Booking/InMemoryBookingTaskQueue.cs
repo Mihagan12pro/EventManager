@@ -16,5 +16,10 @@ namespace EventManager.Queues.Queues.Booking
         {
             return _taskQueue.TryDequeue(out task);
         }
+
+        public bool TryPeek(out BookingPendingTask task)
+        {
+            return _taskQueue.TryPeek(out task);
+        }
     }
 }

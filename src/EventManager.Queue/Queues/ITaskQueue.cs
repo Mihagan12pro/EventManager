@@ -6,6 +6,8 @@ namespace EventManager.Queues.Queues
     {
         void Enqueue(TTask task);
 
+        bool TryPeek(out TTask task);
+
         bool TryDequeue(out TTask task);
     }
 }
