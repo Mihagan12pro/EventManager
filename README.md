@@ -129,3 +129,9 @@ Features from the last brunch (sprint4):
 2. Modify the EventsController.Book: when Event.AvaliableSeats = 0, this end point
 	sends response with status code 409 (conflict)
 
+3. Modify the BookingHandlingService. Add new method - ProcessBookingsAsync. This method handles new bookings.
+   How does it works? The ProcessBookingsAsync uses try-catch-finally construction because protection of the
+   criticall area implemented via semaphore. In try code block object of the SemaphoreSlim class invokes the WaitAsync()
+   method. After that IEventsService.GetEventByIdAsync tries to get object of the Event class. If everything is Ok,
+   booking changes its status from "Pending" to "Confirmed". If somethings went wrong booking changes its status from
+   "Pending" to "Rejected". In finally code block object of the SemaphoreSlim class invokes the Release() method.
