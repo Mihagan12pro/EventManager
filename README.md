@@ -65,13 +65,6 @@ Features from the sprint2:
 	2. message - contains description of error
 
 
-
-
-
-
-
-
-
 Features from the sprint3:
 1. New domain model - Booking. It contains:
 	a. Guid Id - primary key. Required field.
@@ -115,8 +108,6 @@ Features from the sprint3:
 	classes from this library will be used in the code.
 
 
-
-
 Features from the last brunch (sprint4):
 1. Modify the Event
 	- Add TotalSeats property (shows total count of seats at this event)
@@ -126,8 +117,13 @@ Features from the last brunch (sprint4):
 	
 	The TryReverseSeats and TryReleaseSeats methods use the _lock for critical section protection.
 
-2. Modify the EventsController.Book: when Event.AvaliableSeats = 0, this end point
-	sends response with status code 409 (conflict)
+2. Modify the EventsController.Book: when Event.AvaliableSeats = 0 (overbooking), this end point
+	sends response with status code 409 (conflict).
+
+	Sample of overbooking sutuiation: one event (e.g. hackaton) has only five avaliable seats.
+	But there are twenty users who want to take part in this event. Every one tries too book place,
+	but server will send 5 respones with status code 202 (accepted) and 15 responses with status
+	code 409 (conflict).
 
 3. Modify the BookingHandlingService. Add new method - ProcessBookingsAsync. This method handles new bookings.
    How does it works? The ProcessBookingsAsync uses try-catch-finally construction because protection of the
