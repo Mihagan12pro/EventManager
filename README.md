@@ -123,5 +123,9 @@ Features from the last brunch (sprint4):
 	- Add AvailableSeats property (shows count of free seats at this event)
 	- Add TryReverseSeats(int count = 1) method (provides decreasing in number of available seats)
 	- Add TryReleaseSeats(int count = 1) method (provides releasing seats)
+	
+	The TryReverseSeats and TryReleaseSeats methods use the _lock for critical section protection.
 
-2. 
+2. Modify the EventsController.Book: when Event.AvaliableSeats = 0, this end point
+	sends response with status code 409 (conflict)
+
