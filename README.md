@@ -131,3 +131,5 @@ Features from the last brunch (sprint4):
    method. After that IEventsService.GetEventByIdAsync tries to get object of the Event class. If everything is Ok,
    booking changes its status from "Pending" to "Confirmed". If somethings went wrong booking changes its status from
    "Pending" to "Rejected". In finally code block object of the SemaphoreSlim class invokes the Release() method.
+
+4. Remove the EventManager.Queues project.
