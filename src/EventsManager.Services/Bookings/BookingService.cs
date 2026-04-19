@@ -23,12 +23,6 @@ namespace EventManager.Services.Bookings
             {
                 var eventById = await _eventsService.GetEventByIdAsync(eventId);
 
-                lock(_bookingLock)
-                {
-                    if (!eventById.TryReverseSeats())
-                        throw new NoAvailableSeatsException();
-                }
-
                 Booking booking = new Booking()
                 { 
                     CreatedAt = DateTime.Now,
@@ -36,8 +30,14 @@ namespace EventManager.Services.Bookings
                     Id = Guid.NewGuid(), 
                     Status = BookingStatus.Pending
                 };
-
-                _bookings.Add(booking);
+                
+                lock(_bookingLock)
+                {
+                    if (!eventById.TryReverseSeats())
+                        throw new NoAvailableSeatsException();
+                    
+                    _bookings.Add(booking);
+                }
 
                 bookingAcceptedDto = new BookingAcceptedDto(
                     booking.Id,
