@@ -14,7 +14,8 @@ namespace EventManager.Tests.Events.Add
                     new NewEventDto(
                         "Выпускной 11 класса",
                         null,
-                        datetime
+                        datetime,
+                        10
                     ),
                     "Start date time and End date time are required fields!"
                 ],
@@ -22,28 +23,30 @@ namespace EventManager.Tests.Events.Add
                     new NewEventDto(
                         "Корпоратив",
                         datetime.AddHours(6),
-                        null),
+                        null,
+                        10),
                     "Start date time and End date time are required fields!"
                 ],
                 [
                     new NewEventDto(
                         "Корпоратив",
                         null,
-                        null),
+                        null, 10),
                     "Start date time and End date time are required fields!"
                 ],
                 [
                     new NewEventDto(
                         "Концерт",
                         datetime.AddDays(-1),
-                        datetime.AddDays(2)),
+                        datetime.AddDays(2), 10),
                     "Too late!"
                 ],
                 [
                     new NewEventDto(
                         "Концерт",
                         datetime,
-                        datetime.AddDays(-1)),
+                        datetime.AddDays(-1), 
+                        10),
                     "Too late!"
                 ],
                 [
@@ -53,8 +56,20 @@ namespace EventManager.Tests.Events.Add
                         datetime.AddHours(6),
 
 
-                        datetime.AddHours(2)),
+                        datetime.AddHours(2), 
+                        10),
                     "Start date time must be greater than end date time!"
+                ],
+                [
+                    new NewEventDto(
+                        "Корпоратив",
+
+                        datetime.AddHours(6),
+
+
+                        datetime.AddHours(8),
+                        0),
+                    "Count of total seats must be greater than zero!"
                 ],
             ];
         }
@@ -72,7 +87,7 @@ namespace EventManager.Tests.Events.Add
 
                         datetime,
 
-                        datetime.AddHours(10))
+                        datetime.AddHours(10), 10)
                 ],
 
                 [
@@ -80,7 +95,7 @@ namespace EventManager.Tests.Events.Add
                         "Золотая свадьба",
 
                         datetime.AddDays(10),
-                        datetime.AddDays(11))
+                        datetime.AddDays(11), 10)
                 ],
 
                 [
@@ -94,7 +109,7 @@ namespace EventManager.Tests.Events.Add
 
                         new DateTime(
                             new DateOnly(DateOnly.FromDateTime(datetime).Year + 1, 6, 22),
-                            new TimeOnly(8, 0, 20)))
+                            new TimeOnly(8, 0, 20)), 10)
                 ]
             ];
         }

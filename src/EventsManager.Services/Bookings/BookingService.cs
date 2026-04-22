@@ -1,16 +1,19 @@
 ﻿using EventManager.Domain.Bookings;
 using EventManager.Domain.Bookings.Enums;
 using EventManager.DTOs.Bookings;
-using EventManager.DTOs.Events;
 using EventManager.Services.Events;
-using EventManager.Services.Exceptions;
+using EventManager.Services.Exceptions.WebApi.Client.Conflict;
+using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 
 namespace EventManager.Services.Bookings
 {
     internal class BookingsService : IBookingsService
     {
         private readonly IEventsService _eventsService;
+
         private readonly List<Booking> _bookings = new List<Booking>();
+
+        private readonly object _bookingLock = new();
 
         public async Task<BookingAcceptedDto> CreateBookingAsync(Guid eventId)
         {
@@ -18,7 +21,7 @@ namespace EventManager.Services.Bookings
 
             try
             {
-                GetEventDto eventById = await _eventsService.GetEventByIdAsync(eventId);
+                var eventById = await _eventsService.GetEventByIdAsync(eventId);
 
                 Booking booking = new Booking()
                 { 
@@ -27,8 +30,14 @@ namespace EventManager.Services.Bookings
                     Id = Guid.NewGuid(), 
                     Status = BookingStatus.Pending
                 };
-
-                _bookings.Add(booking);
+                
+                lock(_bookingLock)
+                {
+                    if (!eventById.TryReverseSeats())
+                        throw new NoAvailableSeatsException();
+                    
+                    _bookings.Add(booking);
+                }
 
                 bookingAcceptedDto = new BookingAcceptedDto(
                     booking.Id,
@@ -68,6 +77,13 @@ namespace EventManager.Services.Bookings
                 result = result.Where(b => b.Status == filtersDto.Status);
 
             return result.ToArray();
+        }
+
+        public Task Update(Booking booking)
+        {
+            booking.ProcessedAt = DateTime.Now;
+
+            return Task.CompletedTask;
         }
 
         public BookingsService(IEventsService eventsService)

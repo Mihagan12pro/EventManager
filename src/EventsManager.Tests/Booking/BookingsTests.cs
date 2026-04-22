@@ -1,9 +1,7 @@
 ﻿using EventManager.DTOs.Events;
-using EventManager.Queues.Queues.Booking;
 using EventManager.Services.Background.Bookings;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
-using EventManager.Tests.Booking.Create;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Booking
@@ -20,7 +18,6 @@ namespace EventManager.Tests.Booking
             services.AddSingleton<IEventsService, EventsService>();//Temporary solution
             services.AddSingleton<IBookingsService, BookingsService>();//Temporary solution
 
-            services.AddSingleton<IBookingTaskQueue, MockBookingTaskQueue>();
             services.AddHostedService<BookingHandlingService>();
 
             services.AddLogging();
@@ -40,7 +37,8 @@ namespace EventManager.Tests.Booking
                     new NewEventDto(
                         "Вечеринка",
                         now,
-                        now.AddHours(10),
+                        now.AddHours(10), 
+                        10,
                         "Только с 18 лет")
                 ],
 
@@ -48,7 +46,8 @@ namespace EventManager.Tests.Booking
                     new NewEventDto(
                         "Юбилей деда",
                         now.AddMonths(1),
-                        now.AddMonths(1).AddDays(1))
+                        now.AddMonths(1).AddDays(1),
+                        10)
                 ]
             ];
         }

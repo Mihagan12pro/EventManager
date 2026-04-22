@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using Shared;
+using EventsManager.Failures;
+using EventsManager.Failures.Errors;
 
 namespace EventManager.Domain.Events
 {
@@ -22,22 +23,24 @@ namespace EventManager.Domain.Events
 
         public readonly DateTime? UpperBound;
 
-        public Result<string, Error> CheckDateRange(Event eventModel)
+        public Result<string, HttpError> CheckDateRange(Event eventModel)
         {
             if (LowerBound.HasValue)
             {
                 if (StrictlyGreater && LowerBound >= eventModel.StartAt)
-                    return Error.CreateError400("Date time must be strictly greater than lower bound!");
+                    return ClientErrors.Create400("Date time must be strictly greater than lower bound!");
+
                 else if (!StrictlyGreater && LowerBound > eventModel.StartAt)
-                    return Error.CreateError400("Date time must be greater than lower bound!");
+                    return ClientErrors.Create400("Date time must be greater than lower bound!");
             }
 
             if (UpperBound.HasValue)
             {
                 if (StrictlyLower && UpperBound <= eventModel.EndAt)
-                    return Error.CreateError400("Date time must be strictly smaller than lower bound!");
+                    return ClientErrors.Create400("Date time must be strictly smaller than lower bound!");
+
                 else if (!StrictlyLower && UpperBound < eventModel.EndAt)
-                    return Error.CreateError400("Date time must be lower than upper bound!");
+                    return ClientErrors.Create400("Date time must be lower than upper bound!");
             }
 
             return "Everything is ok!";

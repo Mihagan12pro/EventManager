@@ -1,10 +1,10 @@
-﻿using Shared;
+﻿using EventsManager.Failures;
 
-namespace EventManager.Services.Exceptions
+namespace EventsManager.Failures.Exceptions.WebApi
 {
     public abstract class WebApiException : Exception
     {
-        public Error Error { get; protected set; }
+        public HttpError Error { get; protected set; }
 
         public WebApiException(string message)
         {

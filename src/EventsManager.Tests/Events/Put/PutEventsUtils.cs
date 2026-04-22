@@ -53,6 +53,7 @@ namespace EventManager.Tests.Events.Put
                         "Свадьба сына",
                         DateTime.Now.AddDays(1),
                         DateTime.Now.AddDays(1).AddHours(10),
+                        10,
                         "Роскошная свадьба Степана и Марии")
                 ]
             ];

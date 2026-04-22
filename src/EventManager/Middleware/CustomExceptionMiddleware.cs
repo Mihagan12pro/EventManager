@@ -1,5 +1,6 @@
-﻿using EventManager.Services.Exceptions;
-using Shared;
+﻿using EventsManager.Failures;
+using EventsManager.Failures.Errors;
+using EventsManager.Failures.Exceptions.WebApi;
 
 namespace EventManager.Middleware
 {
@@ -23,7 +24,7 @@ namespace EventManager.Middleware
             {
                 LogError(ex, httpContext);
 
-                await ModifyResponse(httpContext, Error.CreateError500());
+                await ModifyResponse(httpContext, ServerErrors.Create500());
             }
         }
 
@@ -37,7 +38,7 @@ namespace EventManager.Middleware
                     httpContext.Request.Headers["x-request-id"]);
         }
 
-        private async Task ModifyResponse(HttpContext httpContext, Error error)
+        private async Task ModifyResponse(HttpContext httpContext, HttpError error)
         {
             HttpResponse response = httpContext.Response;
             response.ContentType = "application/json";

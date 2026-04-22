@@ -1,5 +1,5 @@
 ﻿using EventManager.Services.Bookings;
-using EventManager.Services.Exceptions;
+using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Booking.Get

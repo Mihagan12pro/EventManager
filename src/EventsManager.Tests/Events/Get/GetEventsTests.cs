@@ -2,7 +2,8 @@
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Services.Events;
-using EventManager.Services.Exceptions;
+using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
+using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 
 namespace EventManager.Tests.Events.Get
 {
@@ -20,14 +21,14 @@ namespace EventManager.Tests.Events.Get
 
                  datetime,
 
-                 datetime.AddHours(10));
+                 datetime.AddHours(10), 10);
 
             Guid id = await eventsService.AddNewAsync(newEvent);
             Guid hiddenId = Guid.Empty;
 
             var resultSuccessful = (await eventsService.GetEventByIdAsync(id));
           
-            Assert.Equal(typeof(GetEventDto), resultSuccessful.GetType());
+            Assert.Equal(typeof(Event), resultSuccessful.GetType());
 
             var resultFailed = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.GetEventByIdAsync(hiddenId));
 
@@ -52,28 +53,28 @@ namespace EventManager.Tests.Events.Get
                  new NewEventDto(
                      "Юбилей",
                      dateTime.AddDays(1),
-                     dateTime.AddDays(2))
+                     dateTime.AddDays(2), 10)
                  );
 
             await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Юбилей",
                     dateTime.AddDays(1),
-                    dateTime.AddDays(2))
+                    dateTime.AddDays(2), 10)
                 );
 
             await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Юбилей",
                     dateTime.AddDays(2),
-                    dateTime.AddDays(3))
+                    dateTime.AddDays(3), 10)
                 );
 
             await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Корпоратив",
                     dateTime.AddDays(2),
-                    dateTime.AddDays(3))
+                    dateTime.AddDays(3), 10)
                 );
 
             var result = await eventsService.GetEventsAsync(

@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\EventsManager.Failures\EventsManager.Failures.csproj" />
+    <ProjectReference Include="..\Shared\EventsManager.Shared.csproj" />
   </ItemGroup>
 
 </Project>
