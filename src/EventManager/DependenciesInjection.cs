@@ -1,4 +1,5 @@
-﻿using EventManager.Middleware;
+﻿using EventManager.DataAccess.PostgreSQL;
+using EventManager.Middleware;
 using EventManager.Services;
 
 namespace EventManager
@@ -9,7 +10,8 @@ namespace EventManager
         {
             return services.AddScopedServices()
                 .AddBackgroundServices()
-                    .AddSingletonServices();
+                    .AddSingletonServices()
+                        .AddPostgreDependencies();
         }
 
         public static IApplicationBuilder UseCustomMiddleware(this IApplicationBuilder app)

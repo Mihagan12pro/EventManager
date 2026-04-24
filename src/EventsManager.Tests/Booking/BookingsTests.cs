@@ -15,8 +15,8 @@ namespace EventManager.Tests.Booking
 
             //services.AddScoped<IEventsService, EventsService>();
             //services.AddScoped<IBookingsService, BookingsService>();
-            services.AddSingleton<IEventsService, EventsService>();//Temporary solution
-            services.AddSingleton<IBookingsService, BookingsService>();//Temporary solution
+            services.AddSingleton<IEventsService, InMemoryEventsService>();//Temporary solution
+            services.AddSingleton<IBookingsService, InMemoryBookingsService>();//Temporary solution
 
             services.AddHostedService<BookingHandlingService>();
 

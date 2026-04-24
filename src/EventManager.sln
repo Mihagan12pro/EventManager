@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.5.11605.296
+VisualStudioVersion = 18.6.11716.218
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager", "EventManager\EventManager.csproj", "{5E077F75-E197-E5E5-C20D-23F73F81D0A9}"
 EndProject
@@ -29,9 +29,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FEA4D242
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{0C4C7EA8-6144-4DE9-AC22-89D56068183B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{DBF3D28B-C7D3-48A5-BD0D-0BB62F5F826E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedLibs", "SharedLibs", "{D4B554A4-959F-481D-AA8F-04A34B2AC1CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccess", "DataAccess", "{563CE81D-060A-4A44-BB32-78AF71B6EF0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager.DataAccess.PostgreSQL", "DataAccess\EventManager.DataAccess.PostgreSQL\EventManager.DataAccess.PostgreSQL.csproj", "{795E528A-985F-4DAC-98BD-BEAE3A2A4B97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{A3272363-6AF6-4CD4-922E-148F26B2D063}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3272363-6AF6-4CD4-922E-148F26B2D063}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3272363-6AF6-4CD4-922E-148F26B2D063}.Release|Any CPU.Build.0 = Release|Any CPU
+		{795E528A-985F-4DAC-98BD-BEAE3A2A4B97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{795E528A-985F-4DAC-98BD-BEAE3A2A4B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{795E528A-985F-4DAC-98BD-BEAE3A2A4B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{795E528A-985F-4DAC-98BD-BEAE3A2A4B97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{74A9D8EA-10FA-4746-B341-1636285B1019} = {D4B554A4-959F-481D-AA8F-04A34B2AC1CA}
 		{0D05A166-B4C1-4DA1-94F3-BAAC936C132B} = {43870D9F-4EFE-4BDE-A372-432B68774310}
 		{A3272363-6AF6-4CD4-922E-148F26B2D063} = {D4B554A4-959F-481D-AA8F-04A34B2AC1CA}
+		{795E528A-985F-4DAC-98BD-BEAE3A2A4B97} = {563CE81D-060A-4A44-BB32-78AF71B6EF0C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C4F7EC3-4E3C-4915-A91B-4B437473CA13}

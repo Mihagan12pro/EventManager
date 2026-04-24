@@ -12,11 +12,8 @@ namespace EventManager.Services
     {
         public static IServiceCollection AddScopedServices(this IServiceCollection scopedServices)
         {
-            //scopedServices.AddScoped<IBookingService, BookingService>();
-            //scopedServices.AddScoped<IEventsService, EventsService>();
-
-            scopedServices.AddSingleton<IBookingsService, BookingsService>();//It is a temporary solution!
-            scopedServices.AddSingleton<IEventsService, EventsService>();//It is a temporary solution!
+            scopedServices.AddScoped<IBookingsService, BookingsService>();
+            scopedServices.AddScoped<IEventsService, EventsService>();
 
             return scopedServices;
         }
