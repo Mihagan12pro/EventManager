@@ -3,13 +3,15 @@ using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
+using EventsManager.Shared;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventManager.Controllers
+namespace EventManager.API.Controllers
 {
     [ApiController]
     [Route("/events")]
-    public class EventsController : ControllerBase
+    internal class EventsController : ControllerBase
     {
         private readonly IEventsService _eventService;
         private readonly IBookingsService _bookingService;
@@ -57,7 +59,7 @@ namespace EventManager.Controllers
 
             DateRange dateRange = new DateRange(
                 from,
-                false, 
+                false,
                 to,
                 false);
 

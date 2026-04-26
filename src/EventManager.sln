@@ -35,6 +35,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccess", "DataAccess", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager.DataAccess.PostgreSQL", "DataAccess\EventManager.DataAccess.PostgreSQL\EventManager.DataAccess.PostgreSQL.csproj", "{795E528A-985F-4DAC-98BD-BEAE3A2A4B97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventManager.API", "EventManager.API\EventManager.API.csproj", "{9D29972E-43A6-4658-B5A9-B22D0C046BA4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{795E528A-985F-4DAC-98BD-BEAE3A2A4B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{795E528A-985F-4DAC-98BD-BEAE3A2A4B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{795E528A-985F-4DAC-98BD-BEAE3A2A4B97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D29972E-43A6-4658-B5A9-B22D0C046BA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D29972E-43A6-4658-B5A9-B22D0C046BA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D29972E-43A6-4658-B5A9-B22D0C046BA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D29972E-43A6-4658-B5A9-B22D0C046BA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,6 +92,7 @@ Global
 		{0D05A166-B4C1-4DA1-94F3-BAAC936C132B} = {43870D9F-4EFE-4BDE-A372-432B68774310}
 		{A3272363-6AF6-4CD4-922E-148F26B2D063} = {D4B554A4-959F-481D-AA8F-04A34B2AC1CA}
 		{795E528A-985F-4DAC-98BD-BEAE3A2A4B97} = {563CE81D-060A-4A44-BB32-78AF71B6EF0C}
+		{9D29972E-43A6-4658-B5A9-B22D0C046BA4} = {0C4C7EA8-6144-4DE9-AC22-89D56068183B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C4F7EC3-4E3C-4915-A91B-4B437473CA13}
