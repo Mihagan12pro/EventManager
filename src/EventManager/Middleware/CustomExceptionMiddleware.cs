@@ -31,11 +31,11 @@ namespace EventManager.Middleware
         private void LogError(Exception ex, HttpContext httpContext)
         {
             _logger.LogError(
-                    ex,
-                    "Unhandled exception. Method={Method}, Path={Path}, RequestId={RequestId}",
-                    httpContext.Request.Method,
-                    httpContext.Request.Path,
-                    httpContext.Request.Headers["x-request-id"]);
+                ex,
+                "Unhandled exception. Method={Method}, Path={Path}, RequestId={RequestId}",
+                httpContext.Request.Method,
+                httpContext.Request.Path,
+                httpContext.Request.Headers["x-request-id"]);
         }
 
         private async Task ModifyResponse(HttpContext httpContext, HttpError error)
