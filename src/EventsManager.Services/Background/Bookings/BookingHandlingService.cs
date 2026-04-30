@@ -28,7 +28,7 @@ namespace EventManager.Services.Background.Bookings
                     {
                         IBookingsService bookingService = scope.ServiceProvider.GetRequiredService<IBookingsService>();
 
-                        var pendingBookings = await bookingService.GetAllAsync(new BookingFiltersDto(BookingStatus.Pending, null, null));
+                        var pendingBookings = await bookingService.GetAllAsync(new BookingFiltersDto(BookingStatus.Pending, null, null), stoppingToken);
 
                         var pendingTasks = pendingBookings.Select(pb => ProcessBookingsAsync(pb, stoppingToken)); 
 
@@ -63,7 +63,7 @@ namespace EventManager.Services.Background.Bookings
                 {
                     await _processingSemaphore.WaitAsync();
 
-                    eventById = await eventsService.GetEventByIdAsync(booking.EventId);
+                    eventById = await eventsService.GetEventByIdAsync(booking.EventId, stoppingToken);
 
                     booking.Confirm();
                 }
@@ -86,7 +86,7 @@ namespace EventManager.Services.Background.Bookings
                 }
                 finally
                 {
-                    await bookingsService.Update(booking);
+                    await bookingsService.Update(booking, stoppingToken);
                     _processingSemaphore.Release();
                 }
             }

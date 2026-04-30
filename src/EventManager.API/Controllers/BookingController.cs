@@ -17,9 +17,9 @@ namespace EventManager.API.Controllers
         /// <response code="200">If everyting is ok</response>
         /// <response code="404">If book does not exists</response>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            Booking booking = await _bookingService.GetBookingByIdAsync(id);
+            Booking booking = await _bookingService.GetBookingByIdAsync(id, cancellationToken);
 
             return Ok(booking);
         }

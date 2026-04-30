@@ -24,9 +24,9 @@ namespace EventManager.API.Controllers
         /// <response code="400">If data is invalid</response>
         [HttpPost]
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status201Created)]
-        public async Task<IActionResult> New([FromBody] NewEventDto newEvent)
+        public async Task<IActionResult> New([FromBody] NewEventDto newEvent, CancellationToken cancellationToken)
         {
-            var result = await _eventService.AddNewAsync(newEvent);
+            var result = await _eventService.AddNewAsync(newEvent, cancellationToken);
 
             var output = result;
             var request = HttpContext.Request;
@@ -49,6 +49,7 @@ namespace EventManager.API.Controllers
         /// <response code="400">If page or page size is invalid</response>
         [HttpGet]
         public async Task<IActionResult> All(
+             CancellationToken cancellationToken,
             [FromQuery] string? title,
             [FromQuery] DateTime? from,
             [FromQuery] DateTime? to,
@@ -66,7 +67,8 @@ namespace EventManager.API.Controllers
             var events = await _eventService.GetEventsAsync(
                 title,
                 pagination,
-                dateRange);
+                dateRange,
+                cancellationToken);
 
 
             return Ok(events);
@@ -79,9 +81,9 @@ namespace EventManager.API.Controllers
         /// <response code="200">If everything is ok</response>
         /// <response code="404">If event does not exists</response>
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get([FromRoute] Guid id)
+        public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            var result = await _eventService.GetEventByIdAsync(id);
+            var result = await _eventService.GetEventByIdAsync(id, cancellationToken);
 
             return Ok(result);
         }
@@ -93,9 +95,9 @@ namespace EventManager.API.Controllers
         /// <response code="200">If everything is ok</response>
         /// <response code="404">If event does not exists</response>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            var result = await _eventService.DeleteAsync(id);
+            var result = await _eventService.DeleteAsync(id, cancellationToken);
 
             return Ok(result);
         }
@@ -111,9 +113,10 @@ namespace EventManager.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(
             [FromRoute] Guid id,
-            [FromBody] NewEventDto newEvent)
+            [FromBody] PutEventDto newEvent,
+            CancellationToken cancellationToken)
         {
-            var result = await _eventService.UpdateByPutAsync(id, newEvent);
+            var result = await _eventService.UpdateByPutAsync(id, newEvent, cancellationToken);
 
             return Ok(result);
         }
@@ -131,7 +134,7 @@ namespace EventManager.API.Controllers
             [FromRoute] Guid id,
             CancellationToken cancellationToken)
         {
-            var bookingDto = await _bookingService.CreateBookingAsync(id);
+            var bookingDto = await _bookingService.CreateBookingAsync(id, cancellationToken);
 
             var location = UrlMaster.CreateWithoutPath(HttpContext.Request, "bookings", bookingDto.Id);
 

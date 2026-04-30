@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EventManager.Domain.Bookings;
+using System.ComponentModel.DataAnnotations;
 
 namespace EventManager.Domain.Events
 {
     public class Event
     {
-        public required Guid Id { get; set; }
+        public Guid Id { get; set; }
 
         public required string Title { get; set; }
 
@@ -17,6 +18,9 @@ namespace EventManager.Domain.Events
         public required int TotalSeats { get; set; }
 
         public int AvailableSeats { get; set; }
+
+        public List<Booking> Bookings { get; set; }
+
 
         private readonly Lock _lock = new Lock();
 

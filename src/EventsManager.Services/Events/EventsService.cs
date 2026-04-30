@@ -6,29 +6,37 @@ namespace EventManager.Services.Events
 {
     internal class EventsService : IEventsService
     {
-        public Task<Guid> AddNewAsync(NewEventDto request)
+        private readonly IEventsRepository _eventsRepository;
+
+        public Task<Guid> AddNewAsync(NewEventDto request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> DeleteAsync(Guid id)
+        public Task<string> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Event> GetEventByIdAsync(Guid id)
+        public Task<Event> GetEventByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<PaginatedEventsDto> GetEventsAsync(string? title, PaginationDto pagination, DateRange dateRange)
+        public Task<PaginatedEventsDto> GetEventsAsync(string? title, PaginationDto pagination, DateRange dateRange, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> UpdateByPutAsync(Guid id, NewEventDto putEvent)
+        public Task<string> UpdateByPutAsync(Guid id, PutEventDto putEvent, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
+        }
+
+
+        public EventsService(IEventsRepository eventsRepository)
+        {
+            _eventsRepository = eventsRepository;
         }
     }
 }

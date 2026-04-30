@@ -1,4 +1,5 @@
 ﻿using EventManager.Domain.Bookings.Enums;
+using EventManager.Domain.Events;
 
 namespace EventManager.Domain.Bookings
 {
@@ -13,6 +14,8 @@ namespace EventManager.Domain.Bookings
         public required BookingStatus Status { get; set; }
 
         public DateTime? ProcessedAt { get; set; }
+
+        public Event Event { get; set;  }
 
         public void Confirm()
             => Status = BookingStatus.Confirmed;

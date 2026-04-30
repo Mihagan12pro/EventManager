@@ -12,7 +12,7 @@ namespace EventManager.Services.Events
     {
         private readonly List<Event> _events = new List<Event>();
 
-        public async Task<Guid> AddNewAsync(NewEventDto request)
+        public async Task<Guid> AddNewAsync(NewEventDto request, CancellationToken cancellationToken)
         {
             DateTime now = DateTime.Now;
 
@@ -61,7 +61,7 @@ namespace EventManager.Services.Events
             return createdEvent.Id;
         }
 
-        public async Task<string> DeleteAsync(Guid id)
+        public async Task<string> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             Event? eventById = _events.FirstOrDefault(e => e.Id == id);
 
@@ -83,10 +83,16 @@ namespace EventManager.Services.Events
             return eventById;
         }
 
+        public Task<Event> GetEventByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<PaginatedEventsDto> GetEventsAsync(
             string? title,
             PaginationDto pagination,
-            DateRange dateRange)
+            DateRange dateRange,
+            CancellationToken cancellationToken)
         {
             if (pagination.Page < 0 || pagination.PageSize < 0)
                 throw new BadRequestException("Pagination parameters must be greater than zero!");
@@ -114,7 +120,10 @@ namespace EventManager.Services.Events
             return result;
         }
 
-        public async Task<string> UpdateByPutAsync(Guid id, NewEventDto putEvent)
+        public async Task<string> UpdateByPutAsync(
+            Guid id,
+            PutEventDto putEvent,
+            CancellationToken cancellationToken)
         {
             DateTime now = DateTime.Now;
 

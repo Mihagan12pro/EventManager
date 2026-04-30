@@ -11,7 +11,9 @@ namespace EventManager.Services.Events
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<Guid> AddNewAsync(NewEventDto request);
+        Task<Guid> AddNewAsync(
+            NewEventDto request, 
+            CancellationToken cancellationToken);
 
 
         /// <summary>
@@ -23,21 +25,26 @@ namespace EventManager.Services.Events
         Task<PaginatedEventsDto> GetEventsAsync(
             string? title,
             PaginationDto pagination,
-            DateRange dateRange);
+            DateRange dateRange, 
+            CancellationToken cancellationToken);
 
         /// <summary>
         /// Returns event by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Event> GetEventByIdAsync(Guid id);
+        Task<Event> GetEventByIdAsync(
+            Guid id, 
+            CancellationToken cancellationToken);
 
         /// <summary>
         /// Deletes event from database
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<string> DeleteAsync(Guid id);
+        Task<string> DeleteAsync(
+            Guid id,
+            CancellationToken cancellationToken);
 
         /// <summary>
         /// Updates every field of event
@@ -45,6 +52,9 @@ namespace EventManager.Services.Events
         /// <param name="id"></param>
         /// <param name="putEvent"></param>
         /// <returns></returns>
-        Task<string> UpdateByPutAsync(Guid id, NewEventDto putEvent);
+        Task<string> UpdateByPutAsync(
+            Guid id,
+            PutEventDto putEvent,
+            CancellationToken cancellationToken);
     }
 }

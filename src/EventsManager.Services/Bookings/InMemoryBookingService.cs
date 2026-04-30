@@ -15,13 +15,13 @@ namespace EventManager.Services.Bookings
 
         private readonly object _bookingLock = new();
 
-        public async Task<BookingAcceptedDto> CreateBookingAsync(Guid eventId)
+        public async Task<BookingAcceptedDto> CreateBookingAsync(Guid eventId, CancellationToken cancellationToken)
         {
             BookingAcceptedDto bookingAcceptedDto;
 
             try
             {
-                var eventById = await _eventsService.GetEventByIdAsync(eventId);
+                var eventById = await _eventsService.GetEventByIdAsync(eventId, cancellationToken);
 
                 Booking booking = new Booking()
                 { 
@@ -53,7 +53,7 @@ namespace EventManager.Services.Bookings
             return bookingAcceptedDto;
         }
 
-        public async Task<Booking> GetBookingByIdAsync(Guid bookingId)
+        public async Task<Booking> GetBookingByIdAsync(Guid bookingId, CancellationToken cancellationToken)
         {
             Booking? booking = _bookings.FirstOrDefault(b => b.Id == bookingId);
 
@@ -63,7 +63,7 @@ namespace EventManager.Services.Bookings
             return booking;
         }
 
-        public async Task<IEnumerable<Booking>> GetAllAsync(BookingFiltersDto filtersDto)
+        public async Task<IEnumerable<Booking>> GetAllAsync(BookingFiltersDto filtersDto, CancellationToken cancellationToken)
         {
             var result = _bookings.Select(b => b);
 
@@ -79,7 +79,7 @@ namespace EventManager.Services.Bookings
             return result.ToArray();
         }
 
-        public Task Update(Booking booking)
+        public Task Update(Booking booking, CancellationToken cancellationToken)
         {
             booking.ProcessedAt = DateTime.Now;
 
