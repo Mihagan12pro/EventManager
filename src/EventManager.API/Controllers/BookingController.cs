@@ -19,7 +19,7 @@ namespace EventManager.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            Booking booking = await _bookingService.GetBookingByIdAsync(id, cancellationToken);
+            BookingModel booking = await _bookingService.GetBookingByIdAsync(id, cancellationToken);
 
             return Ok(booking);
         }

@@ -66,7 +66,7 @@ namespace EventManager.Tests.Events.Put
                      10)
                  );
 
-            Event oldModel = (await eventsService.GetEventsAsync(
+            EventModel oldModel = (await eventsService.GetEventsAsync(
                 null,
                 new PaginationDto(),
                 new DateRange(
@@ -83,7 +83,7 @@ namespace EventManager.Tests.Events.Put
             string description = oldModel.Description;
 
             var result = (await eventsService.UpdateByPutAsync(oldModel.Id, eventDto));
-            Event putModel = (await eventsService.GetEventsAsync(
+            EventModel putModel = (await eventsService.GetEventsAsync(
                 null,
                 new PaginationDto(),
                 new DateRange(

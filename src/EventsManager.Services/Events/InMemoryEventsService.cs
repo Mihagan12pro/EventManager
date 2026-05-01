@@ -10,7 +10,7 @@ namespace EventManager.Services.Events
 {
     internal class InMemoryEventsService : IEventsService
     {
-        private readonly List<Event> _events = new List<Event>();
+        private readonly List<EventModel> _events = new List<EventModel>();
 
         public async Task<Guid> AddNewAsync(NewEventDto request, CancellationToken cancellationToken)
         {
@@ -39,7 +39,7 @@ namespace EventManager.Services.Events
                 throw new BadRequestException("Start date time must be greater than end date time!");
 
 
-            Event createdEvent = new Event()
+            EventModel createdEvent = new EventModel()
             {
                 Id = Guid.NewGuid(),
 
@@ -63,7 +63,7 @@ namespace EventManager.Services.Events
 
         public async Task<string> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            Event? eventById = _events.FirstOrDefault(e => e.Id == id);
+            EventModel? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
                 throw new NotFoundException($"Event with id = '{id}' was not found!");
@@ -73,9 +73,9 @@ namespace EventManager.Services.Events
             return "Event had been deleted!";
         }
 
-        public async Task<Event> GetEventByIdAsync(Guid id)
+        public async Task<EventModel> GetEventByIdAsync(Guid id)
         {
-            Event? eventById = _events.FirstOrDefault(e => e.Id == id);
+            EventModel? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
                 throw new NotFoundException($"Event with id = '{id}' was not found!");
@@ -83,7 +83,7 @@ namespace EventManager.Services.Events
             return eventById;
         }
 
-        public Task<Event> GetEventByIdAsync(Guid id, CancellationToken cancellationToken)
+        public Task<EventModel> GetEventByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -97,7 +97,7 @@ namespace EventManager.Services.Events
             if (pagination.Page < 0 || pagination.PageSize < 0)
                 throw new BadRequestException("Pagination parameters must be greater than zero!");
 
-            IEnumerable<Event> filteredEvents = _events;
+            IEnumerable<EventModel> filteredEvents = _events;
 
             if (dateRange.UpperBound.HasValue || dateRange.LowerBound.HasValue)
                 filteredEvents = filteredEvents.Where(e => dateRange.CheckDateRange(e).IsSuccess);
@@ -108,7 +108,7 @@ namespace EventManager.Services.Events
             int totalCount = filteredEvents.Count();
 
 
-            var eventsList = PaginationMaster<Event>.DoPagination(filteredEvents, pagination)
+            var eventsList = PaginationMaster<EventModel>.DoPagination(filteredEvents, pagination)
                 .ToList();
 
             PaginatedEventsDto result = new PaginatedEventsDto(
@@ -133,7 +133,7 @@ namespace EventManager.Services.Events
             DateSpan startSpan = new DateSpan(start, now);
             DateSpan endSpan = new DateSpan(end, now);
 
-            Event? eventById = _events.FirstOrDefault(e => e.Id == id);
+            EventModel? eventById = _events.FirstOrDefault(e => e.Id == id);
 
             if (eventById == null)
                 throw new NotFoundException($"Event with id = '{id}' was not found!");

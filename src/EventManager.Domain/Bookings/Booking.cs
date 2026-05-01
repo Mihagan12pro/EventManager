@@ -3,9 +3,9 @@ using EventManager.Domain.Events;
 
 namespace EventManager.Domain.Bookings
 {
-    public class Booking
+    public class BookingModel
     {
-        public required Guid Id { get; set; }
+        public Guid Id { get; set; }
 
         public required Guid EventId { get; set; }
 
@@ -15,7 +15,7 @@ namespace EventManager.Domain.Bookings
 
         public DateTime? ProcessedAt { get; set; }
 
-        public Event Event { get; set;  }
+        public EventModel Event { get; set;  }
 
         public void Confirm()
             => Status = BookingStatus.Confirmed;

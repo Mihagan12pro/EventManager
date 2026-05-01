@@ -8,7 +8,6 @@ using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 
 namespace EventManager.Services.Background.Bookings
 {
@@ -47,7 +46,7 @@ namespace EventManager.Services.Background.Bookings
         }
 
         private async Task ProcessBookingsAsync(
-            Booking booking,
+            BookingModel booking,
             CancellationToken stoppingToken)
         {
             await Task.Delay(500);
@@ -56,22 +55,31 @@ namespace EventManager.Services.Background.Bookings
             {
                 IEventsService eventsService = scope.ServiceProvider.GetRequiredService<IEventsService>();
                 IBookingsService bookingsService = scope.ServiceProvider.GetRequiredService<IBookingsService>();
+                IBookingRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
 
-                Event? eventById = null;
-                
+                EventModel? eventById = null;
+                BookingProcessedDto bookingProcessedDto = new BookingProcessedDto(booking.Id, booking.Status);
+
+
                 try
                 {
                     await _processingSemaphore.WaitAsync();
 
                     eventById = await eventsService.GetEventByIdAsync(booking.EventId, stoppingToken);
 
-                    booking.Confirm();
+                    bookingProcessedDto = bookingProcessedDto  with 
+                    {
+                        Status = BookingStatus.Confirmed  
+                    };
                 }
                 catch (NotFoundException)
                 {
                     _logger.LogWarning("Event with id = {EventId} does not exists!", booking.EventId);
 
-                    booking.Reject();
+                    bookingProcessedDto = bookingProcessedDto with
+                    {
+                        Status = BookingStatus.Rejected
+                    };
                 }
                 catch (OperationCanceledException)
                 {
@@ -82,11 +90,19 @@ namespace EventManager.Services.Background.Bookings
                     _logger.LogError(ex, ex.Message);
 
                     eventById?.TryReleaseSeats();
-                    booking.Reject();
+
+                    bookingProcessedDto = bookingProcessedDto with
+                    {
+                        Status = BookingStatus.Rejected
+                    };
                 }
                 finally
                 {
-                    await bookingsService.Update(booking, stoppingToken);
+                    await bookingRepository.ProcessBookingAsync(
+                            bookingProcessedDto,
+                            stoppingToken
+                        );
+
                     _processingSemaphore.Release();
                 }
             }

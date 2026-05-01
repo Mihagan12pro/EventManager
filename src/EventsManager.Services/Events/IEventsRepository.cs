@@ -9,7 +9,7 @@ namespace EventManager.Services.Events
             NewEventDto eventDto,
             CancellationToken cancellationToken);
 
-        Task<Event> GetByIdAsync(
+        Task<EventModel> GetByIdAsync(
             Guid id, 
             CancellationToken cancellationToken);
 
@@ -17,7 +17,7 @@ namespace EventManager.Services.Events
             Guid id, 
             CancellationToken cancellationToken);
 
-        Task<IReadOnlyCollection<Event>> GetEventsAsync(
+        Task<IReadOnlyCollection<EventModel>> GetEventsAsync(
             GetEventsWithFiltersDto eventsDto, 
             CancellationToken cancellationToken);
 

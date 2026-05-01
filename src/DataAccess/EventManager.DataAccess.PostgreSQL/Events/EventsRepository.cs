@@ -19,7 +19,7 @@ namespace EventManager.DataAccess.PostgreSQL.Events
             NewEventDto eventDto,
             CancellationToken cancellationToken)
         {
-            Event @event = new Event()
+            EventModel @event = new EventModel()
             {
                 Title = eventDto.Title,
 
@@ -46,7 +46,7 @@ namespace EventManager.DataAccess.PostgreSQL.Events
             PutEventDto putEvent,
             CancellationToken cancellationToken)
         {
-            Event @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+            EventModel @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
             @event.StartAt = putEvent.StartAt.Value;
             @event.EndAt = putEvent.EndAt.Value;
@@ -60,16 +60,16 @@ namespace EventManager.DataAccess.PostgreSQL.Events
             Guid id, 
             CancellationToken cancellationToken)
         {
-            Event @event = await GetByIdAsync(id, cancellationToken);
+            EventModel @event = await GetByIdAsync(id, cancellationToken);
 
             _dbContext.Events.Remove(@event);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IReadOnlyCollection<Event>> GetEventsAsync(GetEventsWithFiltersDto eventsDto, CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<EventModel>> GetEventsAsync(GetEventsWithFiltersDto eventsDto, CancellationToken cancellationToken)
         {
-            IQueryable<Event> events = _dbContext.Events;
+            IQueryable<EventModel> events = _dbContext.Events;
 
             if (eventsDto.Title != null)
             {
@@ -91,9 +91,9 @@ namespace EventManager.DataAccess.PostgreSQL.Events
                 .AsReadOnly();
         }
 
-        public async Task<Event> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<EventModel> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            Event @event = await _dbContext.Events.FirstOrDefaultAsync((e => e.Id == id), cancellationToken);
+            EventModel @event = await _dbContext.Events.FirstOrDefaultAsync((e => e.Id == id), cancellationToken);
 
             return @event;
         }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EventManager.Domain.Events
 {
-    public class Event
+    public class EventModel
     {
         public Guid Id { get; set; }
 
@@ -19,7 +19,7 @@ namespace EventManager.Domain.Events
 
         public int AvailableSeats { get; set; }
 
-        public List<Booking> Bookings { get; set; }
+        public List<BookingModel> Bookings { get; set; }
 
 
         private readonly Lock _lock = new Lock();

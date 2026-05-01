@@ -11,7 +11,7 @@ namespace EventManager.Services.Bookings
     {
         private readonly IEventsService _eventsService;
 
-        private readonly List<Booking> _bookings = new List<Booking>();
+        private readonly List<BookingModel> _bookings = new List<BookingModel>();
 
         private readonly object _bookingLock = new();
 
@@ -23,7 +23,7 @@ namespace EventManager.Services.Bookings
             {
                 var eventById = await _eventsService.GetEventByIdAsync(eventId, cancellationToken);
 
-                Booking booking = new Booking()
+                BookingModel booking = new BookingModel()
                 { 
                     CreatedAt = DateTime.Now,
                     EventId = eventId,
@@ -53,9 +53,9 @@ namespace EventManager.Services.Bookings
             return bookingAcceptedDto;
         }
 
-        public async Task<Booking> GetBookingByIdAsync(Guid bookingId, CancellationToken cancellationToken)
+        public async Task<BookingModel> GetBookingByIdAsync(Guid bookingId, CancellationToken cancellationToken)
         {
-            Booking? booking = _bookings.FirstOrDefault(b => b.Id == bookingId);
+            BookingModel? booking = _bookings.FirstOrDefault(b => b.Id == bookingId);
 
             if (booking == null)
                 throw new NotFoundException($"Booking with id = {bookingId} was not found!");
@@ -63,7 +63,7 @@ namespace EventManager.Services.Bookings
             return booking;
         }
 
-        public async Task<IEnumerable<Booking>> GetAllAsync(BookingFiltersDto filtersDto, CancellationToken cancellationToken)
+        public async Task<IEnumerable<BookingModel>> GetAllAsync(BookingFiltersDto filtersDto, CancellationToken cancellationToken)
         {
             var result = _bookings.Select(b => b);
 
@@ -77,13 +77,6 @@ namespace EventManager.Services.Bookings
                 result = result.Where(b => b.Status == filtersDto.Status);
 
             return result.ToArray();
-        }
-
-        public Task Update(Booking booking, CancellationToken cancellationToken)
-        {
-            booking.ProcessedAt = DateTime.Now;
-
-            return Task.CompletedTask;
         }
 
         public InMemoryBookingsService(IEventsService eventsService)

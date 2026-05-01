@@ -124,7 +124,7 @@ namespace EventManager.Tests.Booking.Background
                 bookingsIds.Add(bookingAccepted.Id);
             }
 
-            Event @event = await eventsService.GetEventByIdAsync(eventId);
+            EventModel @event = await eventsService.GetEventByIdAsync(eventId);
 
             Assert.Equal(0, @event.AvailableSeats);
             Assert.Equal(@event.TotalSeats, bookingsIds.Count);

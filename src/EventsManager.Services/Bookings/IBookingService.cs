@@ -9,15 +9,12 @@ namespace EventManager.Services.Bookings
             Guid eventId, 
             CancellationToken cancellationToken);
 
-        Task<Booking> GetBookingByIdAsync(
+        Task<BookingModel> GetBookingByIdAsync(
             Guid bookingId, 
             CancellationToken cancellationToken);
 
-        Task<IEnumerable<Booking>> GetAllAsync(
+        Task<IEnumerable<BookingModel>> GetAllAsync(
             BookingFiltersDto filtersDto, 
-            CancellationToken cancellationToken);
-
-        Task Update(Booking booking, 
             CancellationToken cancellationToken);
     }
 }

@@ -44,7 +44,7 @@ namespace EventManager.Services.Events
 
         public async Task<string> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            Event? @event = await _eventsRepository.GetByIdAsync(id, cancellationToken);
+            EventModel? @event = await _eventsRepository.GetByIdAsync(id, cancellationToken);
 
             if (@event == null)
                 throw new NotFoundException($"Event with id = {id} does not exists!");
@@ -54,9 +54,9 @@ namespace EventManager.Services.Events
             return $"Event with id = {id} had been deleted!";
         }
 
-        public async Task<Event> GetEventByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<EventModel> GetEventByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            Event? @event = await _eventsRepository.GetByIdAsync(id, cancellationToken);
+            EventModel? @event = await _eventsRepository.GetByIdAsync(id, cancellationToken);
 
             if (@event == null)
                 throw new NotFoundException($"Event with id = {id} does not exists!");
@@ -92,7 +92,7 @@ namespace EventManager.Services.Events
             DateSpan startSpan = new DateSpan(start, now);
             DateSpan endSpan = new DateSpan(end, now);
 
-            Event? eventById = await _eventsRepository.GetByIdAsync(id, cancellationToken);
+            EventModel? eventById = await _eventsRepository.GetByIdAsync(id, cancellationToken);
 
             if (eventById == null)
                 throw new NotFoundException($"Event with id = '{id}' was not found!");

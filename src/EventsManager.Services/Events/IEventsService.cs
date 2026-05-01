@@ -33,7 +33,7 @@ namespace EventManager.Services.Events
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Event> GetEventByIdAsync(
+        Task<EventModel> GetEventByIdAsync(
             Guid id, 
             CancellationToken cancellationToken);
 

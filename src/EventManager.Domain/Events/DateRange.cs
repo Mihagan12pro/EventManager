@@ -23,7 +23,7 @@ namespace EventManager.Domain.Events
 
         public readonly DateTime? UpperBound;
 
-        public Result<string, HttpError> CheckDateRange(Event eventModel)
+        public Result<string, HttpError> CheckDateRange(EventModel eventModel)
         {
             if (LowerBound.HasValue)
             {
