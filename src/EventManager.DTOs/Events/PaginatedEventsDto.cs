@@ -4,7 +4,7 @@ namespace EventManager.DTOs.Events
 {
     public record PaginatedEventsDto(
         int TotalCount,
-        IReadOnlyList<Event> Events,
+       IReadOnlyCollection<Event> Events,
         int Page, 
         int PageSize
     );

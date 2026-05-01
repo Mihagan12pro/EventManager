@@ -67,7 +67,7 @@ namespace EventManager.DataAccess.PostgreSQL.Events
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IReadOnlyCollection<Event>> GetAllAsync(GetEventsWithFiltersDto eventsDto, CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<Event>> GetEventsAsync(GetEventsWithFiltersDto eventsDto, CancellationToken cancellationToken)
         {
             IQueryable<Event> events = _dbContext.Events;
 

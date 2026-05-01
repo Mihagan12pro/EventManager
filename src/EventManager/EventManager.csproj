@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\EventManager.DataAccess.PostgreSQL\EventManager.DataAccess.PostgreSQL.csproj" />
+    <ProjectReference Include="..\EventManager.API\EventManager.API.csproj" />
     <ProjectReference Include="..\EventManager.Domain\EventManager.Domain.csproj" />
     <ProjectReference Include="..\EventManager.DTOs\EventManager.DTOs.csproj" />
     <ProjectReference Include="..\EventsManager.Services\EventManager.Services.csproj" />

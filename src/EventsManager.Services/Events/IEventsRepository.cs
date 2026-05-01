@@ -17,7 +17,7 @@ namespace EventManager.Services.Events
             Guid id, 
             CancellationToken cancellationToken);
 
-        Task<IReadOnlyCollection<Event>> GetAllAsync(
+        Task<IReadOnlyCollection<Event>> GetEventsAsync(
             GetEventsWithFiltersDto eventsDto, 
             CancellationToken cancellationToken);
 

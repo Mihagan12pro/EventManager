@@ -6,12 +6,15 @@ using EventManager.Services.Events;
 using EventsManager.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace EventManager.API.Controllers
 {
     [ApiController]
     [Route("/events")]
-    internal class EventsController : ControllerBase
+    public class EventsController : ControllerBase
     {
         private readonly IEventsService _eventService;
         private readonly IBookingsService _bookingService;
