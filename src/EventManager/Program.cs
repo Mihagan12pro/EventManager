@@ -6,6 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddServices();
 
+builder.Host.ConfigureLogging(opt =>
+{
+    opt.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
+    opt.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Warning);
+});
+
 builder.Services.AddSwaggerGen(options =>
 {
     var binDirectory = new DirectoryInfo(AppContext.BaseDirectory);

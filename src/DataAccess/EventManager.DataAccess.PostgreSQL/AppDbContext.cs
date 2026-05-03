@@ -17,6 +17,8 @@ namespace EventManager.DataAccess.PostgreSQL
             : base(options)
         {
             _connectionString = configuration.GetConnectionString("Default");
+
+            Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -49,7 +49,7 @@ namespace EventManager.Services.Background.Bookings
             BookingModel booking,
             CancellationToken stoppingToken)
         {
-            await Task.Delay(500);
+            //await Task.Delay(500);
 
             using (var scope = _serviceScopeFactory.CreateScope())
             {

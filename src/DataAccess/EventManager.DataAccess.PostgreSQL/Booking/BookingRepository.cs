@@ -10,31 +10,46 @@ namespace EventManager.DataAccess.PostgreSQL.Booking
     internal class BookingRepository : IBookingRepository
     {
         private readonly AppDbContext _dbContext;
+        private SemaphoreSlim _semaphore;
 
         public BookingRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
+
+            _semaphore = new SemaphoreSlim(1, 1);
         }
 
         public async Task<Guid> CreateNewBookingAsync(
             Guid eventId,
             CancellationToken cancellationToken)
         {
-            EventModel? @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == eventId, cancellationToken);
-            @event.TryReleaseSeats();
+            EventModel? @event;
+            BookingModel? booking;
 
-            BookingModel booking = new BookingModel()
-            { 
-                CreatedAt = DateTime.Now,
-                
-                Status = BookingStatus.Pending,
+            try
+            {
+                await _semaphore.WaitAsync();
 
-                EventId = eventId
-            };
+                @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == eventId, cancellationToken);
+                @event.TryReverseSeats();
 
-            await _dbContext.Bookings.AddAsync(booking, cancellationToken);
+                booking = new BookingModel()
+                {
+                    CreatedAt = DateTime.UtcNow,
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+                    Status = BookingStatus.Pending,
+
+                    EventId = eventId
+                };
+
+                await _dbContext.Bookings.AddAsync(booking, cancellationToken);
+
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
 
             return booking.Id;
         }

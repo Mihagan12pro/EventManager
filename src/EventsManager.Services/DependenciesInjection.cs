@@ -12,7 +12,7 @@ namespace EventManager.Services
     {
         public static IServiceCollection AddScopedServices(this IServiceCollection scopedServices)
         {
-            scopedServices.AddScoped<IBookingsService, InMemoryBookingsService>();
+            scopedServices.AddScoped<IBookingsService, BookingsService>();
             scopedServices.AddScoped<IEventsService, EventsService>();
 
             return scopedServices;
