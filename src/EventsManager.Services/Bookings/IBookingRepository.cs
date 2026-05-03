@@ -17,7 +17,7 @@ namespace EventManager.Services.Bookings
             Guid id,
             CancellationToken cancellationToken);
 
-        Task<IReadOnlyCollection<BookingModel>> GetAllAsync(
+        Task<IEnumerable<BookingModel>> GetAllAsync(
             BookingFiltersDto bookingFiltersDto, 
             CancellationToken cancellationToken);
     }

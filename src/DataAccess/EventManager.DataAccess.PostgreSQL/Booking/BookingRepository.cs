@@ -54,7 +54,7 @@ namespace EventManager.DataAccess.PostgreSQL.Booking
             return booking.Id;
         }
 
-        public async Task<IReadOnlyCollection<BookingModel>> GetAllAsync(
+        public async Task<IEnumerable<BookingModel>> GetAllAsync(
             BookingFiltersDto bookingFiltersDto, 
             CancellationToken cancellationToken)
         {
@@ -74,9 +74,7 @@ namespace EventManager.DataAccess.PostgreSQL.Booking
                 bookings = bookings.Where(b => b.CreatedAt == bookingFiltersDto.ProcessedAt);
             }
 
-            List<BookingModel> inMemoryBooking = await bookings.ToListAsync();
-
-            return inMemoryBooking.AsReadOnly();
+            return bookings;
         }
 
         public async Task<BookingModel> GetByIdAsync(

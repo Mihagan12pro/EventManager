@@ -67,7 +67,7 @@ namespace EventManager.DataAccess.PostgreSQL.Events
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IReadOnlyCollection<EventModel>> GetEventsAsync(GetEventsWithFiltersDto eventsDto, CancellationToken cancellationToken)
+        public async Task<PaginatedEventsDto> GetPaginatedEventsAsync(GetEventsWithFiltersDto eventsDto, CancellationToken cancellationToken)
         {
             IQueryable<EventModel> events = _dbContext.Events;
 
@@ -87,8 +87,11 @@ namespace EventManager.DataAccess.PostgreSQL.Events
             events = events.Skip(eventsDto.Pagination.Page)
                 .Take(eventsDto.Pagination.PageSize);
 
-            return (await events.ToListAsync(cancellationToken))
-                .AsReadOnly();
+            return new PaginatedEventsDto(
+                events.Count(), 
+                events.Skip(eventsDto.Pagination.Page).Take(eventsDto.Pagination.PageSize), 
+                eventsDto.Pagination.Page, 
+                eventsDto.Pagination.PageSize);
         }
 
         public async Task<EventModel> GetByIdAsync(Guid id, CancellationToken cancellationToken)

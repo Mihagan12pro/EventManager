@@ -17,7 +17,7 @@ namespace EventManager.Services.Events
             Guid id, 
             CancellationToken cancellationToken);
 
-        Task<IReadOnlyCollection<EventModel>> GetEventsAsync(
+        Task<PaginatedEventsDto> GetPaginatedEventsAsync(
             GetEventsWithFiltersDto eventsDto, 
             CancellationToken cancellationToken);
 

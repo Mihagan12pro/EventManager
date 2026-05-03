@@ -74,9 +74,7 @@ namespace EventManager.Services.Events
 
             GetEventsWithFiltersDto eventsWithFiltersDto = new GetEventsWithFiltersDto(title, pagination, dateRange);
 
-            var events = await _eventsRepository.GetEventsAsync(eventsWithFiltersDto, cancellationToken);
-
-            return new PaginatedEventsDto(events.Count, events, pagination.Page, pagination.PageSize);
+            return await _eventsRepository.GetPaginatedEventsAsync(eventsWithFiltersDto, cancellationToken);
         }
 
         public async Task<string> UpdateByPutAsync(

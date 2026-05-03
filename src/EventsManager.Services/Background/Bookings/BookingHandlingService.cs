@@ -25,10 +25,9 @@ namespace EventManager.Services.Background.Bookings
                 {
                     using (var scope = _serviceScopeFactory.CreateScope())
                     {
-                        IBookingsService bookingService = scope.ServiceProvider.GetRequiredService<IBookingsService>();
+                        IBookingRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
 
-                        var pendingBookings = await bookingService.GetAllAsync(new BookingFiltersDto(BookingStatus.Pending, null, null), stoppingToken);
-
+                        var pendingBookings = await bookingRepository.GetAllAsync(new BookingFiltersDto(BookingStatus.Pending, null, null), stoppingToken);
                         var pendingTasks = pendingBookings.Select(pb => ProcessBookingsAsync(pb, stoppingToken)); 
 
                         await Task.WhenAll(pendingTasks);
@@ -49,12 +48,9 @@ namespace EventManager.Services.Background.Bookings
             BookingModel booking,
             CancellationToken stoppingToken)
         {
-            //await Task.Delay(500);
-
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 IEventsService eventsService = scope.ServiceProvider.GetRequiredService<IEventsService>();
-                IBookingsService bookingsService = scope.ServiceProvider.GetRequiredService<IBookingsService>();
                 IBookingRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
 
                 EventModel? eventById = null;
@@ -67,9 +63,9 @@ namespace EventManager.Services.Background.Bookings
 
                     eventById = await eventsService.GetEventByIdAsync(booking.EventId, stoppingToken);
 
-                    bookingProcessedDto = bookingProcessedDto  with 
+                    bookingProcessedDto = bookingProcessedDto with
                     {
-                        Status = BookingStatus.Confirmed  
+                        Status = BookingStatus.Confirmed
                     };
                 }
                 catch (NotFoundException)
@@ -88,8 +84,6 @@ namespace EventManager.Services.Background.Bookings
                 catch(Exception ex)
                 {
                     _logger.LogError(ex, ex.Message);
-
-                    eventById?.TryReleaseSeats();
 
                     bookingProcessedDto = bookingProcessedDto with
                     {
