@@ -95,7 +95,7 @@ namespace EventManager.DataAccess.PostgreSQL.Booking
             if (bookingProcessedDto.Status != BookingStatus.Pending)
             {
                 booking?.Status = bookingProcessedDto.Status;
-                booking?.CreatedAt = DateTime.Now;
+                booking?.ProcessedAt = DateTime.UtcNow;
             }
             
             await _dbContext.SaveChangesAsync(cancellationToken);
