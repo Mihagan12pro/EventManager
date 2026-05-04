@@ -84,22 +84,23 @@ namespace EventManager.DataAccess.PostgreSQL.Events
                 events = events.Where(e => e.EndAt == eventsDto.DateRange.UpperBound.Value);
             }
 
-            events = events.Skip(eventsDto.Pagination.Page)
+            int count = await events.CountAsync();
+            events = events.Skip(eventsDto.Pagination.Skip)
                 .Take(eventsDto.Pagination.PageSize);
 
+            var a = events.ToArray()[0];
+
             return new PaginatedEventsDto(
-                events.Count(), 
-                events.Skip(eventsDto.Pagination.Page)
-                    .Take(eventsDto.Pagination.PageSize)
-                        .Select(e => new GetEventDto(
-                            e.Id,
-                            e.Title,
-                            e.StartAt,
-                            e.EndAt, 
-                            e.Description, 
-                            e.TotalSeats, 
-                            e.AvailableSeats)
-                        ), 
+                count,
+                events.Select(e => new GetEventDto(
+                    e.Id,
+                    e.Title,
+                    e.StartAt,
+                    e.EndAt,
+                    e.Description,
+                    e.TotalSeats,
+                    e.AvailableSeats)
+                ),
                 eventsDto.Pagination.Page, 
                 eventsDto.Pagination.PageSize);
         }
