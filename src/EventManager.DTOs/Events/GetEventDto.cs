@@ -8,5 +8,4 @@
         string Description,
         int TotalSeats,
         int AvalibleSeats);
-
 }

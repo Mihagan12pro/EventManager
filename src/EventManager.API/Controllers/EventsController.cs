@@ -6,9 +6,6 @@ using EventManager.Services.Events;
 using EventsManager.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EventManager.API.Controllers
 {
@@ -63,9 +60,7 @@ namespace EventManager.API.Controllers
 
             DateRange dateRange = new DateRange(
                 from,
-                false,
-                to,
-                false);
+                to);
 
             var events = await _eventService.GetEventsAsync(
                 title,

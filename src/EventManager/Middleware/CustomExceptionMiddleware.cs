@@ -1,5 +1,6 @@
 ﻿using EventsManager.Failures;
 using EventsManager.Failures.Errors;
+using EventsManager.Failures.Errors.Factories.Server;
 using EventsManager.Failures.Exceptions.WebApi;
 
 namespace EventManager.Middleware
@@ -24,7 +25,7 @@ namespace EventManager.Middleware
             {
                 LogError(ex, httpContext);
 
-                await ModifyResponse(httpContext, ServerErrors.Create500());
+                await ModifyResponse(httpContext, ServerErrorsFactory.InternalServerErrorWorkbench.Craft("Internal server error!"));
             }
         }
 
@@ -44,7 +45,7 @@ namespace EventManager.Middleware
             response.ContentType = "application/json";
             response.StatusCode = (int)error.StatusCode;
 
-            await httpContext.Response.WriteAsJsonAsync(error);
+            await httpContext.Response.WriteAsJsonAsync(error.Errors);
         }
 
         public CustomExceptionMiddleware(

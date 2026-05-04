@@ -1,5 +1,6 @@
-﻿using EventManager.Domain.Bookings;
-using EventManager.Services.Bookings;
+﻿using EventManager.Services.Bookings;
+using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
+using EventsManager.Failures.Errors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventManager.API.Controllers

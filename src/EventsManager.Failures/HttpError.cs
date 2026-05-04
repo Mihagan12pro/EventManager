@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using EventsManager.Failures.Errors;
+using EventsManager.Failures.Errors.Collections;
+using System.Net;
 
 namespace EventsManager.Failures
 {
@@ -6,15 +8,35 @@ namespace EventsManager.Failures
     {
         public HttpStatusCode StatusCode { get; }
 
-        public string Message { get; }
+        public ErrorsCollection Errors { get; }
 
         internal HttpError(
-            HttpStatusCode statusCode, 
+            HttpStatusCode statusCode,
+            ErrorsCollection errors)
+        {
+            StatusCode = statusCode;
+
+            Errors = errors;
+        }
+
+        internal HttpError(
+            HttpStatusCode statusCode,
+            Error error)
+        {
+            StatusCode = statusCode;
+
+            Errors = new ErrorsCollection();
+            Errors.Add(error);
+        }
+
+        internal HttpError(
+            HttpStatusCode statusCode,
             string message)
         {
             StatusCode = statusCode;
 
-            Message = message;
+            Errors = new ErrorsCollection();
+            Errors.Add(new Error(message));
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿using EventManager.Services.Background.Bookings;
+﻿using EventManager.DTOs.Events;
+using EventManager.Services.Background.Bookings;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
 
@@ -14,6 +16,8 @@ namespace EventManager.Services
         {
             scopedServices.AddScoped<IBookingsService, BookingsService>();
             scopedServices.AddScoped<IEventsService, EventsService>();
+
+            scopedServices.AddValidatorsFromAssembly(typeof(DependenciesInjection).Assembly);
 
             return scopedServices;
         }
