@@ -32,6 +32,10 @@ namespace EventManager.DataAccess.PostgreSQL
                 .HasMany(e => e.Bookings)
                 .WithOne(b => b.Event)
                 .HasForeignKey(b => b.EventId);
+
+            modelBuilder.Entity<EventModel>()
+                .Property(e => e.Title)
+                    .HasColumnType("citext");
         }
 
         private readonly string _connectionString;

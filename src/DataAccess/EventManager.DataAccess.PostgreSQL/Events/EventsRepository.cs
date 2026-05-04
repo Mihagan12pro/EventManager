@@ -88,8 +88,6 @@ namespace EventManager.DataAccess.PostgreSQL.Events
             events = events.Skip(eventsDto.Pagination.Skip)
                 .Take(eventsDto.Pagination.PageSize);
 
-            var a = events.ToArray()[0];
-
             return new PaginatedEventsDto(
                 count,
                 events.Select(e => new GetEventDto(
