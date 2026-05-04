@@ -73,6 +73,10 @@ namespace EventManager.API.Controllers
                 dateRange,
                 cancellationToken);
 
+            foreach(var i in events.Events)
+            {
+                var b = i is EventModel;
+            }
 
             return Ok(events);
         }

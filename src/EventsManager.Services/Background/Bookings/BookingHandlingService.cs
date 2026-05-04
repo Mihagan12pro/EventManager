@@ -50,7 +50,8 @@ namespace EventManager.Services.Background.Bookings
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                IEventsService eventsService = scope.ServiceProvider.GetRequiredService<IEventsService>();
+                IEventsRepository eventsRepository = scope.ServiceProvider.GetRequiredService<IEventsRepository>();
+                //IEventsService eventsService = scope.ServiceProvider.GetRequiredService<IEventsService>();
                 IBookingRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
 
                 EventModel? eventById = null;
@@ -61,7 +62,7 @@ namespace EventManager.Services.Background.Bookings
                 {
                     await _processingSemaphore.WaitAsync();
 
-                    eventById = await eventsService.GetEventByIdAsync(booking.EventId, stoppingToken);
+                    eventById = await eventsRepository.GetByIdAsync(booking.EventId, stoppingToken);
 
                     bookingProcessedDto = bookingProcessedDto with
                     {

@@ -17,7 +17,7 @@ namespace EventManager.Domain.Bookings
 
         public DateTime? ProcessedAt { get; set; }
 
-        public EventModel Event { get; set;  }
+        public EventModel Event { get; set; } = null!;
 
         public void Confirm()
             => Status = BookingStatus.Confirmed;

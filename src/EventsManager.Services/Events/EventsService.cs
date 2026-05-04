@@ -54,13 +54,22 @@ namespace EventManager.Services.Events
             return $"Event with id = {id} had been deleted!";
         }
 
-        public async Task<EventModel> GetEventByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<GetEventDto> GetEventByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             EventModel? @event = await _eventsRepository.GetByIdAsync(id, cancellationToken);
 
             if (@event == null)
                 throw new NotFoundException($"Event with id = {id} does not exists!");
-            return @event;
+
+            return new GetEventDto(
+                @event.Id,
+                @event.Title,
+                @event.StartAt,
+                @event.EndAt,
+                @event.Description, 
+                @event.TotalSeats,
+                @event.AvailableSeats
+            );
         }
 
         public async Task<PaginatedEventsDto> GetEventsAsync(

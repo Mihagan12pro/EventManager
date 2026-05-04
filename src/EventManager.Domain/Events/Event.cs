@@ -19,7 +19,7 @@ namespace EventManager.Domain.Events
 
         public int AvailableSeats { get; set; }
 
-        public List<BookingModel> Bookings { get; set; }
+        public List<BookingModel> Bookings { get; set; } = null!;
 
 
         private readonly Lock _lock = new Lock();

@@ -89,7 +89,17 @@ namespace EventManager.DataAccess.PostgreSQL.Events
 
             return new PaginatedEventsDto(
                 events.Count(), 
-                events.Skip(eventsDto.Pagination.Page).Take(eventsDto.Pagination.PageSize), 
+                events.Skip(eventsDto.Pagination.Page)
+                    .Take(eventsDto.Pagination.PageSize)
+                        .Select(e => new GetEventDto(
+                            e.Id,
+                            e.Title,
+                            e.StartAt,
+                            e.EndAt, 
+                            e.Description, 
+                            e.TotalSeats, 
+                            e.AvailableSeats)
+                        ), 
                 eventsDto.Pagination.Page, 
                 eventsDto.Pagination.PageSize);
         }

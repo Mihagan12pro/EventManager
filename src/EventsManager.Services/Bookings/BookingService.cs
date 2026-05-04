@@ -45,16 +45,20 @@ namespace EventManager.Services.Bookings
             return result;
         }
 
-        public async Task<IEnumerable<BookingModel>> GetAllAsync(
+        public async Task<IEnumerable<GetBookingDto>> GetAllAsync(
             BookingFiltersDto filtersDto,
             CancellationToken cancellationToken)
         {
             var result = await _bookingRepository.GetAllAsync(filtersDto, cancellationToken);
 
-            return result;
+            return result.Select(b => new GetBookingDto(
+                b.EventId, 
+                b.CreatedAt, 
+                b.ProcessedAt, 
+                b.Status));
         }
 
-        public async Task<BookingModel> GetBookingByIdAsync(
+        public async Task<GetBookingDto> GetBookingByIdAsync(
             Guid bookingId,
             CancellationToken cancellationToken)
         {
@@ -62,7 +66,11 @@ namespace EventManager.Services.Bookings
             if (booking == null)
                 throw new NotFoundException($"Booking with id = {bookingId} does not exists!");
 
-            return booking;
+            return new GetBookingDto(
+                booking.EventId, 
+                booking.CreatedAt,
+                booking.ProcessedAt,
+                booking.Status);
         }
 
         public BookingsService(
