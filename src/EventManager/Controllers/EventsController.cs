@@ -4,10 +4,9 @@ using EventManager.DTOs.Shared;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using EventsManager.Shared;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventManager.API.Controllers
+namespace EventManager.Controllers
 {
     [ApiController]
     [Route("/events")]

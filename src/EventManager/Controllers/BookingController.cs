@@ -1,7 +1,7 @@
 ﻿using EventManager.Services.Bookings;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventManager.API.Controllers
+namespace EventManager.Controllers
 {
     [ApiController]
     [Route("/bookings")]
