@@ -15,7 +15,7 @@ namespace EventManager.Tests.Events.Add
         {
             CancellationTokenSource cts = new CancellationTokenSource();
 
-            var provider = TestingServicesProvider.GetProviderService();
+            var provider = TestingServicesProvider.GetServicesProvider();
 
             IEventsService eventsService = provider.GetRequiredService<IEventsService>();
 
@@ -31,7 +31,7 @@ namespace EventManager.Tests.Events.Add
         [Trait("SubCategory", "Add")]
         public async Task Test_Bad_Request(NewEventDto dto, int expected)
         {
-            IServiceProvider serviceProvider = TestingServicesProvider.GetProviderService();
+            IServiceProvider serviceProvider = TestingServicesProvider.GetServicesProvider();
 
             CancellationTokenSource cts = new CancellationTokenSource();
             IEventsService eventsService = serviceProvider.GetRequiredService<IEventsService>();

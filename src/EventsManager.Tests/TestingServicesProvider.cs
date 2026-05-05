@@ -12,7 +12,7 @@ namespace EventManager.Services.Tests
 {
     internal static class TestingServicesProvider
     {
-        public static IServiceProvider GetProviderService()
+        public static IServiceProvider GetServicesProvider()
         {
             IServiceCollection services = new ServiceCollection();
 

@@ -9,25 +9,10 @@
 
   <ItemGroup>
     <Compile Remove="Booking\**" />
-    <Compile Remove="Events\Delete\**" />
-    <Compile Remove="Events\Get\**" />
-    <Compile Remove="Events\Put\**" />
     <EmbeddedResource Remove="Booking\**" />
-    <EmbeddedResource Remove="Events\Delete\**" />
-    <EmbeddedResource Remove="Events\Get\**" />
-    <EmbeddedResource Remove="Events\Put\**" />
     <None Remove="Booking\**" />
-    <None Remove="Events\Delete\**" />
-    <None Remove="Events\Get\**" />
-    <None Remove="Events\Put\**" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Events\AddEventsCtor.cs" />
-    <Compile Remove="Events\AddEventsTests.cs" />
-    <Compile Remove="Events\AddEventsTestsUtils.cs" />
-  </ItemGroup>
-
+	
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.7" />

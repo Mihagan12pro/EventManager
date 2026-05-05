@@ -1,47 +1,55 @@
-﻿using EventManager.DTOs.Events;
+﻿using EventManager.Domain.Events;
+using EventManager.DTOs.Events;
+using EventManager.DTOs.Shared;
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
+using EventManager.Services.Tests;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Events.Put
 {
     public partial class PutEventsTests
     {
-        //[Theory]
-        //[MemberData(nameof(PutDataForBadRequest))]
-        //public async Task Test_Putting_Bad_Request(
-        //    DateTime start,
-        //    DateTime end)
-        //{
-        //    CancellationTokenSource cts = new CancellationTokenSource();
+        [Theory]
+        [MemberData(nameof(PutDataForBadRequest))]
+        public async Task Test_Putting_Bad_Request(
+            DateTime start,
+            DateTime end)
+        {
+            CancellationTokenSource cts = new CancellationTokenSource();
 
-        //    DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
-        //    var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
+            DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
 
-        //    Guid id = await eventsService.AddNewAsync(
-        //         new NewEventDto(
-        //             "Юбилей",
-        //             dateTime.AddDays(1),
-        //             dateTime.AddDays(2), 
-        //             10),
-        //         cts.Token
-        //         );
+            var provider = TestingServicesProvider.GetServicesProvider();
+            var eventsService = provider.GetRequiredService<IEventsService>();
 
-        //    NewEventDto eventDto = new NewEventDto(
-        //        string.Empty,
-        //        start,
-        //        end, 10
-        //    );
+            Guid id = await eventsService.AddNewAsync(
+                 new NewEventDto(
+                     "Юбилей",
+                     dateTime.AddDays(1),
+                     dateTime.AddDays(2),
+                     10),
+                 cts.Token
+                 );
 
-        //    var exception = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.UpdateByPutAsync(id, eventDto, cts.Token));
-        //}
+            PutEventDto putEventDto = new PutEventDto(
+                string.Empty,
+                start,
+                end
+            );
+
+            var exception = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.UpdateByPutAsync(id, putEventDto, cts.Token));
+        }
 
         [Fact]
         public async Task Test_Putting_With_Error_404()
         {
             CancellationTokenSource cts = new CancellationTokenSource();
 
-            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
+            var provider = TestingServicesProvider.GetServicesProvider();
+            var eventsService = provider.GetRequiredService<IEventsService>();
+
             Guid id = Guid.NewGuid();
 
             PutEventDto eventDto = new PutEventDto(
@@ -53,53 +61,26 @@ namespace EventManager.Tests.Events.Put
             var result = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.UpdateByPutAsync(id, eventDto, cts.Token));
         }
 
-        //[Theory]
-        //[MemberData(nameof(PutData))]
-        //public async Task Test_Putting(int index, NewEventDto eventDto)
-        //{
-        //    CancellationTokenSource cts = new CancellationTokenSource();
+        [Theory]
+        [MemberData(nameof(PutData))]
+        public async Task Test_Putting(NewEventDto eventDto)
+        {
+            CancellationTokenSource cts = new CancellationTokenSource();
 
-        //    DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
-        //    var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
+            var provider = TestingServicesProvider.GetServicesProvider();
+            var eventsService = provider.GetRequiredService<IEventsService>();
 
-        //    await eventsService.AddNewAsync(
-        //         new NewEventDto(
-        //             "Юбилей",
-        //             dateTime.AddDays(1),
-        //             dateTime.AddDays(2),
-        //             10),
-        //         cts.Token
-        //         );
+            DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
 
-        //    EventModel oldModel = (await eventsService.GetEventsAsync(
-        //        null,
-        //        new PaginationDto(1, 10),
-        //        new DateRange(
-        //             null,
-        //             null)
-        //        )).Events.First();
+            var id = await eventsService.AddNewAsync(eventDto, cts.Token);
 
-        //    DateTime start = oldModel.StartAt;
-        //    DateTime end = oldModel.EndAt;
+            var oldModel = await eventsService.GetEventByIdAsync(id, cts.Token);
 
-        //    string title = oldModel.Title;
-        //    string description = oldModel.Description;
+            await eventsService.UpdateByPutAsync(id, new PutEventDto(eventDto.Title, eventDto.StartAt, dateTime.AddYears(100)), cts.Token);
 
-        //    var result = (await eventsService.UpdateByPutAsync(oldModel.Id, eventDto));
-        //    EventModel putModel = (await eventsService.GetEventsAsync(
-        //        null,
-        //        new PaginationDto(),
-        //        new DateRange(
-        //             null,
-        //             false,
-        //             null,
-        //             false)
-        //        )).Events.First();
+            var updatedModel = await eventsService.GetEventByIdAsync(id, cts.Token);
 
-        //    Assert.False(title == putModel.Title);
-        //    Assert.False(description == putModel.Description);
-        //    Assert.False(start == putModel.StartAt);
-        //    Assert.False(end == putModel.EndAt);
-        //}
+            Assert.NotEqual(oldModel, updatedModel);
+        }
     }
 }
