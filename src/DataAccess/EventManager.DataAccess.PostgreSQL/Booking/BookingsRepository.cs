@@ -7,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventManager.DataAccess.PostgreSQL.Booking
 {
-    internal class BookingsRepository : IBookingsRepository
+    public class BookingsRepository : IBookingsRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContextBase _dbContext;
         private SemaphoreSlim _semaphore;
 
-        public BookingsRepository(AppDbContext dbContext)
+        public BookingsRepository(AppDbContextBase dbContext)
         {
             _dbContext = dbContext;
 

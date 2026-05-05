@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventManager.DataAccess.PostgreSQL.Events
 {
-    internal class EventsRepository : IEventsRepository
+    public class EventsRepository : IEventsRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly AppDbContextBase _dbContext;
 
 
-        public EventsRepository(AppDbContext dbContext)
+        public EventsRepository(AppDbContextBase dbContext)
         {
             _dbContext = dbContext;
         }

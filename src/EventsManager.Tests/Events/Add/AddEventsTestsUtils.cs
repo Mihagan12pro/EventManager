@@ -17,29 +17,34 @@ namespace EventManager.Tests.Events.Add
                         datetime,
                         10
                     ),
-                    "Start date time and End date time are required fields!"
+
+                    1//Counf of errors
                 ],
                 [
                     new NewEventDto(
                         "Корпоратив",
-                        datetime.AddHours(6),
+                        null,
                         null,
                         10),
-                    "Start date time and End date time are required fields!"
+                    
+                    2
                 ],
                 [
                     new NewEventDto(
-                        "Корпоратив",
+                        "",
                         null,
-                        null, 10),
-                    "Start date time and End date time are required fields!"
+                        null, 
+                        10),
+                    3
                 ],
                 [
                     new NewEventDto(
-                        "Концерт",
+                        string.Empty,
                         datetime.AddDays(-1),
-                        datetime.AddDays(2), 10),
-                    "Too late!"
+                        datetime.AddDays(2),
+                        10),
+
+                    2
                 ],
                 [
                     new NewEventDto(
@@ -47,7 +52,8 @@ namespace EventManager.Tests.Events.Add
                         datetime,
                         datetime.AddDays(-1), 
                         10),
-                    "Too late!"
+                    
+                    2
                 ],
                 [
                     new NewEventDto(
@@ -58,7 +64,8 @@ namespace EventManager.Tests.Events.Add
 
                         datetime.AddHours(2), 
                         10),
-                    "Start date time must be greater than end date time!"
+                    
+                    1
                 ],
                 [
                     new NewEventDto(
@@ -69,7 +76,20 @@ namespace EventManager.Tests.Events.Add
 
                         datetime.AddHours(8),
                         0),
-                    "Count of total seats must be greater than zero!"
+                    1
+                ],
+                 [
+                    new NewEventDto(
+                        null,
+
+                        datetime.AddHours(6),
+
+
+                        datetime.AddHours(2),
+
+                        10),
+
+                    2
                 ],
             ];
         }

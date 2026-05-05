@@ -2,7 +2,9 @@
 using EventManager.DataAccess.PostgreSQL.Events;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Data.Common;
 
 namespace EventManager.DataAccess.PostgreSQL
 {
@@ -13,7 +15,7 @@ namespace EventManager.DataAccess.PostgreSQL
             services.AddScoped<IEventsRepository, EventsRepository>();
             services.AddScoped<IBookingsRepository, BookingsRepository>();
 
-            services.AddDbContext<AppDbContext>();
+            services.AddDbContext<AppDbContextBase, AppDbContext>();
 
             return services;
         }
