@@ -6,6 +6,7 @@ namespace EventManager.DataAccess.PostgreSQL
     internal class AppDbContext : AppDbContextBase
     {
         public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration) 
+            : base(options)
         {
             _connectionString = configuration.GetConnectionString("Default");
         }

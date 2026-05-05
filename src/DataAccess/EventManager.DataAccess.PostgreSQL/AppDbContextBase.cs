@@ -7,6 +7,10 @@ namespace EventManager.DataAccess.PostgreSQL
 {
     public class AppDbContextBase : DbContext
     {
+        public AppDbContextBase(DbContextOptions options) : base(options)
+        {
+        }
+
         public DbSet<EventModel> Events { set; get; }
 
         public DbSet<BookingModel> Bookings { get; set; }

@@ -21,7 +21,6 @@ namespace EventManager.Services.Tests
             services.AddDbContext<AppDbContextBase, InMemoryAppDbContext>(options =>
                 options.UseInMemoryDatabase(dbName));
 
-            //services.AddValidatorsFromAssemblies(typeof(EventManager.Services.DependenciesInjection).Assembly);
             services.AddValidatorsFromAssembly(typeof(EventManager.Services.DependenciesInjection).Assembly);
 
             services.AddScoped<IEventsService, EventsService>();

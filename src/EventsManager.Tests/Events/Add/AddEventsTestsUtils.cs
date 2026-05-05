@@ -97,7 +97,7 @@ namespace EventManager.Tests.Events.Add
 
         public static IEnumerable<object[]> AddEvents()
         {
-            DateTime datetime = DateTime.Now.AddDays(1);
+            DateTime datetime = DateTime.Now.AddDays(10);
 
             return
             [
@@ -107,7 +107,9 @@ namespace EventManager.Tests.Events.Add
 
                         datetime,
 
-                        datetime.AddHours(10), 10)
+                        datetime.AddHours(10), 
+                        
+                        10)
                 ],
 
                 [
@@ -115,7 +117,10 @@ namespace EventManager.Tests.Events.Add
                         "Золотая свадьба",
 
                         datetime.AddDays(10),
-                        datetime.AddDays(11), 10)
+
+                        datetime.AddDays(11), 
+                        
+                        10)
                 ],
 
                 [
@@ -129,7 +134,9 @@ namespace EventManager.Tests.Events.Add
 
                         new DateTime(
                             new DateOnly(DateOnly.FromDateTime(datetime).Year + 1, 6, 22),
-                            new TimeOnly(8, 0, 20)), 10)
+                            new TimeOnly(8, 0, 20)), 
+                        
+                        10)
                 ]
             ];
         }
