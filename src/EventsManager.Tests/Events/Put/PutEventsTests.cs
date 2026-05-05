@@ -39,17 +39,18 @@ namespace EventManager.Tests.Events.Put
         [Fact]
         public async Task Test_Putting_With_Error_404()
         {
+            CancellationTokenSource cts = new CancellationTokenSource();
+
             var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
             Guid id = Guid.NewGuid();
 
-            NewEventDto eventDto = new NewEventDto(
-                string.Empty,
+            PutEventDto eventDto = new PutEventDto(
+                "Birthday",
                 DateTime.Now.AddDays(1),
-                DateTime.Now.AddDays(2),
-                10
+                DateTime.Now.AddDays(2)
             );
 
-            var result = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.UpdateByPutAsync(id, eventDto));
+            var result = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.UpdateByPutAsync(id, eventDto, cts.Token));
         }
 
         //[Theory]

@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Booking\**" />
-    <EmbeddedResource Remove="Booking\**" />
-    <None Remove="Booking\**" />
+    <Compile Include="Booking\BookingsTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Events\AddEventsCtor.cs" />
+    <Compile Remove="Events\AddEventsTests.cs" />
+    <Compile Remove="Events\AddEventsTestsUtils.cs" />
   </ItemGroup>
 
   <ItemGroup>
