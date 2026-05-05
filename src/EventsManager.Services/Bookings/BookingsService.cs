@@ -10,7 +10,7 @@ namespace EventManager.Services.Bookings
 {
     internal class BookingsService : IBookingsService
     {
-        private readonly IBookingRepository _bookingRepository;
+        private readonly IBookingsRepository _bookingRepository;
         private readonly IEventsRepository _eventsRepository;
 
         private readonly SemaphoreSlim _semaphore;
@@ -75,7 +75,7 @@ namespace EventManager.Services.Bookings
 
         public BookingsService(
             IEventsRepository eventsRepository, 
-            IBookingRepository bookingRepository)
+            IBookingsRepository bookingRepository)
         {
             _eventsRepository = eventsRepository;
             _bookingRepository = bookingRepository;

@@ -3,7 +3,7 @@ using EventManager.DTOs.Bookings;
 
 namespace EventManager.Services.Bookings
 {
-    public interface IBookingRepository
+    public interface IBookingsRepository
     {
         Task<Guid> CreateNewBookingAsync(
             Guid eventId, 

@@ -11,7 +11,7 @@ namespace EventManager.DataAccess.PostgreSQL
         public static IServiceCollection AddPostgreDependencies(this IServiceCollection services)
         {
             services.AddScoped<IEventsRepository, EventsRepository>();
-            services.AddScoped<IBookingRepository, BookingRepository>();
+            services.AddScoped<IBookingsRepository, BookingsRepository>();
 
             services.AddDbContext<AppDbContext>();
 

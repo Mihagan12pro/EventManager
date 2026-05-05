@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace EventManager.Services.Events.Validators
 {
-    public class NewEventValidator : AbstractValidator<NewEventDto>
+    public class PutEventValidator : AbstractValidator<PutEventDto>
     {
-        public NewEventValidator()
+        public PutEventValidator()
         {
             RuleFor(e => e.Title)
                 .MinimumLength(1)
@@ -22,10 +22,6 @@ namespace EventManager.Services.Events.Validators
                     .WithMessage("Too late for creating new events!")
                         .NotNull()
                             .WithMessage("Start date is a required field!");
-
-            RuleFor(e => e.TotalSeats)
-                .GreaterThan(0)
-                    .WithMessage("Count of total seats must be greater than zero!");
         }
     }
 }

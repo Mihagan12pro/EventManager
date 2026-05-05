@@ -11,10 +11,12 @@ namespace EventManager.Tests.Events.Add
         [Trait("SubCategory", "Add")]
         public async Task Test_Successful_Adding(NewEventDto newEventDto)
         {
+            CancellationTokenSource cts = new CancellationTokenSource();
+
             IEventsService eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
-            var result = await eventsService.AddNewAsync(newEventDto);
-            var deletingResult = await eventsService.DeleteAsync(result);
+            var result = await eventsService.AddNewAsync(newEventDto, cts.Token);
+            var deletingResult = await eventsService.DeleteAsync(result, cts.Token);
 
             Assert.Equal(typeof(Guid), result.GetType());
             Assert.Equal(typeof(string), deletingResult.GetType());
@@ -25,9 +27,10 @@ namespace EventManager.Tests.Events.Add
         [Trait("SubCategory", "Add")]
         public async Task Test_Bad_Request(NewEventDto dto, string expected)
         {
+            CancellationTokenSource cts = new CancellationTokenSource();
             IEventsService eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
 
-            var result = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.AddNewAsync(dto));
+            var result = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.AddNewAsync(dto, cts.Token));
             Assert.Equal(expected, result.Error.Message);
         }
     }

@@ -25,7 +25,7 @@ namespace EventManager.Services.Background.Bookings
                 {
                     using (var scope = _serviceScopeFactory.CreateScope())
                     {
-                        IBookingRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
+                        IBookingsRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingsRepository>();
 
                         var pendingBookings = await bookingRepository.GetAllAsync(new BookingFiltersDto(BookingStatus.Pending, null, null), stoppingToken);
                         var pendingTasks = pendingBookings.Select(pb => ProcessBookingsAsync(pb, stoppingToken)); 
@@ -52,7 +52,7 @@ namespace EventManager.Services.Background.Bookings
             {
                 IEventsRepository eventsRepository = scope.ServiceProvider.GetRequiredService<IEventsRepository>();
                 //IEventsService eventsService = scope.ServiceProvider.GetRequiredService<IEventsService>();
-                IBookingRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
+                IBookingsRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingsRepository>();
 
                 EventModel? eventById = null;
                 BookingProcessedDto bookingProcessedDto = new BookingProcessedDto(booking.Id, booking.Status);

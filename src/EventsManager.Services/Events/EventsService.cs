@@ -15,23 +15,15 @@ namespace EventManager.Services.Events
         private readonly IEventsRepository _eventsRepository;
 
         private readonly IValidator<NewEventDto> _newEventValidator;
+        private readonly IValidator<PutEventDto> _putEventValidator;
 
         public async Task<Guid> AddNewAsync(NewEventDto request, CancellationToken cancellationToken)
         {
-            DateTime now = DateTime.Now;
-
-            if (!request.StartAt.HasValue || !request.EndAt.HasValue)
-                throw new BadRequestException("Start date time and End date time are required fields!");
-
-            DateTime start = request.StartAt.Value;
-            DateTime end = request.EndAt.Value;
-            int totalSeats = request.TotalSeats.Value;
-
             var validation = _newEventValidator.Validate(request);
 
             if (!validation.IsValid)
             {
-                ErrorsCollection errors = new (validation.Errors.Select(vf => vf.ToError()));
+                ErrorsCollection errors = new ErrorsCollection(validation.Errors.Select(vf => vf.ToError()));
 
                 throw new BadRequestException(errors);
             }
@@ -90,27 +82,19 @@ namespace EventManager.Services.Events
             PutEventDto putEvent,
             CancellationToken cancellationToken)
         {
-            DateTime now = DateTime.Now;
-
-            DateTime start = putEvent.StartAt!.Value;
-            DateTime end = putEvent.EndAt!.Value;
-
-            DateSpan startSpan = new DateSpan(start, now);
-            DateSpan endSpan = new DateSpan(end, now);
-
             EventModel? eventById = await _eventsRepository.GetByIdAsync(id, cancellationToken);
 
             if (eventById == null)
                 throw new NotFoundException($"Event with id = '{id}' was not found!");
 
-            if (startSpan.Day <= 0 && startSpan.Year <= 0 && startSpan.Month <= 0)
-                throw new BadRequestException("Too late!");
+            var validation = _putEventValidator.Validate(putEvent);
 
-            if (endSpan.Day <= 0 && endSpan.Year <= 0 && endSpan.Month <= 0)
-                throw new BadRequestException("Too late!");
+            if (!validation.IsValid)
+            {
+                ErrorsCollection errors = new ErrorsCollection(validation.Errors.Select(vf => vf.ToError()));
 
-            if (putEvent.StartAt >= putEvent.EndAt)
-                throw new BadRequestException("End time must be greater than start time!");
+                throw new BadRequestException(errors);
+            }
 
             await _eventsRepository.CompleteUpdateAsync(id, putEvent, cancellationToken);
 
@@ -120,11 +104,13 @@ namespace EventManager.Services.Events
 
         public EventsService(
             IEventsRepository eventsRepository, 
-            IValidator<NewEventDto> newEventValidator)
+            IValidator<NewEventDto> newEventValidator,
+            IValidator<PutEventDto> putEventValidator)
         {
             _eventsRepository = eventsRepository;
 
             _newEventValidator = newEventValidator;
+            _putEventValidator = putEventValidator;
         }
     }
 }

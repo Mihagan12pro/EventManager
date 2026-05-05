@@ -2,10 +2,11 @@
 using EventManager.Domain.Events;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 namespace EventManager.DataAccess.PostgreSQL
 {
-    internal class AppDbContext : DbContext
+    public class AppDbContext : DbContext
     {
         public DbSet<EventModel> Events { set; get; }
 
@@ -15,28 +16,14 @@ namespace EventManager.DataAccess.PostgreSQL
             DbContextOptions<AppDbContext> options,
             IConfiguration configuration) 
             : base(options)
-        {
-            _connectionString = configuration.GetConnectionString("Default");
+                => _connectionString = configuration.GetConnectionString("Default");
 
-            Database.EnsureCreated();
-        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql(_connectionString);
-        }
+            => optionsBuilder.UseNpgsql(_connectionString);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<EventModel>()
-                .HasMany(e => e.Bookings)
-                .WithOne(b => b.Event)
-                .HasForeignKey(b => b.EventId);
-
-            modelBuilder.Entity<EventModel>()
-                .Property(e => e.Title)
-                    .HasColumnType("citext");
-        }
+            => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         private readonly string _connectionString;
     }

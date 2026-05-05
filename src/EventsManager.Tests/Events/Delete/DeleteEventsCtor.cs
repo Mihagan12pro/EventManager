@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EventManager.Tests.Events.Delete
+﻿namespace EventManager.Tests.Events.Delete
 {
     public partial class DeleteEventsTests : EventsTests
     {
