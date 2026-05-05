@@ -4,6 +4,7 @@ using EventManager.DataAccess.PostgreSQL.Events;
 using EventManager.Services.Background.Bookings;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,14 @@ namespace EventManager.Services.Tests
         {
             IServiceCollection services = new ServiceCollection();
 
+            var dbName = Guid.NewGuid().ToString();
+
+            services.AddDbContext<AppDbContextBase, InMemoryAppDbContext>(options =>
+                options.UseInMemoryDatabase(dbName));
+
+            //services.AddValidatorsFromAssemblies(typeof(EventManager.Services.DependenciesInjection).Assembly);
+            services.AddValidatorsFromAssembly(typeof(EventManager.Services.DependenciesInjection).Assembly);
+
             services.AddScoped<IEventsService, EventsService>();
             services.AddScoped<IBookingsService, BookingsService>();
 
@@ -24,10 +33,6 @@ namespace EventManager.Services.Tests
             services.AddHostedService<BookingHandlingService>();
 
             services.AddLogging();
-
-            var dbName = Guid.NewGuid().ToString();
-            services.AddDbContext<AppDbContextBase>(options =>
-                options.UseInMemoryDatabase(dbName));
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
 

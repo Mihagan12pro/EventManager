@@ -11,15 +11,6 @@ namespace EventManager.DataAccess.PostgreSQL
 
         public DbSet<BookingModel> Bookings { get; set; }
 
-        public AppDbContextBase(DbContextOptions<AppDbContextBase> options) : base(options)
-        {
-
-        }
-
-        public AppDbContextBase(DbContextOptions options) : base(options)
-        {
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
             => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }

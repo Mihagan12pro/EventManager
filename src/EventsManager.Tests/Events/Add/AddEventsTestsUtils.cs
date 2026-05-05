@@ -18,7 +18,7 @@ namespace EventManager.Tests.Events.Add
                         10
                     ),
 
-                    1//Counf of errors
+                    2//Counf of errors
                 ],
                 [
                     new NewEventDto(
@@ -26,14 +26,14 @@ namespace EventManager.Tests.Events.Add
                         null,
                         null,
                         10),
-                    
+
                     2
                 ],
                 [
                     new NewEventDto(
                         "",
                         null,
-                        null, 
+                        null,
                         10),
                     3
                 ],
@@ -50,9 +50,9 @@ namespace EventManager.Tests.Events.Add
                     new NewEventDto(
                         "Концерт",
                         datetime,
-                        datetime.AddDays(-1), 
+                        datetime.AddDays(-1),
                         10),
-                    
+
                     2
                 ],
                 [
@@ -62,9 +62,9 @@ namespace EventManager.Tests.Events.Add
                         datetime.AddHours(6),
 
 
-                        datetime.AddHours(2), 
+                        datetime.AddHours(2),
                         10),
-                    
+
                     1
                 ],
                 [

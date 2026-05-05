@@ -1,14 +1,11 @@
-﻿using EventManager.Domain.Bookings;
-using EventManager.Domain.Events;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.Reflection;
 
 namespace EventManager.DataAccess.PostgreSQL
 {
     internal class AppDbContext : AppDbContextBase
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration) 
         {
             _connectionString = configuration.GetConnectionString("Default");
         }

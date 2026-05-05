@@ -35,7 +35,7 @@ namespace EventManager.Tests.Events.Add
             IEventsService eventsService = serviceProvider.GetRequiredService<IEventsService>();
 
             var result = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.AddNewAsync(dto, cts.Token));
-            
+
             Assert.Equal(expected, result.Error.Errors.Count());
         }
     }
