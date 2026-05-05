@@ -23,6 +23,9 @@ namespace EventManager.Services.Bookings
             BookingAcceptedDto? result = null;
 
             EventModel @event = await _eventsRepository.GetByIdAsync(eventId, cancellationToken);
+            if (@event == null)
+                throw new NotFoundException($"Event with id = {eventId} does not exists!");
+
             try
             {
                 await _semaphore.WaitAsync();

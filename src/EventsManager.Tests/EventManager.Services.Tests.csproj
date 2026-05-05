@@ -8,11 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Booking\**" />
-    <EmbeddedResource Remove="Booking\**" />
-    <None Remove="Booking\**" />
+    <Compile Remove="Booking\Background\**" />
+    <EmbeddedResource Remove="Booking\Background\**" />
+    <None Remove="Booking\Background\**" />
   </ItemGroup>
-	
+
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.7" />

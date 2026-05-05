@@ -1,36 +1,10 @@
-﻿using EventManager.DataAccess.PostgreSQL;
-using EventManager.DTOs.Events;
-using EventManager.Services.Background.Bookings;
-using EventManager.Services.Bookings;
-using EventManager.Services.Events;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using EventManager.DTOs.Events;
 
 namespace EventManager.Tests.Booking
 {
     [Trait("Category", "Bookings")]
     public class BookingsTests
     {
-        public static IServiceProvider GetProviderService()
-        {
-            IServiceCollection services = new ServiceCollection();
-
-            services.AddScoped<IEventsService, EventsService>();
-            services.AddScoped<IBookingsService, BookingsService>();
-
-            services.AddHostedService<BookingHandlingService>();
-
-            services.AddLogging();
-
-            var dbName = Guid.NewGuid().ToString();
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseInMemoryDatabase(dbName));
-
-            ServiceProvider serviceProvider = services.BuildServiceProvider();
-
-            return serviceProvider;
-        }
-
         public static IEnumerable<object[]> AddEvents()
         {
             DateTime now = DateTime.Now.AddDays(1);

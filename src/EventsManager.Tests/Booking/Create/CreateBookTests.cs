@@ -4,6 +4,7 @@ using EventManager.DTOs.Events;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
+using EventManager.Services.Tests;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Booking.Create
@@ -15,15 +16,16 @@ namespace EventManager.Tests.Booking.Create
         [Trait("SubCategory", "Create")]
         public async Task Test_CreateTwoBookingsForOneEvent(NewEventDto eventDto)
         {
-            var provider = GetProviderService();
+            CancellationTokenSource cts = new CancellationTokenSource();
+            var provider = TestingServicesProvider.GetServicesProvider();
 
             IEventsService eventsService = provider.GetRequiredService<IEventsService>();
             IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
 
-            Guid eventId = await eventsService.AddNewAsync(eventDto);
+            Guid eventId = await eventsService.AddNewAsync(eventDto, cts.Token);
 
-            BookingAcceptedDto accepted1 = await bookingsService.CreateBookingAsync(eventId);
-            BookingAcceptedDto accepted2 = await bookingsService.CreateBookingAsync(eventId);
+            BookingAcceptedDto accepted1 = await bookingsService.CreateBookingAsync(eventId, cts.Token);
+            BookingAcceptedDto accepted2 = await bookingsService.CreateBookingAsync(eventId, cts.Token);
 
             Assert.False(accepted1.Id == accepted2.Id);
         }
@@ -32,14 +34,15 @@ namespace EventManager.Tests.Booking.Create
         [Trait("SubCategory", "Create")]
         public async Task Test_CreateBookingWithNotExistentEvent()
         {
-            var provider = GetProviderService();
+            CancellationTokenSource cts = new CancellationTokenSource();
+            var provider = TestingServicesProvider.GetServicesProvider();
 
             IEventsService eventsService = provider.GetRequiredService<IEventsService>();
             IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
 
             Guid id = Guid.Empty;
 
-            await Assert.ThrowsAsync<NotFoundException>( () => bookingsService.CreateBookingAsync(id) );
+            await Assert.ThrowsAsync<NotFoundException>(() => bookingsService.CreateBookingAsync(id, cts.Token));
         }
 
         [Theory]
@@ -47,18 +50,19 @@ namespace EventManager.Tests.Booking.Create
         [Trait("SubCategory", "Create")]
         public async Task Test_CreateBookingWithDeletedEvent(NewEventDto eventDto)
         {
-            var provider = GetProviderService();
+            CancellationTokenSource cts = new CancellationTokenSource();
+            var provider = TestingServicesProvider.GetServicesProvider();
 
             IEventsService eventsService = provider.GetRequiredService<IEventsService>();
             IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
 
-            Guid eventId = await eventsService.AddNewAsync(eventDto);
+            Guid eventId = await eventsService.AddNewAsync(eventDto, cts.Token);
 
-            var acceptedBookingDto = await bookingsService.CreateBookingAsync(eventId);
-            await eventsService.DeleteAsync(eventId);
+            var acceptedBookingDto = await bookingsService.CreateBookingAsync(eventId, cts.Token);
+            await eventsService.DeleteAsync(eventId, cts.Token);
 
             Assert.Equal(BookingStatus.Pending, acceptedBookingDto.Status);
-            await Assert.ThrowsAsync<NotFoundException>( () => bookingsService.CreateBookingAsync(eventId) );
+            await Assert.ThrowsAsync<NotFoundException>(() => bookingsService.CreateBookingAsync(eventId, cts.Token));
         }
     }
 }
