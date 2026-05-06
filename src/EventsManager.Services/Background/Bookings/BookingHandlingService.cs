@@ -50,6 +50,8 @@ namespace EventManager.Services.Background.Bookings
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
+                await Task.Delay(500);
+
                 IEventsRepository eventsRepository = scope.ServiceProvider.GetRequiredService<IEventsRepository>();
                 //IEventsService eventsService = scope.ServiceProvider.GetRequiredService<IEventsService>();
                 IBookingsRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingsRepository>();
