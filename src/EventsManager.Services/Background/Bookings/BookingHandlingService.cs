@@ -28,10 +28,10 @@ namespace EventManager.Services.Background.Bookings
                     {
                         IBookingsRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingsRepository>();
 
-                        Expression<Func<BookingModel, bool>> filters = (BookingModel b) => b.Status == BookingStatus.Pending || b.EventId == null;
+                        Expression<Func<BookingModel, bool>> filters = (BookingModel b) => b.Status == BookingStatus.Pending || (b.EventId == null && b.Status != BookingStatus.Rejected);
 
                         var pendingBookings = await bookingRepository.GetAllAsync(filters, stoppingToken);
-                        var pendingTasks = pendingBookings.Select(pb => ProcessBookingsAsync(pb, stoppingToken)); 
+                        var pendingTasks = pendingBookings.Select(pb => ProcessBookingsAsync(pb, stoppingToken));
 
                         await Task.WhenAll(pendingTasks);
                     }
@@ -44,6 +44,8 @@ namespace EventManager.Services.Background.Bookings
                 {
                     _logger.LogError(ex, ex.Message);
                 }
+
+                await Task.Delay(500, stoppingToken);
             }
         }
 
@@ -51,10 +53,10 @@ namespace EventManager.Services.Background.Bookings
             BookingModel booking,
             CancellationToken stoppingToken)
         {
+            await Task.Delay(500);
+
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                await Task.Delay(500);
-
                 IEventsRepository eventsRepository = scope.ServiceProvider.GetRequiredService<IEventsRepository>();
                 IBookingsRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingsRepository>();
 
@@ -66,34 +68,26 @@ namespace EventManager.Services.Background.Bookings
                 {
                     await _processingSemaphore.WaitAsync();
 
-                    eventById = await eventsRepository.GetByIdAsync(booking.EventId.Value, stoppingToken);
-
-                    bookingProcessedDto = bookingProcessedDto with
+                    if (booking.EventId == null)
                     {
-                        Status = BookingStatus.Confirmed
-                    };
-                }
-                catch (NotFoundException)
-                {
-                    _logger.LogWarning("Event with id = {EventId} does not exists!", booking.EventId);
-
-                    bookingProcessedDto = bookingProcessedDto with
+                        bookingProcessedDto = bookingProcessedDto with
+                        {
+                            Status = BookingStatus.Rejected
+                        };
+                    }
+                    else
                     {
-                        Status = BookingStatus.Rejected
-                    };
+                        eventById = await eventsRepository.GetByIdAsync(booking.EventId.Value, stoppingToken);
+
+                        bookingProcessedDto = bookingProcessedDto with
+                        {
+                            Status = BookingStatus.Confirmed
+                        };
+                    }
                 }
                 catch (OperationCanceledException)
                 {
                     _logger.LogInformation("This booking can not be processed right now because the operation had been canceled!");
-                }
-                catch(Exception ex)
-                {
-                    _logger.LogError(ex, ex.Message);
-
-                    bookingProcessedDto = bookingProcessedDto with
-                    {
-                        Status = BookingStatus.Rejected
-                    };
                 }
                 finally
                 {

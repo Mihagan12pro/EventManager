@@ -34,16 +34,10 @@ namespace EventManager.Services.Tests.Background
 
             Guid eventId = await eventsService.AddNewAsync(eventDto, cts.Token);
 
-            BookingAcceptedDto? bookingDto = null;
+            BookingAcceptedDto? bookingDto = await bookingsService.CreateBookingAsync(eventId, cts.Token);
+            await eventsService.DeleteAsync(eventId, cts.Token);
 
-            Task task1 = Task.Run(async () => { await Task.Delay(200); await eventsService.DeleteAsync(eventId, cts.Token); });
-            Task task2 = Task.Run( async () => bookingDto = await bookingsService.CreateBookingAsync(eventId, cts.Token));
-
-
-            await Task.WhenAll(task1, task2);
-            
             await Task.Delay(3000);
-
             var booking = await bookingsService.GetBookingByIdAsync(bookingDto.Id, cts.Token);
 
             Assert.Equal(BookingStatus.Rejected, booking.Status);

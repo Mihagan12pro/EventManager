@@ -10,7 +10,7 @@ namespace EventManager.DTOs.Bookings
     /// <param name="ProcessedAt"></param>
     /// <param name="Status"></param>
     public record GetBookingDto(
-        Guid EventId, 
+        Guid? EventId, 
         DateTime CreatedAt,
         DateTime? ProcessedAt,
         BookingStatus Status);

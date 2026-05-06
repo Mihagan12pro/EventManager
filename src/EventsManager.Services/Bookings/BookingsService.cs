@@ -13,8 +13,6 @@ namespace EventManager.Services.Bookings
         private readonly IBookingsRepository _bookingRepository;
         private readonly IEventsRepository _eventsRepository;
 
-        private readonly SemaphoreSlim _semaphore;
-
         public async Task<BookingAcceptedDto> CreateBookingAsync(
             Guid eventId, 
             CancellationToken cancellationToken)
@@ -26,24 +24,15 @@ namespace EventManager.Services.Bookings
             if (@event == null)
                 throw new NotFoundException($"Event with id = {eventId} does not exists!");
 
-            try
-            {
-                await _semaphore.WaitAsync();
+            if (@event.AvailableSeats == 0)
+                throw new NoAvailableSeatsException();
 
-                if (@event.AvailableSeats == 0)
-                    throw new NoAvailableSeatsException();
+            Guid id = await _bookingRepository.CreateNewBookingAsync(eventId, cancellationToken);
 
-                Guid id = await _bookingRepository.CreateNewBookingAsync(eventId, cancellationToken);
-
-                result = new BookingAcceptedDto(
-                    id,
-                    eventId, 
-                    BookingStatus.Pending);
-            }
-            finally
-            {
-                _semaphore.Release();
-            }
+            result = new BookingAcceptedDto(
+                id,
+                eventId,
+                BookingStatus.Pending);
 
             return result;
         }
@@ -55,7 +44,7 @@ namespace EventManager.Services.Bookings
             var result = await _bookingRepository.GetAllAsync(filtersDto, cancellationToken);
 
             return result.Select(b => new GetBookingDto(
-                b.EventId.Value, 
+                b.EventId, 
                 b.CreatedAt, 
                 b.ProcessedAt, 
                 b.Status));
@@ -70,7 +59,7 @@ namespace EventManager.Services.Bookings
                 throw new NotFoundException($"Booking with id = {bookingId} does not exists!");
 
             return new GetBookingDto(
-                booking.EventId.Value, 
+                booking.EventId, 
                 booking.CreatedAt,
                 booking.ProcessedAt,
                 booking.Status);
@@ -82,8 +71,6 @@ namespace EventManager.Services.Bookings
         {
             _eventsRepository = eventsRepository;
             _bookingRepository = bookingRepository;
-
-            _semaphore = new SemaphoreSlim(1, 1);
         }
     }
 }

@@ -44,11 +44,11 @@ namespace EventManager.DataAccess.PostgreSQL.Booking
                 };
 
                 await _dbContext.Bookings.AddAsync(booking, cancellationToken);
-
-                await _dbContext.SaveChangesAsync(cancellationToken);
             }
             finally
             {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+
                 _semaphore.Release();
             }
 
@@ -98,15 +98,15 @@ namespace EventManager.DataAccess.PostgreSQL.Booking
             BookingProcessedDto bookingProcessedDto, 
             CancellationToken cancellationToken)
         {
-            BookingModel? booking = await _dbContext.Bookings.FirstOrDefaultAsync(b => b.Id == bookingProcessedDto.Id, cancellationToken);
+            BookingModel booking = await _dbContext.Bookings.FirstOrDefaultAsync(b => b.Id == bookingProcessedDto.Id, cancellationToken);
 
             if (bookingProcessedDto.Status != BookingStatus.Pending)
             {
-                booking?.Status = bookingProcessedDto.Status;
-                booking?.ProcessedAt = DateTime.UtcNow;
+                booking.Status = bookingProcessedDto.Status;
+                booking.ProcessedAt = DateTime.UtcNow;
+
+                await _dbContext.SaveChangesAsync(cancellationToken);
             }
-            
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }
