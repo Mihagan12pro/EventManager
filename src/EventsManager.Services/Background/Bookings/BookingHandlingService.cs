@@ -8,6 +8,7 @@ using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Linq.Expressions;
 
 namespace EventManager.Services.Background.Bookings
 {
@@ -27,7 +28,9 @@ namespace EventManager.Services.Background.Bookings
                     {
                         IBookingsRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingsRepository>();
 
-                        var pendingBookings = await bookingRepository.GetAllAsync(new BookingFiltersDto(BookingStatus.Pending, null, null), stoppingToken);
+                        Expression<Func<BookingModel, bool>> filters = (BookingModel b) => b.Status == BookingStatus.Pending || b.EventId == null;
+
+                        var pendingBookings = await bookingRepository.GetAllAsync(filters, stoppingToken);
                         var pendingTasks = pendingBookings.Select(pb => ProcessBookingsAsync(pb, stoppingToken)); 
 
                         await Task.WhenAll(pendingTasks);
@@ -53,7 +56,6 @@ namespace EventManager.Services.Background.Bookings
                 await Task.Delay(500);
 
                 IEventsRepository eventsRepository = scope.ServiceProvider.GetRequiredService<IEventsRepository>();
-                //IEventsService eventsService = scope.ServiceProvider.GetRequiredService<IEventsService>();
                 IBookingsRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingsRepository>();
 
                 EventModel? eventById = null;
@@ -64,7 +66,7 @@ namespace EventManager.Services.Background.Bookings
                 {
                     await _processingSemaphore.WaitAsync();
 
-                    eventById = await eventsRepository.GetByIdAsync(booking.EventId, stoppingToken);
+                    eventById = await eventsRepository.GetByIdAsync(booking.EventId.Value, stoppingToken);
 
                     bookingProcessedDto = bookingProcessedDto with
                     {

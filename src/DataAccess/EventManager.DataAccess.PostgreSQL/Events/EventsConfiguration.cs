@@ -10,7 +10,8 @@ namespace EventManager.DataAccess.PostgreSQL.Events
         {
             builder.HasMany(e => e.Bookings)
                 .WithOne(b => b.Event)
-                .HasForeignKey(b => b.EventId);
+                .HasForeignKey(b => b.EventId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.Property(e => e.Title)
                     .HasColumnType("citext");

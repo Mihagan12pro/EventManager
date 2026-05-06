@@ -1,14 +1,12 @@
 ﻿using EventManager.Domain.Bookings.Enums;
-using EventManager.Domain.Events;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
-using EventManager.Services.Exceptions.WebApi.Client.Conflict;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace EventManager.Tests.Booking.Background
+namespace EventManager.Services.Tests.Background
 {
     public partial class BackgroundBookingHandlingTests
     {
@@ -34,19 +32,19 @@ namespace EventManager.Tests.Booking.Background
                 DateTime.Now.AddMonths(5).AddHours(10),
                 5);
 
-            Guid eventId = await eventsService.AddNewAsync(eventDto);
+            Guid eventId = await eventsService.AddNewAsync(eventDto, cts.Token);
 
             BookingAcceptedDto? bookingDto = null;
 
-            Task task1 = Task.Run(async () => { await Task.Delay(200); await eventsService.DeleteAsync(eventId); });
-            Task task2 = Task.Run( async () => bookingDto = await bookingsService.CreateBookingAsync(eventId));
+            Task task1 = Task.Run(async () => { await Task.Delay(200); await eventsService.DeleteAsync(eventId, cts.Token); });
+            Task task2 = Task.Run( async () => bookingDto = await bookingsService.CreateBookingAsync(eventId, cts.Token));
 
 
             await Task.WhenAll(task1, task2);
             
             await Task.Delay(3000);
 
-            var booking = await bookingsService.GetBookingByIdAsync(bookingDto.Id);
+            var booking = await bookingsService.GetBookingByIdAsync(bookingDto.Id, cts.Token);
 
             Assert.Equal(BookingStatus.Rejected, booking.Status);
         }

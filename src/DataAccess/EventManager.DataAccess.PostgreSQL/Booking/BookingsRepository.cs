@@ -4,6 +4,7 @@ using EventManager.Domain.Events;
 using EventManager.DTOs.Bookings;
 using EventManager.Services.Bookings;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace EventManager.DataAccess.PostgreSQL.Booking
 {
@@ -73,6 +74,13 @@ namespace EventManager.DataAccess.PostgreSQL.Booking
             {
                 bookings = bookings.Where(b => b.CreatedAt == bookingFiltersDto.ProcessedAt);
             }
+
+            return bookings;
+        }
+
+        public async Task<IEnumerable<BookingModel>> GetAllAsync(Expression<Func<BookingModel, bool>> filters, CancellationToken cancellationToken)
+        {
+            var bookings = _dbContext.Bookings.Where(filters);
 
             return bookings;
         }

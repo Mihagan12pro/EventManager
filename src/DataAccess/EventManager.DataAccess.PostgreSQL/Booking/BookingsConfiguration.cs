@@ -8,7 +8,8 @@ namespace EventManager.DataAccess.PostgreSQL.Booking
     {
         public void Configure(EntityTypeBuilder<BookingModel> builder)
         {
-            
+            builder.Property(b => b.EventId)
+                .IsRequired(false);
         }
     }
 }

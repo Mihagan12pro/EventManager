@@ -1,5 +1,6 @@
 ﻿using EventManager.Domain.Bookings;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EventManager.Domain.Events
 {
@@ -19,6 +20,7 @@ namespace EventManager.Domain.Events
 
         public int AvailableSeats { get; set; }
 
+        [JsonIgnore]
         public List<BookingModel> Bookings { get; set; } = null!;
 
 

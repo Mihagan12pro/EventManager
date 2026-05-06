@@ -1,5 +1,6 @@
 ﻿using EventManager.Domain.Bookings;
 using EventManager.DTOs.Bookings;
+using System.Linq.Expressions;
 
 namespace EventManager.Services.Bookings
 {
@@ -19,6 +20,10 @@ namespace EventManager.Services.Bookings
 
         Task<IEnumerable<BookingModel>> GetAllAsync(
             BookingFiltersDto bookingFiltersDto, 
+            CancellationToken cancellationToken);
+
+        Task<IEnumerable<BookingModel>> GetAllAsync(
+            Expression<Func<BookingModel, bool>> filters, 
             CancellationToken cancellationToken);
     }
 }

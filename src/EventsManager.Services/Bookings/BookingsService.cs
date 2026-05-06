@@ -55,7 +55,7 @@ namespace EventManager.Services.Bookings
             var result = await _bookingRepository.GetAllAsync(filtersDto, cancellationToken);
 
             return result.Select(b => new GetBookingDto(
-                b.EventId, 
+                b.EventId.Value, 
                 b.CreatedAt, 
                 b.ProcessedAt, 
                 b.Status));
@@ -70,7 +70,7 @@ namespace EventManager.Services.Bookings
                 throw new NotFoundException($"Booking with id = {bookingId} does not exists!");
 
             return new GetBookingDto(
-                booking.EventId, 
+                booking.EventId.Value, 
                 booking.CreatedAt,
                 booking.ProcessedAt,
                 booking.Status);
