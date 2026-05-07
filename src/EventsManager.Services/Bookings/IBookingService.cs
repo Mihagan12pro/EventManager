@@ -5,12 +5,16 @@ namespace EventManager.Services.Bookings
 {
     public interface IBookingsService
     {
-        Task<BookingAcceptedDto> CreateBookingAsync(Guid eventId);
+        Task<BookingAcceptedDto> CreateBookingAsync(
+            Guid eventId, 
+            CancellationToken cancellationToken);
 
-        Task<Booking> GetBookingByIdAsync(Guid bookingId);
+        Task<GetBookingDto> GetBookingByIdAsync(
+            Guid bookingId, 
+            CancellationToken cancellationToken);
 
-        Task<IEnumerable<Booking>> GetAllAsync(BookingFiltersDto filtersDto);
-
-        Task Update(Booking booking);
+        Task<IEnumerable<GetBookingDto>> GetAllAsync(
+            BookingFiltersDto filtersDto, 
+            CancellationToken cancellationToken);
     }
 }

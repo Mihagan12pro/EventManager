@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\**" />
+    <Content Remove="Controllers\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <None Remove="Controllers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CSharpFunctionalExtensions" Version="3.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.2" />
@@ -15,6 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataAccess\EventManager.DataAccess.PostgreSQL\EventManager.DataAccess.PostgreSQL.csproj" />
+    <ProjectReference Include="..\EventManager.API\EventManager.API.csproj" />
     <ProjectReference Include="..\EventManager.Domain\EventManager.Domain.csproj" />
     <ProjectReference Include="..\EventManager.DTOs\EventManager.DTOs.csproj" />
     <ProjectReference Include="..\EventsManager.Services\EventManager.Services.csproj" />

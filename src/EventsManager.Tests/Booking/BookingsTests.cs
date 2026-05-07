@@ -1,32 +1,10 @@
 ﻿using EventManager.DTOs.Events;
-using EventManager.Services.Background.Bookings;
-using EventManager.Services.Bookings;
-using EventManager.Services.Events;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Booking
 {
     [Trait("Category", "Bookings")]
     public class BookingsTests
     {
-        public static IServiceProvider GetProviderService()
-        {
-            IServiceCollection services = new ServiceCollection();
-
-            //services.AddScoped<IEventsService, EventsService>();
-            //services.AddScoped<IBookingsService, BookingsService>();
-            services.AddSingleton<IEventsService, EventsService>();//Temporary solution
-            services.AddSingleton<IBookingsService, BookingsService>();//Temporary solution
-
-            services.AddHostedService<BookingHandlingService>();
-
-            services.AddLogging();
-
-            ServiceProvider serviceProvider = services.BuildServiceProvider();
-
-            return serviceProvider;
-        }
-
         public static IEnumerable<object[]> AddEvents()
         {
             DateTime now = DateTime.Now.AddDays(1);

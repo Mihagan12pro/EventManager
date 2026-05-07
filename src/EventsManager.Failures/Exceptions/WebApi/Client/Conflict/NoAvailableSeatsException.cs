@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EventManager.Services.Exceptions.WebApi.Client.Conflict
+﻿namespace EventManager.Services.Exceptions.WebApi.Client.Conflict
 {
     public class NoAvailableSeatsException : ConflictException
     {

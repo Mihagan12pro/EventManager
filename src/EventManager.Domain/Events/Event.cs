@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EventManager.Domain.Bookings;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EventManager.Domain.Events
 {
-    public class Event
+    public class EventModel
     {
-        public required Guid Id { get; set; }
+        public Guid Id { get; set; }
 
         public required string Title { get; set; }
 
@@ -17,6 +19,10 @@ namespace EventManager.Domain.Events
         public required int TotalSeats { get; set; }
 
         public int AvailableSeats { get; set; }
+
+        [JsonIgnore]
+        public List<BookingModel> Bookings { get; set; } = null!;
+
 
         private readonly Lock _lock = new Lock();
 

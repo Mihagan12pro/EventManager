@@ -48,11 +48,10 @@ namespace EventManager.Tests.Events.Put
             return
             [
                 [
-                    0,
                     new NewEventDto(
                         "Свадьба сына",
-                        DateTime.Now.AddDays(1),
-                        DateTime.Now.AddDays(1).AddHours(10),
+                        DateTime.Now.AddDays(10),
+                        DateTime.Now.AddDays(10).AddHours(10),
                         10,
                         "Роскошная свадьба Степана и Марии")
                 ]

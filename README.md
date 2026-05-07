@@ -108,7 +108,7 @@ Features from the sprint3:
 	classes from this library will be used in the code.
 
 
-Features from the last brunch (sprint4):
+Features from the sprint4:
 1. Modify the Event
 	- Add TotalSeats property (shows total count of seats at this event)
 	- Add AvailableSeats property (shows count of free seats at this event)
@@ -133,3 +133,10 @@ Features from the last brunch (sprint4):
    "Pending" to "Rejected". In finally code block object of the SemaphoreSlim class invokes the Release() method.
 
 4. Remove the EventManager.Queues project.
+
+
+Features from the last branch(sprint5):
+1. Use the PostgreSQL database management system from storing data. If you want to run this application, you have to install PostgreSQL to your device
+2. Modify appsetting.json: add connection string. If PostgreSQL on your device had another parameters (e.g. another port) you can edit conncection string
+3. If your PostgreSQL server does not contains the eventmanager database created new database, the application will create it automatically via Database.EnsureCreated
+4. Modify tests project: now it contains in-memory provider for creating test cases 

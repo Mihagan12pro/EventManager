@@ -1,18 +1,24 @@
 ﻿using EventManager.Domain.Bookings.Enums;
+using EventManager.Domain.Events;
+using System.Text.Json.Serialization;
 
 namespace EventManager.Domain.Bookings
 {
-    public class Booking
+    public class BookingModel
     {
-        public required Guid Id { get; set; }
+        public Guid Id { get; set; }
 
-        public required Guid EventId { get; set; }
+        public Guid? EventId { get; set; }
 
         public required DateTime CreatedAt { get; set; }
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public required BookingStatus Status { get; set; }
 
         public DateTime? ProcessedAt { get; set; }
+
+        [JsonIgnore]
+        public EventModel Event { get; set; } = null!;
 
         public void Confirm()
             => Status = BookingStatus.Confirmed;

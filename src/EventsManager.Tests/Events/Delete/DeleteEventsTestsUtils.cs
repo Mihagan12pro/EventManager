@@ -6,7 +6,7 @@ namespace EventManager.Tests.Events.Delete
     {
         public static IEnumerable<object[]> AddEventsForDeleting()
         {
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.Now.AddDays(10);
 
             return 
             [

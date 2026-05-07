@@ -1,149 +1,116 @@
-﻿using CSharpFunctionalExtensions;
-using EventManager.Domain.Events;
+﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
+using EventManager.Services.Extensions.Validation;
+using EventsManager.Failures.Errors.Collections;
+using FluentValidation;
 using Shared;
 
 namespace EventManager.Services.Events
 {
     internal class EventsService : IEventsService
     {
-        private readonly List<Event> _events = new List<Event>();
+        private readonly IEventsRepository _eventsRepository;
 
-        public async Task<Guid> AddNewAsync(NewEventDto request)
+        private readonly IValidator<NewEventDto> _newEventValidator;
+        private readonly IValidator<PutEventDto> _putEventValidator;
+
+        public async Task<Guid> AddNewAsync(NewEventDto request, CancellationToken cancellationToken)
         {
-            DateTime now = DateTime.Now;
+            var validation = _newEventValidator.Validate(request);
 
-            if (!request.StartAt.HasValue || !request.EndAt.HasValue)
-                throw new BadRequestException("Start date time and End date time are required fields!");
-
-            DateTime start = request.StartAt.Value;
-            DateTime end = request.EndAt.Value;
-            int totalSeats = request.TotalSeats.Value;
-
-            DateSpan startSpan = new DateSpan(start, now);
-            DateSpan endSpan = new DateSpan(end, now);
-
-            if (startSpan.Day <= 0 && startSpan.Year <= 0 && startSpan.Month <= 0)
-                throw new BadRequestException("Too late!");
-
-            if (endSpan.Day <= 0 && endSpan.Year <= 0 && endSpan.Month <= 0)
-                throw new BadRequestException("Too late!");
-
-            if (totalSeats < 1)
-                throw new BadRequestException("Count of total seats must be greater than zero!");
-
-            if (start >= end)
-                throw new BadRequestException("Start date time must be greater than end date time!");
-
-
-            Event createdEvent = new Event()
+            if (!validation.IsValid)
             {
-                Id = Guid.NewGuid(),
+                ErrorsCollection errors = new ErrorsCollection(validation.Errors.Select(vf => vf.ToError()));
 
-                Title = request.Title,
+                throw new BadRequestException(errors);
+            }
 
-                StartAt = start,
+            Guid id = await _eventsRepository.AddNewAsync(request, cancellationToken);
 
-                EndAt = end,
-
-                TotalSeats = totalSeats,
-
-                AvailableSeats = totalSeats,
-
-                Description = request.Description
-            };
-
-            _events.Add(createdEvent);
-
-            return createdEvent.Id;
+            return id;
         }
 
-        public async Task<string> DeleteAsync(Guid id)
+        public async Task<string> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            Event? eventById = _events.FirstOrDefault(e => e.Id == id);
+            EventModel? @event = await _eventsRepository.GetByIdAsync(id, cancellationToken);
 
-            if (eventById == null)
-                throw new NotFoundException($"Event with id = '{id}' was not found!");
+            if (@event == null)
+                throw new NotFoundException($"Event with id = {id} does not exists!");
 
-            _events.Remove(eventById);
+            await _eventsRepository.DeleteAsync(id, cancellationToken);
 
-            return "Event had been deleted!";
+            return $"Event with id = {id} had been deleted!";
         }
 
-        public async Task<Event> GetEventByIdAsync(Guid id)
+        public async Task<GetEventDto> GetEventByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            Event? eventById = _events.FirstOrDefault(e => e.Id == id);
+            EventModel? @event = await _eventsRepository.GetByIdAsync(id, cancellationToken);
 
-            if (eventById == null)
-                throw new NotFoundException($"Event with id = '{id}' was not found!");
+            if (@event == null)
+                throw new NotFoundException($"Event with id = {id} does not exists!");
 
-            return eventById;
+            return new GetEventDto(
+                @event.Id,
+                @event.Title,
+                @event.StartAt,
+                @event.EndAt,
+                @event.Description, 
+                @event.TotalSeats,
+                @event.AvailableSeats
+            );
         }
 
         public async Task<PaginatedEventsDto> GetEventsAsync(
             string? title,
             PaginationDto pagination,
-            DateRange dateRange)
+            DateRange dateRange, 
+            CancellationToken cancellationToken)
         {
             if (pagination.Page < 0 || pagination.PageSize < 0)
                 throw new BadRequestException("Pagination parameters must be greater than zero!");
 
-            IEnumerable<Event> filteredEvents = _events;
+            GetEventsWithFiltersDto eventsWithFiltersDto = new GetEventsWithFiltersDto(title, pagination, dateRange);
 
-            if (dateRange.UpperBound.HasValue || dateRange.LowerBound.HasValue)
-                filteredEvents = filteredEvents.Where(e => dateRange.CheckDateRange(e).IsSuccess);
-
-            if (title != null)
-                filteredEvents = filteredEvents.Where(e => e.Title.ToLower().Contains(title.ToLower()));
-
-            int totalCount = filteredEvents.Count();
-
-
-            var eventsList = PaginationMaster<Event>.DoPagination(filteredEvents, pagination)
-                .ToList();
-
-            PaginatedEventsDto result = new PaginatedEventsDto(
-                totalCount, 
-                eventsList.AsReadOnly(),
-                pagination.Page,
-                pagination.PageSize);
-
-            return result;
+            return await _eventsRepository.GetPaginatedEventsAsync(eventsWithFiltersDto, cancellationToken);
         }
 
-        public async Task<string> UpdateByPutAsync(Guid id, NewEventDto putEvent)
+        public async Task<string> UpdateByPutAsync(
+            Guid id,
+            PutEventDto putEvent,
+            CancellationToken cancellationToken)
         {
-            DateTime now = DateTime.Now;
-
-            DateTime start = putEvent.StartAt!.Value;
-            DateTime end = putEvent.EndAt!.Value;
-
-            DateSpan startSpan = new DateSpan(start, now);
-            DateSpan endSpan = new DateSpan(end, now);
-
-            Event? eventById = _events.FirstOrDefault(e => e.Id == id);
+            EventModel? eventById = await _eventsRepository.GetByIdAsync(id, cancellationToken);
 
             if (eventById == null)
                 throw new NotFoundException($"Event with id = '{id}' was not found!");
 
-            if (startSpan.Day <= 0 && startSpan.Year <= 0 && startSpan.Month <= 0)
-                throw new BadRequestException("Too late!");
+            var validation = _putEventValidator.Validate(putEvent);
 
-            if (endSpan.Day <= 0 && endSpan.Year <= 0 && endSpan.Month <= 0)
-                throw new BadRequestException("Too late!");
+            if (!validation.IsValid)
+            {
+                ErrorsCollection errors = new ErrorsCollection(validation.Errors.Select(vf => vf.ToError()));
 
-            if (putEvent.StartAt >= putEvent.EndAt)
-                throw new BadRequestException("End time must be greater than start time!");
+                throw new BadRequestException(errors);
+            }
 
-            eventById.StartAt = putEvent.StartAt!.Value;
-            eventById.EndAt = putEvent.EndAt!.Value;
-            eventById.Title = putEvent.Title;
-            eventById.Description = putEvent.Description;
+            await _eventsRepository.CompleteUpdateAsync(id, putEvent, cancellationToken);
 
-            return "Event had been updated!";
+            return $"Event with id = {id} had been updated!";
+        }
+
+
+        public EventsService(
+            IEventsRepository eventsRepository, 
+            IValidator<NewEventDto> newEventValidator,
+            IValidator<PutEventDto> putEventValidator)
+        {
+            _eventsRepository = eventsRepository;
+
+            _newEventValidator = newEventValidator;
+            _putEventValidator = putEventValidator;
         }
     }
 }

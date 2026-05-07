@@ -4,6 +4,8 @@ using EventManager.DTOs.Shared;
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
+using EventManager.Services.Tests;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Events.Get
 {
@@ -13,26 +15,30 @@ namespace EventManager.Tests.Events.Get
         [Trait("SubCategory", "Get")]
         public async Task Test_Get_By_Id()
         {
-            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
-            DateTime datetime = DateTime.Now.AddDays(1);
+            var cto = new CancellationTokenSource();
+
+            var provider = TestingServicesProvider.GetServicesProvider();
+
+            IEventsService eventsService = provider.GetRequiredService<IEventsService>();
+            DateTime datetime = DateTime.Now.AddDays(10);
 
             var newEvent = new NewEventDto(
                 "Юбилей деда",
 
                  datetime,
 
-                 datetime.AddHours(10), 10);
+                 datetime.AddHours(10), 
+                 
+                 10);
 
-            Guid id = await eventsService.AddNewAsync(newEvent);
+            Guid id = await eventsService.AddNewAsync(newEvent, cto.Token);
             Guid hiddenId = Guid.Empty;
 
-            var resultSuccessful = (await eventsService.GetEventByIdAsync(id));
-          
-            Assert.Equal(typeof(Event), resultSuccessful.GetType());
+            var resultSuccessful = await eventsService.GetEventByIdAsync(id, cto.Token);
 
-            var resultFailed = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.GetEventByIdAsync(hiddenId));
+            Assert.NotNull(resultSuccessful);
 
-            await eventsService.DeleteAsync(id);
+            var resultFailed = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.GetEventByIdAsync(hiddenId, cto.Token));
         }
 
         [Theory]
@@ -46,48 +52,63 @@ namespace EventManager.Tests.Events.Get
             int expectedTotalCount,
             int expectedCountOnPage)
         {
+            var cto = new CancellationTokenSource();
+            var provider = TestingServicesProvider.GetServicesProvider();
+
             DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
-            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
+            var eventsService = provider.GetRequiredService<IEventsService>();
 
             await eventsService.AddNewAsync(
                  new NewEventDto(
                      "Юбилей",
                      dateTime.AddDays(1),
-                     dateTime.AddDays(2), 10)
+                     dateTime.AddDays(2), 
+                     10),
+
+                 cto.Token
                  );
 
             await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Юбилей",
                     dateTime.AddDays(1),
-                    dateTime.AddDays(2), 10)
+                    dateTime.AddDays(2),
+                    10),
+
+                 cto.Token
                 );
 
             await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Юбилей",
                     dateTime.AddDays(2),
-                    dateTime.AddDays(3), 10)
+                    dateTime.AddDays(3),
+                    10),
+
+                 cto.Token
                 );
 
             await eventsService.AddNewAsync(
                 new NewEventDto(
                     "Корпоратив",
                     dateTime.AddDays(2),
-                    dateTime.AddDays(3), 10)
+                    dateTime.AddDays(3), 
+                    10),
+
+                 cto.Token
                 );
 
             var result = await eventsService.GetEventsAsync(
-              title,
-              paginationDto,
-              new DateRange(
-                  start,
-                  false,
-                  end,
-                  false)
-              );
+                title,
+              
+                paginationDto,
 
-            Assert.Equal(expectedCountOnPage, result.Events.Count);
+                new DateRange(start, end),
+
+                cto.Token
+            );
+
+            Assert.Equal(expectedCountOnPage, result.Events.Count());
             Assert.Equal(expectedTotalCount, result.TotalCount);
         }
 
@@ -96,12 +117,16 @@ namespace EventManager.Tests.Events.Get
         [Trait("SubCategory", "Get")]
         public async Task Test_Fail_Pagination(int page, int pageSize)
         {
-            var eventsService = (IEventsService)Activator.CreateInstance(_eventsServiceType);
+            var cto = new CancellationTokenSource();
+            var provider = TestingServicesProvider.GetServicesProvider();
+
+            var eventsService = provider.GetRequiredService<IEventsService>();
 
             var exception = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.GetEventsAsync(
                     string.Empty,
                     new PaginationDto(page, pageSize),
-                    new DateRange(null, false, null, false)
+                    new DateRange(null, null),
+                    cto.Token
                 )
             );
         }

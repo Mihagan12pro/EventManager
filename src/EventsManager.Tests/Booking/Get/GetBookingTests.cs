@@ -1,5 +1,6 @@
 ﻿using EventManager.Services.Bookings;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
+using EventManager.Services.Tests;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Booking.Get
@@ -10,10 +11,12 @@ namespace EventManager.Tests.Booking.Get
         [Trait("SubCategory", "Get")]
         public async Task Test_GetNotExistentBooking()
         {
-            var provider = GetProviderService();
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+            var provider = TestingServicesProvider.GetServicesProvider();
 
             IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
-            await Assert.ThrowsAsync<NotFoundException>(() => bookingsService.GetBookingByIdAsync(Guid.Empty));
+            await Assert.ThrowsAsync<NotFoundException>(() => bookingsService.GetBookingByIdAsync(Guid.Empty, cts.Token));
         }
     }
 }

@@ -1,0 +1,76 @@
+﻿using EventManager.Domain.Bookings;
+using EventManager.Domain.Bookings.Enums;
+using EventManager.Domain.Events;
+using EventManager.DTOs.Bookings;
+using EventManager.Services.Events;
+using EventManager.Services.Exceptions.WebApi.Client.Conflict;
+using EventManager.Services.Exceptions.WebApi.Client.NotFound;
+
+namespace EventManager.Services.Bookings
+{
+    internal class BookingsService : IBookingsService
+    {
+        private readonly IBookingsRepository _bookingRepository;
+        private readonly IEventsRepository _eventsRepository;
+
+        public async Task<BookingAcceptedDto> CreateBookingAsync(
+            Guid eventId, 
+            CancellationToken cancellationToken)
+        {
+            Guid? bookingId;
+            BookingAcceptedDto? result = null;
+
+            EventModel @event = await _eventsRepository.GetByIdAsync(eventId, cancellationToken);
+            if (@event == null)
+                throw new NotFoundException($"Event with id = {eventId} does not exists!");
+
+            if (@event.AvailableSeats == 0)
+                throw new NoAvailableSeatsException();
+
+            Guid id = await _bookingRepository.CreateNewBookingAsync(eventId, cancellationToken);
+
+            result = new BookingAcceptedDto(
+                id,
+                eventId,
+                BookingStatus.Pending);
+
+            return result;
+        }
+
+        public async Task<IEnumerable<GetBookingDto>> GetAllAsync(
+            BookingFiltersDto filtersDto,
+            CancellationToken cancellationToken)
+        {
+            var result = await _bookingRepository.GetAllAsync(filtersDto, cancellationToken);
+
+            return result.Select(b => new GetBookingDto(
+                b.EventId, 
+                b.CreatedAt, 
+                b.ProcessedAt, 
+                b.Status));
+        }
+
+        public async Task<GetBookingDto> GetBookingByIdAsync(
+            Guid bookingId,
+            CancellationToken cancellationToken)
+        {
+            BookingModel booking = await _bookingRepository.GetByIdAsync(bookingId, cancellationToken);
+            if (booking == null)
+                throw new NotFoundException($"Booking with id = {bookingId} does not exists!");
+
+            return new GetBookingDto(
+                booking.EventId, 
+                booking.CreatedAt,
+                booking.ProcessedAt,
+                booking.Status);
+        }
+
+        public BookingsService(
+            IEventsRepository eventsRepository, 
+            IBookingsRepository bookingRepository)
+        {
+            _eventsRepository = eventsRepository;
+            _bookingRepository = bookingRepository;
+        }
+    }
+}
