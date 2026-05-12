@@ -1,4 +1,5 @@
-﻿using EventManager.Domain.Events;
+﻿using EventManager.DataAccess.PostgreSQL.DbContexts;
+using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.Services.Events;
 using Microsoft.EntityFrameworkCore;

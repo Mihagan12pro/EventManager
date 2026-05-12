@@ -3,7 +3,7 @@ using EventManager.Domain.Events;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace EventManager.DataAccess.PostgreSQL
+namespace EventManager.DataAccess.PostgreSQL.DbContexts
 {
     public class AppDbContextBase : DbContext
     {

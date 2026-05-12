@@ -17,10 +17,6 @@ namespace EventManager.DataAccess.PostgreSQL.Events
                     .HasColumnType("citext");
 
             builder.HasIndex(e => e.Title);
-
-            builder.HasIndex(e => e.StartAt);
-
-            builder.HasIndex(e => e.EndAt);
         }
     }
 }

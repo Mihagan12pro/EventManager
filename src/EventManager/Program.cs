@@ -1,5 +1,7 @@
 using EventManager;
 using EventManager.DataAccess.PostgreSQL;
+using EventManager.DataAccess.PostgreSQL.DbContexts;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +32,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContextBase>();
 
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline.

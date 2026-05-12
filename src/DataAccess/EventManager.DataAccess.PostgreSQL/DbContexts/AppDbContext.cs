@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace EventManager.DataAccess.PostgreSQL
+namespace EventManager.DataAccess.PostgreSQL.DbContexts
 {
     internal class AppDbContext : AppDbContextBase
     {

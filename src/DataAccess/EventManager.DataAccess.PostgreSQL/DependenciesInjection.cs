@@ -1,4 +1,5 @@
 ﻿using EventManager.DataAccess.PostgreSQL.Booking;
+using EventManager.DataAccess.PostgreSQL.DbContexts;
 using EventManager.DataAccess.PostgreSQL.Events;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
