@@ -1,5 +1,7 @@
 ﻿using EventManager.DataAccess.PostgreSQL.Events;
 using EventManager.DTOs.Events;
+using EventManager.Services.Events;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Integration.Events
 {
@@ -9,11 +11,10 @@ namespace EventManager.Tests.Integration.Events
         public async Task Test_AddingNew()
         {
             await ResetDatabaseAsync();
-            await using var context = CreateContext();
+            var provider = await GetServiceProviderAsync();
 
+            var eventsRepository = provider.GetRequiredService<IEventsRepository>();
             CancellationTokenSource cts = new CancellationTokenSource();
-
-            var eventsRepository = new PostgreEventsRepository(context);
 
             NewEventDto newEventDto = new NewEventDto("Birthday", DateTime.UtcNow.AddMonths(1), DateTime.UtcNow.AddMonths(1).AddHours(20), 10, "Daddy's birthday");
 
@@ -27,12 +28,11 @@ namespace EventManager.Tests.Integration.Events
         [Fact]
         public async Task Test_GetDeletedEvent()
         {
-            await ResetDatabaseAsync();
-            await using var context = CreateContext();
+            var provider = await GetServiceProviderAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();
 
-            var eventsRepository = new PostgreEventsRepository(context);
+            var eventsRepository = provider.GetRequiredService<IEventsRepository>();
 
             NewEventDto newEventDto = new NewEventDto("Birthday", DateTime.UtcNow.AddMonths(1), DateTime.UtcNow.AddMonths(1).AddHours(20), 10, "Daddy's birthday");
 

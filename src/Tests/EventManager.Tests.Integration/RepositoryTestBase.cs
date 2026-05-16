@@ -28,31 +28,21 @@ namespace EventManager.Tests.Integration
             await postgres.StopAsync();
         }
 
-        protected AppDbContextBase CreateContext()
-        {
-            DbContextOptions<AppDbContextBase> options = new DbContextOptionsBuilder<AppDbContextBase>()
-                .UseNpgsql(postgres.GetConnectionString())
-                .Options;
-
-            AppDbContextBase dbContext = new AppDbContextBase(options);
-            dbContext.Database.EnsureCreated();
-
-            return dbContext;
-        }
-
         protected async Task ResetDatabaseAsync()
         {
+            var provider = await GetServiceProviderAsync();
+
             NpgsqlConnection.ClearAllPools();
-            await using var context = CreateContext();
+            await using var context = provider.GetRequiredService<AppDbContextBase>();
             await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
         }
 
-       protected IServiceProvider GetServiceProvider()
+       protected async Task<IServiceProvider> GetServiceProviderAsync()
        {
             ServiceCollection services = new ServiceCollection();
 
-            services.AddDbContext<AppDbContextBase, AppDbContext>(options => {
+            services.AddDbContext<AppDbContextBase, DockerAppDbContext>(options => {
                 options.UseNpgsql(postgres.GetConnectionString());
             });
 
