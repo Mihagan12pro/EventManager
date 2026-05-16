@@ -7,6 +7,7 @@ using EventManager.Services.Events;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Npgsql;
 using Testcontainers.PostgreSql;
 
@@ -38,11 +39,12 @@ namespace EventManager.Tests.Integration
             await context.Database.EnsureCreatedAsync();
         }
 
-       protected async Task<IServiceProvider> GetServiceProviderAsync()
-       {
+        protected async Task<IServiceProvider> GetServiceProviderAsync()
+        {
             ServiceCollection services = new ServiceCollection();
 
-            services.AddDbContext<AppDbContextBase, DockerAppDbContext>(options => {
+            services.AddDbContext<AppDbContextBase, DockerAppDbContext>(options =>
+            {
                 options.UseNpgsql(postgres.GetConnectionString());
             });
 
@@ -59,6 +61,6 @@ namespace EventManager.Tests.Integration
             services.AddLogging();
 
             return services.BuildServiceProvider();
-       }
+        }
     }
 }

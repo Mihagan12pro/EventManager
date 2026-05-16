@@ -1,11 +1,10 @@
-﻿using EventManager.DataAccess.PostgreSQL.Events;
-using EventManager.DTOs.Events;
+﻿using EventManager.DTOs.Events;
 using EventManager.Services.Events;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Integration.Events
 {
-    public class BookingsRepositoryTests : RepositoryTestBase
+    public class EventsRepositoryTests : RepositoryTestBase
     {
         [Fact]
         public async Task Test_AddingNew()
@@ -28,6 +27,7 @@ namespace EventManager.Tests.Integration.Events
         [Fact]
         public async Task Test_GetDeletedEvent()
         {
+            await ResetDatabaseAsync();
             var provider = await GetServiceProviderAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();

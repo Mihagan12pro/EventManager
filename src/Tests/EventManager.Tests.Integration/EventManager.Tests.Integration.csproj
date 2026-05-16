@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="Testcontainers" Version="4.11.0" />
     <PackageReference Include="Testcontainers.PostgreSql" Version="4.11.0" />
@@ -27,10 +28,6 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Bookings\" />
   </ItemGroup>
 
 </Project>
