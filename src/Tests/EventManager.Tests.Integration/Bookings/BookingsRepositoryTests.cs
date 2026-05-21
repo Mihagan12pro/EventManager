@@ -2,13 +2,19 @@
 using EventManager.DTOs.Events;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace EventManager.Tests.Integration.Bookings
 {
     public class BookingsRepositoryTests : RepositoryTestBase
     {
+        public BookingsRepositoryTests(EventManagerAppFactory<Program> factory) : base(factory)
+        {
+        }
+
         [Fact]
         public async Task Test_PendingToComfirmed()
         {

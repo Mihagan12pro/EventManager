@@ -5,16 +5,26 @@ using EventManager.Services.Background.Bookings;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Npgsql;
 using Testcontainers.PostgreSql;
 
 namespace EventManager.Tests.Integration
 {
-    public abstract class RepositoryTestBase : IAsyncLifetime
+    public abstract class RepositoryTestBase : IAsyncLifetime, IClassFixture<EventManagerAppFactory<Program>>
     {
+        protected readonly WebApplicationFactory<Program> factory;
+        protected readonly HttpClient httpClient;
+
+        public RepositoryTestBase(WebApplicationFactory<Program> factory)
+        {
+            this.factory = factory;
+            httpClient = factory.CreateClient();
+        }
+
         protected readonly PostgreSqlContainer postgres = new PostgreSqlBuilder("postgres:16-alpine")
             .WithDatabase("bookstore_test")
             .Build();
