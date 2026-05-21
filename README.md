@@ -135,8 +135,28 @@ Features from the sprint4:
 4. Remove the EventManager.Queues project.
 
 
-Features from the last branch(sprint5):
+Features from the sprint5:
 1. Use the PostgreSQL database management system from storing data. If you want to run this application, you have to install PostgreSQL to your device
 2. Modify appsetting.json: add connection string. If PostgreSQL on your device had another parameters (e.g. another port) you can edit conncection string
 3. If your PostgreSQL server does not contains the eventmanager database created new database, the application will create it automatically via Database.EnsureCreated
-4. Modify tests project: now it contains in-memory provider for creating test cases 
+4. Modify tests project: now it contains in-memory provider for creating test cases
+
+
+Features from the last branch (sprint6):
+1. Use migrations instead of Database.EnsureCreated
+	How to create new migration? There are two ways:
+
+	Via dotnet cli:
+	A. Open cmd or terminal in the 'EventManager.DataAccess.PostgreSQL' directory
+	B. Write "dotnet ef migrations add <migrationName>" and press Enter or Return
+	C. Write "dotnet ef database update" and press Enter or Return
+	
+	Via Visual Studio 2026:
+	A. Open package manager console
+	B. Write "Add-Migration <migrationName>" and press Enter
+	C. Write "Update-Database" and press Enter
+	
+2. Add docker-compose.yml. 
+    So, you do not need installed PostgreSQL and pgAdmin on your device, but docker is required (especially for integration tests)
+
+3. Add integration tests. This type of tests provides testing of interactions between lots of different components of the application.
