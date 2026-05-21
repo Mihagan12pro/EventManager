@@ -1,6 +1,7 @@
 ﻿using EventManager.DataAccess.PostgreSQL.Booking;
 using EventManager.DataAccess.PostgreSQL.DbContexts;
 using EventManager.DataAccess.PostgreSQL.Events;
+using EventManager.Services.Background.Bookings;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using Microsoft.AspNetCore.Hosting;
@@ -14,16 +15,18 @@ namespace EventManager.Tests.Integration
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            //builder.ConfigureServices(services =>
-            //{
-            //    services.AddDbContext<AppDbContextBase, DockerAppDbContext>();
-                
-            //    services.AddScoped<IEventsRepository, PostgreEventsRepository>();
-            //    services.AddScoped<IBookingsRepository, PostgreBookingsRepository>();
+            builder.ConfigureServices(services =>
+            {
+                services.AddDbContext<AppDbContextBase, DockerAppDbContext>();
 
-            //    services.AddScoped<IEventsService, EventsService>();
-            //    services.AddScoped<IBookingsService, BookingsService>();
-            //});
+                services.AddScoped<IEventsRepository, PostgreEventsRepository>();
+                services.AddScoped<IBookingsRepository, PostgreBookingsRepository>();
+
+                services.AddScoped<IEventsService, EventsService>();
+                services.AddScoped<IBookingsService, BookingsService>();
+
+                services.AddHostedService<BookingHandlingService>();
+            });
 
             builder.UseEnvironment("Development");
         }

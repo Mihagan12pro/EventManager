@@ -14,12 +14,12 @@ using Testcontainers.PostgreSql;
 
 namespace EventManager.Tests.Integration
 {
-    public abstract class RepositoryTestBase : IAsyncLifetime, IClassFixture<EventManagerAppFactory<Program>>
+    public abstract class IntegrationTests : IAsyncLifetime, IClassFixture<EventManagerAppFactory<Program>>
     {
         protected readonly WebApplicationFactory<Program> factory;
         protected readonly HttpClient httpClient;
 
-        public RepositoryTestBase(WebApplicationFactory<Program> factory)
+        public IntegrationTests(WebApplicationFactory<Program> factory)
         {
             this.factory = factory;
             httpClient = factory.CreateClient();

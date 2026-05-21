@@ -9,9 +9,9 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace EventManager.Tests.Integration.Bookings
 {
-    public class BookingsRepositoryTests : RepositoryTestBase
+    public class BookingsTests : IntegrationTests
     {
-        public BookingsRepositoryTests(EventManagerAppFactory<Program> factory) : base(factory)
+        public BookingsTests(EventManagerAppFactory<Program> factory) : base(factory)
         {
         }
 
