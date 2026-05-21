@@ -1,10 +1,6 @@
 ﻿using EventManager.Domain.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
-using EventManager.Services.Bookings;
-using EventManager.Services.Events;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -58,6 +54,7 @@ namespace EventManager.Tests.Integration.Bookings
             Assert.Equal(BookingStatus.Confirmed, getBookingDto.Status);
         }
 
+
         [Fact]
         public async Task Test_ConfirmedToRejected()
         {
@@ -109,6 +106,37 @@ namespace EventManager.Tests.Integration.Bookings
             var getRejectedDto = JsonSerializer.Deserialize<GetBookingDto>(getRejectedBookingContent, serializerOptions);
 
             Assert.Equal(BookingStatus.Rejected, getRejectedDto.Status);
+        }
+
+
+        [Fact]
+        public async Task Test_Overbooking()
+        {
+            await ResetDatabaseAsync();
+
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            NewEventDto newEvent = new NewEventDto(
+                "Birthday",
+                DateTime.UtcNow.AddYears(1),
+                DateTime.UtcNow.AddYears(1).AddDays(1),
+                10
+            );
+
+            var postResponse = await httpClient.PostAsJsonAsync(@"events\", newEvent, cts.Token);
+
+            Assert.Equal(postResponse.StatusCode, System.Net.HttpStatusCode.Created);
+            string postResponseBody = await postResponse.Content.ReadAsStringAsync();
+
+            Guid.TryParse(postResponseBody.Trim('"'), out Guid eventId);
+
+            for(int i = 0; i < newEvent.TotalSeats; i++)
+                await httpClient.PostAsJsonAsync(@$"events\{eventId}\book", eventId, cts.Token);
+
+            var overBooked = await httpClient.PostAsJsonAsync(@$"events\{eventId}\book", eventId, cts.Token);
+
+            Assert.Equal(HttpStatusCode.Conflict, overBooked.StatusCode);
         }
     }
 }
