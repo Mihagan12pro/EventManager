@@ -97,8 +97,6 @@ namespace EventManager.Services.Background.Bookings
                         );
 
                     _processingSemaphore.Release();
-
-                    var a = await bookingRepository.GetByIdAsync(booking.Id, stoppingToken);
                 }
             }
         }
