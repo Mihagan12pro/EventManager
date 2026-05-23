@@ -1,8 +1,10 @@
 ﻿using EventManager.DataAccess.PostgreSQL.DbContexts;
 using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
+using EventManager.DTOs.Shared;
 using EventManager.Services.Events;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace EventManager.DataAccess.PostgreSQL.Events
 {
@@ -68,29 +70,64 @@ namespace EventManager.DataAccess.PostgreSQL.Events
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<PaginatedEventsDto> GetPaginatedEventsAsync(GetEventsWithFiltersDto eventsDto, CancellationToken cancellationToken)
+        //public async Task<PaginatedEventsDto> GetPaginatedEventsAsync(GetEventsWithFiltersDto eventsDto, CancellationToken cancellationToken)
+        //{
+        //    IQueryable<EventModel> events = _dbContext.Events;
+
+        //    if (eventsDto.Title != null)
+        //    {
+        //        events = events.Where(e => e.Title.Contains(eventsDto.Title));
+        //    }
+        //    if (eventsDto.DateRange.LowerBound.HasValue)
+        //    {
+        //        events = events.Where(e => e.StartAt == eventsDto.DateRange.LowerBound.Value);
+        //    }
+        //    if (eventsDto.DateRange.UpperBound.HasValue)
+        //    {
+        //        events = events.Where(e => e.EndAt == eventsDto.DateRange.UpperBound.Value);
+        //    }
+
+        //    int count = await events.CountAsync();
+        //    events = events.Skip(eventsDto.Pagination.Skip)
+        //        .Take(eventsDto.Pagination.PageSize);
+
+        //    return new PaginatedEventsDto(
+        //        count,
+        //        events.Select(e => new GetEventDto(
+        //            e.Id,
+        //            e.Title,
+        //            e.StartAt,
+        //            e.EndAt,
+        //            e.Description,
+        //            e.TotalSeats,
+        //            e.AvailableSeats)
+        //        ),
+        //        eventsDto.Pagination.Page, 
+        //        eventsDto.Pagination.PageSize);
+        //}
+
+        public async Task<EventModel> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            EventModel @event = await _dbContext.Events.FirstOrDefaultAsync((e => e.Id == id), cancellationToken);
+
+            return @event;
+        }
+
+        public async Task<PaginatedEventsDto> GetPaginatedEventsAsync(
+            IEnumerable<Expression<Func<EventModel, bool>>> filters, 
+            PaginationDto pagination, 
+            CancellationToken cancellationToken)
         {
             IQueryable<EventModel> events = _dbContext.Events;
 
-            if (eventsDto.Title != null)
-            {
-                events = events.Where(e => e.Title.Contains(eventsDto.Title));
-            }
-            if (eventsDto.DateRange.LowerBound.HasValue)
-            {
-                events = events.Where(e => e.StartAt == eventsDto.DateRange.LowerBound.Value);
-            }
-            if (eventsDto.DateRange.UpperBound.HasValue)
-            {
-                events = events.Where(e => e.EndAt == eventsDto.DateRange.UpperBound.Value);
-            }
+            foreach(var filter in filters)
+                events = events.Where(filter);
 
-            int count = await events.CountAsync();
-            events = events.Skip(eventsDto.Pagination.Skip)
-                .Take(eventsDto.Pagination.PageSize);
+            events = events.Skip(pagination.Skip)
+                .Take(pagination.PageSize);
 
             return new PaginatedEventsDto(
-                count,
+                events.Count(),
                 events.Select(e => new GetEventDto(
                     e.Id,
                     e.Title,
@@ -100,15 +137,8 @@ namespace EventManager.DataAccess.PostgreSQL.Events
                     e.TotalSeats,
                     e.AvailableSeats)
                 ),
-                eventsDto.Pagination.Page, 
-                eventsDto.Pagination.PageSize);
-        }
-
-        public async Task<EventModel> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-        {
-            EventModel @event = await _dbContext.Events.FirstOrDefaultAsync((e => e.Id == id), cancellationToken);
-
-            return @event;
+                pagination.Page,
+                pagination.PageSize);
         }
     }
 }

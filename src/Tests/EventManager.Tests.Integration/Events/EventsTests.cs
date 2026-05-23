@@ -1,10 +1,4 @@
-﻿using EventManager.Domain.Events;
-using EventManager.DTOs.Events;
-using EventManager.Services.Events;
-using EventManager.Services.Exceptions.WebApi.Client.NotFound;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
+﻿using EventManager.DTOs.Events;
 using System.Net;
 using System.Net.Http.Json;
 
