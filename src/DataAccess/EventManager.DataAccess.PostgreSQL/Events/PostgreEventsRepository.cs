@@ -120,14 +120,18 @@ namespace EventManager.DataAccess.PostgreSQL.Events
         {
             IQueryable<EventModel> events = _dbContext.Events;
 
+            var a = events.Count();
+
             foreach(var filter in filters)
                 events = events.Where(filter);
+
+            int count = events.Count();
 
             events = events.Skip(pagination.Skip)
                 .Take(pagination.PageSize);
 
             return new PaginatedEventsDto(
-                events.Count(),
+                count,
                 events.Select(e => new GetEventDto(
                     e.Id,
                     e.Title,

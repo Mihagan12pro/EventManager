@@ -1,10 +1,7 @@
-﻿using EventManager.Domain.Events;
-using EventManager.DTOs.Events;
-using EventManager.DTOs.Shared;
+﻿using EventManager.DTOs.Events;
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
-using EventManager.Tests.Unit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Unit.Events.Put

@@ -7,6 +7,7 @@ using EventManager.Services.Events;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace EventManager.Tests.Integration
 {
@@ -17,6 +18,11 @@ namespace EventManager.Tests.Integration
         {
             builder.ConfigureServices(services =>
             {
+                ILoggingBuilder loggingBuilder;
+                loggingBuilder.max
+
+                services.AddLogging();
+
                 services.AddDbContext<AppDbContextBase, DockerAppDbContext>();
 
                 services.AddScoped<IEventsRepository, PostgreEventsRepository>();

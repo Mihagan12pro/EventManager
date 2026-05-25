@@ -47,6 +47,8 @@ namespace EventManager.Tests.Integration
             await using var context = provider.GetRequiredService<AppDbContextBase>();
             await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
+
+            await context.Database.MigrateAsync();
         }
 
         protected async Task<IServiceProvider> GetServiceProviderAsync()
