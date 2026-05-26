@@ -1,5 +1,4 @@
-﻿using EventManager.DataAccess.PostgreSQL.Events;
-using EventManager.Domain.Events;
+﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Services.Events;
@@ -15,7 +14,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
         }
 
         [Fact]
-        public async Task Test_AddAsync()
+        public async Task Test_AddNewAsync()
         {
             await ResetDatabaseAsync();
             var provider = await GetServiceProviderAsync();
@@ -93,7 +92,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
 
         [Theory]
         [MemberData(nameof(Filters))]
-        public async Task Test_GetAll(
+        public async Task Test_GetPaginatedEventsAsync(
             Expression<Func<EventModel, bool>> filters, 
             PaginationDto pagination, 
             int expected)

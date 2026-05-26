@@ -61,11 +61,6 @@ namespace EventManager.Tests.Integration
                 options.UseNpgsql(postgres.GetConnectionString());
             });
 
-            services.AddLogging(builder => 
-            {
-                builder.AddDebug();
-            });
-
             services.AddValidatorsFromAssembly(typeof(Services.DependenciesInjection).Assembly);
 
             services.AddScoped<IEventsService, EventsService>();
