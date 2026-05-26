@@ -1,10 +1,13 @@
 ﻿using EventManager.DataAccess.PostgreSQL.DbContexts;
+using EventManager.Domain.Bookings;
 using EventManager.Domain.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
+using EventManager.DTOs.Shared;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq.Expressions;
 
 namespace EventManager.Tests.Integration.CRUD.Bookings
 {
@@ -60,6 +63,53 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
             booking5.CreatedAt = now.AddMinutes(10);
 
             await dbContext.SaveChangesAsync(cts.Token);
+        }
+
+        public static IEnumerable<object[]> FiltersByExpression()
+        {
+            return
+            [
+                [
+                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Confirmed),
+                    3
+                ],
+
+                [
+                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Pending),
+                    1
+                ],
+
+                [
+                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Rejected),
+                    1
+                ],
+
+                [
+                    (Expression<Func<BookingModel, bool>>)(b => b.CreatedAt == now),
+
+                    4
+                ],
+
+                [
+                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Pending && b.CreatedAt == now),
+                    0
+                ],
+
+                [
+                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Confirmed && b.CreatedAt == now),
+                    3
+                ],
+
+                [
+                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Confirmed && b.CreatedAt == now && b.ProcessedAt == now),
+                    1
+                ],
+
+                [
+                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Confirmed && b.CreatedAt == now && b.ProcessedAt == now.AddDays(5)),
+                    2
+                ],
+            ];
         }
 
         public static IEnumerable<object[]> FilterByDto()

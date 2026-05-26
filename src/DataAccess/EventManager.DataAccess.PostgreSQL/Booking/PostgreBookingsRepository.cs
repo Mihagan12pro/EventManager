@@ -80,7 +80,9 @@ namespace EventManager.DataAccess.PostgreSQL.Booking
             return bookings;
         }
 
-        public async Task<IEnumerable<BookingModel>> GetAllAsync(Expression<Func<BookingModel, bool>> filters, CancellationToken cancellationToken)
+        public async Task<IEnumerable<BookingModel>> GetAllAsync(
+            Expression<Func<BookingModel, bool>> filters, 
+            CancellationToken cancellationToken)
         {
             var bookings = _dbContext.Bookings.Where(filters);
 
