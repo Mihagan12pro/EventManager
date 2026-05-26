@@ -18,9 +18,6 @@ namespace EventManager.Tests.Integration
         {
             builder.ConfigureServices(services =>
             {
-                ILoggingBuilder loggingBuilder;
-                loggingBuilder.max
-
                 services.AddLogging();
 
                 services.AddDbContext<AppDbContextBase, DockerAppDbContext>();

@@ -107,7 +107,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
 
             foreach (var seed in Seed())
             {
-                await eventsRepository.AddNewAsync(seed[0], cts.Token);
+                await eventsRepository.AddNewAsync(seed, cts.Token);
             }
 
             var dto = await eventsRepository.GetPaginatedEventsAsync(new List<Expression<Func<EventModel, bool>>>{ filters }, pagination, cts.Token);

@@ -8,6 +8,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Npgsql;
 using Testcontainers.PostgreSql;
@@ -58,6 +59,11 @@ namespace EventManager.Tests.Integration
             services.AddDbContext<AppDbContextBase, DockerAppDbContext>(options =>
             {
                 options.UseNpgsql(postgres.GetConnectionString());
+            });
+
+            services.AddLogging(builder => 
+            {
+                builder.AddDebug();
             });
 
             services.AddValidatorsFromAssembly(typeof(Services.DependenciesInjection).Assembly);
