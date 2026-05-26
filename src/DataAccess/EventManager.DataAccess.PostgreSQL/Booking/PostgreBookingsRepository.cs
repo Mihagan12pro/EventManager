@@ -73,8 +73,9 @@ namespace EventManager.DataAccess.PostgreSQL.Booking
 
             if (bookingFiltersDto.ProcessedAt != null)
             {
-                bookings = bookings.Where(b => b.CreatedAt == bookingFiltersDto.ProcessedAt);
+                bookings = bookings.Where(b => b.ProcessedAt == bookingFiltersDto.ProcessedAt);
             }
+
 
             return bookings;
         }
