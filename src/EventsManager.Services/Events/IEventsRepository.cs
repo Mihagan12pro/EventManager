@@ -1,5 +1,7 @@
 ﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
+using EventManager.DTOs.Shared;
+using System.Linq.Expressions;
 
 namespace EventManager.Services.Events
 {
@@ -18,7 +20,8 @@ namespace EventManager.Services.Events
             CancellationToken cancellationToken);
 
         Task<PaginatedEventsDto> GetPaginatedEventsAsync(
-            GetEventsWithFiltersDto eventsDto, 
+            IEnumerable<Expression<Func<EventModel, bool>>> filters,
+            PaginationDto Pagination, 
             CancellationToken cancellationToken);
 
         Task CompleteUpdateAsync(

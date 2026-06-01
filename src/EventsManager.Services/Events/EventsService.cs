@@ -7,6 +7,7 @@ using EventManager.Services.Extensions.Validation;
 using EventsManager.Failures.Errors.Collections;
 using FluentValidation;
 using Shared;
+using System.Linq.Expressions;
 
 namespace EventManager.Services.Events
 {
@@ -72,9 +73,28 @@ namespace EventManager.Services.Events
             if (pagination.Page < 0 || pagination.PageSize < 0)
                 throw new BadRequestException("Pagination parameters must be greater than zero!");
 
-            GetEventsWithFiltersDto eventsWithFiltersDto = new GetEventsWithFiltersDto(title, pagination, dateRange);
+            List<Expression<Func<EventModel, bool>>> filters = new List<Expression<Func<EventModel, bool>>>();
+            
+            if (title != null)
+            {
+                Expression<Func<EventModel, bool>>  titleFilter = (EventModel e) => e.Title.StartsWith(title); 
+                filters.Add(titleFilter);
+            }
+            
+            if (dateRange.LowerBound != null)
+            {
+                Expression<Func<EventModel, bool>> lowerBoundFilter = (EventModel e) => e.StartAt == dateRange.LowerBound;
+                filters.Add(lowerBoundFilter);
+            }
 
-            return await _eventsRepository.GetPaginatedEventsAsync(eventsWithFiltersDto, cancellationToken);
+            if (dateRange.UpperBound != null)
+            {
+                Expression<Func<EventModel, bool>> upperBoundFilter = (EventModel e) => e.EndAt == dateRange.UpperBound;
+                filters.Add(upperBoundFilter);
+            }
+
+
+            return await _eventsRepository.GetPaginatedEventsAsync(filters, pagination, cancellationToken);
         }
 
         public async Task<string> UpdateByPutAsync(

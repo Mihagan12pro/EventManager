@@ -13,7 +13,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: eventmanager
     ports:
-      - "5432:5432"
+      - "5440:5432"
     volumes:
       - eventmanager_pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -22,5 +22,22 @@ services:
       timeout: 5s
       retries: 5
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: adminpassword
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+
 volumes:
   eventmanager_pgdata:
+  pgadmin_data:
