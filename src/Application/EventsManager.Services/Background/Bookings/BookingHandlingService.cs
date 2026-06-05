@@ -43,8 +43,6 @@ namespace EventManager.Services.Background.Bookings
                 {
                     _logger.LogError(ex, ex.Message);
                 }
-
-                //await Task.Delay(500, stoppingToken);
             }
         }
 
