@@ -1,6 +1,8 @@
 ﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
+using EventManager.Handlers;
+using EventManager.Handlers.Events.AddEvent;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using EventsManager.Shared;
@@ -24,9 +26,14 @@ namespace EventManager.API.Controllers
         /// <response code="400">If data is invalid</response>
         [HttpPost]
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status201Created)]
-        public async Task<IActionResult> New([FromBody] NewEventDto newEvent, CancellationToken cancellationToken)
+        public async Task<IActionResult> New(
+            [FromBody] NewEventDto newEvent,
+            [FromServices] ICommandHandler<Guid, AddEventCommand> addingHandler,
+            CancellationToken cancellationToken)
         {
-            var result = await _eventService.AddNewAsync(newEvent, cancellationToken);
+            AddEventCommand command = new AddEventCommand(newEvent);
+
+            var result = await addingHandler.HandleAsync(command, cancellationToken);
 
             var output = result;
             var request = HttpContext.Request;

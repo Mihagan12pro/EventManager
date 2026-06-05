@@ -1,16 +1,18 @@
 ﻿namespace EventManager.Handlers
 {
-    public interface ICommandHandler<T, TCommand>
+    public interface ICommandHandler<T, TCommand> 
+        where TCommand : ICommand
     {
         Task<T> HandleAsync(
-            in TCommand command,
+            TCommand command,
             CancellationToken cancellationToken);
     }
 
     public interface ICommandHandler<TCommand>
+        where TCommand : ICommand
     {
         Task HandlerAsync(
-            in TCommand command, 
+            TCommand command, 
             CancellationToken cancellationToken);
     }
 }

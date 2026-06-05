@@ -2,5 +2,6 @@
 
 namespace EventManager.Handlers.Events.AddEvent
 {
-    public record AddEventCommand(NewEventDto NewEvent);
+    public record AddEventCommand(NewEventDto NewEvent)
+        : ICommand;
 }
