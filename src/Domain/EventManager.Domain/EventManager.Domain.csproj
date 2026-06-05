@@ -10,9 +10,4 @@
     <PackageReference Include="CSharpFunctionalExtensions" Version="3.7.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\EventsManager.Failures\EventsManager.Failures.csproj" />
-    <ProjectReference Include="..\Shared\EventsManager.Shared.csproj" />
-  </ItemGroup>
-
 </Project>

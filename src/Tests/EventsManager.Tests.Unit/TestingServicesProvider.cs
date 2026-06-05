@@ -1,10 +1,4 @@
-﻿using EventManager.DataAccess.PostgreSQL.Booking;
-using EventManager.DataAccess.PostgreSQL.DbContexts;
-using EventManager.DataAccess.PostgreSQL.Events;
-using EventManager.Services.Background.Bookings;
-using EventManager.Services.Bookings;
-using EventManager.Services.Events;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

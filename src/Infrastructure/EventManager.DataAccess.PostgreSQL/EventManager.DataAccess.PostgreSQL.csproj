@@ -71,7 +71,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\EventsManager.Services\EventManager.Services.csproj" />
+    <ProjectReference Include="..\..\Application\EventsManager.Services\EventManager.Services.csproj" />
+    <ProjectReference Include="..\..\Domain\EventManager.Domain\EventManager.Domain.csproj" />
+    <ProjectReference Include="..\..\SharedLibs\EventManager.DTOs\EventManager.DTOs.csproj" />
   </ItemGroup>
 
 </Project>
