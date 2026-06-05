@@ -3,6 +3,7 @@ using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Handlers;
 using EventManager.Handlers.Events.AddEvent;
+using EventManager.Handlers.Events.DeleteEvent;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using EventsManager.Shared;
@@ -28,12 +29,12 @@ namespace EventManager.API.Controllers
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status201Created)]
         public async Task<IActionResult> New(
             [FromBody] NewEventDto newEvent,
-            [FromServices] ICommandHandler<Guid, AddEventCommand> addingHandler,
+            [FromServices] ICommandHandler<Guid, AddEventCommand> handler,
             CancellationToken cancellationToken)
         {
             AddEventCommand command = new AddEventCommand(newEvent);
 
-            var result = await addingHandler.HandleAsync(command, cancellationToken);
+            var result = await handler.HandleAsync(command, cancellationToken);
 
             var output = result;
             var request = HttpContext.Request;
@@ -100,9 +101,14 @@ namespace EventManager.API.Controllers
         /// <response code="200">If everything is ok</response>
         /// <response code="404">If event does not exists</response>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete(
+            [FromRoute] Guid id, 
+            [FromServices] ICommandHandler<string, DeleteEventCommand> handler, 
+            CancellationToken cancellationToken)
         {
-            var result = await _eventService.DeleteAsync(id, cancellationToken);
+            var result = await handler.HandleAsync(
+                new DeleteEventCommand(id),
+                cancellationToken);
 
             return Ok(result);
         }
