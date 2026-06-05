@@ -1,6 +1,7 @@
 ﻿using EventManager.Infrastructure.PostgreSQL;
 using EventManager.Middleware;
 using EventManager.Services;
+using EventManager.Handlers;
 
 namespace EventManager
 {
@@ -8,6 +9,7 @@ namespace EventManager
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
             => services.AddScopedServices()
+                       .AddHandlers()
                        .AddBackgroundServices()
                        .AddSingletonServices()
                        .AddPostgreDependencies();
