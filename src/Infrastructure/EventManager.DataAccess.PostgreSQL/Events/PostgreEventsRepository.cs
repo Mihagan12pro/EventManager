@@ -3,7 +3,6 @@ using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Repositories.Events;
-using EventManager.Services.Events;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq.Expressions;

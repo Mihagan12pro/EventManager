@@ -4,8 +4,10 @@ using EventManager.DTOs.Shared;
 using EventManager.Handlers;
 using EventManager.Handlers.Events.AddEvent;
 using EventManager.Handlers.Events.DeleteEvent;
+using EventManager.Handlers.Events.GetByIdEvent;
+using EventManager.Handlers.Events.GetEvents;
+using EventManager.Handlers.Events.PutEvent;
 using EventManager.Services.Bookings;
-using EventManager.Services.Events;
 using EventsManager.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +18,6 @@ namespace EventManager.API.Controllers
     [Route("/events")]
     public class EventsController : ControllerBase
     {
-        private readonly IEventsService _eventService;
         private readonly IBookingsService _bookingService;
 
         /// <summary>
@@ -58,6 +59,7 @@ namespace EventManager.API.Controllers
         [HttpGet]
         public async Task<IActionResult> All(
              CancellationToken cancellationToken,
+            [FromServices] ICommandHandler<PaginatedEventsDto, GetEventsCommand> handler,
             [FromQuery] string? title,
             [FromQuery] DateTime? from,
             [FromQuery] DateTime? to,
@@ -70,10 +72,8 @@ namespace EventManager.API.Controllers
                 from,
                 to);
 
-            var events = await _eventService.GetEventsAsync(
-                title,
-                pagination,
-                dateRange,
+            var events = await handler.HandleAsync(
+                new GetEventsCommand(title, pagination, dateRange),
                 cancellationToken);
 
 
@@ -87,9 +87,12 @@ namespace EventManager.API.Controllers
         /// <response code="200">If everything is ok</response>
         /// <response code="404">If event does not exists</response>
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Get(
+            [FromRoute] Guid id,
+            [FromServices] ICommandHandler<GetEventDto, GetByIdEventCommand> handler,
+            CancellationToken cancellationToken)
         {
-            var result = await _eventService.GetEventByIdAsync(id, cancellationToken);
+            var result = handler.HandleAsync(new GetByIdEventCommand(id), cancellationToken);
 
             return Ok(result);
         }
@@ -125,9 +128,10 @@ namespace EventManager.API.Controllers
         public async Task<IActionResult> Put(
             [FromRoute] Guid id,
             [FromBody] PutEventDto newEvent,
+            [FromServices] ICommandHandler<string, PutEventCommand> handler,
             CancellationToken cancellationToken)
         {
-            var result = await _eventService.UpdateByPutAsync(id, newEvent, cancellationToken);
+            var result = await handler.HandleAsync(new PutEventCommand(id, newEvent), cancellationToken);
 
             return Ok(result);
         }
@@ -150,14 +154,6 @@ namespace EventManager.API.Controllers
             var location = UrlMaster.CreateWithoutPath(HttpContext.Request, "bookings", bookingDto.Id);
 
             return Accepted(location, bookingDto);
-        }
-
-        public EventsController(
-            IEventsService eventsService,
-            IBookingsService bookingService)
-        {
-            _eventService = eventsService;
-            _bookingService = bookingService;
         }
     }
 }

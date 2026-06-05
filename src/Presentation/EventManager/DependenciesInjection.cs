@@ -8,11 +8,14 @@ namespace EventManager
     public static class DependenciesInjection
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
-            => services.AddScopedServices()
-                       .AddHandlers()
-                       .AddBackgroundServices()
-                       .AddSingletonServices()
-                       .AddPostgreDependencies();
+        {
+            services.AddHandlers();
+            services.AddBackgroundServices();
+            services.AddSingletonServices();
+            services.AddPostgreDependencies();
+
+            return services;
+        }
         public static IApplicationBuilder UseCustomMiddleware(this IApplicationBuilder app)
             => app.UseMiddleware<CustomExceptionMiddleware>();
     }
