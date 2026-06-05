@@ -1,6 +1,6 @@
 using EventManager;
 using EventManager.DataAccess.PostgreSQL;
-using EventManager.DataAccess.PostgreSQL.DbContexts;
+using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
 public partial class Program

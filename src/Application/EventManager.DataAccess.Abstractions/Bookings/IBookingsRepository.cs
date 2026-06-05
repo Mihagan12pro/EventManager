@@ -2,16 +2,16 @@
 using EventManager.DTOs.Bookings;
 using System.Linq.Expressions;
 
-namespace EventManager.Services.Bookings
+namespace EventManager.Repositories.Bookings
 {
     public interface IBookingsRepository
     {
         Task<Guid> CreateNewBookingAsync(
-            Guid eventId, 
+            Guid eventId,
             CancellationToken cancellationToken);
 
         Task ProcessBookingAsync(
-            BookingProcessedDto bookingProcessedDto, 
+            BookingProcessedDto bookingProcessedDto,
             CancellationToken cancellationToken);
 
         Task<BookingModel> GetByIdAsync(
@@ -19,11 +19,11 @@ namespace EventManager.Services.Bookings
             CancellationToken cancellationToken);
 
         Task<IEnumerable<BookingModel>> GetAllAsync(
-            BookingFiltersDto bookingFiltersDto, 
+            BookingFiltersDto bookingFiltersDto,
             CancellationToken cancellationToken);
 
         Task<IEnumerable<BookingModel>> GetAllAsync(
-            Expression<Func<BookingModel, bool>> filters, 
+            Expression<Func<BookingModel, bool>> filters,
             CancellationToken cancellationToken);
     }
 }

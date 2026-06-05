@@ -6,4 +6,11 @@
             in TCommand command,
             CancellationToken cancellationToken);
     }
+
+    public interface ICommandHandler<TCommand>
+    {
+        Task HandlerAsync(
+            in TCommand command, 
+            CancellationToken cancellationToken);
+    }
 }

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace EventManager.DataAccess.PostgreSQL.Events
+namespace EventManager.Infrastructure.PostgreSQL.Events
 {
     public class EventsConfiguration : IEntityTypeConfiguration<EventModel>
     {

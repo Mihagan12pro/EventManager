@@ -3,7 +3,7 @@ using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using System.Linq.Expressions;
 
-namespace EventManager.Services.Events
+namespace EventManager.Repositories.Events
 {
     public interface IEventsRepository
     {
@@ -12,16 +12,16 @@ namespace EventManager.Services.Events
             CancellationToken cancellationToken);
 
         Task<EventModel> GetByIdAsync(
-            Guid id, 
+            Guid id,
             CancellationToken cancellationToken);
 
         Task DeleteAsync(
-            Guid id, 
+            Guid id,
             CancellationToken cancellationToken);
 
         Task<PaginatedEventsDto> GetPaginatedEventsAsync(
             IEnumerable<Expression<Func<EventModel, bool>>> filters,
-            PaginationDto Pagination, 
+            PaginationDto Pagination,
             CancellationToken cancellationToken);
 
         Task CompleteUpdateAsync(

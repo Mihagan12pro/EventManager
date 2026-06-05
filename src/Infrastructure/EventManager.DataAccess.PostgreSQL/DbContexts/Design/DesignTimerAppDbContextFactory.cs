@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EventManager.Infrastructure.PostgreSQL.DbContexts;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace EventManager.DataAccess.PostgreSQL.DbContexts.Design
+namespace EventManager.Infrastructure.PostgreSQL.DbContexts.Design
 {
     internal class DesignTimerAppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     {

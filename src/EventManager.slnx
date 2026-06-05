@@ -6,6 +6,7 @@
   </Folder>
   <Folder Name="/src/" />
   <Folder Name="/src/Application/">
+    <Project Path="Application/EventManager.DataAccess.Abstractions/EventManager.Repositories.csproj" Id="df1717e6-f5c0-4aa5-8a22-358fb5374fc1" />
     <Project Path="Application/EventManager.Handlers/EventManager.Handlers.csproj" Id="652bb767-1b45-4e31-b169-8c482bc821ba" />
     <Project Path="Application/EventsManager.Services/EventManager.Services.csproj" />
   </Folder>
@@ -13,7 +14,7 @@
     <Project Path="Domain/EventManager.Domain/EventManager.Domain.csproj" />
   </Folder>
   <Folder Name="/src/Infrastructure/">
-    <Project Path="Infrastructure/EventManager.DataAccess.PostgreSQL/EventManager.DataAccess.PostgreSQL.csproj" />
+    <Project Path="Infrastructure/EventManager.DataAccess.PostgreSQL/EventManager.Infrastructure.PostgreSQL.csproj" />
   </Folder>
   <Folder Name="/src/Presentation/">
     <Project Path="Presentation/EventManager.API/EventManager.API.csproj" />

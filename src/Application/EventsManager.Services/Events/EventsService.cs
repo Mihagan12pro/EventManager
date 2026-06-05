@@ -1,12 +1,12 @@
 ﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
+using EventManager.Repositories.Events;
 using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using EventManager.Services.Extensions.Validation;
 using EventsManager.Failures.Errors.Collections;
 using FluentValidation;
-using Shared;
 using System.Linq.Expressions;
 
 namespace EventManager.Services.Events

@@ -2,6 +2,8 @@
 using EventManager.Domain.Bookings.Enums;
 using EventManager.Domain.Events;
 using EventManager.DTOs.Bookings;
+using EventManager.Repositories.Bookings;
+using EventManager.Repositories.Events;
 using EventManager.Services.Bookings;
 using EventManager.Services.Events;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;

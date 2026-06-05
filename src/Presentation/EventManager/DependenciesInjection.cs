@@ -1,4 +1,4 @@
-﻿using EventManager.DataAccess.PostgreSQL;
+﻿using EventManager.Infrastructure.PostgreSQL;
 using EventManager.Middleware;
 using EventManager.Services;
 

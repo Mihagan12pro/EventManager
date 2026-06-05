@@ -1,14 +1,14 @@
-﻿using EventManager.DataAccess.PostgreSQL.DbContexts;
-using EventManager.Domain.Events;
+﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
+using EventManager.Infrastructure.PostgreSQL.DbContexts;
+using EventManager.Repositories.Events;
 using EventManager.Services.Events;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Linq.Expressions;
 
-namespace EventManager.DataAccess.PostgreSQL.Events
+namespace EventManager.Infrastructure.PostgreSQL.Events
 {
     public class PostgreEventsRepository : IEventsRepository
     {
