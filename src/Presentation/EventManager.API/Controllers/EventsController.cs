@@ -1,13 +1,14 @@
 ﻿using EventManager.Domain.Events;
+using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Handlers;
+using EventManager.Handlers.Bookings.Create;
 using EventManager.Handlers.Events.AddEvent;
 using EventManager.Handlers.Events.DeleteEvent;
 using EventManager.Handlers.Events.GetByIdEvent;
 using EventManager.Handlers.Events.GetEvents;
 using EventManager.Handlers.Events.PutEvent;
-using EventManager.Services.Bookings;
 using EventsManager.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +19,6 @@ namespace EventManager.API.Controllers
     [Route("/events")]
     public class EventsController : ControllerBase
     {
-        private readonly IBookingsService _bookingService;
-
         /// <summary>
         /// Adds new event
         /// </summary>
@@ -92,7 +91,7 @@ namespace EventManager.API.Controllers
             [FromServices] ICommandHandler<GetEventDto, GetByIdEventCommand> handler,
             CancellationToken cancellationToken)
         {
-            var result = handler.HandleAsync(new GetByIdEventCommand(id), cancellationToken);
+            var result = await handler.HandleAsync(new GetByIdEventCommand(id), cancellationToken);
 
             return Ok(result);
         }
@@ -147,9 +146,10 @@ namespace EventManager.API.Controllers
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status202Accepted)]
         public async Task<IActionResult> Book(
             [FromRoute] Guid id,
+            [FromServices] ICommandHandler<BookingAcceptedDto, CreateBookingsCommand> handler,
             CancellationToken cancellationToken)
         {
-            var bookingDto = await _bookingService.CreateBookingAsync(id, cancellationToken);
+            var bookingDto = await handler.HandleAsync(new CreateBookingsCommand(id), cancellationToken);
 
             var location = UrlMaster.CreateWithoutPath(HttpContext.Request, "bookings", bookingDto.Id);
 

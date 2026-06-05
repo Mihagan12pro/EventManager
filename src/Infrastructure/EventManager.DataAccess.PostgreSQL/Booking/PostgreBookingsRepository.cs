@@ -4,7 +4,6 @@ using EventManager.Domain.Events;
 using EventManager.DTOs.Bookings;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Repositories.Bookings;
-using EventManager.Services.Bookings;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

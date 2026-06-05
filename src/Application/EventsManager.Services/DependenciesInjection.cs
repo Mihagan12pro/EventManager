@@ -1,6 +1,4 @@
 ﻿using EventManager.Services.Background.Bookings;
-using EventManager.Services.Bookings;
-using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
 

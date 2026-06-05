@@ -1,4 +1,6 @@
-﻿using EventManager.Services.Bookings;
+﻿using EventManager.DTOs.Bookings;
+using EventManager.Handlers;
+using EventManager.Handlers.Bookings.GetByIdBooking;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventManager.API.Controllers
@@ -7,8 +9,6 @@ namespace EventManager.API.Controllers
     [Route("/bookings")]
     public class BookingController : ControllerBase
     {
-        private readonly IBookingsService _bookingService;
-
         /// <summary>
         /// Allows to get booking by id
         /// </summary>
@@ -16,17 +16,14 @@ namespace EventManager.API.Controllers
         /// <response code="200">If everyting is ok</response>
         /// <response code="404">If book does not exists</response>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetById(
+            [FromRoute] Guid id,
+            [FromServices] ICommandHandler<GetBookingDto, GetByIdBookingCommand> handler,
+            CancellationToken cancellationToken)
         {
-            var booking = await _bookingService.GetBookingByIdAsync(id, cancellationToken);
+            var booking = await handler.HandleAsync(new GetByIdBookingCommand(id), cancellationToken);
 
             return Ok(booking);
-        }
-
-
-        public BookingController(IBookingsService bookingService)
-        {
-            _bookingService = bookingService;
         }
     }
 }
