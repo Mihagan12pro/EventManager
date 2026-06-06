@@ -2,6 +2,7 @@
 using EventManager.DTOs.Events;
 using EventManager.Repositories.Events;
 using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
+using EventsManager.Shared.Filters;
 using System.Linq.Expressions;
 
 namespace EventManager.Handlers.Events.GetEvents
@@ -21,26 +22,10 @@ namespace EventManager.Handlers.Events.GetEvents
             if (pagination.Page < 0 || pagination.PageSize < 0)
                 throw new BadRequestException("Pagination parameters must be greater than zero!");
 
-            List<Expression<Func<EventModel, bool>>> filters = new List<Expression<Func<EventModel, bool>>>();
-
-            if (title != null)
-            {
-                Expression<Func<EventModel, bool>> titleFilter = (EventModel e) => e.Title.StartsWith(title);
-                filters.Add(titleFilter);
-            }
-
-            if (dateRange.LowerBound != null)
-            {
-                Expression<Func<EventModel, bool>> lowerBoundFilter = (EventModel e) => e.StartAt == dateRange.LowerBound;
-                filters.Add(lowerBoundFilter);
-            }
-
-            if (dateRange.UpperBound != null)
-            {
-                Expression<Func<EventModel, bool>> upperBoundFilter = (EventModel e) => e.EndAt == dateRange.UpperBound;
-                filters.Add(upperBoundFilter);
-            }
-
+            EventsFilters filters = new EventsFilters();
+            filters.Add((EventModel e) => e.Title.StartsWith(title), () => title != null);
+            filters.Add((EventModel e) => e.StartAt == dateRange.LowerBound, () => dateRange.LowerBound != null);
+            filters.Add((EventModel e) => e.EndAt == dateRange.UpperBound, () => dateRange.UpperBound != null);
 
             return await _eventsRepository.GetPaginatedEventsAsync(filters, pagination, cancellationToken);
         }

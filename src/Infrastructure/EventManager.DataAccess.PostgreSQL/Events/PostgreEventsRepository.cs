@@ -3,6 +3,7 @@ using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Repositories.Events;
+using EventsManager.Shared.Filters;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.Linq.Expressions;
@@ -78,23 +79,13 @@ namespace EventManager.Infrastructure.PostgreSQL.Events
         }
 
         public async Task<PaginatedEventsDto> GetPaginatedEventsAsync(
-            IEnumerable<Expression<Func<EventModel, bool>>> filters, 
+            EventsFilters filters, 
             PaginationDto pagination, 
             CancellationToken cancellationToken)
         {
             IQueryable<EventModel> events = _dbContext.Events;
 
-            foreach(var filter in filters)
-            {
-                var a = events.ToList();
-
-                foreach(var e in a)
-                {
-                    Debug.WriteLine(e.Title);
-                }
-                Debug.WriteLine("Next\n");
-                events = events.Where(filter);
-            }
+            events = filters.ApplyFilters(events);
 
             int count = events.Count();
 

@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Domain\EventManager.Domain\EventManager.Domain.csproj" />
     <ProjectReference Include="..\EventsManager.Failures\EventsManager.Failures.csproj" />
   </ItemGroup>
 

@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\EventManager.Domain\EventManager.Domain.csproj" />
     <ProjectReference Include="..\..\SharedLibs\EventManager.DTOs\EventManager.DTOs.csproj" />
+    <ProjectReference Include="..\..\SharedLibs\Shared\EventsManager.Shared.csproj" />
   </ItemGroup>
 
 </Project>
