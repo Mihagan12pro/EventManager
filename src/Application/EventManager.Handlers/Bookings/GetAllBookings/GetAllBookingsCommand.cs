@@ -2,5 +2,5 @@
 
 namespace EventManager.Handlers.Bookings.GetAllBookings
 {
-    public record GetAllBookingsCommand(BookingFiltersDto FiltersDto) : ICommand;
+    public record GetAllBookingsCommand(GetBookingFiltersDto FiltersDto) : ICommand;
 }

@@ -5,8 +5,6 @@ using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Repositories.Events;
 using EventsManager.Shared.Filters;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
-using System.Linq.Expressions;
 
 namespace EventManager.Infrastructure.PostgreSQL.Events
 {
@@ -79,7 +77,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Events
         }
 
         public async Task<PaginatedEventsDto> GetPaginatedEventsAsync(
-            EventsFilters filters, 
+            Filters<EventModel> filters, 
             PaginationDto pagination, 
             CancellationToken cancellationToken)
         {

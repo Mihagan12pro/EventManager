@@ -4,6 +4,7 @@ using EventManager.Domain.Events;
 using EventManager.DTOs.Bookings;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Repositories.Bookings;
+using EventsManager.Shared.Filters;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -57,34 +58,12 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
         }
 
         public async Task<IEnumerable<BookingModel>> GetAllAsync(
-            BookingFiltersDto bookingFiltersDto, 
+            Filters<BookingModel> filters, 
             CancellationToken cancellationToken)
         {
             IQueryable<BookingModel> bookings = _dbContext.Bookings;
-            if (bookingFiltersDto.Status != null)
-            {
-                bookings = bookings.Where(b => b.Status == bookingFiltersDto.Status);
-            }
 
-            if (bookingFiltersDto.CreatedAt != null)
-            {
-                bookings = bookings.Where(b => b.CreatedAt == bookingFiltersDto.CreatedAt);
-            }
-
-            if (bookingFiltersDto.ProcessedAt != null)
-            {
-                bookings = bookings.Where(b => b.ProcessedAt == bookingFiltersDto.ProcessedAt);
-            }
-
-
-            return bookings;
-        }
-
-        public async Task<IEnumerable<BookingModel>> GetAllAsync(
-            Expression<Func<BookingModel, bool>> filters, 
-            CancellationToken cancellationToken)
-        {
-            var bookings = _dbContext.Bookings.Where(filters);
+            bookings = filters.ApplyFilters(bookings);
 
             return bookings;
         }

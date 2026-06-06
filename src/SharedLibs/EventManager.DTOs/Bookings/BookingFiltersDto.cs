@@ -8,7 +8,7 @@ namespace EventManager.DTOs.Bookings
     /// <param name="Status">Booking status. Optional field</param>
     /// <param name="CreatedAt">Date time of creating. Optional field</param>
     /// <param name="ProcessedAt">Date time of processing. Optional field</param>
-    public record BookingFiltersDto(
+    public record GetBookingFiltersDto(
         BookingStatus? Status,
         DateTime? CreatedAt,
         DateTime? ProcessedAt);

@@ -4,6 +4,7 @@ using EventManager.Domain.Events;
 using EventManager.DTOs.Bookings;
 using EventManager.Repositories.Bookings;
 using EventManager.Repositories.Events;
+using EventsManager.Shared.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -27,7 +28,10 @@ namespace EventManager.Services.Background.Bookings
                     {
                         IBookingsRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingsRepository>();
 
-                        Expression<Func<BookingModel, bool>> filters = (BookingModel b) => b.Status == BookingStatus.Pending || (b.EventId == null && b.Status != BookingStatus.Rejected);
+                        var filters = new Filters<BookingModel>(
+                                (BookingModel b) => b.Status == BookingStatus.Pending ||
+                                    (b.EventId == null && b.Status != BookingStatus.Rejected)
+                            );
 
                         var pendingBookings = await bookingRepository.GetAllAsync(filters, stoppingToken);
                         var pendingTasks = pendingBookings.Select(pb => ProcessBookingsAsync(pb, stoppingToken));

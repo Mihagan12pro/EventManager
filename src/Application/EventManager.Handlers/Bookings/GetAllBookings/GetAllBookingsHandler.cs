@@ -1,5 +1,8 @@
-﻿using EventManager.DTOs.Bookings;
+﻿using EventManager.Domain.Bookings;
+using EventManager.DTOs.Bookings;
+using EventManager.Handlers.Extensions;
 using EventManager.Repositories.Bookings;
+using EventsManager.Shared.Filters;
 
 namespace EventManager.Handlers.Bookings.GetAllBookings
 {
@@ -11,9 +14,10 @@ namespace EventManager.Handlers.Bookings.GetAllBookings
             GetAllBookingsCommand command,
             CancellationToken cancellationToken)
         {
-            var filtersDto = command.FiltersDto;
+            var filters = new Filters<BookingModel>();
+            filters.Add(command.FiltersDto);
 
-            var result = await _bookingRepository.GetAllAsync(filtersDto, cancellationToken);
+            var result = await _bookingRepository.GetAllAsync(filters, cancellationToken);
 
             return result.Select(b => new GetBookingDto(
                 b.EventId,

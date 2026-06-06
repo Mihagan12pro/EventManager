@@ -1,5 +1,4 @@
-﻿using EventManager.Domain.Events;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace EventsManager.Shared.Filters
 {
