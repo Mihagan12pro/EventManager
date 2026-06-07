@@ -72,8 +72,14 @@ namespace EventManager.API.Controllers
                 to);
 
             var events = await handler.HandleAsync(
-                new GetEventsCommand(title, pagination, dateRange),
-                cancellationToken);
+                new GetEventsCommand(
+                    new GetEventsWithFiltersDto(
+                        title, 
+                        pagination, 
+                        dateRange
+                    )),
+                 cancellationToken
+                );
 
 
             return Ok(events);

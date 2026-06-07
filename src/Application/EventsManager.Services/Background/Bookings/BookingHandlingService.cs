@@ -8,7 +8,6 @@ using EventsManager.Shared.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System.Linq.Expressions;
 
 namespace EventManager.Services.Background.Bookings
 {

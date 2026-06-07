@@ -1,7 +1,7 @@
 ﻿using EventManager.DTOs.Shared;
 using FluentValidation;
 
-namespace EventManager.Handlers
+namespace EventManager.Handlers.CommonValidators
 {
     public class PaginationDtoValidator : AbstractValidator<PaginationDto>
     {

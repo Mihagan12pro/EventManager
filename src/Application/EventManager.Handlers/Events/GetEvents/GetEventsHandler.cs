@@ -20,26 +20,17 @@ namespace EventManager.Handlers.Events.GetEvents
             GetEventsCommand command, 
             CancellationToken cancellationToken)
         {
-            var pagination = command.Pagination;
-            var title = command.Title;
-            var dateRange = command.DateRange;
-
-            var paginationValidationResult = _paginationValidator.Validate(command.Pagination);
+            var paginationValidationResult = _paginationValidator.Validate(command.EventsFiltersDto.Pagination);
             if (!paginationValidationResult.IsValid)
             {
                 ErrorsCollection errors = new ErrorsCollection(paginationValidationResult.Errors.Select(vf => vf.ToError()));
 
                 throw new BadRequestException(errors);
             }
+            var filters = new EventsFilters();
+            filters.Add(command.EventsFiltersDto);
 
-            Filters<EventModel> filters = new Filters<EventModel>(
-                
-                );
-            filters.Add((EventModel e) => e.Title.StartsWith(title), () => title != null);
-            filters.Add((EventModel e) => e.StartAt == dateRange.LowerBound, () => dateRange.LowerBound != null);
-            filters.Add((EventModel e) => e.EndAt == dateRange.UpperBound, () => dateRange.UpperBound != null);
-
-            return await _eventsRepository.GetPaginatedEventsAsync(filters, pagination, cancellationToken);
+            return await _eventsRepository.GetPaginatedEventsAsync(filters, command.EventsFiltersDto.Pagination, cancellationToken);
         }
 
         public GetEventsHandler(
