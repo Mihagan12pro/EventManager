@@ -1,5 +1,5 @@
 ﻿using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
-using EventsManager.Failures.Errors;
+using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using EventsManager.Failures.Errors.Collections;
 using FluentValidation.Results;
 
@@ -8,11 +8,11 @@ namespace EventManager.Handlers.Extensions.Validation
     internal static class ValidationResultExtensions
     {
         /// <summary>
-        /// Throws BadRequestException when appears validation fails
+        /// Throws BadRequestException when validation fails appears
         /// </summary>
         /// <param name="validationResult"></param>
         /// <exception cref="BadRequestException"></exception>
-        public static void ThrowIfNotIsValid(this ValidationResult validationResult)
+        public static void ThrowBadRequestIfNotIsValid(this ValidationResult validationResult)
         {
             if (!validationResult.IsValid)
             {
@@ -20,6 +20,12 @@ namespace EventManager.Handlers.Extensions.Validation
 
                 throw new BadRequestException(errors);
             }
+        }
+
+        public static void ThrowNotFoundIfNotIsValid(this ValidationResult validationResult, string message = "This resource does not exists!")
+        {
+            if (!validationResult.IsValid)
+                throw new NotFoundException(message);
         }
     }
 }

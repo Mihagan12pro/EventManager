@@ -2,9 +2,8 @@
 using EventManager.DTOs.Events;
 using EventManager.Handlers.Extensions.Validation;
 using EventManager.Repositories.Events;
-using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
-using EventsManager.Failures.Errors.Collections;
+using EventsManager.Shared;
 using FluentValidation;
 
 namespace EventManager.Handlers.Events.PutEvent
@@ -23,18 +22,9 @@ namespace EventManager.Handlers.Events.PutEvent
 
 
             EventModel? eventById = await _eventsRepository.GetByIdAsync(id, cancellationToken);
+            NullChecker.Check(eventById);
 
-            if (eventById == null)
-                throw new NotFoundException($"Event with id = '{id}' was not found!");
-
-            var validation = _validator.Validate(putEvent);
-
-            if (!validation.IsValid)
-            {
-                ErrorsCollection errors = new ErrorsCollection(validation.Errors.Select(vf => vf.ToError()));
-
-                throw new BadRequestException(errors);
-            }
+            _validator.Validate(putEvent).ThrowBadRequestIfNotIsValid();
 
             await _eventsRepository.CompleteUpdateAsync(id, putEvent, cancellationToken);
 

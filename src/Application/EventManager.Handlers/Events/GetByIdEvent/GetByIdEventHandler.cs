@@ -2,6 +2,7 @@
 using EventManager.DTOs.Events;
 using EventManager.Repositories.Events;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
+using EventsManager.Shared;
 
 namespace EventManager.Handlers.Events.GetByIdEvent
 {
@@ -16,9 +17,7 @@ namespace EventManager.Handlers.Events.GetByIdEvent
             Guid id = command.Id;
 
             EventModel? @event = await _eventsRepository.GetByIdAsync(id, cancellationToken);
-
-            if (@event == null)
-                throw new NotFoundException($"Event with id = {id} does not exists!");
+            NullChecker.Check(@event);
 
             return new GetEventDto(
                 @event.Id,

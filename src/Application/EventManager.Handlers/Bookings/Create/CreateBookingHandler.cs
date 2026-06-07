@@ -5,6 +5,7 @@ using EventManager.Repositories.Bookings;
 using EventManager.Repositories.Events;
 using EventManager.Services.Exceptions.WebApi.Client.Conflict;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
+using EventsManager.Shared;
 
 namespace EventManager.Handlers.Bookings.Create
 {
@@ -23,8 +24,7 @@ namespace EventManager.Handlers.Bookings.Create
             BookingAcceptedDto? result = null;
 
             EventModel @event = await _eventsRepository.GetByIdAsync(eventId, cancellationToken);
-            if (@event == null)
-                throw new NotFoundException($"Event with id = {eventId} does not exists!");
+            NullChecker.Check(@event);
 
             if (@event.AvailableSeats == 0)
                 throw new NoAvailableSeatsException();

@@ -2,6 +2,7 @@
 using EventManager.DTOs.Bookings;
 using EventManager.Repositories.Bookings;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
+using EventsManager.Shared;
 
 namespace EventManager.Handlers.Bookings.GetByIdBooking
 {
@@ -16,8 +17,7 @@ namespace EventManager.Handlers.Bookings.GetByIdBooking
             Guid bookingId = command.BookingId;
 
             BookingModel booking = await _bookingsRepository.GetByIdAsync(bookingId, cancellationToken);
-            if (booking == null)
-                throw new NotFoundException($"Booking with id = {bookingId} does not exists!");
+            NullChecker.Check(booking);
 
             return new GetBookingDto(
                 booking.EventId,

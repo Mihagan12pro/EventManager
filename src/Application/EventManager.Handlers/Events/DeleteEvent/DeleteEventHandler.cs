@@ -1,6 +1,9 @@
 ﻿using EventManager.Domain.Events;
+using EventManager.Handlers.Extensions.Validation;
 using EventManager.Repositories.Events;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
+using EventsManager.Shared;
+using FluentValidation;
 
 namespace EventManager.Handlers.Events.DeleteEvent
 {
@@ -15,16 +18,15 @@ namespace EventManager.Handlers.Events.DeleteEvent
             Guid id = command.Id;
 
             EventModel? @event = await _eventsRepository.GetByIdAsync(id, cancellationToken);
-
-            if (@event == null)
-                throw new NotFoundException($"Event with id = {id} does not exists!");
+            NullChecker.Check(@event);
 
             await _eventsRepository.DeleteAsync(id, cancellationToken);
 
             return $"Event with id = {id} had been deleted!";
         }
 
-        public DeleteEventHandler(IEventsRepository eventsRepository)
+        public DeleteEventHandler(
+            IEventsRepository eventsRepository)
         {
             _eventsRepository = eventsRepository;
         }

@@ -16,14 +16,7 @@ namespace EventManager.Handlers.Events.AddEvent
             AddEventCommand command,
             CancellationToken cancellationToken)
         {
-            var validation = _validator.Validate(command.NewEvent);
-
-            if (!validation.IsValid)
-            {
-                ErrorsCollection errors = new ErrorsCollection(validation.Errors.Select(vf => vf.ToError()));
-
-                throw new BadRequestException(errors);
-            }
+            _validator.Validate(command.NewEvent).ThrowBadRequestIfNotIsValid();
 
             Guid id = await _eventsRepository.AddNewAsync(command.NewEvent, cancellationToken);
 
