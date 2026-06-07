@@ -14,7 +14,7 @@ namespace EventManager.Handlers.Bookings.GetAllBookings
             GetAllBookingsCommand command,
             CancellationToken cancellationToken)
         {
-            var filters = new Filters<BookingModel>();
+            var filters = new BookingsFilters();
             filters.Add(command.FiltersDto);
 
             var result = await _bookingRepository.GetAllAsync(filters, cancellationToken);
