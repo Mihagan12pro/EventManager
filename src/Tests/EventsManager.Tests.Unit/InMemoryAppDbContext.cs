@@ -1,4 +1,4 @@
-﻿using EventManager.DataAccess.PostgreSQL.DbContexts;
+﻿using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventManager.Tests.Unit

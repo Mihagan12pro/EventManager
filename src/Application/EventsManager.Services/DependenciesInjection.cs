@@ -9,15 +9,6 @@ namespace EventManager.Services
 {
     public static class DependenciesInjection
     {
-        //public static IServiceCollection AddScopedServices(this IServiceCollection scopedServices)
-        //{
-        //    scopedServices.AddScoped<IBookingsService, BookingsService>();
-
-        //    scopedServices.AddValidatorsFromAssembly(typeof(DependenciesInjection).Assembly);
-
-        //    return scopedServices;
-        //}
-
         public static IServiceCollection AddBackgroundServices(this IServiceCollection backgroundServices)
         {
             backgroundServices.AddHostedService<BookingHandlingService>();

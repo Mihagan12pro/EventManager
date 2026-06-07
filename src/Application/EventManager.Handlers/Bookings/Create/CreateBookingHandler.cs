@@ -9,13 +9,13 @@ using EventsManager.Shared;
 
 namespace EventManager.Handlers.Bookings.Create
 {
-    public class CreateBookingHandler : ICommandHandler<BookingAcceptedDto, CreateBookingsCommand>
+    public class CreateBookingHandler : ICommandHandler<BookingAcceptedDto, CreateBookingCommand>
     {
         private readonly IBookingsRepository _bookingsRepository;
         private readonly IEventsRepository _eventsRepository;
 
         public async Task<BookingAcceptedDto> HandleAsync(
-            CreateBookingsCommand command, 
+            CreateBookingCommand command, 
             CancellationToken cancellationToken)
         {
             Guid eventId = command.EventId;

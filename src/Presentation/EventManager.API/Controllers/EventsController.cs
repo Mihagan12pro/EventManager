@@ -152,10 +152,10 @@ namespace EventManager.API.Controllers
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status202Accepted)]
         public async Task<IActionResult> Book(
             [FromRoute] Guid id,
-            [FromServices] ICommandHandler<BookingAcceptedDto, CreateBookingsCommand> handler,
+            [FromServices] ICommandHandler<BookingAcceptedDto, CreateBookingCommand> handler,
             CancellationToken cancellationToken)
         {
-            var bookingDto = await handler.HandleAsync(new CreateBookingsCommand(id), cancellationToken);
+            var bookingDto = await handler.HandleAsync(new CreateBookingCommand(id), cancellationToken);
 
             var location = UrlMaster.CreateWithoutPath(HttpContext.Request, "bookings", bookingDto.Id);
 

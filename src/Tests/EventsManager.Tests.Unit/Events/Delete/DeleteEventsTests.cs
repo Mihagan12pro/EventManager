@@ -1,5 +1,7 @@
 ﻿using EventManager.DTOs.Events;
-using EventManager.Services.Events;
+using EventManager.Handlers;
+using EventManager.Handlers.Events.AddEvent;
+using EventManager.Handlers.Events.DeleteEvent;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,33 +12,34 @@ namespace EventManager.Tests.Unit.Events.Delete
         [Theory]
         [MemberData(nameof(AddEventsForDeleting))]
         [Trait("SubCategory", "Delete")]
-        public async Task Test_Basic_Deleting(NewEventDto eventDto)
+        public async Task Test_BasicDeleting(NewEventDto eventDto)
         {
             var cto = new CancellationTokenSource();
             var provider = TestingServicesProvider.GetServicesProvider();
 
-            var eventsService = provider.GetRequiredService<IEventsService>();
+            var addingHandler = provider.GetRequiredService<ICommandHandler<Guid, AddEventCommand>>();
+            var deletingHandler = provider.GetRequiredService<ICommandHandler<string, DeleteEventCommand>>();
 
-            Guid id = await eventsService.AddNewAsync(eventDto, cto.Token);
+            Guid id = await addingHandler.HandleAsync(new AddEventCommand(eventDto), cto.Token);
 
-            var test1 = await eventsService.DeleteAsync(id, cto.Token);
+            var test1 = await deletingHandler.HandleAsync(new DeleteEventCommand(id), cto.Token);
            
             Assert.Equal(typeof(string), test1.GetType());
 
-            var test2 = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.DeleteAsync(id, cto.Token));
+            var test2 = await Assert.ThrowsAsync<NotFoundException>(() => deletingHandler.HandleAsync(new DeleteEventCommand(id), cto.Token));
         }
 
         [Theory]
         [MemberData(nameof(AddNotExistsDeleting))]
         [Trait("SubCategory", "Delete")]
-        public async Task Test_Not_Exists_Deleting(Guid id)
+        public async Task Test_NotExistsDeleting(Guid id)
         {
             var cto = new CancellationTokenSource();
             var provider = TestingServicesProvider.GetServicesProvider();
 
-            var eventsService = provider.GetRequiredService<IEventsService>();
+            var handler = provider.GetRequiredService<ICommandHandler<string, DeleteEventCommand>>();
 
-            var test = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.DeleteAsync(id, cto.Token));
+            var test = await Assert.ThrowsAsync<NotFoundException>(() => handler.HandleAsync(new DeleteEventCommand(id), cto.Token));
         }
     }
 }

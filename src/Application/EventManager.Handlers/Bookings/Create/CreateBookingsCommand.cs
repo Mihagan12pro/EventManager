@@ -1,4 +1,4 @@
 ﻿namespace EventManager.Handlers.Bookings.Create
 {
-    public record CreateBookingsCommand(Guid EventId) : ICommand;
+    public record CreateBookingCommand(Guid EventId) : ICommand;
 }

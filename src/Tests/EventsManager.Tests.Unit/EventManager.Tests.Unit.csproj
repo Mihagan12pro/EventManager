@@ -26,8 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Application\EventManager.Handlers\EventManager.Handlers.csproj" />
+    <ProjectReference Include="..\..\Application\EventsManager.Services\EventManager.Services.csproj" />
     <ProjectReference Include="..\..\DataAccess\EventManager.DataAccess.PostgreSQL\EventManager.DataAccess.PostgreSQL.csproj" />
     <ProjectReference Include="..\..\EventsManager.Services\EventManager.Services.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\EventManager.DataAccess.PostgreSQL\EventManager.Infrastructure.PostgreSQL.csproj" />
   </ItemGroup>
 
   <ItemGroup>

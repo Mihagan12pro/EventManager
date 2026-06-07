@@ -1,4 +1,7 @@
-﻿using FluentValidation;
+﻿using EventManager.Handlers;
+using EventManager.Infrastructure.PostgreSQL;
+using EventManager.Infrastructure.PostgreSQL.DbContexts;
+using EventManager.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,15 +18,9 @@ namespace EventManager.Tests.Unit
             services.AddDbContext<AppDbContextBase, InMemoryAppDbContext>(options =>
                 options.UseInMemoryDatabase(dbName));
 
-            services.AddValidatorsFromAssembly(typeof(Services.DependenciesInjection).Assembly);
-
-            services.AddScoped<IEventsService, EventsService>();
-            services.AddScoped<IBookingsService, BookingsService>();
-
-            services.AddScoped<IEventsRepository, PostgreEventsRepository>();
-            services.AddScoped<IBookingsRepository, PostgreBookingsRepository>();
-
-            services.AddHostedService<BookingHandlingService>();
+            services.AddHandlers();
+            services.AddBackgroundServices();
+            services.AddRepositories();
 
             services.AddLogging();
 
