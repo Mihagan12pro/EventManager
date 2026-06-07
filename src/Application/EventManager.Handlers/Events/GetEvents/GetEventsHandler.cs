@@ -1,13 +1,11 @@
-﻿using EventManager.Domain.Events;
-using EventManager.DTOs.Events;
+﻿using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
-using EventManager.Handlers.Extensions;
+using EventManager.Handlers.Extensions.Validation;
 using EventManager.Repositories.Events;
 using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
 using EventsManager.Failures.Errors.Collections;
 using EventsManager.Shared.Filters;
 using FluentValidation;
-using System.ComponentModel.DataAnnotations;
 
 namespace EventManager.Handlers.Events.GetEvents
 {
@@ -21,12 +19,13 @@ namespace EventManager.Handlers.Events.GetEvents
             CancellationToken cancellationToken)
         {
             var paginationValidationResult = _paginationValidator.Validate(command.EventsFiltersDto.Pagination);
-            if (!paginationValidationResult.IsValid)
-            {
-                ErrorsCollection errors = new ErrorsCollection(paginationValidationResult.Errors.Select(vf => vf.ToError()));
+            paginationValidationResult.ThrowIfNotIsValid();
+            //if (!paginationValidationResult.IsValid)
+            //{
+            //    ErrorsCollection errors = new ErrorsCollection(paginationValidationResult.Errors.Select(vf => vf.ToError()));
 
-                throw new BadRequestException(errors);
-            }
+            //    throw new BadRequestException(errors);
+            //}
             var filters = new EventsFilters();
             filters.Add(command.EventsFiltersDto);
 

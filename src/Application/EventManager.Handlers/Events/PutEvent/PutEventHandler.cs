@@ -1,6 +1,6 @@
 ﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
-using EventManager.Handlers.Extensions;
+using EventManager.Handlers.Extensions.Validation;
 using EventManager.Repositories.Events;
 using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Services.Exceptions.WebApi.Client.NotFound;
