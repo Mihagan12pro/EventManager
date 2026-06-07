@@ -1,12 +1,11 @@
-﻿using EventManager.Handlers;
-using EventManager.Infrastructure.PostgreSQL;
+﻿using EventManager.Infrastructure.PostgreSQL;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Services;
+using EventManager.Handlers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Testcontainers.PostgreSql;
-using Xunit;
 
 namespace EventManager.Tests.Abstractions
 {
@@ -57,3 +56,4 @@ namespace EventManager.Tests.Abstractions
         }
     }
 }
+
