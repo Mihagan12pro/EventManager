@@ -1,6 +1,4 @@
-﻿using EventManager.Domain.Bookings;
-using EventManager.DTOs.Bookings;
-using EventManager.Handlers.Extensions;
+﻿using EventManager.DTOs.Bookings;
 using EventManager.Repositories.Bookings;
 using EventsManager.Shared.Filters;
 

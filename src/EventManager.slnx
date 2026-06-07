@@ -1,4 +1,5 @@
 <Solution>
+  <Folder Name="/AutoTests/" />
   <Folder Name="/Solution Items/">
     <File Path="../.gitignore" />
     <File Path="../docker-compose.yml" />
@@ -29,4 +30,5 @@
     <Project Path="SharedLibs/Shared/EventsManager.Shared.csproj" />
   </Folder>
   <Folder Name="/Tests/" />
+  <Project Path="Tests/EventManager.Tests.Integration/EventManager.Tests.Integration.csproj" />
 </Solution>

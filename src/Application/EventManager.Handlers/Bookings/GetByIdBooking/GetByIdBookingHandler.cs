@@ -1,7 +1,6 @@
 ﻿using EventManager.Domain.Bookings;
 using EventManager.DTOs.Bookings;
 using EventManager.Repositories.Bookings;
-using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using EventsManager.Shared;
 
 namespace EventManager.Handlers.Bookings.GetByIdBooking

@@ -1,7 +1,6 @@
 ﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.Repositories.Events;
-using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using EventsManager.Shared;
 
 namespace EventManager.Handlers.Events.GetByIdEvent

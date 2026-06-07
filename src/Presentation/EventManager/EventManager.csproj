@@ -27,8 +27,4 @@
     <ProjectReference Include="..\EventManager.API\EventManager.API.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
-
 </Project>
