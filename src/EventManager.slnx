@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/AutoTests/">
+    <Project Path="Tests/EventManager.Tests.Abstractions/EventManager.Tests.Abstractions.csproj" Id="f4e0bbe8-6929-4a04-863b-76793975a2aa" />
+    <Project Path="Tests/EventManager.Tests.Integration/EventManager.Tests.Integration.csproj" />
+    <Project Path="Tests/EventsManager.Tests.End2End/EventsManager.Tests.End2End.csproj" Id="bfa9d4f4-6fdb-4575-91ef-8b05e1ab2a00" />
     <Project Path="Tests/EventsManager.Tests.Unit/EventManager.Tests.Unit.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">

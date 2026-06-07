@@ -8,6 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Bookings\**" />
+    <Compile Remove="Events\**" />
+    <EmbeddedResource Remove="Bookings\**" />
+    <EmbeddedResource Remove="Events\**" />
+    <None Remove="Bookings\**" />
+    <None Remove="Events\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="EventManagerAppFactory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="lpwkgf2q.sll~" />
   </ItemGroup>
 
@@ -16,17 +29,15 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.8" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="Testcontainers" Version="4.11.0" />
-    <PackageReference Include="Testcontainers.PostgreSql" Version="4.11.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DataAccess\EventManager.DataAccess.PostgreSQL\EventManager.DataAccess.PostgreSQL.csproj" />
-    <ProjectReference Include="..\..\EventManager.API\EventManager.API.csproj" />
-    <ProjectReference Include="..\..\EventManager\EventManager.csproj" />
-    <ProjectReference Include="..\..\EventsManager.Services\EventManager.Services.csproj" />
+    <ProjectReference Include="..\..\Domain\EventManager.Domain\EventManager.Domain.csproj" />
+    <ProjectReference Include="..\..\SharedLibs\EventManager.DTOs\EventManager.DTOs.csproj" />
+    <ProjectReference Include="..\..\SharedLibs\Shared\EventsManager.Shared.csproj" />
+    <ProjectReference Include="..\EventManager.Tests.Abstractions\EventManager.Tests.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

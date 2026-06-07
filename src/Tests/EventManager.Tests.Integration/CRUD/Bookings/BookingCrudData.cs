@@ -1,11 +1,9 @@
-﻿using EventManager.DataAccess.PostgreSQL.DbContexts;
-using EventManager.Domain.Bookings;
+﻿using EventManager.Domain.Bookings;
 using EventManager.Domain.Bookings.Enums;
-using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
-using EventManager.DTOs.Shared;
-using EventManager.Services.Bookings;
-using EventManager.Services.Events;
+using EventManager.Infrastructure.PostgreSQL.DbContexts;
+using EventManager.Repositories.Bookings;
+using EventManager.Repositories.Events;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
 
@@ -107,60 +105,6 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
 
                 [
                     (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Confirmed && b.CreatedAt == now && b.ProcessedAt == now.AddDays(5)),
-                    2
-                ],
-            ];
-        }
-
-        public static IEnumerable<object[]> FilterByDto()
-        {
-            return
-            [
-                [
-                    new BookingFiltersDto(BookingStatus.Confirmed, null, null),
-
-                    3
-                ],
-
-                [
-                    new BookingFiltersDto(BookingStatus.Pending, null, null),
-
-                    1
-                ],
-
-                [
-                    new BookingFiltersDto(BookingStatus.Rejected, null, null),
-
-                    1
-                ],
-
-                [
-                    new BookingFiltersDto(null, now, null),
-
-                    4
-                ],
-
-                [
-                    new BookingFiltersDto(BookingStatus.Pending, now, null),
-
-                    0
-                ],
-
-                [
-                    new BookingFiltersDto(BookingStatus.Confirmed, now, null),
-
-                    3
-                ],
-
-                [
-                    new BookingFiltersDto(BookingStatus.Confirmed, now, now),
-
-                    1
-                ],
-
-                [
-                    new BookingFiltersDto(BookingStatus.Confirmed, now, now.AddDays(5)),
-
                     2
                 ],
             ];
