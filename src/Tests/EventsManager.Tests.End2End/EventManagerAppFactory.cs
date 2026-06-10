@@ -1,11 +1,9 @@
 ﻿using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Tests.Abstractions;
 using Microsoft.AspNetCore.Hosting;
-using EventManager.Handlers;
 using EventManager.Infrastructure.PostgreSQL;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 using EventManager.Application;
 
 namespace EventsManager.Tests.End2End

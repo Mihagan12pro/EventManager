@@ -1,10 +1,10 @@
-﻿using EventManager.Domain.Events;
+﻿using EventManager.Application.Repositories;
+using EventManager.Domain.Events;
 using EventManager.Domain.ValueObjects;
 using EventManager.Domain.ValueObjects.Events;
 using EventManager.Domain.ValueObjects.Events.DateAndTime;
 using EventManager.DTOs.Events;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
-using EventManager.Repositories.Events;
 using EventsManager.Shared.Filters;
 using Microsoft.EntityFrameworkCore;
 

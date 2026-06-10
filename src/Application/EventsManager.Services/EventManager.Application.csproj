@@ -7,19 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.5" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.5" />
+    <PackageReference Include="Scrutor" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\EventManager.Domain\EventManager.Domain.csproj" />
     <ProjectReference Include="..\..\SharedLibs\EventManager.DTOs\EventManager.DTOs.csproj" />
     <ProjectReference Include="..\..\SharedLibs\Shared\EventsManager.Shared.csproj" />
-    <ProjectReference Include="..\EventManager.DataAccess.Abstractions\EventManager.Repositories.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Handlers\" />
   </ItemGroup>
 </Project>

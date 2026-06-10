@@ -1,10 +1,10 @@
 ﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
-using EventManager.Repositories.Events;
 using Microsoft.Extensions.DependencyInjection;
 using EventsManager.Shared.Filters;
 using System.Linq.Expressions;
 using EventManager.Domain.ValueObjects;
+using EventManager.Application.Repositories;
 
 namespace EventManager.Tests.Integration.CRUD.Events
 {

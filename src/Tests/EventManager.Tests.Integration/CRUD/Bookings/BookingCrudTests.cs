@@ -1,9 +1,9 @@
-﻿using EventManager.Domain.Bookings;
+﻿using EventManager.Application.Repositories;
+using EventManager.Domain.Bookings;
 using EventManager.Domain.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.Repositories.Bookings;
-using EventManager.Repositories.Events;
 using EventsManager.Shared.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;

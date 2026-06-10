@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Application\EventManager.Handlers\EventManager.Handlers.csproj" />
     <ProjectReference Include="..\..\Application\EventsManager.Services\EventManager.Application.csproj" />
   </ItemGroup>
 

@@ -1,8 +1,7 @@
-﻿using EventManager.Infrastructure.PostgreSQL.Booking;
+﻿using EventManager.Application.Repositories;
+using EventManager.Infrastructure.PostgreSQL.Booking;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Infrastructure.PostgreSQL.Events;
-using EventManager.Repositories.Bookings;
-using EventManager.Repositories.Events;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
 

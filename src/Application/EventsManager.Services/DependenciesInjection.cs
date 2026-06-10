@@ -1,4 +1,5 @@
-﻿using EventManager.Application.HostedServices.Bookings;
+﻿using EventManager.Application.Handlers;
+using EventManager.Application.HostedServices.Bookings;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
 
@@ -19,6 +20,23 @@ namespace EventManager.Application
         public static IServiceCollection AddSingletonServices(this IServiceCollection singletonServices)
         {
             return singletonServices;
+        }
+
+        public static IServiceCollection AddHandlers(this IServiceCollection services)
+        {
+            var assembly = typeof(DependenciesInjection).Assembly;
+
+            services.Scan(scan => scan.FromAssemblies(assembly)
+                .AddClasses(classes => classes
+                    .AssignableToAny(
+                        typeof(ICommandHandler<,>),
+                        typeof(ICommandHandler<>)
+                    )
+                )
+                .AsSelfWithInterfaces()
+            .WithScopedLifetime());
+
+            return services;
         }
     }
 }

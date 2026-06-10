@@ -1,6 +1,5 @@
 ﻿using EventManager.Infrastructure.PostgreSQL;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
-using EventManager.Handlers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;

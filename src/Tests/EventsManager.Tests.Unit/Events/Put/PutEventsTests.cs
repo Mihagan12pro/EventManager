@@ -1,4 +1,8 @@
-﻿using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
+﻿using EventManager.Application.Handlers;
+using EventManager.Application.Handlers.Events.AddEvent;
+using EventManager.Application.Handlers.Events.GetByIdEvent;
+using EventManager.Application.Handlers.Events.PutEvent;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.NotFound;
 using EventManager.DTOs.Events;
 using EventManager.Handlers;

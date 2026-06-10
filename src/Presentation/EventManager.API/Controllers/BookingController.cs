@@ -1,6 +1,6 @@
-﻿using EventManager.DTOs.Bookings;
-using EventManager.Handlers;
-using EventManager.Handlers.Bookings.GetByIdBooking;
+﻿using EventManager.Application.Handlers;
+using EventManager.Application.Handlers.Bookings.GetByIdBooking;
+using EventManager.DTOs.Bookings;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventManager.API.Controllers
