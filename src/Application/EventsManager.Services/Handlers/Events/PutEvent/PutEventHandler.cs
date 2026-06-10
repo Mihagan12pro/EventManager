@@ -1,12 +1,11 @@
-﻿using EventManager.Application.Handlers;
-using EventManager.Application.Repositories;
+﻿using EventManager.Application.Repositories;
 using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.Shared;
 
 namespace EventManager.Application.Handlers.Events.PutEvent
 {
-    public class PutEventHandler : ICommandHandler<string, PutEventCommand>
+    internal class PutEventHandler : ICommandHandler<string, PutEventCommand>
     {
         private readonly IEventsRepository _eventsRepository;
 

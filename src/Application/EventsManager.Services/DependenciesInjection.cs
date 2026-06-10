@@ -31,7 +31,8 @@ namespace EventManager.Application
                     .AssignableToAny(
                         typeof(ICommandHandler<,>),
                         typeof(ICommandHandler<>)
-                    )
+                    ),
+                    publicOnly: false
                 )
                 .AsSelfWithInterfaces()
             .WithScopedLifetime());

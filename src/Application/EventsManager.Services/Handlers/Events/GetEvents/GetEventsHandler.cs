@@ -1,11 +1,10 @@
-﻿using EventManager.Application.Handlers;
-using EventManager.Application.Repositories;
+﻿using EventManager.Application.Repositories;
 using EventManager.DTOs.Events;
 using EventManager.Shared.Filters;
 
 namespace EventManager.Application.Handlers.Events.GetEvents
 {
-    public class GetEventsHandler : ICommandHandler<PaginatedEventsDto, GetEventsCommand>
+    internal class GetEventsHandler : ICommandHandler<PaginatedEventsDto, GetEventsCommand>
     {
         private readonly IEventsRepository _eventsRepository;
 

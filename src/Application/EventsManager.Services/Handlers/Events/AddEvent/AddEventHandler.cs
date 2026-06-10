@@ -2,7 +2,7 @@
 
 namespace EventManager.Application.Handlers.Events.AddEvent
 {
-    public class AddEventHandler : ICommandHandler<Guid, AddEventCommand>
+    internal class AddEventHandler : ICommandHandler<Guid, AddEventCommand>
     {
         private readonly IEventsRepository _eventsRepository;
 

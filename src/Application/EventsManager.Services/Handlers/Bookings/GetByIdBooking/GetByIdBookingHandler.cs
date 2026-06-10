@@ -5,7 +5,7 @@ using EventManager.Shared;
 
 namespace EventManager.Application.Handlers.Bookings.GetByIdBooking
 {
-    public class GetByIdBookingHandler : ICommandHandler<GetBookingDto, GetByIdBookingCommand>
+    internal class GetByIdBookingHandler : ICommandHandler<GetBookingDto, GetByIdBookingCommand>
     {
         private readonly IBookingsRepository _bookingsRepository;
 

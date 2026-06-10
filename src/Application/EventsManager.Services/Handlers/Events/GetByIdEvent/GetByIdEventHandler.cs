@@ -1,12 +1,11 @@
-﻿using EventManager.Application.Handlers;
-using EventManager.Application.Repositories;
+﻿using EventManager.Application.Repositories;
 using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 using EventManager.Shared;
 
 namespace EventManager.Application.Handlers.Events.GetByIdEvent
 {
-    public class GetByIdEventHandler : ICommandHandler<GetEventDto, GetByIdEventCommand>
+    internal class GetByIdEventHandler : ICommandHandler<GetEventDto, GetByIdEventCommand>
     {
         private readonly IEventsRepository _eventsRepository;
 

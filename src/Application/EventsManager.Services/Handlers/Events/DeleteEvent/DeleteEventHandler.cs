@@ -1,11 +1,10 @@
-﻿using EventManager.Application.Handlers;
-using EventManager.Application.Repositories;
+﻿using EventManager.Application.Repositories;
 using EventManager.Domain.Events;
 using EventManager.Shared;
 
 namespace EventManager.Application.Handlers.Events.DeleteEvent
 {
-    public class DeleteEventHandler : ICommandHandler<string, DeleteEventCommand>
+    internal class DeleteEventHandler : ICommandHandler<string, DeleteEventCommand>
     {
         private readonly IEventsRepository _eventsRepository;
 

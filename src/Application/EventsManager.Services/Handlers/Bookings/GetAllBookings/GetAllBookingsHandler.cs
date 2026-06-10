@@ -4,7 +4,7 @@ using EventManager.Shared.Filters;
 
 namespace EventManager.Application.Handlers.Bookings.GetAllBookings
 {
-    public class GetAllBookingsHandler : ICommandHandler<IEnumerable<GetBookingDto>, GetAllBookingsCommand>
+    internal class GetAllBookingsHandler : ICommandHandler<IEnumerable<GetBookingDto>, GetAllBookingsCommand>
     {
         private readonly IBookingsRepository _bookingRepository;
 
