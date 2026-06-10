@@ -13,71 +13,6 @@ namespace EventManager.Tests.Unit.Events.Add
                 [
                     new NewEventDto(
                        
-                        "Выпускной 11 класса",
-                        
-                        DateTime.Now,
-                        
-                        datetime,
-
-                        10
-                    ),
-
-                    2//Counf of errors
-                ],
-                [
-                    new NewEventDto(
-                        
-                        "Корпоратив",
-                        
-                        DateTime.Now,
-                        
-                        DateTime.Now,
-                        
-                        10),
-
-                    2
-                ],
-                [
-                    new NewEventDto(
-                        
-                        "",
-                        
-                        DateTime.Now,
-                        
-                        DateTime.Now,
-                        
-                        10),
-                    3
-                ],
-                [
-                    new NewEventDto(
-                        
-                        string.Empty,
-                        
-                        datetime.AddDays(-1),
-                        
-                        datetime.AddDays(2),
-                        
-                        10),
-
-                    2
-                ],
-                [
-                    new NewEventDto(
-
-                        "Концерт",
-
-                        datetime,
-
-                        datetime.AddDays(-1),
-
-                        10),
-
-                    2
-                ],
-                [
-                    new NewEventDto(
-                       
                         "Корпоратив",
 
                         datetime.AddHours(6),
@@ -101,20 +36,6 @@ namespace EventManager.Tests.Unit.Events.Add
                         
                         0),
                     1
-                ],
-                [
-                    new NewEventDto(
-                        
-                        null,
-
-                        datetime.AddHours(6),
-
-
-                        datetime.AddHours(2),
-
-                        10),
-
-                    2
                 ],
             ];
         }

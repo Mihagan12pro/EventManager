@@ -69,8 +69,8 @@ namespace EventManager.Domain.Events
             {
                 _seats = value;
 
-                AvailableSeats = _seats.Available;
                 TotalSeats = _seats.Total;
+                AvailableSeats = _seats.Available;
             }
         }
 
@@ -97,7 +97,7 @@ namespace EventManager.Domain.Events
         {
             lock (_lock)
             {
-                Seats = new Seats(TotalSeats, AvailableSeats - count);
+                Seats = new Seats(TotalSeats, AvailableSeats + count);
             }
         }
 
