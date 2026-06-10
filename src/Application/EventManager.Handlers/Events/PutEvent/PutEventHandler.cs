@@ -2,7 +2,6 @@
 using EventManager.DTOs.Events;
 using EventManager.Handlers.Extensions.Validation;
 using EventManager.Repositories.Events;
-using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using EventsManager.Shared;
 using FluentValidation;
 

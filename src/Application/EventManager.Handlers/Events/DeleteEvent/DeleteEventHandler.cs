@@ -1,9 +1,6 @@
 ﻿using EventManager.Domain.Events;
-using EventManager.Handlers.Extensions.Validation;
 using EventManager.Repositories.Events;
-using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using EventsManager.Shared;
-using FluentValidation;
 
 namespace EventManager.Handlers.Events.DeleteEvent
 {

@@ -1,10 +1,9 @@
 ﻿using EventManager.Domain.Bookings.Enums;
 using EventManager.Domain.Events;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.Conflict;
 using EventManager.DTOs.Bookings;
 using EventManager.Repositories.Bookings;
 using EventManager.Repositories.Events;
-using EventManager.Services.Exceptions.WebApi.Client.Conflict;
-using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using EventsManager.Shared;
 
 namespace EventManager.Handlers.Bookings.Create

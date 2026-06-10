@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SharedLibs\EventManager.DTOs\EventManager.DTOs.csproj" />
-    <ProjectReference Include="..\..\SharedLibs\EventsManager.Failures\EventsManager.Failures.csproj" />
     <ProjectReference Include="..\EventManager.DataAccess.Abstractions\EventManager.Repositories.csproj" />
   </ItemGroup>
 

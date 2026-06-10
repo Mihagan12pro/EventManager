@@ -1,4 +1,4 @@
-﻿using EventManager.Services.Exceptions.WebApi.Client.NotFound;
+﻿using EventManager.Domain.Failures.Exceptions.WebApi.Client.NotFound;
 
 namespace EventsManager.Shared
 {

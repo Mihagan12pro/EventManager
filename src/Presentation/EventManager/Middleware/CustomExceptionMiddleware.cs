@@ -1,7 +1,8 @@
-﻿using EventsManager.Failures;
+﻿using EventManager.Domain.Failures;
+using EventManager.Domain.Failures.Errors.Factories;
+using EventManager.Domain.Failures.Exceptions.WebApi;
+using EventsManager.Failures;
 using EventsManager.Failures.Errors;
-using EventsManager.Failures.Errors.Factories.Server;
-using EventsManager.Failures.Exceptions.WebApi;
 
 namespace EventManager.Middleware
 {

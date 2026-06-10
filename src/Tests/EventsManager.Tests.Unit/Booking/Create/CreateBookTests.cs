@@ -1,11 +1,11 @@
 ﻿using EventManager.Domain.Bookings.Enums;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.NotFound;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.Handlers;
 using EventManager.Handlers.Bookings.Create;
 using EventManager.Handlers.Events.AddEvent;
 using EventManager.Handlers.Events.DeleteEvent;
-using EventManager.Services.Exceptions.WebApi.Client.NotFound;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Unit.Booking.Create

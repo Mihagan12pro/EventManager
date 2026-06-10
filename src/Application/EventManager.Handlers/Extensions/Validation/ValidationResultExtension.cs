@@ -1,6 +1,6 @@
-﻿using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
-using EventManager.Services.Exceptions.WebApi.Client.NotFound;
-using EventsManager.Failures.Errors.Collections;
+﻿using EventManager.Domain.Failures.Errors;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.NotFound;
 using FluentValidation.Results;
 
 namespace EventManager.Handlers.Extensions.Validation

@@ -1,4 +1,4 @@
-﻿using EventManager.Domain.Events;
+﻿using EventManager.Domain.ValueObjects.DateAndTime;
 using EventManager.DTOs.Shared;
 
 namespace EventManager.DTOs.Events
@@ -6,5 +6,5 @@ namespace EventManager.DTOs.Events
     public record GetEventsWithFiltersDto(
         string? Title,
         PaginationDto Pagination,
-        DateRange DateRange);
+        DateTimeRange? DateRange);
 }

@@ -1,4 +1,5 @@
 ﻿using EventManager.Domain.Events;
+using EventManager.Domain.ValueObjects.DateAndTime;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
@@ -21,13 +22,14 @@ namespace EventManager.Infrastructure.PostgreSQL.Events
             NewEventDto eventDto,
             CancellationToken cancellationToken)
         {
+            var start = eventDto.StartAt!.Value;
+            var end = eventDto.EndAt!.Value;
+
             EventModel @event = new EventModel()
             {
                 Title = eventDto.Title,
 
-                StartAt = eventDto.StartAt!.Value,
-
-                EndAt = eventDto.EndAt!.Value,
+                EventDateTime = new EventDateTime(start, end),
 
                 TotalSeats = eventDto.TotalSeats!.Value,
 
@@ -50,8 +52,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Events
         {
             EventModel @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
-            @event.StartAt = putEvent.StartAt.Value;
-            @event.EndAt = putEvent.EndAt.Value;
+            @event.EventDateTime = new EventDateTime(putEvent.StartAt.Value, putEvent.EndAt.Value);
             @event.Title = putEvent.Title;
             @event.Description = putEvent.Description;
 

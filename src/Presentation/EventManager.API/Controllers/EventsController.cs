@@ -1,4 +1,4 @@
-﻿using EventManager.Domain.Events;
+﻿using EventManager.Domain.ValueObjects.DateAndTime;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
@@ -67,7 +67,7 @@ namespace EventManager.API.Controllers
         {
             PaginationDto pagination = new PaginationDto(page, pageSize);
 
-            DateRange dateRange = new DateRange(
+            DateTimeRange dateRange = new DateTimeRange(
                 from,
                 to);
 

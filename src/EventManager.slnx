@@ -31,7 +31,6 @@
   </Folder>
   <Folder Name="/src/SharedLibs/">
     <Project Path="SharedLibs/EventManager.DTOs/EventManager.DTOs.csproj" />
-    <Project Path="SharedLibs/EventsManager.Failures/EventsManager.Failures.csproj" />
     <Project Path="SharedLibs/Shared/EventsManager.Shared.csproj" />
   </Folder>
   <Folder Name="/Tests/" />
