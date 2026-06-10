@@ -32,7 +32,7 @@ namespace EventManager.Domain.ValueObjects
                     throw new ConflictException("Count of avaliable seats can't be greater than count of total seats!");
 
                 if (value < 0)
-                    throw new BadRequestException("There are no avaliable seats!");
+                    throw new NoAvailableSeatsException("There are no avaliable seats!");
                 
                 _available = value;
             }
@@ -58,6 +58,8 @@ namespace EventManager.Domain.ValueObjects
             {
                 throw new ConflictException("Total count must be greater than zero!");
             }
+
+            Available = avaliable;
         }
 
 

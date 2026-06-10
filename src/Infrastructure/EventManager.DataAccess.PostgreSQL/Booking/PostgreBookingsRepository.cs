@@ -4,6 +4,7 @@ using EventManager.Domain.Events;
 using EventManager.DTOs.Bookings;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Repositories.Bookings;
+using EventsManager.Shared;
 using EventsManager.Shared.Filters;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -34,6 +35,8 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
                 await _semaphore.WaitAsync();
 
                 @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == eventId, cancellationToken);
+                NullChecker.Check(@event);
+
                 @event.ReverseSeats();
 
                 booking = new BookingModel()

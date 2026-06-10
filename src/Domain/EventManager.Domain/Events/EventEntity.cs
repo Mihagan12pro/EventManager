@@ -87,7 +87,7 @@ namespace EventManager.Domain.Events
         {
             lock (_lock)
             {
-                Seats = new Seats(Seats.Total, Seats.Available - count);
+                Seats = new Seats(TotalSeats, AvailableSeats - count);
             }
         }
 
@@ -95,18 +95,18 @@ namespace EventManager.Domain.Events
         {
             lock(_lock)
             {
-                Seats = new Seats(Seats.Total, Seats.Available + count);
+                Seats = new Seats(TotalSeats, AvailableSeats - count);
             }
         }
 
         public void ModifyStartAt(DateTime start)
         {
-            EventDateTime = new EventDateTime(start, EventDateTime.EndAt);
+            EventDateTime = new EventDateTime(start, EndAt);
         }
 
         public void ModifyEndAt(DateTime end)
         {
-            EventDateTime = new EventDateTime(EventDateTime.StartAt, end);
+            EventDateTime = new EventDateTime(StartAt, end);
         }
 
         public void ModifyBothDatetimes(DateTime start, DateTime end)

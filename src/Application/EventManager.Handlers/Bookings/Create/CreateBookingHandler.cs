@@ -11,7 +11,7 @@ namespace EventManager.Handlers.Bookings.Create
     public class CreateBookingHandler : ICommandHandler<BookingAcceptedDto, CreateBookingCommand>
     {
         private readonly IBookingsRepository _bookingsRepository;
-        private readonly IEventsRepository _eventsRepository;
+        //private readonly IEventsRepository _eventsRepository;
 
         public async Task<BookingAcceptedDto> HandleAsync(
             CreateBookingCommand command, 
@@ -22,11 +22,11 @@ namespace EventManager.Handlers.Bookings.Create
             Guid? bookingId;
             BookingAcceptedDto? result = null;
 
-            EventEntity @event = await _eventsRepository.GetByIdAsync(eventId, cancellationToken);
-            NullChecker.Check(@event);
+            //EventEntity @event = await _eventsRepository.GetByIdAsync(eventId, cancellationToken);
+            //NullChecker.Check(@event);
 
-            if (@event.AvailableSeats == 0)
-                throw new NoAvailableSeatsException();
+            //if (@event.AvailableSeats == 0)
+            //    throw new NoAvailableSeatsException();
 
             Guid id = await _bookingsRepository.CreateNewBookingAsync(eventId, cancellationToken);
 
@@ -39,11 +39,11 @@ namespace EventManager.Handlers.Bookings.Create
         }
 
         public CreateBookingHandler(
-            IBookingsRepository bookingsRepository, 
-            IEventsRepository eventsRepository)
+            IBookingsRepository bookingsRepository
+/*          ,IEventsRepository eventsRepository*/)
         {
             _bookingsRepository = bookingsRepository;
-            _eventsRepository = eventsRepository;
+           // _eventsRepository = eventsRepository;
         }
     }
 }
