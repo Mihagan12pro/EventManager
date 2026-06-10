@@ -15,7 +15,7 @@ namespace EventManager.Handlers.Events.GetByIdEvent
         {
             Guid id = command.Id;
 
-            EventModel? @event = await _eventsRepository.GetByIdAsync(id, cancellationToken);
+            EventEntity? @event = await _eventsRepository.GetByIdAsync(id, cancellationToken);
             NullChecker.Check(@event);
 
             return new GetEventDto(

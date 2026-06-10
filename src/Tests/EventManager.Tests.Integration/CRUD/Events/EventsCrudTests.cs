@@ -90,7 +90,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
         [Theory]
         [MemberData(nameof(Filters))]
         public async Task Test_GetPaginatedEventsAsync(
-            Expression<Func<EventModel, bool>> filters, 
+            Expression<Func<EventEntity, bool>> filters, 
             PaginationDto pagination, 
             int expected)
         {
@@ -106,7 +106,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
                 await eventsRepository.AddNewAsync(seed, cts.Token);
             }
 
-            var dto = await eventsRepository.GetPaginatedEventsAsync(new Filters<EventModel> { filters }, pagination, cts.Token);
+            var dto = await eventsRepository.GetPaginatedEventsAsync(new Filters<EventEntity> { filters }, pagination, cts.Token);
 
             Assert.Equal(expected, dto.TotalCount);
         }

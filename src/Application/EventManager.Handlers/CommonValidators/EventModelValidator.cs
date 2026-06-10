@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace EventManager.Handlers.CommonValidators
 {
-    public class EventModelValidator : AbstractValidator<EventModel>
+    public class EventModelValidator : AbstractValidator<EventEntity>
     {
         public EventModelValidator()
         {

@@ -11,7 +11,7 @@ namespace EventManager.Repositories.Events
             NewEventDto eventDto,
             CancellationToken cancellationToken);
 
-        Task<EventModel> GetByIdAsync(
+        Task<EventEntity> GetByIdAsync(
             Guid id,
             CancellationToken cancellationToken);
 
@@ -20,7 +20,7 @@ namespace EventManager.Repositories.Events
             CancellationToken cancellationToken);
 
         Task<PaginatedEventsDto> GetPaginatedEventsAsync(
-            Filters<EventModel> filters,
+            Filters<EventEntity> filters,
             PaginationDto Pagination,
             CancellationToken cancellationToken);
 

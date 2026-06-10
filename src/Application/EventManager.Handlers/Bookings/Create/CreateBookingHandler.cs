@@ -22,7 +22,7 @@ namespace EventManager.Handlers.Bookings.Create
             Guid? bookingId;
             BookingAcceptedDto? result = null;
 
-            EventModel @event = await _eventsRepository.GetByIdAsync(eventId, cancellationToken);
+            EventEntity @event = await _eventsRepository.GetByIdAsync(eventId, cancellationToken);
             NullChecker.Check(@event);
 
             if (@event.AvailableSeats == 0)

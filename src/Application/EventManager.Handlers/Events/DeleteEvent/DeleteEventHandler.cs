@@ -14,7 +14,7 @@ namespace EventManager.Handlers.Events.DeleteEvent
         {
             Guid id = command.Id;
 
-            EventModel? @event = await _eventsRepository.GetByIdAsync(id, cancellationToken);
+            EventEntity? @event = await _eventsRepository.GetByIdAsync(id, cancellationToken);
             NullChecker.Check(@event);
 
             await _eventsRepository.DeleteAsync(id, cancellationToken);

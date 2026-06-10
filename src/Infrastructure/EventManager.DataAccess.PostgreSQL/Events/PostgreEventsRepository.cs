@@ -1,4 +1,5 @@
 ﻿using EventManager.Domain.Events;
+using EventManager.Domain.ValueObjects;
 using EventManager.Domain.ValueObjects.DateAndTime;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Shared;
@@ -25,17 +26,13 @@ namespace EventManager.Infrastructure.PostgreSQL.Events
             var start = eventDto.StartAt!.Value;
             var end = eventDto.EndAt!.Value;
 
-            EventModel @event = new EventModel()
+            EventEntity @event = new EventEntity()
             {
-                Title = eventDto.Title,
+                EventNamimg = new EventNaming(eventDto.Title, eventDto.Description),
 
                 EventDateTime = new EventDateTime(start, end),
 
-                TotalSeats = eventDto.TotalSeats!.Value,
-
-                AvailableSeats = eventDto.TotalSeats.Value,
-
-                Description = eventDto.Description
+                Seats = new Domain.ValueObjects.Seats(eventDto.TotalSeats!.Value),
             };
 
             await _dbContext.Events.AddAsync(@event, cancellationToken);
@@ -50,11 +47,9 @@ namespace EventManager.Infrastructure.PostgreSQL.Events
             PutEventDto putEvent,
             CancellationToken cancellationToken)
         {
-            EventModel @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
-
-            @event.EventDateTime = new EventDateTime(putEvent.StartAt.Value, putEvent.EndAt.Value);
-            @event.Title = putEvent.Title;
-            @event.Description = putEvent.Description;
+            EventEntity @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+            @event.ModifyNaming(putEvent.Title, putEvent.Description);
+            @event.ModifyBothDatetimes(putEvent.StartAt.Value, putEvent.EndAt.Value);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
@@ -63,26 +58,26 @@ namespace EventManager.Infrastructure.PostgreSQL.Events
             Guid id, 
             CancellationToken cancellationToken)
         {
-            EventModel @event = await GetByIdAsync(id, cancellationToken);
+            EventEntity @event = await GetByIdAsync(id, cancellationToken);
 
             _dbContext.Events.Remove(@event);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<EventModel> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<EventEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            EventModel @event = await _dbContext.Events.FirstOrDefaultAsync((e => e.Id == id), cancellationToken);
+            EventEntity @event = await _dbContext.Events.FirstOrDefaultAsync((e => e.Id == id), cancellationToken);
 
             return @event;
         }
 
         public async Task<PaginatedEventsDto> GetPaginatedEventsAsync(
-            Filters<EventModel> filters, 
+            Filters<EventEntity> filters, 
             PaginationDto pagination, 
             CancellationToken cancellationToken)
         {
-            IQueryable<EventModel> events = _dbContext.Events;
+            IQueryable<EventEntity> events = _dbContext.Events;
 
             events = filters.ApplyFilters(events);
 

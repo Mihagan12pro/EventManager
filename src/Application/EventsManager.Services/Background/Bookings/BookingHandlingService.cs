@@ -60,7 +60,7 @@ namespace EventManager.Services.Background.Bookings
                 IEventsRepository eventsRepository = scope.ServiceProvider.GetRequiredService<IEventsRepository>();
                 IBookingsRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingsRepository>();
 
-                EventModel? eventById = null;
+                EventEntity? eventById = null;
                 BookingProcessedDto bookingProcessedDto = new BookingProcessedDto(booking.Id, booking.Status);
 
 

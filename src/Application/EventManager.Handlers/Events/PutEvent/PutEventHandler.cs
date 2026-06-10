@@ -20,7 +20,7 @@ namespace EventManager.Handlers.Events.PutEvent
             PutEventDto putEvent = command.PutEvent;
 
 
-            EventModel? eventById = await _eventsRepository.GetByIdAsync(id, cancellationToken);
+            EventEntity? eventById = await _eventsRepository.GetByIdAsync(id, cancellationToken);
             NullChecker.Check(eventById);
 
             _validator.Validate(putEvent).ThrowBadRequestIfNotIsValid();

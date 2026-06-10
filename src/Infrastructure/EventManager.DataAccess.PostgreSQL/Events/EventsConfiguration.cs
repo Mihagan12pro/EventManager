@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EventManager.Infrastructure.PostgreSQL.Events
 {
-    public class EventsConfiguration : IEntityTypeConfiguration<EventModel>
+    public class EventsConfiguration : IEntityTypeConfiguration<EventEntity>
     {
-        public void Configure(EntityTypeBuilder<EventModel> builder)
+        public void Configure(EntityTypeBuilder<EventEntity> builder)
         {
             builder.HasMany(e => e.Bookings)
                 .WithOne(b => b.Event)

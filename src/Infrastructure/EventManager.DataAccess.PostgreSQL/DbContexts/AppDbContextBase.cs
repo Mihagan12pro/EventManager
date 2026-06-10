@@ -11,7 +11,7 @@ namespace EventManager.Infrastructure.PostgreSQL.DbContexts
         {
         }
 
-        public DbSet<EventModel> Events { set; get; }
+        public DbSet<EventEntity> Events { set; get; }
 
         public DbSet<BookingModel> Bookings { get; set; }
 

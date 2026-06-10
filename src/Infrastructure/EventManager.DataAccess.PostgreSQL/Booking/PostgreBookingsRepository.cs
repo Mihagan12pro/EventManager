@@ -26,7 +26,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
             Guid eventId,
             CancellationToken cancellationToken)
         {
-            EventModel? @event;
+            EventEntity? @event;
             BookingModel? booking;
 
             try
@@ -34,7 +34,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
                 await _semaphore.WaitAsync();
 
                 @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == eventId, cancellationToken);
-                @event.TryReverseSeats();
+                @event.ReverseSeats();
 
                 booking = new BookingModel()
                 {
