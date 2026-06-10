@@ -1,6 +1,6 @@
 ﻿using EventManager.Domain.Bookings;
-using EventManager.Domain.ValueObjects;
-using EventManager.Domain.ValueObjects.DateAndTime;
+using EventManager.Domain.ValueObjects.Events;
+using EventManager.Domain.ValueObjects.Events.DateAndTime;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 

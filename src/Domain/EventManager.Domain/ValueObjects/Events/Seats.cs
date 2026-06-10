@@ -1,7 +1,7 @@
 ﻿using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.Conflict;
 
-namespace EventManager.Domain.ValueObjects
+namespace EventManager.Domain.ValueObjects.Events
 {
     public record Seats
     {

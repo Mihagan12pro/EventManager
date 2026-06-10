@@ -1,6 +1,6 @@
 ﻿using EventManager.Domain.Events;
+using EventManager.Domain.ValueObjects;
 using EventManager.DTOs.Events;
-using EventManager.DTOs.Shared;
 using System.Linq.Expressions;
 
 namespace EventManager.Tests.Integration.CRUD.Events
@@ -36,7 +36,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
                 [
                    (Expression<Func<EventEntity, bool>>)(e => e.Title == "Birthday"),
 
-                    new PaginationDto(1, 5),
+                    new Pagination(1, 5),
 
                     1
                 ],
@@ -44,21 +44,21 @@ namespace EventManager.Tests.Integration.CRUD.Events
                 [
                      (Expression<Func<EventEntity, bool>>)(e => e.Title == "Execution"),
 
-                     new PaginationDto(1, 5),
+                     new Pagination(1, 5),
 
                      0
                 ],
                 [
                      (Expression<Func<EventEntity, bool>>)(e => e.Title != null),
 
-                     new PaginationDto(1, 5),
+                     new Pagination(1, 5),
 
                      5
                 ],
                 [
                     (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("birthday")),
 
-                    new PaginationDto(1, 5),
+                    new Pagination(1, 5),
 
                      3
                 ],
@@ -66,7 +66,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
                 [
                     (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("birthday") && e.Title.StartsWith("Daddy's")),
 
-                    new PaginationDto(3, 5),
+                    new Pagination(3, 5),
 
                     2
                 ],
@@ -74,14 +74,14 @@ namespace EventManager.Tests.Integration.CRUD.Events
                 [
                     (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("daddy")),
 
-                    new PaginationDto(3, 5),
+                    new Pagination(3, 5),
 
                     3
                 ],
 
                 [
                     (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("daddy") && e.StartAt >= datetime.AddYears(1)),
-                    new PaginationDto(3, 5),
+                    new Pagination(3, 5),
 
                       1
                 ],
@@ -89,7 +89,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
                 [
                      (Expression<Func<EventEntity, bool>>)(e => e.Title != null),
 
-                     new PaginationDto(10, 5),
+                     new Pagination(10, 5),
 
                      5
                 ],
@@ -97,7 +97,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
                 [
                      (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("brothers")),
 
-                     new PaginationDto(1, 5),
+                     new Pagination(1, 5),
 
                      1
                 ],
@@ -105,7 +105,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
                 [
                      (Expression<Func<EventEntity, bool>>)(e => e.EndAt <= datetime.AddHours(20)),
 
-                     new PaginationDto(1, 5),
+                     new Pagination(1, 5),
 
                      3
                 ],
@@ -113,7 +113,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
                 [
                      (Expression<Func<EventEntity, bool>>)(e => e.EndAt <= datetime.AddHours(20) && e.Title.Contains("Dad")),
 
-                     new PaginationDto(1, 5),
+                     new Pagination(1, 5),
 
                      1
                 ],
@@ -121,7 +121,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
                 [
                      (Expression<Func<EventEntity, bool>>)(e => e.EndAt <= datetime.AddHours(20) && e.Title.Contains("brothers")),
 
-                     new PaginationDto(1, 5),
+                     new Pagination(1, 5),
 
                      0
                 ],

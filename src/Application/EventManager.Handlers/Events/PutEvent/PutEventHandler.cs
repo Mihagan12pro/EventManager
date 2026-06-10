@@ -1,9 +1,7 @@
 ﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
-using EventManager.Handlers.Extensions.Validation;
 using EventManager.Repositories.Events;
 using EventsManager.Shared;
-using FluentValidation;
 
 namespace EventManager.Handlers.Events.PutEvent
 {

@@ -1,10 +1,10 @@
 ﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
-using EventManager.DTOs.Shared;
 using EventManager.Repositories.Events;
 using Microsoft.Extensions.DependencyInjection;
 using EventsManager.Shared.Filters;
 using System.Linq.Expressions;
+using EventManager.Domain.ValueObjects;
 
 namespace EventManager.Tests.Integration.CRUD.Events
 {
@@ -91,7 +91,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
         [MemberData(nameof(Filters))]
         public async Task Test_GetPaginatedEventsAsync(
             Expression<Func<EventEntity, bool>> filters, 
-            PaginationDto pagination, 
+            Pagination pagination, 
             int expected)
         {
             await ResetDatabaseAsync();

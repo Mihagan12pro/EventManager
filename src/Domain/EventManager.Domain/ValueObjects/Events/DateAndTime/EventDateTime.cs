@@ -1,6 +1,6 @@
 ﻿using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
 
-namespace EventManager.Domain.ValueObjects.DateAndTime
+namespace EventManager.Domain.ValueObjects.Events.DateAndTime
 {
     public record EventDateTime
     {

@@ -1,4 +1,4 @@
-﻿namespace EventManager.Domain.ValueObjects.DateAndTime
+﻿namespace EventManager.Domain.ValueObjects.Events.DateAndTime
 {
     public record DateTimeRange(
         DateTime? LowerBound,

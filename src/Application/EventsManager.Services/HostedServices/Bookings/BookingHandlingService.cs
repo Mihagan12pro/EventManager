@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace EventManager.Services.Background.Bookings
+namespace EventManager.Application.HostedServices.Bookings
 {
     internal class BookingHandlingService : BackgroundService
     {

@@ -1,7 +1,7 @@
-﻿using EventManager.Domain.ValueObjects.DateAndTime;
+﻿using EventManager.Domain.ValueObjects;
+using EventManager.Domain.ValueObjects.Events.DateAndTime;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
-using EventManager.DTOs.Shared;
 using EventManager.Handlers;
 using EventManager.Handlers.Bookings.Create;
 using EventManager.Handlers.Events.AddEvent;
@@ -65,7 +65,7 @@ namespace EventManager.API.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10)
         {
-            PaginationDto pagination = new PaginationDto(page, pageSize);
+            Pagination pagination = new Pagination(page, pageSize);
 
             DateTimeRange dateRange = new DateTimeRange(
                 from,

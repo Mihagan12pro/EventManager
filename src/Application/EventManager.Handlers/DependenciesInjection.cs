@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Handlers
 {
@@ -8,9 +7,6 @@ namespace EventManager.Handlers
         public static IServiceCollection AddHandlers(this IServiceCollection services)
         {
             var assembly = typeof(DependenciesInjection).Assembly;
-
-
-            services.AddValidatorsFromAssembly(assembly);
 
             services.Scan(scan => scan.FromAssemblies(assembly)
                 .AddClasses(classes => classes

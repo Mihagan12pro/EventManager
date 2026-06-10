@@ -1,6 +1,6 @@
 ﻿using EventManager.Domain.Events;
+using EventManager.Domain.ValueObjects;
 using EventManager.DTOs.Events;
-using EventManager.DTOs.Shared;
 using EventsManager.Shared.Filters;
 
 namespace EventManager.Repositories.Events
@@ -21,7 +21,7 @@ namespace EventManager.Repositories.Events
 
         Task<PaginatedEventsDto> GetPaginatedEventsAsync(
             Filters<EventEntity> filters,
-            PaginationDto Pagination,
+            Pagination Pagination,
             CancellationToken cancellationToken);
 
         Task CompleteUpdateAsync(

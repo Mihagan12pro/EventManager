@@ -7,6 +7,8 @@ namespace EventManager.Domain.Failures.Errors
     {
         public string Json => JsonSerializer.Serialize(this);
 
+        public bool HasErrors => this.Count > 0;
+
         public ErrorsCollection(IEnumerable<Error> errors)
         {
             AddRange(errors);

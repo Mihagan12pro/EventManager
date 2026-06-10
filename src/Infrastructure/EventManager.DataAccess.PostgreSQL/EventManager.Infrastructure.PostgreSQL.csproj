@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\EventManager.DataAccess.Abstractions\EventManager.Repositories.csproj" />
-    <ProjectReference Include="..\..\Application\EventsManager.Services\EventManager.Services.csproj" />
+    <ProjectReference Include="..\..\Application\EventsManager.Services\EventManager.Application.csproj" />
     <ProjectReference Include="..\..\Domain\EventManager.Domain\EventManager.Domain.csproj" />
     <ProjectReference Include="..\..\SharedLibs\EventManager.DTOs\EventManager.DTOs.csproj" />
   </ItemGroup>

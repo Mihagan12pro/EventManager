@@ -1,7 +1,7 @@
 ﻿using EventManager.Infrastructure.PostgreSQL;
 using EventManager.Middleware;
-using EventManager.Services;
 using EventManager.Handlers;
+using EventManager.Application;
 
 namespace EventManager
 {

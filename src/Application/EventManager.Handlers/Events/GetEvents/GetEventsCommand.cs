@@ -1,6 +1,4 @@
-﻿using EventManager.Domain.Events;
-using EventManager.DTOs.Events;
-using EventManager.DTOs.Shared;
+﻿using EventManager.DTOs.Events;
 
 namespace EventManager.Handlers.Events.GetEvents
 {

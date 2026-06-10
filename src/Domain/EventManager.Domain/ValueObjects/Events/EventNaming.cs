@@ -1,7 +1,7 @@
 ﻿using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
 using System.Globalization;
 
-namespace EventManager.Domain.ValueObjects
+namespace EventManager.Domain.ValueObjects.Events
 {
     public record EventNaming
     {

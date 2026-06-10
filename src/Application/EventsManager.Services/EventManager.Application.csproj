@@ -18,4 +18,8 @@
     <ProjectReference Include="..\..\SharedLibs\Shared\EventsManager.Shared.csproj" />
     <ProjectReference Include="..\EventManager.DataAccess.Abstractions\EventManager.Repositories.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Handlers\" />
+  </ItemGroup>
 </Project>

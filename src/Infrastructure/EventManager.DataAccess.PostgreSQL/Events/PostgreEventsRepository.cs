@@ -1,8 +1,8 @@
 ﻿using EventManager.Domain.Events;
 using EventManager.Domain.ValueObjects;
-using EventManager.Domain.ValueObjects.DateAndTime;
+using EventManager.Domain.ValueObjects.Events;
+using EventManager.Domain.ValueObjects.Events.DateAndTime;
 using EventManager.DTOs.Events;
-using EventManager.DTOs.Shared;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Repositories.Events;
 using EventsManager.Shared.Filters;
@@ -32,7 +32,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Events
 
                 EventDateTime = new EventDateTime(start, end),
 
-                Seats = new Domain.ValueObjects.Seats(eventDto.TotalSeats!.Value),
+                Seats = new Seats(eventDto.TotalSeats!.Value),
             };
 
             await _dbContext.Events.AddAsync(@event, cancellationToken);
@@ -74,7 +74,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Events
 
         public async Task<PaginatedEventsDto> GetPaginatedEventsAsync(
             Filters<EventEntity> filters, 
-            PaginationDto pagination, 
+            Pagination pagination, 
             CancellationToken cancellationToken)
         {
             IQueryable<EventEntity> events = _dbContext.Events;
