@@ -1,8 +1,9 @@
 ﻿using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
+using EventsManager.Failures.Errors;
 
 namespace EventManager.Domain.ValueObjects.Events.DateAndTime
 {
-    public record EventDateTime
+    public record EventDateTime 
     {
         private DateTime _startAt, _endAt;
 
@@ -39,6 +40,7 @@ namespace EventManager.Domain.ValueObjects.Events.DateAndTime
         public EventDateTime(DateTime start, DateTime end)
         {
             StartAt = start;
+
             EndAt = end;
         }
     }

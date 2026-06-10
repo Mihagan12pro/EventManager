@@ -1,7 +1,11 @@
 ﻿using EventManager.Domain.Bookings;
+using EventManager.Domain.Failures.Errors;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Domain.ValueObjects.Events;
 using EventManager.Domain.ValueObjects.Events.DateAndTime;
+using EventsManager.Failures.Errors;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Net;
 using System.Text.Json.Serialization;
 
 namespace EventManager.Domain.Events
@@ -21,8 +25,6 @@ namespace EventManager.Domain.Events
         public int AvailableSeats { get; private set; }
 
         public int TotalSeats { get; private set; }
-
-
 
         [NotMapped]
         public required EventNaming EventNamimg
@@ -93,23 +95,13 @@ namespace EventManager.Domain.Events
 
         public void ReleaseSeats(int count = 1)
         {
-            lock(_lock)
+            lock (_lock)
             {
                 Seats = new Seats(TotalSeats, AvailableSeats - count);
             }
         }
 
-        public void ModifyStartAt(DateTime start)
-        {
-            EventDateTime = new EventDateTime(start, EndAt);
-        }
-
-        public void ModifyEndAt(DateTime end)
-        {
-            EventDateTime = new EventDateTime(StartAt, end);
-        }
-
-        public void ModifyBothDatetimes(DateTime start, DateTime end)
+        public void ModifyDatetimes(DateTime start, DateTime end)
         {
             EventDateTime = new EventDateTime(start, end);
         }

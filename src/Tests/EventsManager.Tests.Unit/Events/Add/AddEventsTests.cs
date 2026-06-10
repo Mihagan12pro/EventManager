@@ -2,8 +2,6 @@
 using EventManager.Application.Handlers.Events.AddEvent;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
 using EventManager.DTOs.Events;
-using EventManager.Handlers;
-using EventManager.Handlers.Events.AddEvent;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Unit.Events.Add

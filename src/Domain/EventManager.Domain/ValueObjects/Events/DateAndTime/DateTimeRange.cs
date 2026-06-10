@@ -2,5 +2,5 @@
 {
     public record DateTimeRange(
         DateTime? LowerBound,
-        DateTime? UpperBound);
+        DateTime? UpperBound) : ValueObject;
 }

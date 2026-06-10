@@ -1,9 +1,10 @@
 ﻿using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.Conflict;
+using EventsManager.Failures.Errors;
 
 namespace EventManager.Domain.ValueObjects.Events
 {
-    public record Seats
+    public record Seats : ValueObject
     {
         public int Total
         {
@@ -41,23 +42,11 @@ namespace EventManager.Domain.ValueObjects.Events
         public Seats(int total)
         {
             Total = total;
-
-            if (total <= 0)
-            {
-                throw new ConflictException("Total count must be greater than zero!");
-            }
-
-            Available = total;
         }
 
         public Seats(int total, int avaliable)
         {
             Total = total;
-
-            if (total <= 0)
-            {
-                throw new ConflictException("Total count must be greater than zero!");
-            }
 
             Available = avaliable;
         }

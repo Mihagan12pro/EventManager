@@ -1,5 +1,4 @@
 ﻿using EventManager.Application;
-using EventManager.Handlers;
 using EventManager.Infrastructure.PostgreSQL;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using Microsoft.EntityFrameworkCore;

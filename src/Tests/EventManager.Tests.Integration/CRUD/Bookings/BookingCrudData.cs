@@ -3,7 +3,6 @@ using EventManager.Domain.Bookings;
 using EventManager.Domain.Bookings.Enums;
 using EventManager.DTOs.Events;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
-using EventManager.Repositories.Bookings;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
 

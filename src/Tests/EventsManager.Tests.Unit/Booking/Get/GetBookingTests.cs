@@ -2,8 +2,6 @@
 using EventManager.Application.Handlers.Bookings.GetByIdBooking;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.NotFound;
 using EventManager.DTOs.Bookings;
-using EventManager.Handlers;
-using EventManager.Handlers.Bookings.GetByIdBooking;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Unit.Booking.Get

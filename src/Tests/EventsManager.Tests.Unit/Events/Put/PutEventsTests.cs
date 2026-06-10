@@ -5,10 +5,6 @@ using EventManager.Application.Handlers.Events.PutEvent;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.NotFound;
 using EventManager.DTOs.Events;
-using EventManager.Handlers;
-using EventManager.Handlers.Events.AddEvent;
-using EventManager.Handlers.Events.GetByIdEvent;
-using EventManager.Handlers.Events.PutEvent;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Unit.Events.Put
