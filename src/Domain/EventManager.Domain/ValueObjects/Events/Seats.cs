@@ -4,7 +4,7 @@ using EventsManager.Failures.Errors;
 
 namespace EventManager.Domain.ValueObjects.Events
 {
-    public record Seats : ValueObject
+    public record Seats
     {
         public int Total
         {

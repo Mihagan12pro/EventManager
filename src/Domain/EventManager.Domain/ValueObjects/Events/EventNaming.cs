@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace EventManager.Domain.ValueObjects.Events
 {
-    public record EventNaming : ValueObject
+    public record EventNaming
     {
         public string Title
         {

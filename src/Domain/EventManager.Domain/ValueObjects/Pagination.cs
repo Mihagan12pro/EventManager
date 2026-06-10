@@ -4,7 +4,7 @@ using EventsManager.Failures.Errors;
 
 namespace EventManager.Domain.ValueObjects
 {
-    public record Pagination : ValueObject
+    public record Pagination 
     {
         public int Page { get; init; }
         public int PageSize { get; init; }
