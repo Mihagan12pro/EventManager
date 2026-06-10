@@ -5,7 +5,7 @@ using EventManager.Domain.ValueObjects.Events;
 using EventManager.Domain.ValueObjects.Events.DateAndTime;
 using EventManager.DTOs.Events;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
-using EventsManager.Shared.Filters;
+using EventManager.Shared.Filters;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventManager.Infrastructure.PostgreSQL.Events

@@ -1,7 +1,7 @@
 ﻿using EventManager.Domain.Events;
 using EventManager.Domain.ValueObjects;
 using EventManager.DTOs.Events;
-using EventsManager.Shared.Filters;
+using EventManager.Shared.Filters;
 
 namespace EventManager.Application.Repositories
 {

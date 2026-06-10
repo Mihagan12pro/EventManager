@@ -1,7 +1,7 @@
 ﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
 
-namespace EventsManager.Shared.Filters
+namespace EventManager.Shared.Filters
 {
     public class EventsFilters : Filters<EventEntity>
     {

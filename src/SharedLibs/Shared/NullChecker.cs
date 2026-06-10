@@ -1,6 +1,6 @@
 ﻿using EventManager.Domain.Failures.Exceptions.WebApi.Client.NotFound;
 
-namespace EventsManager.Shared
+namespace EventManager.Shared
 {
     public static class NullChecker
     {

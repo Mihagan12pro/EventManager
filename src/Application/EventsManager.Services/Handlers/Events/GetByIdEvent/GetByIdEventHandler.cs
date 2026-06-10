@@ -2,7 +2,7 @@
 using EventManager.Application.Repositories;
 using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
-using EventsManager.Shared;
+using EventManager.Shared;
 
 namespace EventManager.Application.Handlers.Events.GetByIdEvent
 {

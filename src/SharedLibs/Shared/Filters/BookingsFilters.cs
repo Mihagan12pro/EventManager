@@ -1,7 +1,7 @@
 ﻿using EventManager.Domain.Bookings;
 using EventManager.DTOs.Bookings;
 
-namespace EventsManager.Shared.Filters
+namespace EventManager.Shared.Filters
 {
     public class BookingsFilters : Filters<BookingModel>
     {

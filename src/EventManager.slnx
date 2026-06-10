@@ -17,7 +17,6 @@
     <Project Path="Presentation/EventManager.API/EventManager.API.csproj" />
     <Project Path="Presentation/EventManager/EventManager.csproj" />
     <Project Path="SharedLibs/EventManager.DTOs/EventManager.DTOs.csproj" />
-    <Project Path="SharedLibs/Shared/EventsManager.Shared.csproj" />
+    <Project Path="SharedLibs/Shared/EventManager.Shared.csproj" />
   </Folder>
-  <Folder Name="/Tests/" />
 </Solution>

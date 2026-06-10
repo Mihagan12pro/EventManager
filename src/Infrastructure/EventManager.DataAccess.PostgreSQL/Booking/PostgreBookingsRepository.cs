@@ -4,8 +4,8 @@ using EventManager.Domain.Bookings.Enums;
 using EventManager.Domain.Events;
 using EventManager.DTOs.Bookings;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
-using EventsManager.Shared;
-using EventsManager.Shared.Filters;
+using EventManager.Shared;
+using EventManager.Shared.Filters;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventManager.Infrastructure.PostgreSQL.Booking

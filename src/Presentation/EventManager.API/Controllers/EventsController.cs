@@ -9,7 +9,7 @@ using EventManager.Domain.ValueObjects;
 using EventManager.Domain.ValueObjects.Events.DateAndTime;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
-using EventsManager.Shared;
+using EventManager.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

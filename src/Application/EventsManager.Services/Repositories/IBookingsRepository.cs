@@ -1,6 +1,6 @@
 ﻿using EventManager.Domain.Bookings;
 using EventManager.DTOs.Bookings;
-using EventsManager.Shared.Filters;
+using EventManager.Shared.Filters;
 
 namespace EventManager.Application.Repositories
 {

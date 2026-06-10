@@ -3,7 +3,7 @@ using EventManager.Domain.Bookings;
 using EventManager.Domain.Bookings.Enums;
 using EventManager.Domain.Events;
 using EventManager.DTOs.Bookings;
-using EventsManager.Shared.Filters;
+using EventManager.Shared.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

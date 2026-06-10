@@ -1,7 +1,7 @@
 ﻿using EventManager.Application.Handlers;
 using EventManager.Application.Repositories;
 using EventManager.Domain.Events;
-using EventsManager.Shared;
+using EventManager.Shared;
 
 namespace EventManager.Application.Handlers.Events.DeleteEvent
 {

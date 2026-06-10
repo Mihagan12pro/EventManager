@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace EventsManager.Shared.Filters
+namespace EventManager.Shared.Filters
 {
     public class Filters<T> : List<Expression<Func<T, bool>>>
     {

@@ -1,7 +1,7 @@
 ﻿using EventManager.Application.Repositories;
 using EventManager.Domain.Bookings;
 using EventManager.DTOs.Bookings;
-using EventsManager.Shared;
+using EventManager.Shared;
 
 namespace EventManager.Application.Handlers.Bookings.GetByIdBooking
 {

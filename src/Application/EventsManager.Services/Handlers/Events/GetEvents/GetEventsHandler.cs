@@ -1,7 +1,7 @@
 ﻿using EventManager.Application.Handlers;
 using EventManager.Application.Repositories;
 using EventManager.DTOs.Events;
-using EventsManager.Shared.Filters;
+using EventManager.Shared.Filters;
 
 namespace EventManager.Application.Handlers.Events.GetEvents
 {
