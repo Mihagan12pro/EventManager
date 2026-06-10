@@ -13,8 +13,8 @@ namespace EventManager.Domain.ValueObjects
             }
             init
             {
-                if (value.Length < 1)
-                    throw new BadRequestException("Too short title!");
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new BadRequestException("Title can't be empty!");
 
                 _title = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(value);
             }

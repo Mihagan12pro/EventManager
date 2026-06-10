@@ -10,7 +10,6 @@ namespace EventManager.Handlers.Events.PutEvent
     public class PutEventHandler : ICommandHandler<string, PutEventCommand>
     {
         private readonly IEventsRepository _eventsRepository;
-        private readonly IValidator<PutEventDto> _validator;
 
         public async Task<string> HandleAsync(
             PutEventCommand command, 
@@ -23,19 +22,15 @@ namespace EventManager.Handlers.Events.PutEvent
             EventEntity? eventById = await _eventsRepository.GetByIdAsync(id, cancellationToken);
             NullChecker.Check(eventById);
 
-            _validator.Validate(putEvent).ThrowBadRequestIfNotIsValid();
-
             await _eventsRepository.CompleteUpdateAsync(id, putEvent, cancellationToken);
 
             return $"Event with id = {id} had been updated!";
         }
 
         public PutEventHandler(
-            IEventsRepository eventsRepository,
-            IValidator<PutEventDto> validator)
+            IEventsRepository eventsRepository)
         {
             _eventsRepository = eventsRepository;
-            _validator = validator;
         }
     }
 }

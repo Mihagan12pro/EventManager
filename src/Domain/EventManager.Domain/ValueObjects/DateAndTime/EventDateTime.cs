@@ -15,7 +15,7 @@ namespace EventManager.Domain.ValueObjects.DateAndTime
             init
             {
                 if (value <= DateTime.Now)
-                    throw new BadRequestException("Too late date for creating new events!");
+                    throw new BadRequestException("Too late for start date time!");
 
                 _startAt = value;
             }
