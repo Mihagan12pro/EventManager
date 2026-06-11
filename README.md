@@ -2,7 +2,8 @@ How to get and run this application on your computer?
 
 Via .NET CLI:
 1. Open terminal or cmd (on Windows) and write this command: git clone [repository url]. Press ENTER
-2. Write: cd .\EventManager\src\Presentation\EventManager\. Press ENTER
+2. Write: cd (.\EventManager\src\Presentation\EventManager\ on Windows or ./EventManager/src/Presentation/EventManager/
+ on Unix). Press ENTER
 3. Write: dotnet build. If everything is ok, press ENTER
 4. Write: dotnet run --project EventManager.csproj. Press ENTER
 5. Have fun with my application!
