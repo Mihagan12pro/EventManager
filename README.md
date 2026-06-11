@@ -163,16 +163,19 @@ Features from the sprint6:
 
 
 Features from the last branch (sprint7):
-1. The EventManager contains 5 layers:
-	- Application (projects: EventManager.Handlers, EventManager.Services, EventManager.Repositories)
+1. The EventManager contains 4 layers:
+	- Domain (project: EventManager.Domain)
+	- Application (project: EventManager.Application)
 	- Infrastructure (project: EventManager.Infrastructure.PostgreSQL)
 	- Presentation (projects: EventManager, EventManager.API)
-	- SharedLibs (EventManager.DTOs, EventsManager.Failures, EventsManager.Shared)
+
 
 2. Remove IEventsService and IBookingsService. For interacting with events and bookings use classes from the EventManager.Handlers projects.
 
-3. Split integration tests into 2 independant projects: EventManager.Tests.Integration and EventsManager.Tests.End2End. Both projects require docker to be installed on your device. 
+3. Split integration tests into 2 independant projects: EventManager.Tests.Integration and EventsManager.Tests.End2End. Both projects require docker to be installed on your device.  
 
-4. Move repositories interfaces from EventManager.Services to new project - EventManager.Repositories. 
+4. Using clean architecture principles: the application and domain layers know nothing about the Infrastructure layer.
 
-5. Using clean architecture principles: the application and domain layers know nothing about the Infrastructure layer.
+5. Add value objects.
+
+6. Refusing from some installed libs (e.g. FluentValidation)
