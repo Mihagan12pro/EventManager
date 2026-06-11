@@ -1,7 +1,10 @@
-﻿using EventManager.DTOs.Events;
-using EventManager.Services.Events;
-using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
-using EventManager.Services.Exceptions.WebApi.Client.NotFound;
+﻿using EventManager.Application.Handlers;
+using EventManager.Application.Handlers.Events.AddEvent;
+using EventManager.Application.Handlers.Events.GetByIdEvent;
+using EventManager.Application.Handlers.Events.PutEvent;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.NotFound;
+using EventManager.DTOs.Events;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Unit.Events.Put
@@ -10,7 +13,7 @@ namespace EventManager.Tests.Unit.Events.Put
     {
         [Theory]
         [MemberData(nameof(PutDataForBadRequest))]
-        public async Task Test_Putting_Bad_Request(
+        public async Task Test_PuttingBadRequest(
             DateTime start,
             DateTime end)
         {
@@ -19,16 +22,18 @@ namespace EventManager.Tests.Unit.Events.Put
             DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
 
             var provider = TestingServicesProvider.GetServicesProvider();
-            var eventsService = provider.GetRequiredService<IEventsService>();
+            
+            var addingHandler = provider.GetRequiredService<ICommandHandler<Guid, AddEventCommand>>();
+            var puttingHandler = provider.GetRequiredService<ICommandHandler<string, PutEventCommand>>();
 
-            Guid id = await eventsService.AddNewAsync(
-                 new NewEventDto(
+            Guid id = await addingHandler.HandleAsync(
+                 new AddEventCommand(new NewEventDto(
                      "Юбилей",
                      dateTime.AddDays(1),
                      dateTime.AddDays(2),
-                     10),
+                     10)),
                  cts.Token
-                 );
+            );
 
             PutEventDto putEventDto = new PutEventDto(
                 string.Empty,
@@ -36,16 +41,16 @@ namespace EventManager.Tests.Unit.Events.Put
                 end
             );
 
-            var exception = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.UpdateByPutAsync(id, putEventDto, cts.Token));
+            var exception = await Assert.ThrowsAsync<BadRequestException>(() => puttingHandler.HandleAsync(new PutEventCommand(id, putEventDto), cts.Token));
         }
 
         [Fact]
-        public async Task Test_Putting_With_Error_404()
+        public async Task Test_PuttingWithError404()
         {
             CancellationTokenSource cts = new CancellationTokenSource();
 
             var provider = TestingServicesProvider.GetServicesProvider();
-            var eventsService = provider.GetRequiredService<IEventsService>();
+            var puttingHandler = provider.GetRequiredService<ICommandHandler<string, PutEventCommand>>();
 
             Guid id = Guid.NewGuid();
 
@@ -55,7 +60,7 @@ namespace EventManager.Tests.Unit.Events.Put
                 DateTime.Now.AddDays(2)
             );
 
-            var result = await Assert.ThrowsAsync<NotFoundException>(() => eventsService.UpdateByPutAsync(id, eventDto, cts.Token));
+            var result = await Assert.ThrowsAsync<NotFoundException>(() => puttingHandler.HandleAsync(new PutEventCommand(id, eventDto), cts.Token));
         }
 
         [Theory]
@@ -65,17 +70,24 @@ namespace EventManager.Tests.Unit.Events.Put
             CancellationTokenSource cts = new CancellationTokenSource();
 
             var provider = TestingServicesProvider.GetServicesProvider();
-            var eventsService = provider.GetRequiredService<IEventsService>();
+
+            var addingHandler = provider.GetRequiredService<ICommandHandler<Guid, AddEventCommand>>();
+            var gettingHandler = provider.GetRequiredService<ICommandHandler<GetEventDto, GetByIdEventCommand>>();
+            var puttingHandler = provider.GetRequiredService<ICommandHandler<string, PutEventCommand>>();
 
             DateTime dateTime = new DateTime(new DateOnly(2027, 5, 1), new TimeOnly(20, 20)).AddYears(2);
 
-            var id = await eventsService.AddNewAsync(eventDto, cts.Token);
+            var id = await addingHandler.HandleAsync(new AddEventCommand(eventDto), cts.Token);
 
-            var oldModel = await eventsService.GetEventByIdAsync(id, cts.Token);
+            var oldModel = await gettingHandler.HandleAsync(new GetByIdEventCommand(id), cts.Token);
 
-            await eventsService.UpdateByPutAsync(id, new PutEventDto(eventDto.Title, eventDto.StartAt, dateTime.AddYears(100)), cts.Token);
+            await puttingHandler.HandleAsync(
+                new PutEventCommand(
+                    id, 
+                    new PutEventDto(
+                        eventDto.Title, eventDto.StartAt, dateTime.AddYears(100))), cts.Token);
 
-            var updatedModel = await eventsService.GetEventByIdAsync(id, cts.Token);
+            var updatedModel = await gettingHandler.HandleAsync(new GetByIdEventCommand(id), cts.Token);
 
             Assert.NotEqual(oldModel, updatedModel);
         }

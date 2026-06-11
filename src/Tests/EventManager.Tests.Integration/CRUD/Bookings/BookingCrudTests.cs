@@ -1,22 +1,16 @@
-﻿using EventManager.Domain.Bookings;
+﻿using EventManager.Application.Repositories;
+using EventManager.Domain.Bookings;
 using EventManager.Domain.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
-using EventManager.Services.Bookings;
-using EventManager.Services.Events;
-using Microsoft.AspNetCore.Mvc.Testing;
+using EventManager.Shared.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
-using System.Net.Http.Json;
 
 namespace EventManager.Tests.Integration.CRUD.Bookings
 {
     public partial class BookingCrudTests : IntegrationTests
     {
-        public BookingCrudTests(EventManagerAppFactory<Program> factory) : base(factory)
-        {
-        }
-
         [Fact]
         public async Task Test_CreateNewBookingAsync()
         {
@@ -97,24 +91,6 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
         }
 
         [Theory]
-        [MemberData(nameof(FilterByDto))]
-        public async Task Test_GetAllAsync_ByDto(BookingFiltersDto filtersDto, int expected)
-        {
-            await ResetDatabaseAsync();
-
-            await Seed();
-
-            CancellationTokenSource cts = new CancellationTokenSource();
-
-            var provider = await GetServiceProviderAsync();
-            var bookingsRepository = provider.GetRequiredService<IBookingsRepository>();
-
-            var bookings = await bookingsRepository.GetAllAsync(filtersDto, cts.Token);
-
-            Assert.Equal(expected, bookings.Count());
-        }
-
-        [Theory]
         [MemberData(nameof(FiltersByExpression))]
         public async Task Test_GetAllAsync_ByExpression(Expression<Func<BookingModel, bool>> filters, int expected)
         {
@@ -127,7 +103,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
             var provider = await GetServiceProviderAsync();
             var bookingsRepository = provider.GetRequiredService<IBookingsRepository>();
 
-            var bookings = await bookingsRepository.GetAllAsync(filters, cts.Token);
+            var bookings = await bookingsRepository.GetAllAsync(new Filters<BookingModel>(filters), cts.Token);
 
             Assert.Equal(expected, bookings.Count());
         }

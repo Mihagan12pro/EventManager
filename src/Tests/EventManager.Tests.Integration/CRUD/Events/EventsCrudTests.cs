@@ -1,18 +1,15 @@
 ﻿using EventManager.Domain.Events;
 using EventManager.DTOs.Events;
-using EventManager.DTOs.Shared;
-using EventManager.Services.Events;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
+using EventManager.Domain.ValueObjects;
+using EventManager.Application.Repositories;
+using EventManager.Shared.Filters;
 
 namespace EventManager.Tests.Integration.CRUD.Events
 {
     public partial class EventsCrudTests : IntegrationTests
     {
-        public EventsCrudTests(EventManagerAppFactory<Program> factory) : base(factory)
-        {
-        }
-
         [Fact]
         public async Task Test_AddNewAsync()
         {
@@ -93,8 +90,8 @@ namespace EventManager.Tests.Integration.CRUD.Events
         [Theory]
         [MemberData(nameof(Filters))]
         public async Task Test_GetPaginatedEventsAsync(
-            Expression<Func<EventModel, bool>> filters, 
-            PaginationDto pagination, 
+            Expression<Func<EventEntity, bool>> filters, 
+            Pagination pagination, 
             int expected)
         {
             await ResetDatabaseAsync();
@@ -109,7 +106,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
                 await eventsRepository.AddNewAsync(seed, cts.Token);
             }
 
-            var dto = await eventsRepository.GetPaginatedEventsAsync(new List<Expression<Func<EventModel, bool>>>{ filters }, pagination, cts.Token);
+            var dto = await eventsRepository.GetPaginatedEventsAsync(new Filters<EventEntity> { filters }, pagination, cts.Token);
 
             Assert.Equal(expected, dto.TotalCount);
         }

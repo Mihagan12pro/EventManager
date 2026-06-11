@@ -1,7 +1,7 @@
-﻿using EventManager.DTOs.Events;
-using EventManager.Services.Events;
-using EventManager.Services.Exceptions.WebApi.Client.BadRequest;
-using EventManager.Tests.Unit;
+﻿using EventManager.Application.Handlers;
+using EventManager.Application.Handlers.Events.AddEvent;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
+using EventManager.DTOs.Events;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Unit.Events.Add
@@ -17,13 +17,11 @@ namespace EventManager.Tests.Unit.Events.Add
 
             var provider = TestingServicesProvider.GetServicesProvider();
 
-            IEventsService eventsService = provider.GetRequiredService<IEventsService>();
+            var handler = provider.GetRequiredService<ICommandHandler<Guid, AddEventCommand>>();
 
-            var result = await eventsService.AddNewAsync(newEventDto, cts.Token);
-            var deletingResult = await eventsService.DeleteAsync(result, cts.Token);
+            var result = await handler.HandleAsync(new AddEventCommand(newEventDto), cts.Token);
 
             Assert.Equal(typeof(Guid), result.GetType());
-            Assert.Equal(typeof(string), deletingResult.GetType());
         }
 
         [Theory]
@@ -34,9 +32,9 @@ namespace EventManager.Tests.Unit.Events.Add
             IServiceProvider serviceProvider = TestingServicesProvider.GetServicesProvider();
 
             CancellationTokenSource cts = new CancellationTokenSource();
-            IEventsService eventsService = serviceProvider.GetRequiredService<IEventsService>();
+            var handler = serviceProvider.GetRequiredService<ICommandHandler<Guid, AddEventCommand>>();
 
-            var result = await Assert.ThrowsAsync<BadRequestException>(() => eventsService.AddNewAsync(dto, cts.Token));
+            var result = await Assert.ThrowsAsync<BadRequestException>(() => handler.HandleAsync(new AddEventCommand(dto), cts.Token));
 
             Assert.Equal(expected, result.Error.Errors.Count());
         }

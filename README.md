@@ -2,11 +2,11 @@ How to get and run this application on your computer?
 
 Via .NET CLI:
 1. Open terminal or cmd (on Windows) and write this command: git clone [repository url]. Press ENTER
-2. Write: cd src. Press ENTER
+2. Write: cd (.\EventManager\src\Presentation\EventManager\ on Windows or ./EventManager/src/Presentation/EventManager/
+ on Unix). Press ENTER
 3. Write: dotnet build. If everything is ok, press ENTER
-4. Write: cd EventManager. Press ENTER
-5. Write: dotnet run --project EventManager.csproj. Press ENTER
-6. Have fun with my application!
+4. Write: dotnet run --project EventManager.csproj. Press ENTER
+5. Have fun with my application!
 
 Via Visual Studio 2026:
 1. Open Visual Studio.
@@ -142,7 +142,7 @@ Features from the sprint5:
 4. Modify tests project: now it contains in-memory provider for creating test cases
 
 
-Features from the last branch (sprint6):
+Features from the sprint6:
 1. Use migrations instead of Database.EnsureCreated
 	How to create new migration? There are two ways:
 
@@ -160,3 +160,22 @@ Features from the last branch (sprint6):
     So, you do not need installed PostgreSQL and pgAdmin on your device, but docker is required (especially for integration tests)
 
 3. Add integration tests. This type of tests provides testing of interactions between lots of different components of the application.
+
+
+Features from the last branch (sprint7):
+1. The EventManager contains 4 layers:
+	- Domain (project: EventManager.Domain)
+	- Application (project: EventManager.Application)
+	- Infrastructure (project: EventManager.Infrastructure.PostgreSQL)
+	- Presentation (projects: EventManager, EventManager.API)
+
+
+2. Remove IEventsService and IBookingsService. For interacting with events and bookings use classes from the EventManager.Handlers projects.
+
+3. Split integration tests into 2 independant projects: EventManager.Tests.Integration and EventsManager.Tests.End2End. Both projects require docker to be installed on your device.  
+
+4. Using clean architecture principles: the application and domain layers know nothing about the Infrastructure layer.
+
+5. Add value objects.
+
+6. Refusing from some installed libs (e.g. FluentValidation)

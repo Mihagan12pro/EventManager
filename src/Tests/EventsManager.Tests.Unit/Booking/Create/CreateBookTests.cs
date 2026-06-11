@@ -1,10 +1,11 @@
-﻿using EventManager.Domain.Bookings.Enums;
+﻿using EventManager.Application.Handlers;
+using EventManager.Application.Handlers.Bookings.Create;
+using EventManager.Application.Handlers.Events.AddEvent;
+using EventManager.Application.Handlers.Events.DeleteEvent;
+using EventManager.Domain.Bookings.Enums;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.NotFound;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
-using EventManager.Services.Bookings;
-using EventManager.Services.Events;
-using EventManager.Services.Exceptions.WebApi.Client.NotFound;
-using EventManager.Tests.Unit;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventManager.Tests.Unit.Booking.Create
@@ -19,13 +20,13 @@ namespace EventManager.Tests.Unit.Booking.Create
             CancellationTokenSource cts = new CancellationTokenSource();
             var provider = TestingServicesProvider.GetServicesProvider();
 
-            IEventsService eventsService = provider.GetRequiredService<IEventsService>();
-            IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
+            var addingEventHandler = provider.GetRequiredService<ICommandHandler<Guid, AddEventCommand>>();
+            var createBookingHandler = provider.GetRequiredService<ICommandHandler<BookingAcceptedDto, CreateBookingCommand>>();
 
-            Guid eventId = await eventsService.AddNewAsync(eventDto, cts.Token);
+            Guid eventId = await addingEventHandler.HandleAsync(new AddEventCommand(eventDto), cts.Token);
 
-            BookingAcceptedDto accepted1 = await bookingsService.CreateBookingAsync(eventId, cts.Token);
-            BookingAcceptedDto accepted2 = await bookingsService.CreateBookingAsync(eventId, cts.Token);
+            BookingAcceptedDto accepted1 = await createBookingHandler.HandleAsync(new CreateBookingCommand(eventId), cts.Token);
+            BookingAcceptedDto accepted2 = await createBookingHandler.HandleAsync(new CreateBookingCommand(eventId), cts.Token);
 
             Assert.False(accepted1.Id == accepted2.Id);
         }
@@ -37,12 +38,11 @@ namespace EventManager.Tests.Unit.Booking.Create
             CancellationTokenSource cts = new CancellationTokenSource();
             var provider = TestingServicesProvider.GetServicesProvider();
 
-            IEventsService eventsService = provider.GetRequiredService<IEventsService>();
-            IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
+            var creatingBookingsHandler = provider.GetRequiredService<ICommandHandler<BookingAcceptedDto, CreateBookingCommand>>();
 
-            Guid id = Guid.Empty;
+            Guid eventId = Guid.Empty;
 
-            await Assert.ThrowsAsync<NotFoundException>(() => bookingsService.CreateBookingAsync(id, cts.Token));
+            await Assert.ThrowsAsync<NotFoundException>(() => creatingBookingsHandler.HandleAsync(new CreateBookingCommand(eventId), cts.Token));
         }
 
         [Theory]
@@ -53,16 +53,17 @@ namespace EventManager.Tests.Unit.Booking.Create
             CancellationTokenSource cts = new CancellationTokenSource();
             var provider = TestingServicesProvider.GetServicesProvider();
 
-            IEventsService eventsService = provider.GetRequiredService<IEventsService>();
-            IBookingsService bookingsService = provider.GetRequiredService<IBookingsService>();
+            var addingEventsHandler = provider.GetRequiredService<ICommandHandler<Guid, AddEventCommand>>();
+            var deletingEventsHandle = provider.GetRequiredService<ICommandHandler<string, DeleteEventCommand>>();
+            var creatingBookingsHandler = provider.GetRequiredService < ICommandHandler<BookingAcceptedDto, CreateBookingCommand>>();
+            
+            Guid eventId = await addingEventsHandler.HandleAsync(new AddEventCommand(eventDto), cts.Token);
 
-            Guid eventId = await eventsService.AddNewAsync(eventDto, cts.Token);
-
-            var acceptedBookingDto = await bookingsService.CreateBookingAsync(eventId, cts.Token);
-            await eventsService.DeleteAsync(eventId, cts.Token);
+            var acceptedBookingDto = await creatingBookingsHandler.HandleAsync(new CreateBookingCommand(eventId), cts.Token);
+            await deletingEventsHandle.HandleAsync(new DeleteEventCommand(eventId), cts.Token);
 
             Assert.Equal(BookingStatus.Pending, acceptedBookingDto.Status);
-            await Assert.ThrowsAsync<NotFoundException>(() => bookingsService.CreateBookingAsync(eventId, cts.Token));
+            await Assert.ThrowsAsync<NotFoundException>(() => creatingBookingsHandler.HandleAsync(new CreateBookingCommand(eventId), cts.Token));
         }
     }
 }
