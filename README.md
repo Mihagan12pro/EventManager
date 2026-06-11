@@ -2,11 +2,10 @@ How to get and run this application on your computer?
 
 Via .NET CLI:
 1. Open terminal or cmd (on Windows) and write this command: git clone [repository url]. Press ENTER
-2. Write: cd src. Press ENTER
+2. Write: cd .\EventManager\src\Presentation\EventManager\. Press ENTER
 3. Write: dotnet build. If everything is ok, press ENTER
-4. Write: cd EventManager. Press ENTER
-5. Write: dotnet run --project EventManager.csproj. Press ENTER
-6. Have fun with my application!
+4. Write: dotnet run --project EventManager.csproj. Press ENTER
+5. Have fun with my application!
 
 Via Visual Studio 2026:
 1. Open Visual Studio.
