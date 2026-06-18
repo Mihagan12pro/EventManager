@@ -67,43 +67,43 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
             return
             [
                 [
-                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Confirmed),
+                    (Expression<Func<BookingEntity, bool>>)(b => b.Status == BookingStatus.Confirmed),
                     3
                 ],
 
                 [
-                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Pending),
+                    (Expression<Func<BookingEntity, bool>>)(b => b.Status == BookingStatus.Pending),
                     1
                 ],
 
                 [
-                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Rejected),
+                    (Expression<Func<BookingEntity, bool>>)(b => b.Status == BookingStatus.Rejected),
                     1
                 ],
 
                 [
-                    (Expression<Func<BookingModel, bool>>)(b => b.CreatedAt == now),
+                    (Expression<Func<BookingEntity, bool>>)(b => b.CreatedAt == now),
 
                     4
                 ],
 
                 [
-                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Pending && b.CreatedAt == now),
+                    (Expression<Func<BookingEntity, bool>>)(b => b.Status == BookingStatus.Pending && b.CreatedAt == now),
                     0
                 ],
 
                 [
-                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Confirmed && b.CreatedAt == now),
+                    (Expression<Func<BookingEntity, bool>>)(b => b.Status == BookingStatus.Confirmed && b.CreatedAt == now),
                     3
                 ],
 
                 [
-                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Confirmed && b.CreatedAt == now && b.ProcessedAt == now),
+                    (Expression<Func<BookingEntity, bool>>)(b => b.Status == BookingStatus.Confirmed && b.CreatedAt == now && b.ProcessedAt == now),
                     1
                 ],
 
                 [
-                    (Expression<Func<BookingModel, bool>>)(b => b.Status == BookingStatus.Confirmed && b.CreatedAt == now && b.ProcessedAt == now.AddDays(5)),
+                    (Expression<Func<BookingEntity, bool>>)(b => b.Status == BookingStatus.Confirmed && b.CreatedAt == now && b.ProcessedAt == now.AddDays(5)),
                     2
                 ],
             ];

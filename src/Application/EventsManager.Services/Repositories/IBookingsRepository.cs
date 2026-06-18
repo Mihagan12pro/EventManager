@@ -14,12 +14,12 @@ namespace EventManager.Application.Repositories
             BookingProcessedDto bookingProcessedDto,
             CancellationToken cancellationToken);
 
-        Task<BookingModel> GetByIdAsync(
+        Task<BookingEntity> GetByIdAsync(
             Guid id,
             CancellationToken cancellationToken);
 
-        Task<IEnumerable<BookingModel>> GetAllAsync(
-            Filters<BookingModel> filters,
+        Task<IEnumerable<BookingEntity>> GetAllAsync(
+            Filters<BookingEntity> filters,
             CancellationToken cancellationToken);
     }
 }

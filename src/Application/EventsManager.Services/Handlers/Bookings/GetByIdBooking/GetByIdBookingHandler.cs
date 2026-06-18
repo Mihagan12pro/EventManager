@@ -15,7 +15,7 @@ namespace EventManager.Application.Handlers.Bookings.GetByIdBooking
         {
             Guid bookingId = command.BookingId;
 
-            BookingModel booking = await _bookingsRepository.GetByIdAsync(bookingId, cancellationToken);
+            BookingEntity booking = await _bookingsRepository.GetByIdAsync(bookingId, cancellationToken);
             NullChecker.Check(booking);
 
             return new GetBookingDto(

@@ -92,7 +92,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
 
         [Theory]
         [MemberData(nameof(FiltersByExpression))]
-        public async Task Test_GetAllAsync_ByExpression(Expression<Func<BookingModel, bool>> filters, int expected)
+        public async Task Test_GetAllAsync_ByExpression(Expression<Func<BookingEntity, bool>> filters, int expected)
         {
             await ResetDatabaseAsync();
 
@@ -103,7 +103,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
             var provider = await GetServiceProviderAsync();
             var bookingsRepository = provider.GetRequiredService<IBookingsRepository>();
 
-            var bookings = await bookingsRepository.GetAllAsync(new Filters<BookingModel>(filters), cts.Token);
+            var bookings = await bookingsRepository.GetAllAsync(new Filters<BookingEntity>(filters), cts.Token);
 
             Assert.Equal(expected, bookings.Count());
         }

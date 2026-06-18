@@ -26,8 +26,8 @@ namespace EventManager.Application.HostedServices.Bookings
                     {
                         IBookingsRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingsRepository>();
 
-                        var filters = new Filters<BookingModel>(
-                                (BookingModel b) => b.Status == BookingStatus.Pending ||
+                        var filters = new Filters<BookingEntity>(
+                                (BookingEntity b) => b.Status == BookingStatus.Pending ||
                                     (b.EventId == null && b.Status != BookingStatus.Rejected)
                             );
 
@@ -49,7 +49,7 @@ namespace EventManager.Application.HostedServices.Bookings
         }
 
         private async Task ProcessBookingsAsync(
-            BookingModel booking,
+            BookingEntity booking,
             CancellationToken stoppingToken)
         {
             await Task.Delay(500);

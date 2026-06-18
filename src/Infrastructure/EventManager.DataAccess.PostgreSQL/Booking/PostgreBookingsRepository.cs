@@ -27,7 +27,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
             CancellationToken cancellationToken)
         {
             EventEntity? @event;
-            BookingModel? booking;
+            BookingEntity? booking;
 
             try
             {
@@ -38,7 +38,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
 
                 @event.ReverseSeats();
 
-                booking = new BookingModel()
+                booking = new BookingEntity()
                 {
                     CreatedAt = DateTime.UtcNow,
 
@@ -59,22 +59,22 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
             return booking.Id;
         }
 
-        public async Task<IEnumerable<BookingModel>> GetAllAsync(
-            Filters<BookingModel> filters, 
+        public async Task<IEnumerable<BookingEntity>> GetAllAsync(
+            Filters<BookingEntity> filters, 
             CancellationToken cancellationToken)
         {
-            IQueryable<BookingModel> bookings = _dbContext.Bookings;
+            IQueryable<BookingEntity> bookings = _dbContext.Bookings;
 
             bookings = filters.ApplyFilters(bookings);
 
             return bookings;
         }
 
-        public async Task<BookingModel> GetByIdAsync(
+        public async Task<BookingEntity> GetByIdAsync(
             Guid id,
             CancellationToken cancellationToken)
         {
-            BookingModel booking = await _dbContext.Bookings.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
+            BookingEntity booking = await _dbContext.Bookings.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
 
             return booking;
         }
@@ -83,7 +83,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
             BookingProcessedDto bookingProcessedDto, 
             CancellationToken cancellationToken)
         {
-            BookingModel booking = await _dbContext.Bookings.FirstOrDefaultAsync(b => b.Id == bookingProcessedDto.Id, cancellationToken);
+            BookingEntity booking = await _dbContext.Bookings.FirstOrDefaultAsync(b => b.Id == bookingProcessedDto.Id, cancellationToken);
 
             if (bookingProcessedDto.Status != BookingStatus.Pending)
             {

@@ -75,7 +75,7 @@ namespace EventManager.Domain.Events
         }
 
         [JsonIgnore]
-        public List<BookingModel> Bookings { get; set; } = null!;
+        public List<BookingEntity> Bookings { get; set; } = null!;
 
 
         private readonly Lock _lock = new Lock();

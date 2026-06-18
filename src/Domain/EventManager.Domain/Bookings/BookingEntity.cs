@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace EventManager.Domain.Bookings
 {
-    public class BookingModel
+    public class BookingEntity
     {
         public Guid Id { get; set; }
 
