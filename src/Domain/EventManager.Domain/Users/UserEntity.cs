@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EventManager.Domain.Users.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace EventManager.Domain.Users
 {

@@ -1,4 +1,4 @@
-﻿namespace EventManager.Domain.Users
+﻿namespace EventManager.Domain.Users.Enums
 {
     public enum Roles
     {

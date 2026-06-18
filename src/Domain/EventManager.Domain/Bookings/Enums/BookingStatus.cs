@@ -18,6 +18,11 @@ namespace EventManager.Domain.Bookings.Enums
         /// <summary>
         /// Booking had been rejected
         /// </summary>
-        Rejected
+        Rejected,
+
+        /// <summary>
+        /// For cancelled bookings
+        /// </summary>
+        Cancelled
     }
 }
