@@ -1,5 +1,6 @@
 ﻿using EventManager.Domain.Bookings.Enums;
 using EventManager.Domain.Events;
+using EventManager.Domain.Users;
 using System.Text.Json.Serialization;
 
 namespace EventManager.Domain.Bookings
@@ -10,6 +11,8 @@ namespace EventManager.Domain.Bookings
 
         public Guid? EventId { get; set; }
 
+        public required Guid UserId { get; set; }
+
         public required DateTime CreatedAt { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
@@ -19,6 +22,9 @@ namespace EventManager.Domain.Bookings
 
         [JsonIgnore]
         public EventEntity Event { get; set; } = null!;
+
+        [JsonIgnore]
+        public UserEntity User { get; set; } = null!;
 
         public void Confirm()
             => Status = BookingStatus.Confirmed;

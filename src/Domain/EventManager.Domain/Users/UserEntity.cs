@@ -1,5 +1,7 @@
-﻿using EventManager.Domain.Users.Enums;
+﻿using EventManager.Domain.Bookings;
+using EventManager.Domain.Users.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EventManager.Domain.Users
 {
@@ -13,5 +15,8 @@ namespace EventManager.Domain.Users
         public required string Login { get; set; }
 
         public required Roles Role { get; set; }
+
+        [NotMapped]
+        public IEnumerable<BookingEntity> Bookings { get; set; } = null!;
     }
 }

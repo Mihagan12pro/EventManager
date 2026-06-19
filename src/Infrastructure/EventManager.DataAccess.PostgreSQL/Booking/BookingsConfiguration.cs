@@ -9,7 +9,11 @@ namespace EventManager.DataAccess.PostgreSQL.Booking
         public void Configure(EntityTypeBuilder<BookingEntity> builder)
         {
             builder.Property(b => b.EventId)
-                .IsRequired(false);
+                   .IsRequired(false);
+
+            builder.HasOne(b => b.User)
+                   .WithMany(u => u.Bookings)
+                   .HasForeignKey(b => b.UserId);
         }
     }
 }
