@@ -1,4 +1,4 @@
-﻿namespace EventManager.Application.Utils.Security
+﻿namespace EventManager.Application.Security
 {
     public interface IPasswordHasher
     {

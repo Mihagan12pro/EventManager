@@ -1,4 +1,4 @@
-﻿using EventManager.Application.Utils.Security;
+﻿using EventManager.Application.Security;
 using System.Security.Cryptography;
 using System.Text;
 

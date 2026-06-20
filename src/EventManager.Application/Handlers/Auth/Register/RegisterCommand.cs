@@ -1,9 +1,7 @@
 ﻿using EventManager.Domain.Entities.Users.Enums;
+using EventManager.DTOs.Users;
 
 namespace EventManager.Application.Handlers.Auth.Register
 {
-    public record RegisterCommand(
-        string Login, 
-        string Password,
-        Roles Role) : ICommand;
+    public record RegisterCommand(RegisterDto Register) : ICommand;
 }
