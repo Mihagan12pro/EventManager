@@ -11,7 +11,7 @@ namespace EventManager.Domain.Entities.Bookings
 
         public Guid? EventId { get; set; }
 
-        public required Guid UserId { get; set; } 
+        public Guid? UserId { get; set; } 
 
         public required DateTime CreatedAt { get; set; }
 

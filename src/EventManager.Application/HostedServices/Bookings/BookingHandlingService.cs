@@ -74,6 +74,13 @@ namespace EventManager.Application.HostedServices.Bookings
                             Status = BookingStatus.Rejected
                         };
                     }
+                    else if (booking.UserId == null)
+                    {
+                        bookingProcessedDto = bookingProcessedDto with
+                        {
+                            Status = BookingStatus.Cancelled
+                        };
+                    }
                     else
                     {
                         eventById = await eventsRepository.GetByIdAsync(booking.EventId.Value, stoppingToken);
