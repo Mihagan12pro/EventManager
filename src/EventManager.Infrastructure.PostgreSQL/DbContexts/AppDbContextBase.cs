@@ -1,5 +1,6 @@
 ﻿using EventManager.Domain.Entities.Bookings;
 using EventManager.Domain.Entities.Events;
+using EventManager.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -10,6 +11,8 @@ namespace EventManager.Infrastructure.PostgreSQL.DbContexts
         public AppDbContextBase(DbContextOptions options) : base(options)
         {
         }
+
+        public DbSet<UserEntity> Users { get; set; }
 
         public DbSet<EventEntity> Events { set; get; }
 

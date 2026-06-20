@@ -10,6 +10,7 @@ namespace EventManager.Domain.Entities.Users
         public Guid Id { get; private set; }
 
         [MinLength(3)]
+        [MaxLength(256)]
         public required string Login { get; set; }
 
         public required string HashedPassword { get; set; }

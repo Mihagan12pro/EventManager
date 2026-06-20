@@ -13,6 +13,10 @@ namespace EventManager.DataAccess.PostgreSQL.Booking
 
             builder.Property(b => b.Status)
                 .HasConversion<string>();
+
+            builder.HasOne(b => b.User)
+                   .WithMany(u => u.Bookings)
+                   .HasForeignKey(b => b.UserId);
         }
     }
 }

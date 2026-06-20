@@ -1,7 +1,6 @@
 ﻿using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.Domain.Entities.Events;
 using EventManager.Domain.Entities.Users;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace EventManager.Domain.Entities.Bookings
