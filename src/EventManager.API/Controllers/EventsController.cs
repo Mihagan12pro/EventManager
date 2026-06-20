@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventManager.API.Controllers
 {
     [ApiController]
-    [Route("/events")]
+    [Route("api/[controller]")]
     public class EventsController : ControllerBase
     {
         /// <summary>

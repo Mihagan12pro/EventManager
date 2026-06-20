@@ -1,4 +1,5 @@
 ﻿using EventManager.Application.Handlers;
+using EventManager.Application.Handlers.Bookings.Cancel;
 using EventManager.Application.Handlers.Bookings.GetByIdBooking;
 using EventManager.DTOs.Bookings;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventManager.API.Controllers
 {
     [ApiController]
-    [Route("/bookings")]
+    [Route("api/[controller]")]
     public class BookingController : ControllerBase
     {
         /// <summary>
@@ -28,8 +29,13 @@ namespace EventManager.API.Controllers
 
 
         [HttpDelete("id")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteAsync(
+            [FromRoute] Guid id, 
+            [FromServices] ICommandHandler<CancelBookingCommand> handler,
+            CancellationToken cancellationToken)
         {
+            await handler.HandleAsync(new CancelBookingCommand(id), cancellationToken);
+
             return NoContent();
         }
     }

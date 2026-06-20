@@ -1,4 +1,6 @@
 ﻿using EventManager.Application.Repositories;
+using EventManager.Domain.Entities.Bookings.Enums;
+using EventManager.DTOs.Bookings;
 
 namespace EventManager.Application.Handlers.Bookings.Cancel
 {
@@ -9,9 +11,7 @@ namespace EventManager.Application.Handlers.Bookings.Cancel
         public async Task HandleAsync(
             CancelBookingCommand command,
             CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+                => await _bookingsRepository.ProcessBookingAsync(new BookingProcessedDto(command.BookingId, BookingStatus.Cancelled), cancellationToken);
 
         public CancelBookingHandler(IBookingsRepository bookingsRepository)
         {
