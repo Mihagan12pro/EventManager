@@ -76,7 +76,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
             Guid id,
             CancellationToken cancellationToken)
         {
-            BookingEntity booking = await _dbContext.Bookings.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
+            BookingEntity booking = await _dbContext.Bookings.FirstAsync(b => b.Id == id, cancellationToken);
 
             return booking;
         }
@@ -85,15 +85,19 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
             BookingProcessedDto bookingProcessedDto, 
             CancellationToken cancellationToken)
         {
-            BookingEntity booking = await _dbContext.Bookings.FirstOrDefaultAsync(b => b.Id == bookingProcessedDto.Id, cancellationToken);
+            BookingEntity booking = await _dbContext.Bookings.FirstAsync(b => b.Id == bookingProcessedDto.Id, cancellationToken);
 
-            if (bookingProcessedDto.Status != BookingStatus.Pending)
+            if (bookingProcessedDto.Status == BookingStatus.Rejected || bookingProcessedDto.Status == BookingStatus.Cancelled)
             {
-                booking.Status = bookingProcessedDto.Status;
-                booking.ProcessedAt = DateTime.UtcNow;
+                EventEntity @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == booking.EventId);
 
-                await _dbContext.SaveChangesAsync(cancellationToken);
+                @event?.ReverseSeats();
             }
+
+            booking.Status = bookingProcessedDto.Status;
+            booking.ProcessedAt = DateTime.UtcNow;
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -11,7 +11,7 @@
     public interface ICommandHandler<TCommand>
         where TCommand : ICommand
     {
-        Task HandlerAsync(
+        Task HandleAsync(
             TCommand command, 
             CancellationToken cancellationToken);
     }

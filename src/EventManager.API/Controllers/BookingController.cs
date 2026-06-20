@@ -25,5 +25,12 @@ namespace EventManager.API.Controllers
 
             return Ok(booking);
         }
+
+
+        [HttpDelete("id")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+        {
+            return NoContent();
+        }
     }
 }

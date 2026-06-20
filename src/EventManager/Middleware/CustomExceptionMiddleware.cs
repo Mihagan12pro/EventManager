@@ -1,8 +1,6 @@
 ﻿using EventManager.Domain.Failures;
 using EventManager.Domain.Failures.Errors.Factories;
 using EventManager.Domain.Failures.Exceptions.WebApi;
-using EventsManager.Failures;
-using EventsManager.Failures.Errors;
 
 namespace EventManager.Middleware
 {
@@ -21,6 +19,12 @@ namespace EventManager.Middleware
                 LogError(ex, httpContext);
 
                 await ModifyResponse(httpContext, ex.Error);
+            }
+            catch(ArgumentNullException ex)
+            {
+                LogError(ex, httpContext);
+
+                await ModifyResponse(httpContext, ClientErrorsFactory.NotFoundWorkbench.Craft("Not found!"));
             }
             catch (Exception ex)
             {
