@@ -5,6 +5,7 @@
     <Project Path="src/EventManager.Domain/EventManager.Domain.csproj" />
     <Project Path="src/EventManager.DTOs/EventManager.DTOs.csproj" />
     <Project Path="src/EventManager.Infrastructure.PostgreSQL/EventManager.Infrastructure.PostgreSQL.csproj" />
+    <Project Path="src/EventManager.Infrastructure.Security/EventManager.Infrastructure.Security.csproj" Id="b86de8be-7dc8-4473-a1c5-03043a877edc" />
     <Project Path="src/EventManager.Shared/EventManager.Shared.csproj" />
     <Project Path="src/EventManager/EventManager.csproj" />
   </Folder>
