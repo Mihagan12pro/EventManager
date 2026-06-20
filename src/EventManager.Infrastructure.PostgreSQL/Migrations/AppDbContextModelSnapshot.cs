@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace EventManager.DataAccess.PostgreSQL.Migrations
+namespace EventManager.Infrastructure.PostgreSQL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -17,13 +17,13 @@ namespace EventManager.DataAccess.PostgreSQL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.7")
+                .HasAnnotation("ProductVersion", "10.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "citext");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("EventManager.Domain.Bookings.BookingModel", b =>
+            modelBuilder.Entity("EventManager.Domain.Entities.Bookings.BookingEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,8 +38,9 @@ namespace EventManager.DataAccess.PostgreSQL.Migrations
                     b.Property<DateTime?>("ProcessedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -48,7 +49,7 @@ namespace EventManager.DataAccess.PostgreSQL.Migrations
                     b.ToTable("Bookings");
                 });
 
-            modelBuilder.Entity("EventManager.Domain.Events.EventModel", b =>
+            modelBuilder.Entity("EventManager.Domain.Entities.Events.EventEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,9 +82,9 @@ namespace EventManager.DataAccess.PostgreSQL.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("EventManager.Domain.Bookings.BookingModel", b =>
+            modelBuilder.Entity("EventManager.Domain.Entities.Bookings.BookingEntity", b =>
                 {
-                    b.HasOne("EventManager.Domain.Events.EventModel", "Event")
+                    b.HasOne("EventManager.Domain.Entities.Events.EventEntity", "Event")
                         .WithMany("Bookings")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -91,7 +92,7 @@ namespace EventManager.DataAccess.PostgreSQL.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("EventManager.Domain.Events.EventModel", b =>
+            modelBuilder.Entity("EventManager.Domain.Entities.Events.EventEntity", b =>
                 {
                     b.Navigation("Bookings");
                 });

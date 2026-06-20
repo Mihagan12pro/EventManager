@@ -1,5 +1,5 @@
-﻿using EventManager.Domain.Bookings;
-using EventManager.Domain.Events;
+﻿using EventManager.Domain.Entities.Bookings;
+using EventManager.Domain.Entities.Events;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -13,7 +13,7 @@ namespace EventManager.Infrastructure.PostgreSQL.DbContexts
 
         public DbSet<EventEntity> Events { set; get; }
 
-        public DbSet<BookingModel> Bookings { get; set; }
+        public DbSet<BookingEntity> Bookings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
             => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

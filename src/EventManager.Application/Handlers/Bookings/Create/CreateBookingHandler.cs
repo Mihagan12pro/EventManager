@@ -1,5 +1,5 @@
 ﻿using EventManager.Application.Repositories;
-using EventManager.Domain.Bookings.Enums;
+using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 
 namespace EventManager.Application.Handlers.Bookings.Create

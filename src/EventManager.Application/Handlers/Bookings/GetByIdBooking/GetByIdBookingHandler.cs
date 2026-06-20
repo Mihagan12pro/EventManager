@@ -1,5 +1,5 @@
 ﻿using EventManager.Application.Repositories;
-using EventManager.Domain.Bookings;
+using EventManager.Domain.Entities.Bookings;
 using EventManager.DTOs.Bookings;
 using EventManager.Shared;
 
@@ -15,7 +15,7 @@ namespace EventManager.Application.Handlers.Bookings.GetByIdBooking
         {
             Guid bookingId = command.BookingId;
 
-            BookingModel booking = await _bookingsRepository.GetByIdAsync(bookingId, cancellationToken);
+            BookingEntity booking = await _bookingsRepository.GetByIdAsync(bookingId, cancellationToken);
             NullChecker.Check(booking);
 
             return new GetBookingDto(

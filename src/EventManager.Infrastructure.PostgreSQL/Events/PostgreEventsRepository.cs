@@ -1,5 +1,5 @@
 ﻿using EventManager.Application.Repositories;
-using EventManager.Domain.Events;
+using EventManager.Domain.Entities.Events;
 using EventManager.Domain.ValueObjects;
 using EventManager.Domain.ValueObjects.Events;
 using EventManager.Domain.ValueObjects.Events.DateAndTime;

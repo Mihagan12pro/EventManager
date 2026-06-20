@@ -9,7 +9,7 @@ namespace EventManager.Infrastructure.PostgreSQL.DbContexts.Design
     {
         public AppDbContext CreateDbContext(string[] args)
         {
-            string path = new DirectoryInfo(@"..\..\EventManager").FullName;
+            string path = new DirectoryInfo(@"..\EventManager").FullName;
 
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(path)

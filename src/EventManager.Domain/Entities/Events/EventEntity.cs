@@ -1,4 +1,4 @@
-﻿using EventManager.Domain.Bookings;
+﻿using EventManager.Domain.Entities.Bookings;
 using EventManager.Domain.Failures.Errors;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Domain.ValueObjects.Events;
@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 using System.Text.Json.Serialization;
 
-namespace EventManager.Domain.Events
+namespace EventManager.Domain.Entities.Events
 {
     public class EventEntity
     {
@@ -75,7 +75,7 @@ namespace EventManager.Domain.Events
         }
 
         [JsonIgnore]
-        public List<BookingModel> Bookings { get; set; } = null!;
+        public List<BookingEntity> Bookings { get; set; } = null!;
 
 
         private readonly Lock _lock = new Lock();

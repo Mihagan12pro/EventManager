@@ -1,6 +1,4 @@
-﻿using EventManager.Domain.Events;
-
-namespace EventManager.DTOs.Events
+﻿namespace EventManager.DTOs.Events
 {
     public record PaginatedEventsDto(
         int TotalCount,

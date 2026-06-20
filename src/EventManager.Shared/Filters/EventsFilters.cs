@@ -1,4 +1,4 @@
-﻿using EventManager.Domain.Events;
+﻿using EventManager.Domain.Entities.Events;
 using EventManager.DTOs.Events;
 
 namespace EventManager.Shared.Filters

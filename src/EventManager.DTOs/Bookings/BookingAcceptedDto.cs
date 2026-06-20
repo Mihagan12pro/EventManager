@@ -1,4 +1,4 @@
-﻿using EventManager.Domain.Bookings.Enums;
+﻿using EventManager.Domain.Entities.Bookings.Enums;
 
 namespace EventManager.DTOs.Bookings
 {

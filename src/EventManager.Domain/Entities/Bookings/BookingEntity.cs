@@ -1,10 +1,10 @@
-﻿using EventManager.Domain.Bookings.Enums;
-using EventManager.Domain.Events;
+﻿using EventManager.Domain.Entities.Bookings.Enums;
+using EventManager.Domain.Entities.Events;
 using System.Text.Json.Serialization;
 
-namespace EventManager.Domain.Bookings
+namespace EventManager.Domain.Entities.Bookings
 {
-    public class BookingModel
+    public class BookingEntity
     {
         public Guid Id { get; set; }
 
