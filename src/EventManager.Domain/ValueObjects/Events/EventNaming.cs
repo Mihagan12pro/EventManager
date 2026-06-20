@@ -1,45 +1,35 @@
-﻿using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
+﻿using EventManager.Domain.Failures.Errors;
+using EventManager.Domain.Validation;
+using EventsManager.Failures.Errors;
 using System.Globalization;
 
 namespace EventManager.Domain.ValueObjects.Events
 {
-    public record EventNaming
+    public record EventNaming : IValidatableValueObject
     {
-        public string Title
-        {
-            get
-            {
-                return _title;
-            }
-            init
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new BadRequestException("Title can't be empty!");
+        public string Title { get; init; }
 
-                _title = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(value);
-            }
-        }
-
-        public string Description
-        {
-            get
-            {
-                return _description;
-            }
-            init
-            {
-                _description = value;
-            }
-        }
+        public string Description { get; init; }
 
 
         public EventNaming(string title, string description = "")
         {
-            Title = title;
+            Title = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(title); ;
 
             Description = description;
         }
 
-        private string _title, _description;
+        public ErrorsCollection Validate()
+        {
+            ErrorsCollection errors = new ();
+
+            if (string.IsNullOrWhiteSpace(Title))
+                errors.Add(new Error("Title can't be empty!"));
+
+            else if (Title.Length < 3)
+                errors.Add(new Error("Title can't be shorter than 3 symbols!"));
+
+            return errors;
+        }
     }
 }

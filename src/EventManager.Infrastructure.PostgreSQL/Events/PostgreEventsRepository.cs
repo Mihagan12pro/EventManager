@@ -28,13 +28,13 @@ namespace EventManager.Infrastructure.PostgreSQL.Events
 
             EventEntity @event = new EventEntity()
             {
-                EventNamimg =  new EventNaming(eventDto.Title, eventDto.Description),
+                EventNaming =  new EventNaming(eventDto.Title, eventDto.Description),
                 
                 EventDateTime = new EventDateTime(start, end),
                 
                 Seats = new Seats(eventDto.TotalSeats!.Value)
             };
-
+            @event.Validate();
 
             await _dbContext.Events.AddAsync(@event, cancellationToken);
 
@@ -48,9 +48,10 @@ namespace EventManager.Infrastructure.PostgreSQL.Events
             PutEventDto putEvent,
             CancellationToken cancellationToken)
         {
-            EventEntity @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
-            @event.ModifyNaming(putEvent.Title, putEvent.Description);
-            @event.ModifyDatetimes(putEvent.StartAt.Value, putEvent.EndAt.Value);
+            EventEntity @event = await _dbContext.Events.FirstAsync(e => e.Id == id, cancellationToken);
+            @event.EventNaming = new EventNaming(putEvent.Title, putEvent.Description);
+            @event.EventDateTime = new EventDateTime(putEvent.StartAt.Value, putEvent.EndAt.Value);
+            @event.Validate();
 
             await _dbContext.SaveChangesAsync(cancellationToken);
         }

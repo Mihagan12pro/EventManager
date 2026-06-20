@@ -1,5 +1,4 @@
 ﻿using EventManager.Domain.Failures;
-using EventManager.Domain.Failures.Errors;
 using EventsManager.Failures.Errors;
 using System.Net;
 

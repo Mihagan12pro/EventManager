@@ -1,16 +1,15 @@
 ﻿using EventManager.Domain.Entities.Bookings;
 using EventManager.Domain.Failures.Errors;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
+using EventManager.Domain.Validation;
 using EventManager.Domain.ValueObjects.Events;
 using EventManager.Domain.ValueObjects.Events.DateAndTime;
-using EventsManager.Failures.Errors;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Net;
 using System.Text.Json.Serialization;
 
 namespace EventManager.Domain.Entities.Events
 {
-    public class EventEntity
+    public class EventEntity : IValidatableEntity
     {
         public Guid Id { get; private set; }
 
@@ -27,7 +26,7 @@ namespace EventManager.Domain.Entities.Events
         public int TotalSeats { get; private set; }
 
         [NotMapped]
-        public required EventNaming EventNamimg
+        public required EventNaming EventNaming
         {
             get
             {
@@ -101,14 +100,20 @@ namespace EventManager.Domain.Entities.Events
             }
         }
 
-        public void ModifyDatetimes(DateTime start, DateTime end)
+        public void Validate()
         {
-            EventDateTime = new EventDateTime(start, end);
-        }
+            ErrorsCollection errors = new ErrorsCollection();
 
-        public void ModifyNaming(string title, string description = "")
-        {
-            EventNamimg = new EventNaming(title, description);
+            errors.AddRange(
+                Seats.Validate(),
+
+                EventNaming.Validate(),
+
+                EventDateTime.Validate()
+            );
+
+            if (errors.HasErrors)
+                throw new BadRequestException(errors);
         }
     }
 }

@@ -1,10 +1,13 @@
-﻿using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
+﻿using EventManager.Domain.Failures.Errors;
+using EventManager.Domain.Validation;
 using EventsManager.Failures.Errors;
 
 namespace EventManager.Domain.ValueObjects.Events.DateAndTime
 {
-    public record EventDateTime 
+    public record EventDateTime : IValidatableValueObject
     {
+        private Dictionary<string, Error> _propertyError = new ();
+
         private DateTime _startAt, _endAt;
 
         public DateTime StartAt
@@ -16,7 +19,12 @@ namespace EventManager.Domain.ValueObjects.Events.DateAndTime
             init
             {
                 if (value <= DateTime.Now)
-                    throw new BadRequestException("Too late for start date time!");
+                    _propertyError[nameof(StartAt)] = new Error("Too late for start date time!");
+                else
+                {
+                    if (_propertyError.ContainsKey(nameof(StartAt)))
+                        _propertyError.Remove(nameof(StartAt));
+                }
 
                 _startAt = value;
             }
@@ -31,10 +39,27 @@ namespace EventManager.Domain.ValueObjects.Events.DateAndTime
             init
             {
                 if (value <= StartAt)
-                    throw new BadRequestException("End date time must be later than start date time!");
+                    _propertyError[nameof(EndAt)] = new Error("End date time must be later than start date time!");
+                else
+                {
+                    if (_propertyError.ContainsKey(nameof(EndAt)))
+                        _propertyError.Remove(nameof(EndAt));
+                }
 
                 _endAt = value;
             }
+        }
+
+        public ErrorsCollection Validate()
+        {
+            ErrorsCollection errors = new();
+
+            foreach(var property in _propertyError.Keys)
+            {
+                errors.Add(_propertyError[property]);
+            }
+
+            return errors;
         }
 
         public EventDateTime(DateTime start, DateTime end)

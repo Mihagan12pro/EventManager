@@ -1,10 +1,11 @@
-﻿using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
+﻿using EventManager.Domain.Failures.Errors;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.Conflict;
+using EventManager.Domain.Validation;
 using EventsManager.Failures.Errors;
 
 namespace EventManager.Domain.ValueObjects.Events
 {
-    public record Seats
+    public record Seats : IValidatableValueObject
     {
         public int Total
         {
@@ -14,9 +15,6 @@ namespace EventManager.Domain.ValueObjects.Events
             }
             init
             {
-                if (value <= 0)
-                    throw new BadRequestException("Total count of seats must be greater than zero!");
-
                 _total = value;
             }
         }
@@ -55,5 +53,15 @@ namespace EventManager.Domain.ValueObjects.Events
 
 
         private int _total, _available;
+
+        public ErrorsCollection Validate()
+        {
+            ErrorsCollection errors = new ();
+
+            if (Total < 1)
+                errors.Add(new Error("Total count of seats must be greater than zero!"));
+
+            return errors;
+        }
     }
 }
