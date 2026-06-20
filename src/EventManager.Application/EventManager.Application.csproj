@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain\EventManager.Domain\EventManager.Domain.csproj" />
-    <ProjectReference Include="..\..\SharedLibs\EventManager.DTOs\EventManager.DTOs.csproj" />
-    <ProjectReference Include="..\..\SharedLibs\Shared\EventManager.Shared.csproj" />
+    <ProjectReference Include="..\EventManager.Domain\EventManager.Domain.csproj" />
+    <ProjectReference Include="..\EventManager.DTOs\EventManager.DTOs.csproj" />
+    <ProjectReference Include="..\EventManager.Shared\EventManager.Shared.csproj" />
   </ItemGroup>
 </Project>

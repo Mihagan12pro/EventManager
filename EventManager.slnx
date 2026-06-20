@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/EventManager.API/EventManager.API.csproj" />
+    <Project Path="src/EventManager.Application/EventManager.Application.csproj" />
+    <Project Path="src/EventManager.Domain/EventManager.Domain.csproj" />
+    <Project Path="src/EventManager.DTOs/EventManager.DTOs.csproj" />
+    <Project Path="src/EventManager.Infrastructure.PostgreSQL/EventManager.Infrastructure.PostgreSQL.csproj" />
+    <Project Path="src/EventManager.Shared/EventManager.Shared.csproj" />
+    <Project Path="src/EventManager/EventManager.csproj" />
+  </Folder>
+</Solution>
