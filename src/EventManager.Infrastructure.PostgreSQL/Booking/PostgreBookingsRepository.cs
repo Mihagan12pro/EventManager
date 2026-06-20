@@ -44,7 +44,9 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
 
                     Status = BookingStatus.Pending,
 
-                    EventId = eventId
+                    EventId = eventId,
+
+                    UserId = Guid.NewGuid()//Temporary solution
                 };
 
                 await _dbContext.Bookings.AddAsync(booking, cancellationToken);
