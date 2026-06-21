@@ -1,6 +1,7 @@
 ﻿using EventManager.Infrastructure.PostgreSQL;
-using EventManager.Middleware;
 using EventManager.Application;
+using EventManager.Infrastructure.Security;
+using EventManager.Middleware.Exceptions;
 
 namespace EventManager
 {
@@ -9,6 +10,7 @@ namespace EventManager
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddHandlers();
+            services.AddSecurity();
             services.AddBackgroundServices();
             services.AddSingletonServices();
             services.AddPostgreDependencies();
@@ -16,6 +18,11 @@ namespace EventManager
             return services;
         }
         public static IApplicationBuilder UseCustomMiddleware(this IApplicationBuilder app)
-            => app.UseMiddleware<CustomExceptionMiddleware>();
+        {
+            app.UseMiddleware<WebApiExceptionMiddleware>();
+            app.UseMiddleware<DbExceptionsMiddleware>();
+
+            return app;
+        }
     }
 }

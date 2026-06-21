@@ -2,6 +2,7 @@
 using EventManager.Infrastructure.PostgreSQL.Booking;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Infrastructure.PostgreSQL.Events;
+using EventManager.Infrastructure.PostgreSQL.Users;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;
 
@@ -24,6 +25,7 @@ namespace EventManager.Infrastructure.PostgreSQL
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
+            services.AddScoped<IUsersRepository, PostgreUsersRepository>();
             services.AddScoped<IEventsRepository, PostgreEventsRepository>();
             services.AddScoped<IBookingsRepository, PostgreBookingsRepository>();
 

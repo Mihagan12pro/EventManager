@@ -3,7 +3,9 @@ using EventManager.Domain.Entities.Users.Enums;
 using EventManager.Domain.Failures.Errors;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Domain.Validation;
+using EventManager.Domain.ValueObjects.Users;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace EventManager.Domain.Entities.Users
@@ -12,9 +14,25 @@ namespace EventManager.Domain.Entities.Users
     {
         public Guid Id { get; private set; }
 
+        [NotMapped]
+        [JsonIgnore]
+        public required UserName UserName
+        {
+            get
+            {
+                return _userName;
+            }
+            set
+            {
+                _userName = value;
+
+                Login = _userName.Name;
+            }
+        }
+
         [MinLength(3)]
         [MaxLength(256)]
-        public required string Login { get; set; }
+        public string Login { get; private set; }
 
         public required string HashedPassword { get; set; }
 
@@ -35,5 +53,7 @@ namespace EventManager.Domain.Entities.Users
                 throw new BadRequestException(errors);
             }
         }
+
+        private UserName _userName;
     }
 }

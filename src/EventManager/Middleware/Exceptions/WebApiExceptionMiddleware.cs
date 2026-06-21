@@ -2,11 +2,11 @@
 using EventManager.Domain.Failures.Errors.Factories;
 using EventManager.Domain.Failures.Exceptions.WebApi;
 
-namespace EventManager.Middleware
+namespace EventManager.Middleware.Exceptions
 {
-    public class CustomExceptionMiddleware : CustomMiddleware
+    public class WebApiExceptionMiddleware : CustomMiddleware
     {
-        private readonly ILogger<CustomExceptionMiddleware> _logger;
+        private readonly ILogger<WebApiExceptionMiddleware> _logger;
 
         public override async Task InvokeAsync(HttpContext httpContext)
         {
@@ -53,9 +53,9 @@ namespace EventManager.Middleware
             await httpContext.Response.WriteAsJsonAsync(error.Errors);
         }
 
-        public CustomExceptionMiddleware(
+        public WebApiExceptionMiddleware(
             RequestDelegate next,
-            ILogger<CustomExceptionMiddleware> logger) : base(next)
+            ILogger<WebApiExceptionMiddleware> logger) : base(next)
         {
             _logger = logger;
         }

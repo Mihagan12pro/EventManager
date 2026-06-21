@@ -1,10 +1,12 @@
-﻿using EventManager.Application.Security;
+﻿using EventManager.Application.Repositories;
+using EventManager.Application.Security;
 using EventManager.DTOs.Users;
 
 namespace EventManager.Application.Handlers.Auth.Register
 {
     public class RegisterHandler : ICommandHandler<RegisterCommand>
     {
+        private readonly IUsersRepository _usersRepository;
         private readonly IPasswordHasher _passwordHasher;
 
         public async Task HandleAsync(
@@ -16,11 +18,12 @@ namespace EventManager.Application.Handlers.Auth.Register
                  Password = _passwordHasher.Hash(command.Register.Password)
             };
 
-            throw new NotImplementedException();
+            await _usersRepository.RegisterAsync(register, cancellationToken);
         }
 
-        public RegisterHandler(IPasswordHasher passwordHasher)
+        public RegisterHandler(IUsersRepository usersRepository, IPasswordHasher passwordHasher)
         {
+            _usersRepository = usersRepository;
             _passwordHasher = passwordHasher;
         }
     }

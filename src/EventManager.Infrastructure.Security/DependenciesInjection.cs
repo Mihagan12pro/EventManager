@@ -7,7 +7,7 @@ namespace EventManager.Infrastructure.Security
     {
         public static IServiceCollection AddSecurity(this IServiceCollection services)
         {
-            services.AddTransient<IPasswordHasher, PasswordHasherSHA256>();
+            services.AddScoped<IPasswordHasher, PasswordHasherSHA256>();
 
             return services;
         }

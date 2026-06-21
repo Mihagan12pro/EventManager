@@ -1,5 +1,6 @@
 ﻿using EventManager.Domain.Entities.Users.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EventManager.DTOs.Users
 {

@@ -4,6 +4,8 @@ namespace EventManager.Application.Repositories
 {
     public interface IUsersRepository
     {
-        Task RegisterAsync(RegisterDto register, CancellationToken cancellationToken);
+        Task RegisterAsync(
+            RegisterDto register,
+            CancellationToken cancellationToken);
     }
 }

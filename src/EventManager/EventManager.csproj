@@ -25,6 +25,7 @@
     <ProjectReference Include="..\EventManager.API\EventManager.API.csproj" />
     <ProjectReference Include="..\EventManager.Application\EventManager.Application.csproj" />
     <ProjectReference Include="..\EventManager.Infrastructure.PostgreSQL\EventManager.Infrastructure.PostgreSQL.csproj" />
+    <ProjectReference Include="..\EventManager.Infrastructure.Security\EventManager.Infrastructure.Security.csproj" />
   </ItemGroup>
 
 </Project>
