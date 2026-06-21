@@ -1,12 +1,20 @@
 using EventManager;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 public partial class Program
 {
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
+             .AddJsonFile("appsettings.json");
+
+        IConfiguration configuration = configurationBuilder.Build();
 
         builder.Services.AddControllers();
 
@@ -28,6 +36,22 @@ public partial class Program
                 options.IncludeXmlComments(file.FullName);
             }
         });
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                var jwtOptionsSection = configuration.GetSection("JwtOptions");
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtOptionsSection.GetSection("SecretKey").Value))
+                };
+            });
 
         var app = builder.Build();
 
