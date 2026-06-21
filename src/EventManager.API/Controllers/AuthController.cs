@@ -1,4 +1,5 @@
 ﻿using EventManager.Application.Handlers;
+using EventManager.Application.Handlers.Auth.Login;
 using EventManager.Application.Handlers.Auth.Register;
 using EventManager.DTOs.Users;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace EventManager.API.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync(
             [FromBody] RegisterDto register,
             [FromServices] ICommandHandler<RegisterCommand> handler,
@@ -19,6 +20,19 @@ namespace EventManager.API.Controllers
             await handler.HandleAsync(command, cancellationToken);
 
             return NoContent();
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAsync(
+            [FromBody] LoginDto login,
+            [FromServices] ICommandHandler<string, LoginCommand> handler,
+            CancellationToken cancellationToken) 
+        {
+            LoginCommand command = new LoginCommand(login);
+
+            await handler.HandleAsync(command, cancellationToken);
+
+            return Ok();
         }
     }
 }

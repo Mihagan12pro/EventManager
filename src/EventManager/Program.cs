@@ -48,6 +48,9 @@ public partial class Program
         app.UseHttpsRedirection();
         app.UseRouting();
 
+        app.UseAuthentication();
+        app.UseAuthorization();
+
         app.UseCustomMiddleware();
 
         app.MapControllers();
