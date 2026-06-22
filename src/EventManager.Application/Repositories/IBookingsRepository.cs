@@ -8,6 +8,7 @@ namespace EventManager.Application.Repositories
     {
         Task<Guid> CreateNewBookingAsync(
             Guid eventId,
+            Guid userId,
             CancellationToken cancellationToken);
 
         Task ProcessBookingAsync(

@@ -27,14 +27,15 @@ namespace EventManager.Application.HostedServices.Bookings
                         IBookingsRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingsRepository>();
 
                         var filters = new Filters<BookingEntity>(
-                                (BookingEntity b) => b.Status == BookingStatus.Pending ||
-                                    (b.EventId == null && b.Status != BookingStatus.Rejected)
+                                (BookingEntity b) => (b.Status != BookingStatus.Confirmed && (b.UserId == null || b.EventId == null))
+                                || b.Status == BookingStatus.Pending
                             );
 
-                        var pendingBookings = await bookingRepository.GetAllAsync(filters, stoppingToken);
-                        var pendingTasks = pendingBookings.Select(pb => ProcessBookingsAsync(pb, stoppingToken));
+                        var bookings = await bookingRepository.GetAllAsync(filters, stoppingToken);
 
-                        await Task.WhenAll(pendingTasks);
+                        var tasks = bookings.Select(pb => ProcessBookingsAsync(pb, stoppingToken));
+
+                        await Task.WhenAll(tasks);
                     }
                 }
                 catch (OperationCanceledException ex)
@@ -52,44 +53,17 @@ namespace EventManager.Application.HostedServices.Bookings
             BookingEntity booking,
             CancellationToken stoppingToken)
         {
-            await Task.Delay(500);
-
-            using (var scope = _serviceScopeFactory.CreateScope())
+            using(var scope = _serviceScopeFactory.CreateScope())
             {
-                IEventsRepository eventsRepository = scope.ServiceProvider.GetRequiredService<IEventsRepository>();
                 IBookingsRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingsRepository>();
 
-                EventEntity? eventById = null;
-                BookingProcessedDto bookingProcessedDto = new BookingProcessedDto(booking.Id, booking.Status);
-
+                BookingStatus status = booking.Status;
 
                 try
                 {
                     await _processingSemaphore.WaitAsync();
 
-                    if (booking.EventId == null)
-                    {
-                        bookingProcessedDto = bookingProcessedDto with
-                        {
-                            Status = BookingStatus.Rejected
-                        };
-                    }
-                    else if (booking.UserId == null)
-                    {
-                        bookingProcessedDto = bookingProcessedDto with
-                        {
-                            Status = BookingStatus.Cancelled
-                        };
-                    }
-                    else
-                    {
-                        eventById = await eventsRepository.GetByIdAsync(booking.EventId.Value, stoppingToken);
-
-                        bookingProcessedDto = bookingProcessedDto with
-                        {
-                            Status = BookingStatus.Confirmed
-                        };
-                    }
+                    status = await ChangeBookingStatus(booking, stoppingToken);
                 }
                 catch (OperationCanceledException)
                 {
@@ -97,13 +71,29 @@ namespace EventManager.Application.HostedServices.Bookings
                 }
                 finally
                 {
-                    await bookingRepository.ProcessBookingAsync(
-                            bookingProcessedDto,
-                            stoppingToken
-                        );
-
                     _processingSemaphore.Release();
+
+                    await bookingRepository.ProcessBookingAsync(new BookingProcessedDto(booking.Id, status), stoppingToken);
                 }
+            }
+        }
+
+        private async Task<BookingStatus> ChangeBookingStatus(BookingEntity booking, CancellationToken stoppingToken)
+        {
+            if (booking.UserId == null)
+            {
+                return BookingStatus.Cancelled;
+            }
+            else
+            {
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    IEventsRepository eventsRepository = scope.ServiceProvider.GetRequiredService<IEventsRepository>();
+
+                    var @event = await eventsRepository.GetByIdAsync(booking.EventId.Value, stoppingToken);
+                }
+
+                return BookingStatus.Confirmed;
             }
         }
 

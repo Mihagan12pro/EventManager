@@ -46,9 +46,9 @@ namespace EventManager.Domain.ValueObjects.Events
 
         public Seats(int total, int avaliable)
         {
-            Total = total;
+             Total = total;
 
-            Available = avaliable;
+             Available = avaliable;
         }
 
 

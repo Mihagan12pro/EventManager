@@ -9,6 +9,8 @@ namespace EventManager
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
+
             services.AddHandlers();
             services.AddSecurity();
             services.AddBackgroundServices();

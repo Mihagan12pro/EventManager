@@ -24,6 +24,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
 
         public async Task<Guid> CreateNewBookingAsync(
             Guid eventId,
+            Guid userId,
             CancellationToken cancellationToken)
         {
             EventEntity? @event;
@@ -45,7 +46,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
 
                     EventId = eventId,
 
-                    UserId = Guid.NewGuid()//Temporary solution
+                    UserId = userId
                 };
 
                 await _dbContext.Bookings.AddAsync(booking, cancellationToken);

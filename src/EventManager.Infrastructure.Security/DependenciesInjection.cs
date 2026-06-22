@@ -1,5 +1,7 @@
 ﻿using EventManager.Application.Security;
+using EventManager.Infrastructure.Security.Jwt;
 using Microsoft.Extensions.DependencyInjection;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace EventManager.Infrastructure.Security
 {
@@ -9,6 +11,7 @@ namespace EventManager.Infrastructure.Security
         {
             services.AddScoped<IPasswordHasher, PasswordHasherSHA256>();
             services.AddScoped<IJwtWyzard, JwtHmacSha256Wyzard>();
+            services.AddScoped<IJwtClaimsExtractor, JwtClaimsExtractor>();
 
             return services;
         }

@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
-namespace EventManager.Infrastructure.Security
+namespace EventManager.Infrastructure.Security.Jwt
 {
     internal class JwtHmacSha256Wyzard : IJwtWyzard
     {
@@ -16,8 +16,6 @@ namespace EventManager.Infrastructure.Security
         {
             var claims = new Dictionary<string, object>
             {
-                [JwtRegisteredClaimNames.Sub] = createTokenDto.UserId.ToString(),
-                ["role"] = createTokenDto.Role.ToString(),
                 [JwtRegisteredClaimNames.Jti] = Guid.NewGuid().ToString(),
             };
 
@@ -28,6 +26,12 @@ namespace EventManager.Infrastructure.Security
 
             var descriptor = new SecurityTokenDescriptor
             {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, createTokenDto.UserId.ToString()),
+
+                    new Claim(ClaimTypes.Role, createTokenDto.Role.ToString())
+                }),
                 Issuer = jwtSection.GetRequiredSection("Issuer").Value,
                 Audience = jwtSection.GetRequiredSection("Audience").Value,
                 Expires = DateTime.UtcNow.AddMinutes(minutes),

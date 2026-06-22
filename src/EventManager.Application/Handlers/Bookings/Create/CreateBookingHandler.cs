@@ -1,4 +1,5 @@
 ﻿using EventManager.Application.Repositories;
+using EventManager.Application.Security;
 using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 
@@ -7,6 +8,7 @@ namespace EventManager.Application.Handlers.Bookings.Create
     internal class CreateBookingHandler : ICommandHandler<BookingAcceptedDto, CreateBookingCommand>
     {
         private readonly IBookingsRepository _bookingsRepository;
+        private readonly IJwtClaimsExtractor _jwtClaimsExtractor;
 
         public async Task<BookingAcceptedDto> HandleAsync(
             CreateBookingCommand command, 
@@ -17,18 +19,23 @@ namespace EventManager.Application.Handlers.Bookings.Create
             Guid? bookingId;
             BookingAcceptedDto? result = null;
 
-            Guid id = await _bookingsRepository.CreateNewBookingAsync(eventId, cancellationToken);
+            Guid userId = Guid.Parse(_jwtClaimsExtractor.Extract("sub"));
 
             result = new BookingAcceptedDto(
-                id,
+                userId,
                 eventId,
                 BookingStatus.Pending);
+
+            await _bookingsRepository.CreateNewBookingAsync(eventId, userId, cancellationToken);
 
             return result;
         }
 
-        public CreateBookingHandler(IBookingsRepository bookingsRepository)
+        public CreateBookingHandler(
+            IJwtClaimsExtractor jwtClaimsExtractor,
+            IBookingsRepository bookingsRepository)
         {
+            _jwtClaimsExtractor = jwtClaimsExtractor;
             _bookingsRepository = bookingsRepository;
         }
     }
