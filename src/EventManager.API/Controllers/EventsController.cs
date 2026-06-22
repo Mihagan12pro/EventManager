@@ -5,6 +5,7 @@ using EventManager.Application.Handlers.Events.DeleteEvent;
 using EventManager.Application.Handlers.Events.GetByIdEvent;
 using EventManager.Application.Handlers.Events.GetEvents;
 using EventManager.Application.Handlers.Events.PutEvent;
+using EventManager.Domain.Entities.Users.Enums;
 using EventManager.Domain.ValueObjects;
 using EventManager.Domain.ValueObjects.Events.DateAndTime;
 using EventManager.DTOs.Bookings;
@@ -110,6 +111,7 @@ namespace EventManager.API.Controllers
         /// <param name="id">Event id. Required field</param>
         /// <response code="200">If everything is ok</response>
         /// <response code="404">If event does not exists</response>
+        [Authorize(Roles = nameof(Roles.Admin))]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(
             [FromRoute] Guid id, 
