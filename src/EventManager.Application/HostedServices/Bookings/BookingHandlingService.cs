@@ -27,13 +27,13 @@ namespace EventManager.Application.HostedServices.Bookings
                         IBookingsRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingsRepository>();
 
                         var filters = new Filters<BookingEntity>(
-                                (BookingEntity b) => (b.Status != BookingStatus.Confirmed && (b.UserId == null || b.EventId == null))
+                                (BookingEntity b) => (b.Status == BookingStatus.Confirmed && (b.UserId == null || b.EventId == null))
                                 || b.Status == BookingStatus.Pending
                             );
 
                         var bookings = await bookingRepository.GetAllAsync(filters, stoppingToken);
 
-                        var tasks = bookings.Select(pb => ProcessBookingsAsync(pb, stoppingToken));
+                        var tasks = bookings.Select(pb => ProcessBookingsAsync(pb, stoppingToken)).ToArray();
 
                         await Task.WhenAll(tasks);
                     }
