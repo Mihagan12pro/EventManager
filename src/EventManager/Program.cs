@@ -2,7 +2,6 @@ using EventManager;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -11,11 +10,6 @@ public partial class Program
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
-             .AddJsonFile("appsettings.json");
-
-        IConfiguration configuration = configurationBuilder.Build();
 
         builder.Services.AddControllers();
 
@@ -45,6 +39,10 @@ public partial class Program
         })
         .AddJwtBearer(options => 
         {
+            var jwtSection = new ConfigurationBuilder().AddJsonFile("appsettings.json")
+                                                       .Build()
+                                                       .GetRequiredSection("JwtOptions");
+
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ClockSkew = TimeSpan.Zero,
@@ -52,10 +50,14 @@ public partial class Program
                 ValidateLifetime = true,
 
                 ValidateIssuer = true,
+                ValidIssuer = jwtSection.GetRequiredSection("Issuer").Value,
 
                 ValidateAudience = true,
+                ValidAudience = jwtSection.GetRequiredSection("Audience").Value,
 
-                ValidateIssuerSigningKey = true
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(jwtSection.GetRequiredSection("SecretKey").Value))
             };
         });
 
