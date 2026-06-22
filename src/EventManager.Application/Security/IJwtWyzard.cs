@@ -6,7 +6,7 @@ namespace EventManager.Application.Security
     public interface IJwtWyzard
     {
         string Create(
-            LoginDto login, 
+            CreateTokenDto createTokenDto, 
             IConfigurationSection configurationSection);
     }
 }

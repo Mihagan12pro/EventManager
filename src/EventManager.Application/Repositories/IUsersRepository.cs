@@ -1,4 +1,5 @@
-﻿using EventManager.DTOs.Users;
+﻿using EventManager.Domain.Entities.Users;
+using EventManager.DTOs.Users;
 
 namespace EventManager.Application.Repositories
 {
@@ -6,6 +7,14 @@ namespace EventManager.Application.Repositories
     {
         Task RegisterAsync(
             RegisterDto register,
+            CancellationToken cancellationToken);
+
+        Task<Guid> GetUserIdAsync(
+            LoginDto login,
+            CancellationToken cancellationToken);
+
+        Task<UserEntity> GetUserAsync(
+            LoginDto login, 
             CancellationToken cancellationToken);
     }
 }
