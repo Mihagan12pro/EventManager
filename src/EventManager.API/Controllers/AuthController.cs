@@ -30,9 +30,9 @@ namespace EventManager.API.Controllers
         {
             LoginCommand command = new LoginCommand(login);
 
-            await handler.HandleAsync(command, cancellationToken);
+            string token = await handler.HandleAsync(command, cancellationToken);
 
-            return Ok();
+            return Ok(token);
         }
     }
 }

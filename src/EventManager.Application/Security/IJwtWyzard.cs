@@ -1,7 +1,12 @@
-﻿namespace EventManager.Application.Security
+﻿using EventManager.DTOs.Users;
+using Microsoft.Extensions.Configuration;
+
+namespace EventManager.Application.Security
 {
     public interface IJwtWyzard
     {
-        string Create();
+        string Create(
+            LoginDto login, 
+            IConfigurationSection configurationSection);
     }
 }
