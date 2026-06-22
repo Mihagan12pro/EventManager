@@ -19,6 +19,7 @@ namespace EventManager.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class EventsController : ControllerBase
     {
         /// <summary>
@@ -28,7 +29,7 @@ namespace EventManager.API.Controllers
         /// <response code="201">If everyting is ok</response>
         /// <response code="400">If data is invalid</response>
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = nameof(Roles.Admin))]
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status201Created)]
         public async Task<IActionResult> New(
             [FromBody] NewEventDto newEvent,
@@ -59,6 +60,7 @@ namespace EventManager.API.Controllers
         /// <response code="200">If everything is ok</response>
         /// <response code="400">If page or page size is invalid</response>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> All(
              CancellationToken cancellationToken,
             [FromServices] ICommandHandler<PaginatedEventsDto, GetEventsCommand> handler,
@@ -111,8 +113,8 @@ namespace EventManager.API.Controllers
         /// <param name="id">Event id. Required field</param>
         /// <response code="200">If everything is ok</response>
         /// <response code="404">If event does not exists</response>
-        [Authorize(Roles = nameof(Roles.Admin))]
         [HttpDelete("{id}")]
+        [Authorize(Roles = nameof(Roles.Admin))]
         public async Task<IActionResult> Delete(
             [FromRoute] Guid id, 
             [FromServices] ICommandHandler<string, DeleteEventCommand> handler, 
@@ -134,6 +136,7 @@ namespace EventManager.API.Controllers
         /// <response code="400">If update data is invalid</response>
         /// <response code="404">If event does not exists</response>
         [HttpPut("{id}")]
+        [Authorize(Roles = nameof(Roles.Admin))]
         public async Task<IActionResult> Put(
             [FromRoute] Guid id,
             [FromBody] PutEventDto newEvent,

@@ -2,12 +2,14 @@
 using EventManager.Application.Handlers.Bookings.Cancel;
 using EventManager.Application.Handlers.Bookings.GetByIdBooking;
 using EventManager.DTOs.Bookings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventManager.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class BookingController : ControllerBase
     {
         /// <summary>
