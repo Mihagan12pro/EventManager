@@ -164,7 +164,7 @@ namespace EventManager.API.Controllers
         {
             var bookingDto = await handler.HandleAsync(new CreateBookingCommand(id), cancellationToken);
 
-            var location = UrlMaster.CreateWithoutPath(HttpContext.Request, "bookings", bookingDto.Id);
+            var location = UrlMaster.CreateWithoutPath(HttpContext.Request, "api/bookings", bookingDto.Id);
 
             return Accepted(location, bookingDto);
         }

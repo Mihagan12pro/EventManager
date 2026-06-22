@@ -10,7 +10,7 @@ namespace EventManager.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class BookingController : ControllerBase
+    public class BookingsController : ControllerBase
     {
         /// <summary>
         /// Allows to get booking by id

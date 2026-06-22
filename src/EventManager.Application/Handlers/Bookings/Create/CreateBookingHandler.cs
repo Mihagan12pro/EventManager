@@ -21,12 +21,12 @@ namespace EventManager.Application.Handlers.Bookings.Create
 
             Guid userId = Guid.Parse(_jwtClaimsExtractor.Extract("sub"));
 
+            Guid id = await _bookingsRepository.CreateNewBookingAsync(eventId, userId, cancellationToken);
+
             result = new BookingAcceptedDto(
-                userId,
+                id,
                 eventId,
                 BookingStatus.Pending);
-
-            await _bookingsRepository.CreateNewBookingAsync(eventId, userId, cancellationToken);
 
             return result;
         }
