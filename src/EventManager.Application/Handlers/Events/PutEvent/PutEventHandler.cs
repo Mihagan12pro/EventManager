@@ -18,7 +18,6 @@ namespace EventManager.Application.Handlers.Events.PutEvent
 
 
             EventEntity? eventById = await _eventsRepository.GetByIdAsync(id, cancellationToken);
-            NullChecker.Check(eventById);
 
             await _eventsRepository.CompleteUpdateAsync(id, putEvent, cancellationToken);
 

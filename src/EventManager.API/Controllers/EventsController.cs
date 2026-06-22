@@ -10,6 +10,7 @@ using EventManager.Domain.ValueObjects.Events.DateAndTime;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,7 @@ namespace EventManager.API.Controllers
         /// <response code="201">If everyting is ok</response>
         /// <response code="400">If data is invalid</response>
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status201Created)]
         public async Task<IActionResult> New(
             [FromBody] NewEventDto newEvent,

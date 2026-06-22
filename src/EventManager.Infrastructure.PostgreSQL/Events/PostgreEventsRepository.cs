@@ -69,7 +69,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Events
 
         public async Task<EventEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            EventEntity @event = await _dbContext.Events.FirstOrDefaultAsync((e => e.Id == id), cancellationToken);
+            EventEntity @event = await _dbContext.Events.FirstAsync((e => e.Id == id), cancellationToken);
 
             return @event;
         }

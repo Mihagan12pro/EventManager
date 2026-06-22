@@ -26,6 +26,12 @@ namespace EventManager.Middleware.Exceptions
 
                 await ModifyResponse(httpContext, ClientErrorsFactory.NotFoundWorkbench.Craft("Not found!"));
             }
+            catch(InvalidOperationException ex)
+            {
+                LogError(ex, httpContext);
+
+                await ModifyResponse(httpContext, ClientErrorsFactory.NotFoundWorkbench.Craft("Not found!"));
+            }
             catch (Exception ex)
             {
                 LogError(ex, httpContext);

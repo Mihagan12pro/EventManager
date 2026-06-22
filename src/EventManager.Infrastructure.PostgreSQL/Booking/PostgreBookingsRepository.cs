@@ -33,8 +33,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
             {
                 await _semaphore.WaitAsync();
 
-                @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == eventId, cancellationToken);
-                NullChecker.Check(@event);
+                @event = await _dbContext.Events.FirstAsync(e => e.Id == eventId, cancellationToken);
 
                 @event.ReverseSeats();
 
@@ -89,7 +88,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
 
             if (bookingProcessedDto.Status == BookingStatus.Rejected || bookingProcessedDto.Status == BookingStatus.Cancelled)
             {
-                EventEntity @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == booking.EventId);
+                EventEntity @event = await _dbContext.Events.FirstAsync(e => e.Id == booking.EventId);
 
                 @event?.ReverseSeats();
             }
