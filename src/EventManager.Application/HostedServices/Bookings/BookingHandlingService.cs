@@ -1,7 +1,6 @@
 ﻿using EventManager.Application.Repositories;
 using EventManager.Domain.Entities.Bookings;
 using EventManager.Domain.Entities.Bookings.Enums;
-using EventManager.Domain.Entities.Events;
 using EventManager.DTOs.Bookings;
 using EventManager.Shared.Filters;
 using Microsoft.Extensions.DependencyInjection;
@@ -89,6 +88,9 @@ namespace EventManager.Application.HostedServices.Bookings
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
                     IEventsRepository eventsRepository = scope.ServiceProvider.GetRequiredService<IEventsRepository>();
+
+                    if (booking.EventId == null)
+                        return BookingStatus.Rejected;
 
                     var @event = await eventsRepository.GetByIdAsync(booking.EventId.Value, stoppingToken);
                 }

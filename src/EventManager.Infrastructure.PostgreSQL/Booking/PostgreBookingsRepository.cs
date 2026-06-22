@@ -4,7 +4,6 @@ using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.Domain.Entities.Events;
 using EventManager.DTOs.Bookings;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
-using EventManager.Shared;
 using EventManager.Shared.Filters;
 using Microsoft.EntityFrameworkCore;
 
@@ -89,7 +88,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
 
             if (bookingProcessedDto.Status == BookingStatus.Rejected || bookingProcessedDto.Status == BookingStatus.Cancelled)
             {
-                EventEntity @event = await _dbContext.Events.FirstAsync(e => e.Id == booking.EventId);
+                EventEntity @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == booking.EventId);
 
                 @event?.ReverseSeats();
             }
