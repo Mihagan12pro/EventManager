@@ -1,7 +1,5 @@
-﻿using EventManager.Domain.Failures;
-using EventManager.Domain.Failures.Errors;
+﻿using EventManager.Domain.Failures.Errors;
 using EventManager.Domain.Failures.Errors.Factories;
-using EventManager.Domain.Failures.Exceptions.WebApi;
 using EventsManager.Failures.Errors;
 
 namespace EventManager.Domain.Failures.Exceptions.WebApi.Client.Conflict

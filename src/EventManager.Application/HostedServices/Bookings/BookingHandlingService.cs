@@ -1,4 +1,4 @@
-﻿using EventManager.Application.Repositories;
+﻿using EventManager.Application.DataAccess.Repositories;
 using EventManager.Domain.Entities.Bookings;
 using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.DTOs.Bookings;

@@ -1,4 +1,4 @@
-﻿using EventManager.Application.Repositories;
+﻿using EventManager.Application.DataAccess.Repositories;
 
 namespace EventManager.Application.Handlers.Events.AddEvent
 {

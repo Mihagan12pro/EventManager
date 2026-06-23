@@ -1,4 +1,4 @@
-﻿using EventManager.Application.Repositories;
+﻿using EventManager.Application.DataAccess.Repositories;
 using EventManager.DTOs.Events;
 using EventManager.Shared.Filters;
 

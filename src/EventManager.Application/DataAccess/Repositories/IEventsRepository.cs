@@ -3,7 +3,7 @@ using EventManager.Domain.ValueObjects;
 using EventManager.DTOs.Events;
 using EventManager.Shared.Filters;
 
-namespace EventManager.Application.Repositories
+namespace EventManager.Application.DataAccess.Repositories
 {
     public interface IEventsRepository
     {

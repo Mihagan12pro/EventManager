@@ -2,7 +2,7 @@
 using EventManager.DTOs.Bookings;
 using EventManager.Shared.Filters;
 
-namespace EventManager.Application.Repositories
+namespace EventManager.Application.DataAccess.Repositories
 {
     public interface IBookingsRepository
     {

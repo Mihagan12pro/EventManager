@@ -1,7 +1,6 @@
 ﻿using EventManager.Application.Handlers;
 using EventManager.Application.Handlers.Bookings.Cancel;
 using EventManager.Application.Handlers.Bookings.GetByIdBooking;
-using EventManager.Domain.Entities.Users.Enums;
 using EventManager.DTOs.Bookings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,14 +30,16 @@ namespace EventManager.API.Controllers
         }
 
 
-        [HttpDelete("id")]
-        [Authorize(Roles = "User,Admin")]
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> DeleteAsync(
             [FromRoute] Guid id, 
             [FromServices] ICommandHandler<CancelBookingCommand> handler,
             CancellationToken cancellationToken)
         {
-            await handler.HandleAsync(new CancelBookingCommand(id), cancellationToken);
+            var command = new CancelBookingCommand(id);
+
+            await handler.HandleAsync(command, cancellationToken);
 
             return NoContent();
         }

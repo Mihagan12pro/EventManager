@@ -1,7 +1,7 @@
 ﻿using EventManager.Domain.Entities.Users;
 using EventManager.DTOs.Users;
 
-namespace EventManager.Application.Repositories
+namespace EventManager.Application.DataAccess.Repositories
 {
     public interface IUsersRepository
     {

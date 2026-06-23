@@ -30,7 +30,7 @@ namespace EventManager.Infrastructure.Security.Jwt
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, createTokenDto.UserId.ToString()),
 
-                    new Claim(ClaimTypes.Role, createTokenDto.Role.ToString())
+                    new Claim("role", createTokenDto.Role.ToString())
                 }),
                 Issuer = jwtSection.GetRequiredSection("Issuer").Value,
                 Audience = jwtSection.GetRequiredSection("Audience").Value,

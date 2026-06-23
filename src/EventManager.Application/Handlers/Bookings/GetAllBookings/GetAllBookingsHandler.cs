@@ -1,4 +1,4 @@
-﻿using EventManager.Application.Repositories;
+﻿using EventManager.Application.DataAccess.Repositories;
 using EventManager.DTOs.Bookings;
 using EventManager.Shared.Filters;
 

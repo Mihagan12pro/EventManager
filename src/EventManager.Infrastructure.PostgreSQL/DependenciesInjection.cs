@@ -1,9 +1,12 @@
-﻿using EventManager.Application.Repositories;
+﻿using EventManager.Application.DataAccess.Queries;
+using EventManager.Application.DataAccess.Repositories;
+using EventManager.Application.Handlers;
 using EventManager.Infrastructure.PostgreSQL.Booking;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Infrastructure.PostgreSQL.Events;
 using EventManager.Infrastructure.PostgreSQL.Users;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("EventManager.Tests.Integration")]
@@ -19,6 +22,19 @@ namespace EventManager.Infrastructure.PostgreSQL
             services.AddRepositories();
 
             services.AddDbContext<AppDbContextBase, AppDbContext>();
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            services.Scan(scan => scan.FromAssemblies(assembly)
+               .AddClasses(classes => classes
+                   .AssignableToAny(
+                       typeof(IQueryObject<,>),
+                       typeof(IQueryObject<>)
+                   ),
+                   publicOnly: false
+               )
+               .AsSelfWithInterfaces()
+           .WithScopedLifetime());
 
             return services;
         }

@@ -1,4 +1,4 @@
-﻿using EventManager.Application.Repositories;
+﻿using EventManager.Application.DataAccess.Repositories;
 using EventManager.Domain.Entities.Events;
 using EventManager.Domain.ValueObjects;
 using EventManager.Domain.ValueObjects.Events;

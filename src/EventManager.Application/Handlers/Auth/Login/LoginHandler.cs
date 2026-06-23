@@ -1,4 +1,4 @@
-﻿using EventManager.Application.Repositories;
+﻿using EventManager.Application.DataAccess.Repositories;
 using EventManager.Application.Security;
 using EventManager.Domain.Entities.Users;
 using EventManager.DTOs.Users;

@@ -76,7 +76,9 @@ public partial class Program
 
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(jwtSection.GetRequiredSection("SecretKey").Value))
+                    Encoding.UTF8.GetBytes(jwtSection.GetRequiredSection("SecretKey").Value)),
+
+                RoleClaimType = "role"
             };
         });
 
