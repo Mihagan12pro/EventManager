@@ -3,6 +3,7 @@ using System;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EventManager.Infrastructure.PostgreSQL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260624114416_Remove_Archieved_Events")]
+    partial class Remove_Archieved_Events
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,6 +55,23 @@ namespace EventManager.Infrastructure.PostgreSQL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("EventManager.Domain.Entities.Events.ArchivedEventEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId")
+                        .IsUnique();
+
+                    b.ToTable("ArchivedEventEntity");
                 });
 
             modelBuilder.Entity("EventManager.Domain.Entities.Events.EventEntity", b =>
@@ -129,8 +149,22 @@ namespace EventManager.Infrastructure.PostgreSQL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EventManager.Domain.Entities.Events.ArchivedEventEntity", b =>
+                {
+                    b.HasOne("EventManager.Domain.Entities.Events.EventEntity", "Event")
+                        .WithOne("Archived")
+                        .HasForeignKey("EventManager.Domain.Entities.Events.ArchivedEventEntity", "EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("EventManager.Domain.Entities.Events.EventEntity", b =>
                 {
+                    b.Navigation("Archived")
+                        .IsRequired();
+
                     b.Navigation("Bookings");
                 });
 

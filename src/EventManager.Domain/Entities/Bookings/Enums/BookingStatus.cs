@@ -23,6 +23,6 @@ namespace EventManager.Domain.Entities.Bookings.Enums
         /// <summary>
         /// Booking had been cancelled
         /// </summary>
-        Cancelled
+        Cancelled,
     }
 }

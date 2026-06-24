@@ -1,6 +1,10 @@
-﻿using EventManager.Application.DataAccess.Repositories;
+﻿using EventManager.Application.DataAccess.Queries;
+using EventManager.Application.DataAccess.Queries.Bodies.UsersBookings;
+using EventManager.Application.DataAccess.Repositories;
 using EventManager.Application.Security;
 using EventManager.Domain.Entities.Bookings.Enums;
+using EventManager.Domain.Failures.Exceptions;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.Conflict;
 using EventManager.DTOs.Bookings;
 
 namespace EventManager.Application.Handlers.Bookings.Create
@@ -8,6 +12,7 @@ namespace EventManager.Application.Handlers.Bookings.Create
     internal class CreateBookingHandler : ICommandHandler<BookingAcceptedDto, CreateBookingCommand>
     {
         private readonly IBookingsRepository _bookingsRepository;
+        private readonly IQueryObject<int, GetUserBookingsQueryBody> _getUserQuery;
         private readonly IJwtClaimsExtractor _jwtClaimsExtractor;
 
         public async Task<BookingAcceptedDto> HandleAsync(
@@ -21,6 +26,11 @@ namespace EventManager.Application.Handlers.Bookings.Create
 
             Guid userId = Guid.Parse(_jwtClaimsExtractor.Extract("sub"));
 
+            int activeBookings = await _getUserQuery.Execute(new GetUserBookingsQueryBody(userId), cancellationToken);
+
+            if (activeBookings > 10)
+                throw new ConflictException("User can't has more than 10 active bookings!");
+
             Guid id = await _bookingsRepository.CreateNewBookingAsync(eventId, userId, cancellationToken);
 
             result = new BookingAcceptedDto(
@@ -33,8 +43,10 @@ namespace EventManager.Application.Handlers.Bookings.Create
 
         public CreateBookingHandler(
             IJwtClaimsExtractor jwtClaimsExtractor,
-            IBookingsRepository bookingsRepository)
+            IBookingsRepository bookingsRepository,
+            IQueryObject<int, GetUserBookingsQueryBody> getUserQuery)
         {
+            _getUserQuery = getUserQuery;
             _jwtClaimsExtractor = jwtClaimsExtractor;
             _bookingsRepository = bookingsRepository;
         }

@@ -95,7 +95,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
             {
                 EventEntity @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == booking.EventId);
 
-                @event?.ReverseSeats();
+                @event?.ReleaseSeats();
             }
 
             booking.Status = bookingProcessedDto.Status;

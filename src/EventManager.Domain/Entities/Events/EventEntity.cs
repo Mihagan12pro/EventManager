@@ -76,9 +76,6 @@ namespace EventManager.Domain.Entities.Events
         [JsonIgnore]
         public List<BookingEntity> Bookings { get; set; } = null!;
 
-        [JsonIgnore]
-        public ArchivedEventEntity Archived { get; set; } = null!;
-
 
         private readonly Lock _lock = new Lock();
         
