@@ -14,4 +14,8 @@
     <Project Path="src/EventManager.Shared/EventManager.Shared.csproj" />
     <Project Path="src/EventManager/EventManager.csproj" />
   </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="src/Tests/EventManager.Tests.Abstractions/EventManager.Tests.Abstractions.csproj" />
+    <Project Path="src/Tests/EventsManager.Tests.End2End/EventsManager.Tests.End2End.csproj" />
+  </Folder>
 </Solution>
