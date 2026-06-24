@@ -17,4 +17,8 @@
     <ProjectReference Include="..\EventManager.DTOs\EventManager.DTOs.csproj" />
     <ProjectReference Include="..\EventManager.Shared\EventManager.Shared.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="HostedServices\Events\" />
+  </ItemGroup>
 </Project>

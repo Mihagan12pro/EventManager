@@ -2,6 +2,7 @@
 using EventManager.Domain.Entities.Bookings;
 using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.Domain.Entities.Events;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.Conflict;
 using EventManager.DTOs.Bookings;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Shared.Filters;
@@ -34,6 +35,10 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
                 await _semaphore.WaitAsync();
 
                 @event = await _dbContext.Events.FirstAsync(e => e.Id == eventId, cancellationToken);
+                var createdAt = DateTime.UtcNow;
+
+                if (createdAt >= @event.StartAt)
+                    throw new ConflictException("Too late for booking!");
 
                 @event.ReverseSeats();
 

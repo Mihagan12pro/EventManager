@@ -16,6 +16,8 @@ namespace EventManager.Infrastructure.PostgreSQL.DbContexts
 
         public DbSet<EventEntity> Events { set; get; }
 
+        public DbSet<ArchivedEventEntity> ArchivedEvents { get; set; }
+
         public DbSet<BookingEntity> Bookings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

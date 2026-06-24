@@ -2,11 +2,13 @@
 using EventManager.Application.DataAccess.Queries.Bodies.UsersBookings;
 using EventManager.Application.DataAccess.Repositories;
 using EventManager.Application.Security;
+using EventManager.Domain.Entities.Bookings;
 using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.Domain.Entities.Users.Enums;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.Conflict;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.Forbidden;
 using EventManager.DTOs.Bookings;
+using EventManager.Shared.Filters;
 
 namespace EventManager.Application.Handlers.Bookings.Cancel
 {
@@ -21,10 +23,20 @@ namespace EventManager.Application.Handlers.Bookings.Cancel
             CancellationToken cancellationToken)
         {
             var role = _jwtClaimsExtractor.Extract("role");
+
+            var filters = new Filters<BookingEntity>(b =>
+                                b.Status == BookingStatus.Confirmed && b.Id == command.BookingId
+                            );
+
+            var bookings = await _bookingsRepository.GetAllAsync(
+                filters,
+                cancellationToken);
+
+            var booking = bookings.First();
+
             if (role == nameof(Roles.User))
             {
                 Guid userId = Guid.Parse(_jwtClaimsExtractor.Extract("sub"));
-                //Guid.TryParse(_jwtClaimsExtractor.Extract("sub"), out Guid userId);
 
                 CompareUserBookingQueryBody compareUserBookingQuery = new(command.BookingId, userId);
 
