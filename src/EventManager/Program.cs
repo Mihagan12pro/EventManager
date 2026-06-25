@@ -19,7 +19,10 @@ public partial class Program
 
         builder.Services.AddControllers();
 
-        builder.Services.AddServices();
+        if (!builder.Environment.IsEnvironment("Testing"))
+        {
+            builder.Services.AddServices();
+        }
 
         builder.Host.ConfigureLogging(opt =>
         {
@@ -84,11 +87,14 @@ public partial class Program
 
         var app = builder.Build();
 
-        using (var scope = app.Services.CreateScope())
+        if (!builder.Environment.IsEnvironment("Testing"))
         {
-            var db = scope.ServiceProvider.GetRequiredService<AppDbContextBase>();
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContextBase>();
 
-            db.Database.Migrate();
+                db.Database.Migrate();
+            }
         }
 
         // Configure the HTTP request pipeline.

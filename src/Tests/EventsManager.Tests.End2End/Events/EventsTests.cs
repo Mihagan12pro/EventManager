@@ -1,6 +1,5 @@
 ﻿using EventManager.DTOs.Events;
-using EventManager.Tests.Abstractions;
-using System.Net;
+using EventManager.DTOs.Users;
 using System.Net.Http.Json;
 
 namespace EventsManager.Tests.End2End.Events
@@ -17,6 +16,8 @@ namespace EventsManager.Tests.End2End.Events
             await SeedDefautDataAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();
+
+            var token = await httpClient.PostAsJsonAsync(@"api\auth\login", new LoginDto("admin", "admin"), cts.Token);
 
             NewEventDto newEvent = new NewEventDto("Birthday", DateTime.UtcNow.AddYears(1), DateTime.UtcNow.AddYears(1).AddDays(1), 10);
 

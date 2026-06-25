@@ -1,8 +1,10 @@
 ﻿using EventManager.Application.DataAccess.Repositories;
 using EventManager.Domain.Entities.Users.Enums;
 using EventManager.DTOs.Users;
+using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Tests.Abstractions;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Json;
 
@@ -29,17 +31,13 @@ namespace EventsManager.Tests.End2End
 
             CancellationTokenSource cts = new CancellationTokenSource();
 
-            await httpClient.PostAsJsonAsync("/api/auth/register", new RegisterDto("admin", "admin", Roles.Admin), cts.Token);
+            var response1 = await httpClient.PostAsJsonAsync("/api/auth/register", new RegisterDto("admin", "admin", Roles.Admin), cts.Token);
 
-            var token = await httpClient.PostAsJsonAsync("/api/auth/login", new LoginDto("admin", "admin"), cts.Token);
-            //var provider = await GetServiceProviderAsync();
+            var code1 = response1.StatusCode;
 
-            //IUsersRepository usersRepository = provider.GetRequiredService<IUsersRepository>();
+            var response2 = await httpClient.PostAsJsonAsync("/api/auth/register", new RegisterDto("user", "user", Roles.User), cts.Token);
 
-            //CancellationTokenSource cts = new CancellationTokenSource();
-
-            //await usersRepository.RegisterAsync(new RegisterDto("admin", "admin", Roles.Admin), cts.Token);
-            //await usersRepository.RegisterAsync(new RegisterDto("user", "user", Roles.User), cts.Token);
+            var code2 = response2.StatusCode;
         }
     }
 }

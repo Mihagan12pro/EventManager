@@ -11,7 +11,7 @@ namespace EventManager.Tests.Abstractions
     public abstract class RealPostgreTests : IAsyncLifetime
     {
         protected readonly PostgreSqlContainer postgres = new PostgreSqlBuilder("postgres:16-alpine")
-            .WithDatabase("bookstore_test")
+            .WithDatabase("eventmanager_test")
             .Build();
 
         public async Task InitializeAsync()
@@ -30,7 +30,7 @@ namespace EventManager.Tests.Abstractions
 
             NpgsqlConnection.ClearAllPools();
             await using var context = provider.GetRequiredService<AppDbContextBase>();
-            await context.Database.EnsureDeletedAsync();
+            var res = await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
 
             await context.Database.MigrateAsync();

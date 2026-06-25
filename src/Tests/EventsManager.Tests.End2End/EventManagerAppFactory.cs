@@ -24,7 +24,7 @@ namespace EventsManager.Tests.End2End
                 services.AddLogging();
             });
 
-            builder.UseEnvironment("Development");
+            builder.UseEnvironment("Testing");
         }
     }
 }

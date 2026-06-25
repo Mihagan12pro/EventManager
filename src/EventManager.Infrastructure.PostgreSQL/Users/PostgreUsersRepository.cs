@@ -25,11 +25,6 @@ namespace EventManager.Infrastructure.PostgreSQL.Users
             };
             user.Validate();
 
-            foreach(var u in _dbContext.Users)
-            {
-
-            }
-
             await _dbContext.Users.AddAsync(user, cancellationToken);
 
             await _dbContext.SaveChangesAsync();
