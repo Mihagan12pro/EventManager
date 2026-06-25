@@ -31,11 +31,11 @@ namespace EventsManager.Tests.End2End
 
             CancellationTokenSource cts = new CancellationTokenSource();
 
-            var response1 = await httpClient.PostAsJsonAsync("/api/auth/register", new RegisterDto("admin", "admin", Roles.Admin), cts.Token);
+            var response1 = await httpClient.PostAsJsonAsync(@"api\auth\register", new RegisterDto("admin", "admin", Roles.Admin), cts.Token);
 
             var code1 = response1.StatusCode;
 
-            var response2 = await httpClient.PostAsJsonAsync("/api/auth/register", new RegisterDto("user", "user", Roles.User), cts.Token);
+            var response2 = await httpClient.PostAsJsonAsync(@"api\auth\register", new RegisterDto("user", "user", Roles.User), cts.Token);
 
             var code2 = response2.StatusCode;
         }
