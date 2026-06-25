@@ -19,10 +19,7 @@ public partial class Program
 
         builder.Services.AddControllers();
 
-        if (!builder.Environment.IsEnvironment("Testing"))
-        {
-            builder.Services.AddServices();
-        }
+        builder.Services.AddServices(builder);
 
         builder.Host.ConfigureLogging(opt =>
         {

@@ -2,20 +2,29 @@
 using EventManager.Application;
 using EventManager.Infrastructure.Security;
 using EventManager.Middleware.Exceptions;
+using EventManager.Infrastructure.PostgreSQL.DbContexts;
 
 namespace EventManager
 {
     public static class DependenciesInjection
     {
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        private static IHostApplicationBuilder _hostApplicationBuilder;
+
+        public static IServiceCollection AddServices(this IServiceCollection services, IHostApplicationBuilder hostApplicationBuilder)
         {
+            _hostApplicationBuilder = hostApplicationBuilder;
+
             services.AddHttpContextAccessor();
 
             services.AddHandlers();
             services.AddSecurity();
             services.AddBackgroundServices();
             services.AddSingletonServices();
-            services.AddPostgreDependencies();
+
+            if (!hostApplicationBuilder.Environment.IsEnvironment("Testing"))
+            {
+                services.AddPostgreDependencies();
+            }
 
             return services;
         }

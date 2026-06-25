@@ -1,11 +1,7 @@
-﻿using EventManager.Application.DataAccess.Repositories;
-using EventManager.Domain.Entities.Users.Enums;
+﻿using EventManager.Domain.Entities.Users.Enums;
 using EventManager.DTOs.Users;
-using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Tests.Abstractions;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Json;
 
 namespace EventsManager.Tests.End2End
@@ -31,11 +27,11 @@ namespace EventsManager.Tests.End2End
 
             CancellationTokenSource cts = new CancellationTokenSource();
 
-            var response1 = await httpClient.PostAsJsonAsync(@"auth\register", new RegisterDto("admin", "admin", Roles.Admin), cts.Token);
+            var response1 = await httpClient.PostAsJsonAsync(@"api\auth\register", new RegisterDto("admin", "admin", Roles.Admin), cts.Token);
 
             var code1 = response1.StatusCode;
 
-            var response2 = await httpClient.PostAsJsonAsync(@"auth\register", new RegisterDto("user", "user", Roles.User), cts.Token);
+            var response2 = await httpClient.PostAsJsonAsync(@"api\auth\register", new RegisterDto("user", "user", Roles.User), cts.Token);
 
             var code2 = response2.StatusCode;
         }
