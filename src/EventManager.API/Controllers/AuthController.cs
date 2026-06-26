@@ -32,7 +32,7 @@ namespace EventManager.API.Controllers
 
             string token = await handler.HandleAsync(command, cancellationToken);
 
-            return Ok(new { Token = token });
+            return Ok(token);
         }
     }
 }

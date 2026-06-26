@@ -1,5 +1,6 @@
 ﻿using EventManager.DTOs.Events;
 using EventManager.DTOs.Users;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace EventsManager.Tests.End2End.Events
@@ -17,7 +18,11 @@ namespace EventsManager.Tests.End2End.Events
 
             CancellationTokenSource cts = new CancellationTokenSource();
 
-            var token = await httpClient.PostAsJsonAsync(@"api\auth\login", new LoginDto("admin", "admin"), cts.Token);
+            var loginReponse = await httpClient.PostAsJsonAsync(@"api\auth\login", new LoginDto("admin", "admin"), cts.Token);
+
+            string token = await loginReponse.Content.ReadAsStringAsync();
+            //httpClient.DefaultRequestHeaders.Authorization =
+            //    new AuthenticationHeaderValue("Bearer", token.Content.);
 
             NewEventDto newEvent = new NewEventDto("Birthday", DateTime.UtcNow.AddYears(1), DateTime.UtcNow.AddYears(1).AddDays(1), 10);
 
