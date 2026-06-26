@@ -36,7 +36,7 @@ namespace EventsManager.Tests.End2End
         {
             builder.ConfigureServices(services =>
             {
-                services.AddDbContext<AppDbContextBase, AppDbContext>(options =>
+                services.AddDbContext<AppDbContextBase, DockerAppDbContext>(options =>
                 {
                     options.UseNpgsql(
                      _postgres.GetConnectionString(),
