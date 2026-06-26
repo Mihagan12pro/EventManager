@@ -3,7 +3,9 @@ using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Users;
+using EventsManager.Tests.End2End.Extensions;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -15,132 +17,188 @@ namespace EventsManager.Tests.End2End.Bookings
         {
         }
 
-        //[Fact]
-        //public async Task Test_PendingToConfirmed()
-        //{
-        //    await SeedDefautDataAsync();
+        [Fact]
+        public async Task Test_CancelBooking()
+        {
+            await SeedDefautDataAsync();
 
-        //    CancellationTokenSource cts = new CancellationTokenSource();
+            HttpClient admin = factory.CreateClient();
+            HttpClient user = factory.CreateClient();
 
-        //    var loginResponse = await httpClient.PostAsJsonAsync(@"api\auth\login", new LoginDto("admin", "admin"), cts.Token);
+            CancellationTokenSource cts = new CancellationTokenSource();
 
-        //    NewEventDto newEvent = new NewEventDto("Birthday", DateTime.UtcNow.AddYears(1), DateTime.UtcNow.AddYears(1).AddDays(1), 10);
+            var adminLoginReponse = await admin.PostAsJsonAsync(@"api\auth\login", new LoginDto("admin", "admin"), cts.Token);
+            string adminToken = await adminLoginReponse.Content.ReadAsStringAsync();
+            admin.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminToken);
 
-        //    var postResponse = await httpClient.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);
+            var userLoginResponse = await user.PostAsJsonAsync(@"api\auth\login", new LoginDto("user", "user"), cts.Token);
+            string userToken = await userLoginResponse.Content.ReadAsStringAsync();
+            user.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userToken);
+            NewEventDto newEvent = new NewEventDto("Birthday", DateTime.UtcNow.AddYears(1), DateTime.UtcNow.AddYears(1).AddDays(1), 10);
 
-        //    Assert.Equal(postResponse.StatusCode, System.Net.HttpStatusCode.Created);
-        //    string postResponseBody = await postResponse.Content.ReadAsStringAsync();
+            var postEventResponse = await admin.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);
+            Guid eventId = await postEventResponse.Content.ExtractGuid();
 
-        //    Guid.TryParse(postResponseBody.Trim('"'), out Guid eventId);
+            var userResponseBooking1 = await user.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+            var userContentBooking1 = await userResponseBooking1.Content.ReadAsStringAsync();
+            var userAcceptedBooikng1 = JsonSerializer.Deserialize<BookingAcceptedDto>(userContentBooking1, serializerOptions);
 
-        //    var bookResponse = await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+            var userResponseBooking2 = await user.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+            var userContentBooking2 = await userResponseBooking2.Content.ReadAsStringAsync();
+            var userAcceptedBooikng2 = JsonSerializer.Deserialize<BookingAcceptedDto>(userContentBooking2, serializerOptions);
 
-        //    Assert.Equal(HttpStatusCode.Accepted, bookResponse.StatusCode);
+            var adminResponceBooking = await admin.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+            var adminContentBooking = await adminResponceBooking.Content.ReadAsStringAsync();
+            var adminAcceptedBooking = JsonSerializer.Deserialize<BookingAcceptedDto>(adminContentBooking, serializerOptions);
 
-        //    var acceptedContent = await bookResponse.Content.ReadAsStringAsync();
+            var responseUserCanceltsBooking = await user.DeleteAsync(@$"api\bookings\{userAcceptedBooikng1.Id}", cts.Token);
+            var responseAdminCancelUserBooking = await admin.DeleteAsync(@$"api\bookings\{userAcceptedBooikng2.Id}", cts.Token);
+            var responseUserCancelAdminBooking = await user.DeleteAsync(@$"api\bookings\{adminAcceptedBooking.Id}", cts.Token);
 
-        //    JsonSerializerOptions serializerOptions = new JsonSerializerOptions()
-        //    {
-        //        PropertyNameCaseInsensitive = true,
-        //    };
+            Assert.Equal(HttpStatusCode.NoContent, responseUserCanceltsBooking.StatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, responseAdminCancelUserBooking.StatusCode);
+            Assert.Equal(HttpStatusCode.Forbidden, responseUserCancelAdminBooking.StatusCode);
+        }
 
-        //    var acceptedBooking = JsonSerializer.Deserialize<BookingAcceptedDto>(acceptedContent, serializerOptions);
-            
-        //    var id = acceptedBooking.Id;
-           
-        //    await Task.Delay(5000);
+        [Fact]
+        public async Task Test_PendingToConfirmed()
+        {
+            await SeedDefautDataAsync();
 
-        //    var getBooking = await httpClient.GetAsync(@$"bookings\{id}");
-        //    var getBookingContent = await getBooking.Content.ReadAsStringAsync();
+            CancellationTokenSource cts = new CancellationTokenSource();
 
-        //    var getBookingDto = JsonSerializer.Deserialize<GetBookingDto>(getBookingContent, serializerOptions);
+            var loginReponse = await httpClient.PostAsJsonAsync(@"api\auth\login", new LoginDto("admin", "admin"), cts.Token);
 
-        //    Assert.Equal(BookingStatus.Confirmed, getBookingDto.Status);
-        //}
+            string token = await loginReponse.Content.ReadAsStringAsync();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+            NewEventDto newEvent = new NewEventDto("Birthday", DateTime.UtcNow.AddYears(1), DateTime.UtcNow.AddYears(1).AddDays(1), 10);
 
-        //[Fact]
-        //public async Task Test_ConfirmedToRejected()
-        //{
-        //    await ResetDatabaseAsync();
+            var postResponse = await httpClient.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);
 
-        //    CancellationTokenSource cts = new CancellationTokenSource();
+            Assert.Equal(postResponse.StatusCode, System.Net.HttpStatusCode.Created);
+            string postResponseBody = await postResponse.Content.ReadAsStringAsync();
 
-        //    NewEventDto newEvent = new NewEventDto("Birthday", DateTime.UtcNow.AddYears(1), DateTime.UtcNow.AddYears(1).AddDays(1), 10);
+            Guid.TryParse(postResponseBody.Trim('"'), out Guid eventId);
 
-        //    var postResponse = await httpClient.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);
+            var bookResponse = await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
 
-        //    Assert.Equal(postResponse.StatusCode, System.Net.HttpStatusCode.Created);
-        //    string postResponseBody = await postResponse.Content.ReadAsStringAsync();
+            Assert.Equal(HttpStatusCode.Accepted, bookResponse.StatusCode);
 
-        //    Guid.TryParse(postResponseBody.Trim('"'), out Guid eventId);
+            var acceptedContent = await bookResponse.Content.ReadAsStringAsync();
 
-        //    var bookResponse = await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+            JsonSerializerOptions serializerOptions = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true,
+            };
 
-        //    Assert.Equal(HttpStatusCode.Accepted, bookResponse.StatusCode);
+            var acceptedBooking = JsonSerializer.Deserialize<BookingAcceptedDto>(acceptedContent, serializerOptions);
 
-        //    var acceptedContent = await bookResponse.Content.ReadAsStringAsync();
+            var id = acceptedBooking.Id;
 
-        //    JsonSerializerOptions serializerOptions = new JsonSerializerOptions()
-        //    {
-        //        PropertyNameCaseInsensitive = true,
-        //    };
+            await Task.Delay(5000);
 
-        //    var acceptedBooking = JsonSerializer.Deserialize<BookingAcceptedDto>(acceptedContent, serializerOptions);
+            var getBooking = await httpClient.GetAsync(@$"api\bookings\{id}");
+            var getBookingContent = await getBooking.Content.ReadAsStringAsync();
 
-        //    var id = acceptedBooking.Id;
+            var getBookingDto = JsonSerializer.Deserialize<GetBookingDto>(getBookingContent, serializerOptions);
 
-        //    await Task.Delay(1000);
-
-        //    var getConfirmedBooking = await httpClient.GetAsync(@$"api\bookings\{id}");
-        //    var getConfirmedBookingContent = await getConfirmedBooking.Content.ReadAsStringAsync();
-
-        //    var getConfirmedDto = JsonSerializer.Deserialize<GetBookingDto>(getConfirmedBookingContent, serializerOptions);
-
-        //    Assert.Equal(BookingStatus.Confirmed, getConfirmedDto.Status);
-
-        //    var deleteResult = await httpClient.DeleteAsync(@$"api\events\{eventId}");
-        //    Assert.Equal(HttpStatusCode.OK, deleteResult.StatusCode);
-
-        //    await Task.Delay(1000);
-
-        //    var getRejectedBooking = await httpClient.GetAsync(@$"api\bookings\{id}");
-        //    var getRejectedBookingContent = await getRejectedBooking.Content.ReadAsStringAsync();
-
-        //    var getRejectedDto = JsonSerializer.Deserialize<GetBookingDto>(getRejectedBookingContent, serializerOptions);
-
-        //    Assert.Equal(BookingStatus.Rejected, getRejectedDto.Status);
-        //}
+            Assert.Equal(BookingStatus.Confirmed, getBookingDto.Status);
+        }
 
 
-        //[Fact]
-        //public async Task Test_Overbooking()
-        //{
-        //    await ResetDatabaseAsync();
+        [Fact]
+        public async Task Test_ConfirmedToRejected()
+        {
+            await SeedDefautDataAsync();
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            var loginReponse = await httpClient.PostAsJsonAsync(@"api\auth\login", new LoginDto("admin", "admin"), cts.Token);
+
+            string token = await loginReponse.Content.ReadAsStringAsync();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            NewEventDto newEvent = new NewEventDto("Birthday", DateTime.UtcNow.AddYears(1), DateTime.UtcNow.AddYears(1).AddDays(1), 10);
+
+            var postResponse = await httpClient.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);
+
+            Assert.Equal(postResponse.StatusCode, System.Net.HttpStatusCode.Created);
+            string postResponseBody = await postResponse.Content.ReadAsStringAsync();
+
+            Guid.TryParse(postResponseBody.Trim('"'), out Guid eventId);
+
+            var bookResponse = await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+
+            Assert.Equal(HttpStatusCode.Accepted, bookResponse.StatusCode);
+
+            var acceptedContent = await bookResponse.Content.ReadAsStringAsync();
+
+            JsonSerializerOptions serializerOptions = new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+
+            var acceptedBooking = JsonSerializer.Deserialize<BookingAcceptedDto>(acceptedContent, serializerOptions);
+
+            var id = acceptedBooking.Id;
+
+            await Task.Delay(1000);
+
+            var getConfirmedBooking = await httpClient.GetAsync(@$"api\bookings\{id}");
+            var getConfirmedBookingContent = await getConfirmedBooking.Content.ReadAsStringAsync();
+
+            var getConfirmedDto = JsonSerializer.Deserialize<GetBookingDto>(getConfirmedBookingContent, serializerOptions);
+
+            Assert.Equal(BookingStatus.Confirmed, getConfirmedDto.Status);
+
+            var deleteResult = await httpClient.DeleteAsync(@$"api\events\{eventId}");
+            Assert.Equal(HttpStatusCode.OK, deleteResult.StatusCode);
+
+            await Task.Delay(1000);
+
+            var getRejectedBooking = await httpClient.GetAsync(@$"api\bookings\{id}");
+            var getRejectedBookingContent = await getRejectedBooking.Content.ReadAsStringAsync();
+
+            var getRejectedDto = JsonSerializer.Deserialize<GetBookingDto>(getRejectedBookingContent, serializerOptions);
+
+            Assert.Equal(BookingStatus.Rejected, getRejectedDto.Status);
+        }
 
 
-        //    CancellationTokenSource cts = new CancellationTokenSource();
+        [Fact]
+        public async Task Test_Overbooking()
+        {
+            await SeedDefautDataAsync();
 
-        //    NewEventDto newEvent = new NewEventDto(
-        //        "Birthday",
-        //        DateTime.UtcNow.AddYears(1),
-        //        DateTime.UtcNow.AddYears(1).AddDays(1),
-        //        10
-        //    );
 
-        //    var postResponse = await httpClient.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);
+            CancellationTokenSource cts = new CancellationTokenSource();
 
-        //    Assert.Equal(postResponse.StatusCode, System.Net.HttpStatusCode.Created);
-        //    string postResponseBody = await postResponse.Content.ReadAsStringAsync();
+            var loginReponse = await httpClient.PostAsJsonAsync(@"api\auth\login", new LoginDto("admin", "admin"), cts.Token);
 
-        //    Guid.TryParse(postResponseBody.Trim('"'), out Guid eventId);
+            string token = await loginReponse.Content.ReadAsStringAsync();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        //    for(int i = 0; i < newEvent.TotalSeats; i++)
-        //        await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+            NewEventDto newEvent = new NewEventDto(
+                "Birthday",
+                DateTime.UtcNow.AddYears(1),
+                DateTime.UtcNow.AddYears(1).AddDays(1),
+                10
+            );
 
-        //    var overBooked = await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+            var postResponse = await httpClient.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);
 
-        //    Assert.Equal(HttpStatusCode.Conflict, overBooked.StatusCode);
-        //}
+            Assert.Equal(postResponse.StatusCode, System.Net.HttpStatusCode.Created);
+            string postResponseBody = await postResponse.Content.ReadAsStringAsync();
+
+            Guid.TryParse(postResponseBody.Trim('"'), out Guid eventId);
+
+            for (int i = 0; i < newEvent.TotalSeats; i++)
+                await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+
+            var overBooked = await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+
+            Assert.Equal(HttpStatusCode.Conflict, overBooked.StatusCode);
+        }
     }
 }
