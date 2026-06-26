@@ -1,17 +1,18 @@
 ﻿using EventManager.Domain.Entities.Users.Enums;
 using EventManager.DTOs.Users;
-using EventManager.Tests.Abstractions;
+using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Npgsql;
 using System.Net.Http.Json;
 
 namespace EventsManager.Tests.End2End
 {
-    public abstract class E2ETests : RealPostgreTests, IClassFixture<EventManagerAppFactory<Program>>
+    public abstract class E2ETests : IClassFixture<EventManagerAppFactory<Program>>
     {
-        protected readonly WebApplicationFactory<Program> factory;
+        protected readonly EventManagerAppFactory<Program> factory;
         protected readonly HttpClient httpClient;
 
-        public E2ETests(WebApplicationFactory<Program> factory)
+        public E2ETests(EventManagerAppFactory<Program> factory)
         {
             this.factory = factory;
             httpClient = factory.CreateClient();
@@ -23,7 +24,7 @@ namespace EventsManager.Tests.End2End
         /// <returns></returns>
         protected async Task SeedDefautDataAsync()
         {
-            await ResetDatabaseAsync();
+            await factory.ResetDatabaseAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();
 

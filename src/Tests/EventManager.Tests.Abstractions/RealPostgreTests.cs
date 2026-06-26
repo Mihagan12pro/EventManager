@@ -8,7 +8,7 @@ using EventManager.Application;
 
 namespace EventManager.Tests.Abstractions
 {
-    public abstract class RealPostgreTests : IAsyncLifetime
+    public abstract class RealPostgreTests : IAsyncLifetime, IRealPostgreTests
     {
         protected readonly PostgreSqlContainer postgres = new PostgreSqlBuilder("postgres:16-alpine")
             .WithDatabase("eventmanager_test")
@@ -24,7 +24,7 @@ namespace EventManager.Tests.Abstractions
             await postgres.StopAsync();
         }
 
-        protected async Task ResetDatabaseAsync()
+        public async Task ResetDatabaseAsync()
         {
             var provider = await GetServiceProviderAsync();
 
@@ -36,7 +36,7 @@ namespace EventManager.Tests.Abstractions
             await context.Database.MigrateAsync();
         }
 
-        protected virtual async Task<IServiceProvider> GetServiceProviderAsync()
+        public async Task<IServiceProvider> GetServiceProviderAsync()
         {
             ServiceCollection services = new ServiceCollection();
 
