@@ -15,7 +15,7 @@ namespace EventsManager.Tests.End2End.Auth
 
 
         [Fact]
-        public async Task Test_RegisterUser()
+        public async Task Test_RegisterUsers()
         {
             await SeedDefautDataAsync();
 
@@ -26,10 +26,13 @@ namespace EventsManager.Tests.End2End.Auth
 
             var response2 = await httpClient.PostAsJsonAsync(@"api\auth\register", new RegisterDto("Mihagan12Pro", "password", Roles.User));
             Assert.Equal(HttpStatusCode.Conflict, response2.StatusCode);
+
+            var response3 = await httpClient.PostAsJsonAsync(@"api\auth\register", new RegisterDto("", "password", Roles.User));
+            Assert.Equal(HttpStatusCode.BadRequest, response3.StatusCode);
         }
 
         [Fact]
-        public async Task Test_IncorrectPassword()
+        public async Task Test_LoginIncorrectPassword()
         {
             await SeedDefautDataAsync();
 
@@ -58,6 +61,24 @@ namespace EventsManager.Tests.End2End.Auth
             var userCreateEventResponse = await httpClient.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);
 
             Assert.Equal(HttpStatusCode.Forbidden, userCreateEventResponse.StatusCode);
+        }
+
+        [Fact]
+        public async Task Test_Unauthorized()
+        {
+            await SeedDefautDataAsync();
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            NewEventDto newEvent = new NewEventDto("Birthday", DateTime.UtcNow.AddYears(1), DateTime.UtcNow.AddYears(1).AddDays(1), 10);
+            
+            var createEventResponse = await httpClient.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);
+            var getBookingResponse = await httpClient.GetAsync(@$"api\bookings\{Guid.NewGuid()}", cts.Token);
+            var cancelBookingResponse = await httpClient.DeleteAsync(@$"api\bookings\{Guid.NewGuid()}", cts.Token);
+
+            Assert.Equal(HttpStatusCode.Unauthorized, createEventResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.Unauthorized, getBookingResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.Unauthorized, cancelBookingResponse.StatusCode);
         }
     }
 }
