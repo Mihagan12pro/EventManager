@@ -142,7 +142,7 @@ Features from the sprint5:
 4. Modify tests project: now it contains in-memory provider for creating test cases
 
 
-Features from the sprint6:
+Features from the sprint7:
 1. Use migrations instead of Database.EnsureCreated
 	How to create new migration? There are two ways:
 
@@ -179,3 +179,26 @@ Features from the last branch (sprint7):
 5. Add value objects.
 
 6. Refusing from some installed libs (e.g. FluentValidation)
+
+
+Features from the sprint 8:
+1. Add new entity - user. Every user has role. There are 2 roles: user and admin.
+   Admin can create, edit and events, cancelliing every booking. Users can make 
+   new bookings and cancelling their bookins.
+   Users with both roles can have only 10 active bookings.
+
+2. Modify validation system: add IValidatableValueObject and IValidatableEntity interfaces
+ 
+3. Implementation of Authentication and Authorization
+   The application uses JWT for authentication. JWT is an open standard (RFC 7519).
+   Jwt consist of three parts: a header, a payload and a signature.
+   The application uses the JwtHmacSha256Wyzard class for generating tokens.
+   Most endpoints require authentication. To test protected endpoints in Swagger, 
+   enter the username and password into the corresponding fields, click the "Execute" 
+   button, copy the long string from the response body, click the "Authorize" button, 
+   paste the token value into the input field, and click "Authorize" again.
+
+4. Modify appsettings.json. Now it contains the secret key for creating signatures.
+   WARNING! In production secret key should be kept in user secrets or in environment
+   variables!
+
