@@ -33,28 +33,28 @@ namespace EventManager.Tests.Integration.CRUD.Events
 
             return
             [
-                //[
-                //   (Expression<Func<EventEntity, bool>>)(e => e.Title == "Birthday"),
+                [
+                   (Expression<Func<EventEntity, bool>>)(e => e.Title == "Birthday"),
 
-                //    new Pagination(1, 5),
+                    new Pagination(1, 5),
 
-                //    1
-                //],
+                    1
+                ],
 
-                //[
-                //     (Expression<Func<EventEntity, bool>>)(e => e.Title == "Execution"),
+                [
+                     (Expression<Func<EventEntity, bool>>)(e => e.Title == "Execution"),
 
-                //     new Pagination(1, 5),
+                     new Pagination(1, 5),
 
-                //     0
-                //],
-                //[
-                //     (Expression<Func<EventEntity, bool>>)(e => e.Title != null),
+                     0
+                ],
+                [
+                     (Expression<Func<EventEntity, bool>>)(e => e.Title != null),
 
-                //     new Pagination(1, 5),
+                     new Pagination(1, 5),
 
-                //     5
-                //],
+                     5
+                ],
                 [
                     (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("birthday")),
 
@@ -63,68 +63,68 @@ namespace EventManager.Tests.Integration.CRUD.Events
                      3
                 ],
 
-                //[
-                //    (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("birthday") && e.Title.StartsWith("Daddy's")),
+                [
+                    (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("birthday") && e.Title.StartsWith("Daddy's")),
 
-                //    new Pagination(3, 5),
+                    new Pagination(3, 5),
 
-                //    2
-                //],
+                    2
+                ],
 
-                //[
-                //    (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("daddy")),
+                [
+                    (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("daddy")),
 
-                //    new Pagination(3, 5),
+                    new Pagination(3, 5),
 
-                //    3
-                //],
+                    3
+                ],
 
-                //[
-                //    (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("daddy") && e.StartAt >= datetime.AddYears(1)),
-                //    new Pagination(3, 5),
+                [
+                    (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("daddy") && e.StartAt >= datetime.AddYears(1)),
+                    new Pagination(3, 5),
 
-                //      1
-                //],
+                      1
+                ],
 
-                //[
-                //     (Expression<Func<EventEntity, bool>>)(e => e.Title != null),
+                [
+                     (Expression<Func<EventEntity, bool>>)(e => e.Title != null),
 
-                //     new Pagination(10, 5),
+                     new Pagination(10, 5),
 
-                //     5
-                //],
+                     5
+                ],
 
-                //[
-                //     (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("brothers")),
+                [
+                     (Expression<Func<EventEntity, bool>>)(e => e.Title.Contains("brothers")),
 
-                //     new Pagination(1, 5),
+                     new Pagination(1, 5),
 
-                //     1
-                //],
+                     1
+                ],
 
-                //[
-                //     (Expression<Func<EventEntity, bool>>)(e => e.EndAt <= datetime.AddHours(20)),
+                [
+                     (Expression<Func<EventEntity, bool>>)(e => e.EndAt <= datetime.AddHours(20)),
 
-                //     new Pagination(1, 5),
+                     new Pagination(1, 5),
 
-                //     3
-                //],
+                     3
+                ],
 
-                //[
-                //     (Expression<Func<EventEntity, bool>>)(e => e.EndAt <= datetime.AddHours(20) && e.Title.Contains("Dad")),
+                [
+                     (Expression<Func<EventEntity, bool>>)(e => e.EndAt <= datetime.AddHours(20) && e.Title.Contains("Dad")),
 
-                //     new Pagination(1, 5),
+                     new Pagination(1, 5),
 
-                //     1
-                //],
+                     1
+                ],
 
-                //[
-                //     (Expression<Func<EventEntity, bool>>)(e => e.EndAt <= datetime.AddHours(20) && e.Title.Contains("brothers")),
+                [
+                     (Expression<Func<EventEntity, bool>>)(e => e.EndAt <= datetime.AddHours(20) && e.Title.Contains("brothers")),
 
-                //     new Pagination(1, 5),
+                     new Pagination(1, 5),
 
-                //     0
-                //],
+                     0
+                ],
             ];
         }
     }

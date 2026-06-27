@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace EventManager.Infrastructure.PostgreSQL.DbContexts.Design
 {
@@ -16,9 +17,12 @@ namespace EventManager.Infrastructure.PostgreSQL.DbContexts.Design
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            DbContextOptionsBuilder<AppDbContext> contextOptionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+            string connectionString = configuration.GetConnectionString("Default");
 
-            return new AppDbContext(contextOptionsBuilder.Options);
+            DbContextOptionsBuilder<AppDbContext> optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+            optionsBuilder.UseNpgsql(connectionString);
+
+            return new AppDbContext(optionsBuilder.Options);
         }
     }
 }

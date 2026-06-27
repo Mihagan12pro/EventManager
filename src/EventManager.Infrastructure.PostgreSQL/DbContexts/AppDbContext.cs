@@ -18,6 +18,11 @@ namespace EventManager.Infrastructure.PostgreSQL.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
             => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+        }
+
         public AppDbContext(DbContextOptions<AppDbContext> contextOptions) : base(contextOptions)
         {
             
