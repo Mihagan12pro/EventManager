@@ -27,7 +27,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Queries.Objects.UsersBookings
                         EventEnd = e.EndAt
                     }
                 ).Where(
-                    o => o.Status == BookingStatus.Confirmed && 
+                    o => o.Status == BookingStatus.Confirmed &&
                     o.EventEnd >= now
                 );
 

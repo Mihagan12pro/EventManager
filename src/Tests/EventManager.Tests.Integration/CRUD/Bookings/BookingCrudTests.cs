@@ -1,16 +1,16 @@
 ﻿using EventManager.Application.DataAccess.Repositories;
 using EventManager.Domain.Entities.Bookings;
 using EventManager.Domain.Entities.Bookings.Enums;
+using EventManager.Domain.Entities.Events;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
+using EventManager.Domain.ValueObjects.Events;
+using EventManager.Domain.ValueObjects.Events.DateAndTime;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Shared.Filters;
-using EventManager.Domain.Entities.Events;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
-using EventManager.Domain.ValueObjects.Events.DateAndTime;
-using EventManager.Domain.ValueObjects.Events;
-using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
 
 namespace EventManager.Tests.Integration.CRUD.Bookings
 {

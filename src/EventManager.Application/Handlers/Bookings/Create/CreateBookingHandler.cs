@@ -4,8 +4,6 @@ using EventManager.Application.DataAccess.Repositories;
 using EventManager.Application.Security;
 using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.Domain.Entities.Users;
-using EventManager.Domain.Failures.Exceptions;
-using EventManager.Domain.Failures.Exceptions.WebApi.Client.Conflict;
 using EventManager.DTOs.Bookings;
 
 namespace EventManager.Application.Handlers.Bookings.Create
@@ -28,7 +26,7 @@ namespace EventManager.Application.Handlers.Bookings.Create
             Guid userId = Guid.Parse(_jwtClaimsExtractor.Extract("sub"));
 
             int activeBookings = await _getUserQuery.Execute(new GetUserBookingsQueryBody(userId), cancellationToken);
-            UserEntity.ValidateActiveBookings(activeBookings);
+            UserEntity.ValidateActiveBookings(activeBookings + 1);
 
             Guid id = await _bookingsRepository.CreateNewBookingAsync(eventId, userId, cancellationToken);
 

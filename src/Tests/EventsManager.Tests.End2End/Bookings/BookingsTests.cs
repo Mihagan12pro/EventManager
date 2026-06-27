@@ -16,8 +16,44 @@ namespace EventsManager.Tests.End2End.Bookings
         {
         }
 
+
         [Fact]
-        public async Task Test_BookingLimits()
+        public async Task Test_Overbooking()
+        {
+            await SeedDefautDataAsync();
+
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            var loginReponse = await httpClient.PostAsJsonAsync(@"api\auth\login", new LoginDto("admin", "admin"), cts.Token);
+
+            string token = await loginReponse.Content.ReadAsStringAsync();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            NewEventDto newEvent = new NewEventDto(
+                "Birthday",
+                DateTime.UtcNow.AddYears(1),
+                DateTime.UtcNow.AddYears(1).AddDays(1),
+                10
+            );
+
+            var postResponse = await httpClient.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);
+
+            Assert.Equal(postResponse.StatusCode, System.Net.HttpStatusCode.Created);
+            string postResponseBody = await postResponse.Content.ReadAsStringAsync();
+
+            Guid.TryParse(postResponseBody.Trim('"'), out Guid eventId);
+
+            for (int i = 0; i < newEvent.TotalSeats; i++)
+                await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+
+            var overBooked = await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+
+            Assert.Equal(HttpStatusCode.Conflict, overBooked.StatusCode);
+        }
+
+        [Fact]
+        public async Task Test_BookingUserLimits()
         {
             await SeedDefautDataAsync();
 
@@ -195,42 +231,6 @@ namespace EventsManager.Tests.End2End.Bookings
             var getRejectedDto = JsonSerializer.Deserialize<GetBookingDto>(getRejectedBookingContent, serializerOptions);
 
             Assert.Equal(BookingStatus.Rejected, getRejectedDto.Status);
-        }
-
-
-        [Fact]
-        public async Task Test_Overbooking()
-        {
-            await SeedDefautDataAsync();
-
-
-            CancellationTokenSource cts = new CancellationTokenSource();
-
-            var loginReponse = await httpClient.PostAsJsonAsync(@"api\auth\login", new LoginDto("admin", "admin"), cts.Token);
-
-            string token = await loginReponse.Content.ReadAsStringAsync();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            NewEventDto newEvent = new NewEventDto(
-                "Birthday",
-                DateTime.UtcNow.AddYears(1),
-                DateTime.UtcNow.AddYears(1).AddDays(1),
-                10
-            );
-
-            var postResponse = await httpClient.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);
-
-            Assert.Equal(postResponse.StatusCode, System.Net.HttpStatusCode.Created);
-            string postResponseBody = await postResponse.Content.ReadAsStringAsync();
-
-            Guid.TryParse(postResponseBody.Trim('"'), out Guid eventId);
-
-            for (int i = 0; i < newEvent.TotalSeats; i++)
-                await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
-
-            var overBooked = await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
-
-            Assert.Equal(HttpStatusCode.Conflict, overBooked.StatusCode);
         }
     }
 }

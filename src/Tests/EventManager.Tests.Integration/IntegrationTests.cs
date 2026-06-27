@@ -78,6 +78,7 @@ namespace EventManager.Tests.Integration
                 options.UseNpgsql(_postgres.GetConnectionString());
             });
 
+            services.AddQueries();
             services.AddRepositories();
             services.AddHostedServices();
             services.AddHandlers();
