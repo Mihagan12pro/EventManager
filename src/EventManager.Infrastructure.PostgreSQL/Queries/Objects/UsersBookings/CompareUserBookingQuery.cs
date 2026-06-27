@@ -10,7 +10,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Queries.Objects.UsersBookings
 {
     internal class CompareUserBookingQuery : IQueryObject<CompareUserBookingQueryBody>
     {
-        private readonly AppDbContextBase _dbContext;
+        private readonly AppDbContext _dbContext;
 
         public async Task Execute(CompareUserBookingQueryBody queryBody, CancellationToken cancellationToken)
         {
@@ -20,7 +20,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Queries.Objects.UsersBookings
                 throw new ConflictException();
         }
 
-        public CompareUserBookingQuery(AppDbContextBase dbContext)
+        public CompareUserBookingQuery(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }

@@ -1,5 +1,4 @@
-﻿using EventManager.Application.DataAccess.Repositories;
-using EventManager.Domain.Entities.Bookings.Enums;
+﻿using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.DTOs.Users;
@@ -15,6 +14,38 @@ namespace EventsManager.Tests.End2End.Bookings
     {
         public BookingsTests(EventManagerAppFactory<Program> factory) : base(factory)
         {
+        }
+
+        [Fact]
+        public async Task Test_BookingLimits()
+        {
+            await SeedDefautDataAsync();
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            var adminLoginReponse = await httpClient.PostAsJsonAsync(@"api\auth\login", new LoginDto("admin", "admin"), cts.Token);
+            string adminToken = await adminLoginReponse.Content.ReadAsStringAsync();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminToken);
+
+            int totalSeats = 12;
+
+            NewEventDto newEvent = new NewEventDto("Birthday", DateTime.UtcNow.AddYears(1), DateTime.UtcNow.AddYears(1).AddDays(1), totalSeats);
+
+            var postEventResponse = await httpClient.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);
+            Guid eventId = await postEventResponse.Content.ExtractGuid();
+
+            for(int i = 0; i < totalSeats - 1; i++)
+            {
+                var booking = await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+
+                Assert.Equal(HttpStatusCode.Accepted, booking.StatusCode);
+            }
+
+            await Task.Delay(2000);
+
+            var finalBooking = await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
+
+            Assert.Equal(HttpStatusCode.Conflict, finalBooking.StatusCode);
         }
 
         [Fact]
@@ -34,6 +65,7 @@ namespace EventsManager.Tests.End2End.Bookings
             var userLoginResponse = await user.PostAsJsonAsync(@"api\auth\login", new LoginDto("user", "user"), cts.Token);
             string userToken = await userLoginResponse.Content.ReadAsStringAsync();
             user.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", userToken);
+            
             NewEventDto newEvent = new NewEventDto("Birthday", DateTime.UtcNow.AddYears(1), DateTime.UtcNow.AddYears(1).AddDays(1), 10);
 
             var postEventResponse = await admin.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);

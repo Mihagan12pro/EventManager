@@ -29,7 +29,7 @@ namespace EventManager.Tests.Abstractions
             var provider = await GetServiceProviderAsync();
 
             NpgsqlConnection.ClearAllPools();
-            await using var context = provider.GetRequiredService<AppDbContextBase>();
+            await using var context = provider.GetRequiredService<AppDbContext>();
             var res = await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
 
@@ -40,7 +40,7 @@ namespace EventManager.Tests.Abstractions
         {
             ServiceCollection services = new ServiceCollection();
 
-            services.AddDbContext<AppDbContextBase, DockerAppDbContext>(options =>
+            services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseNpgsql(postgres.GetConnectionString());
             });

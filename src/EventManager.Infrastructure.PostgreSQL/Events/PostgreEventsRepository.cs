@@ -12,9 +12,9 @@ namespace EventManager.Infrastructure.PostgreSQL.Events
 {
     public class PostgreEventsRepository : IEventsRepository
     {
-        private readonly AppDbContextBase _dbContext;
+        private readonly AppDbContext _dbContext;
 
-        public PostgreEventsRepository(AppDbContextBase dbContext)
+        public PostgreEventsRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }

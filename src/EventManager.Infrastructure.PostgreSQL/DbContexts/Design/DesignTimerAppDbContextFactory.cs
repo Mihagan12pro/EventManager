@@ -18,7 +18,7 @@ namespace EventManager.Infrastructure.PostgreSQL.DbContexts.Design
 
             DbContextOptionsBuilder<AppDbContext> contextOptionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
 
-            return new AppDbContext(contextOptionsBuilder.Options, configuration);
+            return new AppDbContext(contextOptionsBuilder.Options);
         }
     }
 }

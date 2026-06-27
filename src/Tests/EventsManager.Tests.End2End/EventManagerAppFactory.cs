@@ -1,5 +1,4 @@
-﻿using EventManager.Application;
-using EventManager.Application.DataAccess.Queries;
+﻿using EventManager.Application.DataAccess.Queries;
 using EventManager.Infrastructure.PostgreSQL;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Tests.Abstractions;
@@ -18,6 +17,8 @@ namespace EventsManager.Tests.End2End
     {
         private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder("postgres:16-alpine")
              .WithDatabase("eventmanager_test")
+             .WithUsername("postgres_tests")
+             .WithPassword("postgres_tests")
              .Build();
 
         public async Task InitializeAsync()
@@ -36,19 +37,21 @@ namespace EventsManager.Tests.End2End
         {
             builder.ConfigureServices(services =>
             {
-                services.AddDbContext<AppDbContextBase, DockerAppDbContext>(options =>
+                services.AddDbContext<AppDbContext>(options =>
                 {
                     options.UseNpgsql(
                      _postgres.GetConnectionString(),
                      npgsqlOptions =>
                      {
-                         npgsqlOptions.MigrationsAssembly(typeof(AppDbContextBase).Assembly.FullName);
+                         string assembly = typeof(AppDbContext).Assembly.FullName;
+
+                         npgsqlOptions.MigrationsAssembly(assembly);
                      });
                 });
 
                 services.AddRepositories();
 
-                Assembly assembly = typeof(AppDbContextBase).Assembly;
+                Assembly assembly = typeof(AppDbContext).Assembly;
 
                 services.Scan(scan => scan.FromAssemblies(assembly)
                    .AddClasses(classes => classes
@@ -71,7 +74,7 @@ namespace EventsManager.Tests.End2End
             NpgsqlConnection.ClearAllPools();
 
             using var scope = Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<AppDbContextBase>();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
             await db.Database.EnsureDeletedAsync();
             await db.Database.MigrateAsync();

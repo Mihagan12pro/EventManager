@@ -19,7 +19,8 @@ public partial class Program
 
         builder.Services.AddControllers();
 
-        builder.Services.AddServices(builder);
+        builder.Services.AddServices(builder, new ConfigurationBuilder().AddJsonFile("appsettings.json")
+                                                       .Build());
 
         builder.Host.ConfigureLogging(opt =>
         {
@@ -88,7 +89,7 @@ public partial class Program
         {
             using (var scope = app.Services.CreateScope())
             {
-                var db = scope.ServiceProvider.GetRequiredService<AppDbContextBase>();
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
                 db.Database.Migrate();
             }

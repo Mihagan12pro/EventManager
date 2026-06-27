@@ -12,10 +12,10 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
 {
     public class PostgreBookingsRepository : IBookingsRepository
     {
-        private readonly AppDbContextBase _dbContext;
+        private readonly AppDbContext _dbContext;
         private SemaphoreSlim _semaphore;
 
-        public PostgreBookingsRepository(AppDbContextBase dbContext)
+        public PostgreBookingsRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
 

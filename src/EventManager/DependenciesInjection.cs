@@ -10,7 +10,10 @@ namespace EventManager
     {
         private static IHostApplicationBuilder _hostApplicationBuilder;
 
-        public static IServiceCollection AddServices(this IServiceCollection services, IHostApplicationBuilder hostApplicationBuilder)
+        public static IServiceCollection AddServices(
+            this IServiceCollection services,
+            IHostApplicationBuilder hostApplicationBuilder,
+            IConfiguration configuration)
         {
             _hostApplicationBuilder = hostApplicationBuilder;
 
@@ -23,7 +26,7 @@ namespace EventManager
 
             if (!hostApplicationBuilder.Environment.IsEnvironment("Testing"))
             {
-                services.AddPostgreDependencies();
+                services.AddPostgreDependencies(configuration);
             }
 
             return services;

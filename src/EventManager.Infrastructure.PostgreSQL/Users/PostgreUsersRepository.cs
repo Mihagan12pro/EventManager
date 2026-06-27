@@ -9,7 +9,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Users
 {
     public class PostgreUsersRepository : IUsersRepository
     {
-        private readonly AppDbContextBase _dbContext;
+        private readonly AppDbContext _dbContext;
 
         public async Task RegisterAsync(
             RegisterDto register,
@@ -49,7 +49,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Users
             return user;
         }
 
-        public PostgreUsersRepository(AppDbContextBase dbContext)
+        public PostgreUsersRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }

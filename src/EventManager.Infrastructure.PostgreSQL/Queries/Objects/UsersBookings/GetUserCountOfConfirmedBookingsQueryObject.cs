@@ -7,7 +7,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Queries.Objects.UsersBookings
 {
     internal class GetUserCountOfConfirmedBookingsQueryObject : IQueryObject<int, GetUserBookingsQueryBody>
     {
-        private readonly AppDbContextBase _dbContext;
+        private readonly AppDbContext _dbContext;
 
         public async Task<int> Execute(
             GetUserBookingsQueryBody queryBody,  
@@ -30,7 +30,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Queries.Objects.UsersBookings
             return bookings.Count();
         }
 
-        public GetUserCountOfConfirmedBookingsQueryObject(AppDbContextBase dbContext)
+        public GetUserCountOfConfirmedBookingsQueryObject(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }

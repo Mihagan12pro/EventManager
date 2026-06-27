@@ -5,6 +5,8 @@ using EventManager.Infrastructure.PostgreSQL.Booking;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Infrastructure.PostgreSQL.Events;
 using EventManager.Infrastructure.PostgreSQL.Users;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -18,11 +20,16 @@ namespace EventManager.Infrastructure.PostgreSQL
 {
     public static class DependenciesInjection
     {
-        public static IServiceCollection AddPostgreDependencies(this IServiceCollection services)
+        public static IServiceCollection AddPostgreDependencies(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddRepositories();
 
-            services.AddDbContext<AppDbContextBase, AppDbContext>();
+            services.AddDbContext<AppDbContext>((options) =>
+            {
+                options.UseNpgsql(configuration.GetConnectionString("Default"));
+            });
 
             Assembly assembly = Assembly.GetExecutingAssembly();
 
