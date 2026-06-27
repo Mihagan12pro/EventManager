@@ -3,6 +3,7 @@ using EventManager.Application.DataAccess.Queries.Bodies.UsersBookings;
 using EventManager.Application.DataAccess.Repositories;
 using EventManager.Application.Security;
 using EventManager.Domain.Entities.Bookings.Enums;
+using EventManager.Domain.Entities.Users;
 using EventManager.Domain.Failures.Exceptions;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.Conflict;
 using EventManager.DTOs.Bookings;
@@ -27,9 +28,7 @@ namespace EventManager.Application.Handlers.Bookings.Create
             Guid userId = Guid.Parse(_jwtClaimsExtractor.Extract("sub"));
 
             int activeBookings = await _getUserQuery.Execute(new GetUserBookingsQueryBody(userId), cancellationToken);
-
-            if (activeBookings > 10)
-                throw new ConflictException("User can't has more than 10 active bookings!");
+            UserEntity.ValidateActiveBookings(activeBookings);
 
             Guid id = await _bookingsRepository.CreateNewBookingAsync(eventId, userId, cancellationToken);
 

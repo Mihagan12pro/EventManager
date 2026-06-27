@@ -2,6 +2,7 @@
 using EventManager.Domain.Entities.Users.Enums;
 using EventManager.Domain.Failures.Errors;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.Conflict;
 using EventManager.Domain.Validation;
 using EventManager.Domain.ValueObjects.Users;
 using System.ComponentModel.DataAnnotations;
@@ -53,6 +54,14 @@ namespace EventManager.Domain.Entities.Users
                 throw new BadRequestException(errors);
             }
         }
+
+        public static void ValidateActiveBookings(int count)
+        {
+            if (count >= MaxActiveBookings)
+                throw new ConflictException("User can't has more than 10 booking!");
+        }
+
+        public const int MaxActiveBookings = 10;
 
         private UserName _userName;
     }

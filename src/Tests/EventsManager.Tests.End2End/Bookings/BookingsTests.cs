@@ -27,14 +27,14 @@ namespace EventsManager.Tests.End2End.Bookings
             string adminToken = await adminLoginReponse.Content.ReadAsStringAsync();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminToken);
 
-            int totalSeats = 12;
+            int totalSeats = 1000;
 
             NewEventDto newEvent = new NewEventDto("Birthday", DateTime.UtcNow.AddYears(1), DateTime.UtcNow.AddYears(1).AddDays(1), totalSeats);
 
             var postEventResponse = await httpClient.PostAsJsonAsync(@"api\events\", newEvent, cts.Token);
             Guid eventId = await postEventResponse.Content.ExtractGuid();
 
-            for(int i = 0; i < totalSeats - 1; i++)
+            for(int i = 0; i < 10; i++)
             {
                 var booking = await httpClient.PostAsJsonAsync(@$"api\events\{eventId}\book", eventId, cts.Token);
 
