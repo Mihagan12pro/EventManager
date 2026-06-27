@@ -57,7 +57,7 @@ namespace EventManager.Domain.Entities.Users
 
         public static void ValidateActiveBookings(int count)
         {
-            if (count > MaxActiveBookings)
+            if (count >= MaxActiveBookings)
                 throw new ConflictException("User can't has more than 10 booking!");
         }
 

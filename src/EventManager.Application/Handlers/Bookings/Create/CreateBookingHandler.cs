@@ -26,7 +26,7 @@ namespace EventManager.Application.Handlers.Bookings.Create
             Guid userId = Guid.Parse(_jwtClaimsExtractor.Extract("sub"));
 
             int activeBookings = await _getUserQuery.Execute(new GetUserBookingsQueryBody(userId), cancellationToken);
-            UserEntity.ValidateActiveBookings(activeBookings + 1);
+            UserEntity.ValidateActiveBookings(activeBookings);
 
             Guid id = await _bookingsRepository.CreateNewBookingAsync(eventId, userId, cancellationToken);
 
