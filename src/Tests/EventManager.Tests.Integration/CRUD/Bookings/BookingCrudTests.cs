@@ -1,6 +1,6 @@
-﻿using EventManager.Application.Repositories;
-using EventManager.Domain.Bookings;
-using EventManager.Domain.Bookings.Enums;
+﻿using EventManager.Application.DataAccess.Repositories;
+using EventManager.Domain.Entities.Bookings;
+using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
 using EventManager.Shared.Filters;
@@ -32,7 +32,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
                cts.Token
             );
 
-            var accepted = await bookingsRepository.CreateNewBookingAsync(eventId, cts.Token);
+            var accepted = await bookingsRepository.CreateNewBookingAsync(eventId, Guid.Empty, cts.Token);
 
             Assert.NotNull(accepted);
         }
@@ -58,7 +58,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
                cts.Token
             );
 
-            var acceptedId = await bookingsRepository.CreateNewBookingAsync(eventId, cts.Token);
+            var acceptedId = await bookingsRepository.CreateNewBookingAsync(eventId, Guid.Empty, cts.Token);
 
             var bookingModel = await bookingsRepository.GetByIdAsync(acceptedId, cts.Token);
 
@@ -79,7 +79,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
             var bookingsRepository = provider.GetRequiredService<IBookingsRepository>();
 
             Guid eventId = await eventsRepository.AddNewAsync(newEvent, cts.Token);
-            Guid bookingId = await bookingsRepository.CreateNewBookingAsync(eventId, cts.Token);
+            Guid bookingId = await bookingsRepository.CreateNewBookingAsync(eventId, Guid.Empty, cts.Token);
 
             await Task.Delay(5000);
 
@@ -92,7 +92,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
 
         [Theory]
         [MemberData(nameof(FiltersByExpression))]
-        public async Task Test_GetAllAsync_ByExpression(Expression<Func<BookingModel, bool>> filters, int expected)
+        public async Task Test_GetAllAsync_ByExpression(Expression<Func<BookingEntity, bool>> filters, int expected)
         {
             await ResetDatabaseAsync();
 
@@ -103,7 +103,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
             var provider = await GetServiceProviderAsync();
             var bookingsRepository = provider.GetRequiredService<IBookingsRepository>();
 
-            var bookings = await bookingsRepository.GetAllAsync(new Filters<BookingModel>(filters), cts.Token);
+            var bookings = await bookingsRepository.GetAllAsync(new Filters<BookingEntity>(filters), cts.Token);
 
             Assert.Equal(expected, bookings.Count());
         }

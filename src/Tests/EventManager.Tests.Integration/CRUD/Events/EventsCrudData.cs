@@ -1,4 +1,4 @@
-﻿using EventManager.Domain.Events;
+﻿using EventManager.Domain.Entities.Events;
 using EventManager.Domain.ValueObjects;
 using EventManager.DTOs.Events;
 using System.Linq.Expressions;

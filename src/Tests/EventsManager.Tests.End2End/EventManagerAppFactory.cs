@@ -1,7 +1,6 @@
 ﻿using EventManager.Application.DataAccess.Queries;
 using EventManager.Infrastructure.PostgreSQL;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
-using EventManager.Tests.Abstractions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +12,7 @@ using Testcontainers.PostgreSql;
 namespace EventsManager.Tests.End2End
 {
     public class EventManagerAppFactory<TEntryPoint>
-         : WebApplicationFactory<TEntryPoint>, IAsyncLifetime, IRealPostgreTests where TEntryPoint : class
+         : WebApplicationFactory<TEntryPoint>, IAsyncLifetime where TEntryPoint : class
     {
         private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder("postgres:16-alpine")
              .WithDatabase("eventmanager_test")
