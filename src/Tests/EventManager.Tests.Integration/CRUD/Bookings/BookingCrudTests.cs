@@ -3,9 +3,14 @@ using EventManager.Domain.Entities.Bookings;
 using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
+using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Shared.Filters;
+using EventManager.Domain.Entities.Events;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
+using EventManager.Domain.ValueObjects.Events.DateAndTime;
+using EventManager.Domain.ValueObjects.Events;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
 
 namespace EventManager.Tests.Integration.CRUD.Bookings
 {
@@ -108,6 +113,41 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
             var bookings = await bookingsRepository.GetAllAsync(new Filters<BookingEntity>(filters), cts.Token);
 
             Assert.Equal(expected, bookings.Count());
+        }
+
+        [Fact]
+        public async Task Test_BookingOldEvent()
+        {
+            await SeedResetDbAndSeedAsync();
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            var provider = await GetServiceProviderAsync();
+
+            AppDbContext dbContext = provider.GetRequiredService<AppDbContext>();
+
+            var @event = new EventEntity()
+            {
+                EventDateTime = new EventDateTime(DateTime.UtcNow, DateTime.UtcNow),
+
+                Seats = new Seats(10),
+
+                EventNaming = new EventNaming("Birthday"),
+            };
+
+           await dbContext.Events.AddAsync(
+                    @event,
+                    cts.Token
+                );
+
+            await dbContext.SaveChangesAsync();
+
+            IBookingsRepository bookingsRepository = provider.GetRequiredService<IBookingsRepository>();
+
+            await Assert.ThrowsAsync<BadRequestException>(async () => 
+            {
+                await bookingsRepository.CreateNewBookingAsync(@event.Id, userId, cts.Token);
+            });
         }
     }
 }

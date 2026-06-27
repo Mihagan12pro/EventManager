@@ -1,11 +1,8 @@
-﻿using EventManager.DTOs.Bookings;
-using EventManager.DTOs.Events;
+﻿using EventManager.DTOs.Events;
 using EventManager.DTOs.Users;
-using EventsManager.Tests.End2End.Extensions;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.Json;
 
 namespace EventsManager.Tests.End2End.Events
 {

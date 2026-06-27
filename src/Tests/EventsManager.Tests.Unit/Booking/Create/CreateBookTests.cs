@@ -2,7 +2,7 @@
 using EventManager.Application.Handlers.Bookings.Create;
 using EventManager.Application.Handlers.Events.AddEvent;
 using EventManager.Application.Handlers.Events.DeleteEvent;
-using EventManager.Domain.Bookings.Enums;
+using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.NotFound;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;

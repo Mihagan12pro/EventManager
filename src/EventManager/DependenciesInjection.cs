@@ -2,7 +2,6 @@
 using EventManager.Application;
 using EventManager.Infrastructure.Security;
 using EventManager.Middleware.Exceptions;
-using EventManager.Infrastructure.PostgreSQL.DbContexts;
 
 namespace EventManager
 {
@@ -21,7 +20,7 @@ namespace EventManager
 
             services.AddHandlers();
             services.AddSecurity();
-            services.AddBackgroundServices();
+            services.AddHostedServices();
             services.AddSingletonServices();
 
             if (!hostApplicationBuilder.Environment.IsEnvironment("Testing"))

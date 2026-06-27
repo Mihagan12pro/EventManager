@@ -10,7 +10,7 @@ namespace EventManager.Application
 {
     public static class DependenciesInjection
     {
-        public static IServiceCollection AddBackgroundServices(this IServiceCollection backgroundServices)
+        public static IServiceCollection AddHostedServices(this IServiceCollection backgroundServices)
         {
             backgroundServices.AddHostedService<BookingHandlingService>();
 

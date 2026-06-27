@@ -79,7 +79,7 @@ namespace EventManager.Tests.Integration
             });
 
             services.AddRepositories();
-            services.AddBackgroundServices();
+            services.AddHostedServices();
             services.AddHandlers();
 
             services.AddLogging();

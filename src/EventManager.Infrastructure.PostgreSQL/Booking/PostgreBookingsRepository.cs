@@ -2,6 +2,7 @@
 using EventManager.Domain.Entities.Bookings;
 using EventManager.Domain.Entities.Bookings.Enums;
 using EventManager.Domain.Entities.Events;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
 using EventManager.Domain.Failures.Exceptions.WebApi.Client.Conflict;
 using EventManager.DTOs.Bookings;
 using EventManager.Infrastructure.PostgreSQL.DbContexts;
@@ -38,7 +39,7 @@ namespace EventManager.Infrastructure.PostgreSQL.Booking
                 var createdAt = DateTime.UtcNow;
 
                 if (createdAt >= @event.StartAt)
-                    throw new ConflictException("Too late for booking!");
+                    throw new BadRequestException("Too late for booking!");
 
                 @event.ReverseSeats();
 

@@ -25,12 +25,18 @@ namespace EventManager.Infrastructure.PostgreSQL
             IConfiguration configuration)
         {
             services.AddRepositories();
+            services.AddQueries();
 
             services.AddDbContext<AppDbContext>((options) =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("Default"));
             });
 
+            return services;
+        }
+
+        public static IServiceCollection AddQueries(this IServiceCollection services)
+        {
             Assembly assembly = Assembly.GetExecutingAssembly();
 
             services.Scan(scan => scan.FromAssemblies(assembly)
