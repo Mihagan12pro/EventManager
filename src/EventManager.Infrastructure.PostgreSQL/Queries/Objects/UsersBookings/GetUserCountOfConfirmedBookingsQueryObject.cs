@@ -15,7 +15,8 @@ namespace EventManager.Infrastructure.PostgreSQL.Queries.Objects.UsersBookings
         {
             DateTime now = DateTime.UtcNow;
 
-            var bookings = _dbContext.Bookings.Join(
+            var bookings = _dbContext.Bookings.Where(b => b.UserId == queryBody.UserId)
+                .Join(
                     _dbContext.Events,
                     b => b.EventId,
                     e => e.Id,
@@ -25,7 +26,10 @@ namespace EventManager.Infrastructure.PostgreSQL.Queries.Objects.UsersBookings
 
                         EventEnd = e.EndAt
                     }
-                ).Where(o => o.Status == BookingStatus.Confirmed && o.EventEnd >= now);
+                ).Where(
+                    o => o.Status == BookingStatus.Confirmed && 
+                    o.EventEnd >= now
+                );
 
             return bookings.Count();
         }
