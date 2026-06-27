@@ -5,35 +5,68 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Testcontainers.PostgreSql;
+using EventManager.Domain.Entities.Users;
+using EventManager.Domain.ValueObjects.Users;
+using EventManager.Domain.Entities.Users.Enums;
 
 namespace EventManager.Tests.Integration
 {
     public abstract class IntegrationTests : IAsyncLifetime
     {
-        protected readonly PostgreSqlContainer postgres = new PostgreSqlBuilder("postgres:16-alpine")
-    .WithDatabase("eventmanager_test")
-    .Build();
+        protected Guid userId;
+
+        private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder("postgres:16-alpine")
+             .WithDatabase("eventmanager_test")
+             .WithUsername("postgres_tests")
+             .WithPassword("postgres_tests")
+             .Build();
+
+        protected async Task SeedResetDbAndSeedAsync()
+        {
+            await ResetDatabaseAsync();
+
+            var provider = await GetServiceProviderAsync();
+
+            var dbContext = provider.GetRequiredService<AppDbContext>();
+
+            UserEntity user = new UserEntity() 
+            {
+                HashedPassword = "hashed_password",
+                UserName = new UserName("Admin"),
+                Role = Roles.Admin 
+            };
+
+            await dbContext.Users.AddAsync(user);
+
+            await dbContext.SaveChangesAsync();
+
+            userId = user.Id;
+        }
 
         public async Task InitializeAsync()
         {
-            await postgres.StartAsync();
+            await _postgres.StartAsync();
         }
 
         public async Task DisposeAsync()
         {
-            await postgres.StopAsync();
+            await _postgres.StopAsync();
         }
 
         public async Task ResetDatabaseAsync()
         {
-            var provider = await GetServiceProviderAsync();
-
             NpgsqlConnection.ClearAllPools();
-            await using var context = provider.GetRequiredService<AppDbContext>();
-            var res = await context.Database.EnsureDeletedAsync();
-            await context.Database.EnsureCreatedAsync();
 
-            await context.Database.MigrateAsync();
+            var provider = await GetServiceProviderAsync();
+            
+            using var scope = provider.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+            await db.Database.EnsureDeletedAsync();
+            await db.Database.MigrateAsync();
+
+            await db.Database.CloseConnectionAsync();
+            NpgsqlConnection.ClearAllPools();
         }
 
         public async Task<IServiceProvider> GetServiceProviderAsync()
@@ -42,7 +75,7 @@ namespace EventManager.Tests.Integration
 
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseNpgsql(postgres.GetConnectionString());
+                options.UseNpgsql(_postgres.GetConnectionString());
             });
 
             services.AddRepositories();

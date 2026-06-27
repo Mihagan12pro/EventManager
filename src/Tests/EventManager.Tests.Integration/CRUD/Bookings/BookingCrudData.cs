@@ -28,10 +28,10 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
 
             for(int i = 0; i < newEvent.TotalSeats; i++)
             {
-                await bookingsRepository.CreateNewBookingAsync(eventId, Guid.Empty, cts.Token);
+                await bookingsRepository.CreateNewBookingAsync(eventId, userId, cts.Token);
             }
 
-            var dbContext = provider.GetRequiredService<AppDbContextBase>();
+            var dbContext = provider.GetRequiredService<AppDbContext>();
 
             var bookings = dbContext.Bookings
                 .ToList();

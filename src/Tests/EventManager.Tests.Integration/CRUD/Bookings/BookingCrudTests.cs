@@ -14,7 +14,8 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
         [Fact]
         public async Task Test_CreateNewBookingAsync()
         {
-            await ResetDatabaseAsync();
+            await SeedResetDbAndSeedAsync();
+
             var provider = await GetServiceProviderAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();
@@ -32,7 +33,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
                cts.Token
             );
 
-            var accepted = await bookingsRepository.CreateNewBookingAsync(eventId, Guid.Empty, cts.Token);
+            var accepted = await bookingsRepository.CreateNewBookingAsync(eventId, userId, cts.Token);
 
             Assert.NotNull(accepted);
         }
@@ -40,7 +41,8 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
         [Fact]
         public async Task Test_GetByIdAsync()
         {
-            await ResetDatabaseAsync();
+            await SeedResetDbAndSeedAsync();
+
             var provider = await GetServiceProviderAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();
@@ -58,7 +60,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
                cts.Token
             );
 
-            var acceptedId = await bookingsRepository.CreateNewBookingAsync(eventId, Guid.Empty, cts.Token);
+            var acceptedId = await bookingsRepository.CreateNewBookingAsync(eventId, userId, cts.Token);
 
             var bookingModel = await bookingsRepository.GetByIdAsync(acceptedId, cts.Token);
 
@@ -68,7 +70,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
         [Fact]
         public async Task Test_ProcessBookingAsync()
         {
-            await ResetDatabaseAsync();
+            await SeedResetDbAndSeedAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -79,7 +81,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
             var bookingsRepository = provider.GetRequiredService<IBookingsRepository>();
 
             Guid eventId = await eventsRepository.AddNewAsync(newEvent, cts.Token);
-            Guid bookingId = await bookingsRepository.CreateNewBookingAsync(eventId, Guid.Empty, cts.Token);
+            Guid bookingId = await bookingsRepository.CreateNewBookingAsync(eventId, userId, cts.Token);
 
             await Task.Delay(5000);
 
@@ -94,7 +96,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
         [MemberData(nameof(FiltersByExpression))]
         public async Task Test_GetAllAsync_ByExpression(Expression<Func<BookingEntity, bool>> filters, int expected)
         {
-            await ResetDatabaseAsync();
+            await SeedResetDbAndSeedAsync();
 
             await Seed();
 
