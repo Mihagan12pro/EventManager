@@ -1,0 +1,21 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="docker-compose.yml" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/EventManager.API/EventManager.API.csproj" />
+    <Project Path="src/EventManager.Application/EventManager.Application.csproj" />
+    <Project Path="src/EventManager.Domain/EventManager.Domain.csproj" />
+    <Project Path="src/EventManager.DTOs/EventManager.DTOs.csproj" />
+    <Project Path="src/EventManager.Infrastructure.PostgreSQL/EventManager.Infrastructure.PostgreSQL.csproj" />
+    <Project Path="src/EventManager.Infrastructure.Security/EventManager.Infrastructure.Security.csproj" Id="b86de8be-7dc8-4473-a1c5-03043a877edc" />
+    <Project Path="src/EventManager.Shared/EventManager.Shared.csproj" />
+    <Project Path="src/EventManager/EventManager.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="src/Tests/EventManager.Tests.Integration/EventManager.Tests.Integration.csproj" />
+    <Project Path="src/Tests/EventsManager.Tests.End2End/EventsManager.Tests.End2End.csproj" />
+  </Folder>
+</Solution>

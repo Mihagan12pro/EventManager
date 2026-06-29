@@ -1,10 +1,10 @@
-﻿using EventManager.Domain.Events;
-using EventManager.DTOs.Events;
+﻿using EventManager.DTOs.Events;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
 using EventManager.Domain.ValueObjects;
-using EventManager.Application.Repositories;
 using EventManager.Shared.Filters;
+using EventManager.Application.DataAccess.Repositories;
+using EventManager.Domain.Entities.Events;
 
 namespace EventManager.Tests.Integration.CRUD.Events
 {
@@ -13,7 +13,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
         [Fact]
         public async Task Test_AddNewAsync()
         {
-            await ResetDatabaseAsync();
+            await SeedResetDbAndSeedAsync();
             var provider = await GetServiceProviderAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();
@@ -46,7 +46,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
         [Fact]
         public async Task Test_DeleteAsync()
         {
-            await ResetDatabaseAsync();
+            await SeedResetDbAndSeedAsync();
             var provider = await GetServiceProviderAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();
@@ -58,15 +58,16 @@ namespace EventManager.Tests.Integration.CRUD.Events
 
             await eventsRepository.DeleteAsync(id, cts.Token);
 
-            var @event = await eventsRepository.GetByIdAsync(id, cts.Token);
-
-            Assert.Null(@event);
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            {
+                await eventsRepository.GetByIdAsync(id, cts.Token);
+            });
         }
 
         [Fact]
         public async Task Test_CompleteUpdateAsync()
         {
-            await ResetDatabaseAsync();
+            await SeedResetDbAndSeedAsync();
             var provider = await GetServiceProviderAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();
@@ -94,7 +95,7 @@ namespace EventManager.Tests.Integration.CRUD.Events
             Pagination pagination, 
             int expected)
         {
-            await ResetDatabaseAsync();
+            await SeedResetDbAndSeedAsync();
             var provider = await GetServiceProviderAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();

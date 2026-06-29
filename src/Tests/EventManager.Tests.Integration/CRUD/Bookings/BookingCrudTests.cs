@@ -1,8 +1,13 @@
-﻿using EventManager.Application.Repositories;
-using EventManager.Domain.Bookings;
-using EventManager.Domain.Bookings.Enums;
+﻿using EventManager.Application.DataAccess.Repositories;
+using EventManager.Domain.Entities.Bookings;
+using EventManager.Domain.Entities.Bookings.Enums;
+using EventManager.Domain.Entities.Events;
+using EventManager.Domain.Failures.Exceptions.WebApi.Client.BadRequest;
+using EventManager.Domain.ValueObjects.Events;
+using EventManager.Domain.ValueObjects.Events.DateAndTime;
 using EventManager.DTOs.Bookings;
 using EventManager.DTOs.Events;
+using EventManager.Infrastructure.PostgreSQL.DbContexts;
 using EventManager.Shared.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
@@ -14,7 +19,8 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
         [Fact]
         public async Task Test_CreateNewBookingAsync()
         {
-            await ResetDatabaseAsync();
+            await SeedResetDbAndSeedAsync();
+
             var provider = await GetServiceProviderAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();
@@ -32,7 +38,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
                cts.Token
             );
 
-            var accepted = await bookingsRepository.CreateNewBookingAsync(eventId, cts.Token);
+            var accepted = await bookingsRepository.CreateNewBookingAsync(eventId, userId, cts.Token);
 
             Assert.NotNull(accepted);
         }
@@ -40,7 +46,8 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
         [Fact]
         public async Task Test_GetByIdAsync()
         {
-            await ResetDatabaseAsync();
+            await SeedResetDbAndSeedAsync();
+
             var provider = await GetServiceProviderAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();
@@ -58,7 +65,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
                cts.Token
             );
 
-            var acceptedId = await bookingsRepository.CreateNewBookingAsync(eventId, cts.Token);
+            var acceptedId = await bookingsRepository.CreateNewBookingAsync(eventId, userId, cts.Token);
 
             var bookingModel = await bookingsRepository.GetByIdAsync(acceptedId, cts.Token);
 
@@ -68,7 +75,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
         [Fact]
         public async Task Test_ProcessBookingAsync()
         {
-            await ResetDatabaseAsync();
+            await SeedResetDbAndSeedAsync();
 
             CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -79,7 +86,7 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
             var bookingsRepository = provider.GetRequiredService<IBookingsRepository>();
 
             Guid eventId = await eventsRepository.AddNewAsync(newEvent, cts.Token);
-            Guid bookingId = await bookingsRepository.CreateNewBookingAsync(eventId, cts.Token);
+            Guid bookingId = await bookingsRepository.CreateNewBookingAsync(eventId, userId, cts.Token);
 
             await Task.Delay(5000);
 
@@ -92,9 +99,9 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
 
         [Theory]
         [MemberData(nameof(FiltersByExpression))]
-        public async Task Test_GetAllAsync_ByExpression(Expression<Func<BookingModel, bool>> filters, int expected)
+        public async Task Test_GetAllAsync_ByExpression(Expression<Func<BookingEntity, bool>> filters, int expected)
         {
-            await ResetDatabaseAsync();
+            await SeedResetDbAndSeedAsync();
 
             await Seed();
 
@@ -103,9 +110,44 @@ namespace EventManager.Tests.Integration.CRUD.Bookings
             var provider = await GetServiceProviderAsync();
             var bookingsRepository = provider.GetRequiredService<IBookingsRepository>();
 
-            var bookings = await bookingsRepository.GetAllAsync(new Filters<BookingModel>(filters), cts.Token);
+            var bookings = await bookingsRepository.GetAllAsync(new Filters<BookingEntity>(filters), cts.Token);
 
             Assert.Equal(expected, bookings.Count());
+        }
+
+        [Fact]
+        public async Task Test_BookingOldEvent()
+        {
+            await SeedResetDbAndSeedAsync();
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            var provider = await GetServiceProviderAsync();
+
+            AppDbContext dbContext = provider.GetRequiredService<AppDbContext>();
+
+            var @event = new EventEntity()
+            {
+                EventDateTime = new EventDateTime(DateTime.UtcNow, DateTime.UtcNow),
+
+                Seats = new Seats(10),
+
+                EventNaming = new EventNaming("Birthday"),
+            };
+
+           await dbContext.Events.AddAsync(
+                    @event,
+                    cts.Token
+                );
+
+            await dbContext.SaveChangesAsync();
+
+            IBookingsRepository bookingsRepository = provider.GetRequiredService<IBookingsRepository>();
+
+            await Assert.ThrowsAsync<BadRequestException>(async () => 
+            {
+                await bookingsRepository.CreateNewBookingAsync(@event.Id, userId, cts.Token);
+            });
         }
     }
 }
