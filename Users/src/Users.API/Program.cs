@@ -1,3 +1,9 @@
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Users.Application;
+using Users.Application.Contracts.Auth;
+using Users.Application.Services.Auth;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -12,6 +18,8 @@ builder.Services.AddSwaggerGen(options =>
     }
 });
 
+builder.Services.AddAuthServises();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -21,7 +29,19 @@ if (app.Environment.IsDevelopment())
 }
 
 var apiGroup = app.MapGroup("auth/api");
-apiGroup.MapGet("/login", () => "Products list");
-apiGroup.MapGet("/register", () => "Products list");
+apiGroup.MapPost("/login", () => 
+{
+
+});
+
+apiGroup.MapPost("/register", async (
+    [FromBody] RegisterDto register, 
+    IAuthService authService,
+    CancellationToken cancellationToken) => 
+{
+    await authService.RegisterAsync(register, cancellationToken);
+
+    return Results.NoContent();
+});
 
 app.Run();
