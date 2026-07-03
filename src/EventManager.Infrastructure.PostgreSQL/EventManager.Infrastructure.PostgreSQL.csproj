@@ -22,9 +22,4 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <ProjectReference Include="..\EventManager.Application\EventManager.Application.csproj" />
-  </ItemGroup>
-
 </Project>

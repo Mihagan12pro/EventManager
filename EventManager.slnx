@@ -1,21 +1,14 @@
 <Solution>
+  <Folder Name="/Microservices/" />
+  <Folder Name="/Microservices/Users/">
+    <Project Path="Users/src/Users.API/Users.API.csproj" Id="066dfb9e-d3e1-4c1b-8d88-c4d75e81b709" />
+    <Project Path="Users/src/Users.Contracts/Users.Contracts.csproj" Id="a92fa8d7-4066-497d-b25a-bbf3252a6bf5" />
+    <Project Path="Users/src/Users.Domain/Users.Domain.csproj" Id="e5793c0c-7a14-4b12-9004-cd1fc60aa4f5" />
+  </Folder>
+  <Folder Name="/SharedLibs/" />
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />
     <File Path="docker-compose.yml" />
     <File Path="README.md" />
-  </Folder>
-  <Folder Name="/src/">
-    <Project Path="src/EventManager.API/EventManager.API.csproj" />
-    <Project Path="src/EventManager.Application/EventManager.Application.csproj" />
-    <Project Path="src/EventManager.Domain/EventManager.Domain.csproj" />
-    <Project Path="src/EventManager.DTOs/EventManager.DTOs.csproj" />
-    <Project Path="src/EventManager.Infrastructure.PostgreSQL/EventManager.Infrastructure.PostgreSQL.csproj" />
-    <Project Path="src/EventManager.Infrastructure.Security/EventManager.Infrastructure.Security.csproj" Id="b86de8be-7dc8-4473-a1c5-03043a877edc" />
-    <Project Path="src/EventManager.Shared/EventManager.Shared.csproj" />
-    <Project Path="src/EventManager/EventManager.csproj" />
-  </Folder>
-  <Folder Name="/Tests/">
-    <Project Path="src/Tests/EventManager.Tests.Integration/EventManager.Tests.Integration.csproj" />
-    <Project Path="src/Tests/EventsManager.Tests.End2End/EventsManager.Tests.End2End.csproj" />
   </Folder>
 </Solution>

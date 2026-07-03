@@ -4,16 +4,52 @@
 # Данные сохраняются в именованном томе eventapi_pgdata
 
 services:
-  postgres:
+  postgres-users:
     image: postgres:16-alpine
-    container_name: eventmanager-postgres
+    container_name: users
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: eventmanager
+      POSTGRES_DB: usersDb
     ports:
       - "5440:5432"
+    volumes:
+      - eventmanager_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d eventmanager"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  postgres-events:
+    image: postgres:16-alpine
+    container_name: users
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: eventsDb
+    ports:
+      - "5441:5432"
+    volumes:
+      - eventmanager_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d eventmanager"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  postgres-bookings:
+    image: postgres:16-alpine
+    container_name: users
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bookingsDb
+    ports:
+      - "5441:5432"
     volumes:
       - eventmanager_pgdata:/var/lib/postgresql/data
     healthcheck:
