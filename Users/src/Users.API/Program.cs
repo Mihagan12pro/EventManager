@@ -5,6 +5,7 @@ using Users.Application;
 using Users.Application.Contracts.Auth;
 using Users.Application.Services.Auth;
 using Users.Infrastructure.Postgre;
+using Users.Infrastructure.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddAuthServises();
+builder.Services.AddSecurity();
 builder.Services.AddRepositories();
 builder.Services.AddDbContext(new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")

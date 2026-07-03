@@ -5,6 +5,7 @@
     <Project Path="Users/src/Users.Application/Users.Application.csproj" Id="da375256-91c5-4891-8f79-ad28a44eb056" />
     <Project Path="Users/src/Users.Domain/Users.Domain.csproj" Id="e5793c0c-7a14-4b12-9004-cd1fc60aa4f5" />
     <Project Path="Users/src/Users.Infrastructure.Postgre/Users.Infrastructure.Postgre.csproj" Id="95c15a23-e3ba-4807-b7fd-02e9b57c9d3a" />
+    <Project Path="Users/src/Users.Infrastructure.Security/Users.Infrastructure.Security.csproj" Id="e5d28c33-6992-42f0-a4c2-312e94d3bbf2" />
   </Folder>
   <Folder Name="/SharedLibs/">
     <Project Path="SharedLibs/Shared.Failures/Shared.Failures.csproj" Id="a4c8d169-a1a0-43de-b7bd-603e772b5a1d" />
