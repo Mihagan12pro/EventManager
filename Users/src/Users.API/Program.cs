@@ -22,7 +22,9 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddAuthServises();
 builder.Services.AddRepositories();
-builder.Services.AddDbContext();
+builder.Services.AddDbContext(new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build());
 
 var app = builder.Build();
 
