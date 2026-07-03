@@ -11,7 +11,8 @@ namespace Users.Infrastructure.Postgre.Configirations
             builder.Property(u => u.Role)
                    .HasConversion<string>();
 
-            builder.HasIndex(u => u.Login);
+            builder.HasIndex(u => u.Login)
+                   .IsUnique();
         }
     }
 }

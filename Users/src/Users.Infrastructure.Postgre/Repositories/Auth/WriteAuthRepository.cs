@@ -1,5 +1,7 @@
 ﻿using Users.Application.Contracts.Auth;
 using Users.Application.Repositories.Auth;
+using Users.Domain;
+using Users.Domain.ValueObjects;
 
 namespace Users.Infrastructure.Postgre.Repositories.Auth
 {
@@ -11,7 +13,17 @@ namespace Users.Infrastructure.Postgre.Repositories.Auth
             RegisterDto register, 
             CancellationToken cancellationToken)
         {
-        
+            UserEntity user = new UserEntity()
+            {
+                HashedPassword = register.Password,
+
+                UserName = new UserName(register.Login),
+
+                Role = register.Role
+            };
+
+            await _dbContext.Users.AddAsync(user, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public WriteAuthRepository(UsersDbContext dbContext)
