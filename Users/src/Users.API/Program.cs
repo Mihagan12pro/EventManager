@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Users.Application;
 using Users.Application.Contracts.Auth;
 using Users.Application.Services.Auth;
+using Users.Infrastructure.Postgre;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +21,17 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddAuthServises();
+builder.Services.AddRepositories();
+builder.Services.AddDbContext();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
+
+    db.Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {
