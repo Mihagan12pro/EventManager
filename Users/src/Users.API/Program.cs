@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Shared.AspNet.Extensions;
 using Shared.Objects;
 using System.Text;
 using Users.Application;
@@ -77,7 +78,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+app.UseRouting();
+
 app.UseAuthentication();
+
+app.UseCustomDbExceptionsMiddleware();
+app.UseCustomWebApiExceptionsMiddleware();
 //app.UseAuthorization();
 
 var apiGroup = app.MapGroup("auth/api");
