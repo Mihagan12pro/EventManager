@@ -17,4 +17,7 @@
     <File Path="docker-compose.yml" />
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/Элементы решения/">
+    <File Path="global.json" />
+  </Folder>
 </Solution>

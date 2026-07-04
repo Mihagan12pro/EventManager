@@ -22,8 +22,11 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddAuthServises();
+
 builder.Services.AddSecurity();
+
 builder.Services.AddRepositories();
+
 builder.Services.AddDbContext(new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build());
@@ -42,6 +45,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 var apiGroup = app.MapGroup("auth/api");
 apiGroup.MapPost("/login", () => 
