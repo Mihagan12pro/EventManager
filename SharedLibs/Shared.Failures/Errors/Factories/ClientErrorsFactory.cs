@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shared.Failures.Errors.Factories
 {
-    internal static class ClientErrorsFactory
+    public static class ClientErrorsFactory
     {
         public static HttpErrorWorkbench ConflictWorkbench
             => new HttpErrorWorkbench(HttpStatusCode.Conflict);

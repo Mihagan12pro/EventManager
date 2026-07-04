@@ -2,7 +2,7 @@
 
 namespace Shared.Failures.Errors.Factories
 {
-    internal static class ServerErrorsFactory
+    public static class ServerErrorsFactory
     {
         public static HttpErrorWorkbench InternalServerErrorWorkbench
            => new HttpErrorWorkbench(HttpStatusCode.InternalServerError);
