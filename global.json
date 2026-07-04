@@ -3,10 +3,9 @@
     "SecretKey": "00000000-0000-0000-0000-000000000000",
     "ExpiredMinutes": "15",
     "Audiences": {
-
-
+      "Users":  "https://localhost:7183"
     },
-    "Issuer": "https://localhost:7066/auth/api"
+    "Issuer": "https://localhost:7066"
   },
   "AllowedHosts": "*"
 }

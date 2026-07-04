@@ -1,6 +1,9 @@
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Shared.Objects;
+using System.Text;
 using Users.Application;
 using Users.Application.Contracts.Auth;
 using Users.Application.Services.Auth;
@@ -9,6 +12,34 @@ using Users.Infrastructure.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    var authOptions = new AuthOptions();
+
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ClockSkew = TimeSpan.Zero,
+
+        ValidateLifetime = true,
+
+        ValidateIssuer = true,
+        ValidIssuer = authOptions.Issuer,
+
+        ValidateAudience = true,
+        ValidAudiences = authOptions.Audiences,
+
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(authOptions.IssuerSigningKey),
+
+        RoleClaimType = "role"
+    };
+});
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -47,7 +78,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthorization();
 
 var apiGroup = app.MapGroup("auth/api");
 apiGroup.MapPost("/login", () => 
