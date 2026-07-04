@@ -81,9 +81,14 @@ app.UseAuthentication();
 //app.UseAuthorization();
 
 var apiGroup = app.MapGroup("auth/api");
-apiGroup.MapPost("/login", () => 
+apiGroup.MapPost("/login", async (
+    [FromBody] LoginDto login,
+    IAuthService authService,
+    CancellationToken cancellationToken) => 
 {
+    string token = await authService.LoginAsync(login, cancellationToken);
 
+    return Results.Ok(token);
 });
 
 apiGroup.MapPost("/register", async (

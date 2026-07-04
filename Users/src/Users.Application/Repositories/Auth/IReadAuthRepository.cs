@@ -1,7 +1,12 @@
-﻿namespace Users.Application.Repositories.Auth
+﻿using Users.Application.Contracts.Auth;
+using Users.Domain;
+
+namespace Users.Application.Repositories.Auth
 {
     public interface IReadAuthRepository
     {
-        Task FindUserAsync();
+        Task<UserEntity> FindUserAsync(
+            LoginDto login, 
+            CancellationToken cancellationToken);
     }
 }

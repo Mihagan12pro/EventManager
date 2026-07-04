@@ -7,5 +7,9 @@ namespace Users.Application.Services.Auth
         Task RegisterAsync(
             RegisterDto register, 
             CancellationToken token);
+
+        Task<string> LoginAsync(
+            LoginDto login,  
+            CancellationToken token);
     }
 }
