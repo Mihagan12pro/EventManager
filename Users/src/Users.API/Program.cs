@@ -1,110 +1,79 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Shared.AspNet.Extensions;
-using Shared.Objects;
-using System.Text;
 using Users.Application;
 using Users.Application.Contracts.Auth;
 using Users.Application.Services.Auth;
 using Users.Infrastructure.Postgre;
 using Users.Infrastructure.Security;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddAuthentication(options =>
+public partial class Program
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    var authOptions = new AuthOptions();
-
-
-    options.TokenValidationParameters = new TokenValidationParameters
+    private static void Main(string[] args)
     {
-        ClockSkew = TimeSpan.Zero,
+        var builder = WebApplication.CreateBuilder(args);
 
-        ValidateLifetime = true,
+        builder.Services.AddJwtAuthentification();
 
-        ValidateIssuer = true,
-        ValidIssuer = authOptions.Issuer,
+        builder.Services.AddSwaggerGen(options =>
+        {
+            var binDirectory = new DirectoryInfo(AppContext.BaseDirectory);
+            var files = binDirectory.GetFiles("*.xml");
 
-        ValidateAudience = true,
-        ValidAudiences = authOptions.Audiences,
+            foreach (var file in files)
+            {
+                options.IncludeXmlComments(file.FullName);
+            }
+        });
 
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(authOptions.IssuerSigningKey),
+        builder.Services.AddAuthServises();
 
-        RoleClaimType = "role"
-    };
-});
+        builder.Services.AddSecurity();
 
-builder.Services.AddSwaggerGen(options =>
-{
-    var binDirectory = new DirectoryInfo(AppContext.BaseDirectory);
-    var files = binDirectory.GetFiles("*.xml");
+        builder.Services.AddRepositories();
 
-    foreach (var file in files)
-    {
-        options.IncludeXmlComments(file.FullName);
+        builder.Services.AddDbContext(new ConfigurationBuilder()
+                        .AddJsonFile("appsettings.json")
+                        .Build());
+
+        var app = builder.Build();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
+
+            db.Database.Migrate();
+        }
+
+        app.UseSwaggerForDebugging();
+
+        app.UseHttpsRedirection();
+        app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseCustomMiddleware();
+
+        var apiGroup = app.MapGroup("auth/api");
+        apiGroup.MapPost("/login", async (
+            [FromBody] LoginDto login,
+            IAuthService authService,
+            CancellationToken cancellationToken) =>
+        {
+            string token = await authService.LoginAsync(login, cancellationToken);
+
+            return Results.Ok(token);
+        });
+
+        apiGroup.MapPost("/register", async (
+            [FromBody] RegisterDto register,
+            IAuthService authService,
+            CancellationToken cancellationToken) =>
+        {
+            await authService.RegisterAsync(register, cancellationToken);
+
+            return Results.NoContent();
+        });
+
+        app.Run();
     }
-});
-
-builder.Services.AddAuthServises();
-
-builder.Services.AddSecurity();
-
-builder.Services.AddRepositories();
-
-builder.Services.AddDbContext(new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build());
-
-var app = builder.Build();
-
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
-
-    db.Database.Migrate();
 }
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-app.UseRouting();
-
-app.UseAuthentication();
-
-
-app.UseCustomMiddleware();
-
-var apiGroup = app.MapGroup("auth/api");
-apiGroup.MapPost("/login", async (
-    [FromBody] LoginDto login,
-    IAuthService authService,
-    CancellationToken cancellationToken) => 
-{
-    string token = await authService.LoginAsync(login, cancellationToken);
-
-    return Results.Ok(token);
-});
-
-apiGroup.MapPost("/register", async (
-    [FromBody] RegisterDto register, 
-    IAuthService authService,
-    CancellationToken cancellationToken) => 
-{
-    await authService.RegisterAsync(register, cancellationToken);
-
-    return Results.NoContent();
-});
-
-app.Run();
