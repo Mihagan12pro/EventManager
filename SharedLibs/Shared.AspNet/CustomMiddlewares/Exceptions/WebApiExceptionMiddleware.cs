@@ -59,8 +59,7 @@ namespace Shared.AspNet.CustomMiddlewares.Exceptions
             response.ContentType = "application/json";
             response.StatusCode = (int)error.StatusCode;
 
-            string json = JsonSerializer.Serialize(error.Errors);
-            await response.WriteAsync(json);
+            await response.WriteAsJsonAsync(error.Errors);
         }
 
         public WebApiExceptionMiddleware(

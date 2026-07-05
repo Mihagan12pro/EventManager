@@ -83,9 +83,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 
-app.UseCustomDbExceptionsMiddleware();
-app.UseCustomWebApiExceptionsMiddleware();
-//app.UseAuthorization();
+
+app.UseCustomMiddleware();
 
 var apiGroup = app.MapGroup("auth/api");
 apiGroup.MapPost("/login", async (

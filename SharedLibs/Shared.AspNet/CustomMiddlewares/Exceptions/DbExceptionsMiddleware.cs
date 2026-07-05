@@ -10,10 +10,6 @@ namespace Shared.AspNet.CustomMiddlewares.Exceptions
 {
     public class DbExceptionsMiddleware : CustomMiddleware
     {
-        public DbExceptionsMiddleware(RequestDelegate next) : base(next)
-        {
-        }
-
         public override async Task InvokeAsync(HttpContext context)
         {
             try
@@ -40,6 +36,10 @@ namespace Shared.AspNet.CustomMiddlewares.Exceptions
                         throw new ConflictException("Unique constrait violation!");
                 }
             }
+        }
+
+        public DbExceptionsMiddleware(RequestDelegate next) : base(next)
+        {
         }
     }
 }

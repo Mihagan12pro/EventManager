@@ -3,24 +3,33 @@ using Shared.AspNet.CustomMiddlewares.Exceptions;
 using Shared.Failures.Exceptions.WebApi;
 using System;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace Shared.AspNet.Extensions
 {
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder UseCustomWebApiExceptionsMiddleware(this IApplicationBuilder applicationBuilder)
+        public static IApplicationBuilder UseWebApiExceptionsMiddleware(this IApplicationBuilder app)
         {
-            applicationBuilder.UseMiddleware<WebApiExceptionMiddleware>();
+            app.UseMiddleware<WebApiExceptionMiddleware>();
 
-            return applicationBuilder;
+            return app;
         }
 
-        public static IApplicationBuilder UseCustomDbExceptionsMiddleware(this IApplicationBuilder applicationBuilder)
+        public static IApplicationBuilder UseDbExceptionsMiddleware(this IApplicationBuilder app)
         {
-            applicationBuilder.UseMiddleware<DbExceptionsMiddleware>();
+            app.UseMiddleware<DbExceptionsMiddleware>();
 
-            return applicationBuilder;
+            return app;
+        }
+
+        public static IApplicationBuilder UseCustomMiddleware(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<WebApiExceptionMiddleware>();
+            app.UseMiddleware<DbExceptionsMiddleware>();
+
+            return app;
         }
     }
 }
