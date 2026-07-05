@@ -1,6 +1,8 @@
-﻿namespace Users.Application.Contracts.Auth
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Users.Application.Contracts.Auth
 {
     public record LoginDto(
-        string Login, 
-        string Password);
+        [Required] string Login, 
+        [Required] string Password);
 }

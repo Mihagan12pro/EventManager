@@ -20,6 +20,7 @@ public partial class Program
         });
 
         builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddValidation();
 
         builder.Services.AddHandlers();
 

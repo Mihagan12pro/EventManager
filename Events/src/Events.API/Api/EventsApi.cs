@@ -12,7 +12,7 @@ namespace Events.API.Api
             var apiGroup = app.MapGroup("events/api");
 
             apiGroup.MapPost("", async (
-                NewEventDto @event, 
+                NewEventDto @event,
                 [FromServices] ICommandHandler<Guid, AddEventCommand> handler,
                 CancellationToken token) =>
             {

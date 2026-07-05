@@ -26,6 +26,7 @@ public partial class Program
         });
 
         builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddValidation();
 
         builder.Services.AddAuthServises();
         builder.Services.AddSecurity();

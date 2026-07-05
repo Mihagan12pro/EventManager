@@ -3,9 +3,9 @@
 namespace Events.Application.Contracts
 {
     public record NewEventDto(
-        string Title,
+        [Required, Length(3, 256)] string Title,
         [Required] DateTime? StartAt,
         [Required] DateTime? EndAt,
-        [Required] int? TotalSeats,
+        [Required, Range(1, int.MaxValue)] int? TotalSeats,
         string Description = "");
 }
