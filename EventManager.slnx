@@ -1,7 +1,8 @@
 <Solution>
   <Folder Name="/Microservices/" />
   <Folder Name="/Microservices/Events/">
-    <Project Path="Events/Events.API/Events.API.csproj" Id="54032df2-72d7-423b-944e-7d2f2463c810" />
+    <Project Path="Events/src/Events.API/Events.API.csproj" />
+    <Project Path="Events/src/Events.Application/Events.Application.csproj" Id="6338c94c-00e1-4b95-9d29-4aca6c330ffc" />
     <Project Path="Events/src/Events.Domain/Events.Domain.csproj" Id="c6343957-18b2-49fb-8219-e7bbb63d713b" />
   </Folder>
   <Folder Name="/Microservices/Users/">

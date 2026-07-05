@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Text;
 
-namespace Shared.Objects
+namespace Shared.Objects.Classes
 {
     public class AuthOptions
     {

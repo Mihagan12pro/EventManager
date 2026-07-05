@@ -51,6 +51,8 @@ public partial class Program
         app.UseRouting();
 
         app.UseAuthentication();
+        app.UseAuthorization();
+
         app.UseCustomMiddleware();
 
         var apiGroup = app.MapGroup("auth/api");

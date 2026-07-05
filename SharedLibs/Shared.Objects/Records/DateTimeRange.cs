@@ -1,4 +1,4 @@
-﻿namespace Shared.Objects
+﻿namespace Shared.Objects.Records
 {
     public record DateTimeRange(
         DateTime? LowerBound,

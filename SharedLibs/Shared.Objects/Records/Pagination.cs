@@ -2,7 +2,7 @@
 using Shared.Failures.Exceptions.WebApi.ClientErrors;
 using Error = Shared.Failures.Errors.Error;
 
-namespace Shared.Objects
+namespace Shared.Objects.Records
 {
     public record Pagination
     {

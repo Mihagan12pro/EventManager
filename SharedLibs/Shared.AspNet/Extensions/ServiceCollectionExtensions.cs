@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Shared.Objects;
+using Shared.Objects.Classes;
 
 namespace Shared.AspNet.Extensions
 {
