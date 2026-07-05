@@ -27,12 +27,11 @@ public partial class Program
             }
         });
 
+        builder.Services.AddEndpointsApiExplorer();
+
         builder.Services.AddAuthServises();
-
         builder.Services.AddSecurity();
-
         builder.Services.AddRepositories();
-
         builder.Services.AddDbContext(new ConfigurationBuilder()
                         .AddJsonFile("appsettings.json")
                         .Build());
