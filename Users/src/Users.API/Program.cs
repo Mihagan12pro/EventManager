@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared.AspNet.Extensions;
 using Users.API.Api;
 using Users.Application;
-using Users.Application.Contracts.Auth;
-using Users.Application.Services.Auth;
 using Users.Infrastructure.Postgre;
 using Users.Infrastructure.Security;
 
@@ -15,6 +12,7 @@ public partial class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddJwtAuthentification();
+        builder.Services.AddAuthorization();
 
         builder.Services.AddSwaggerGen(options =>
         {
@@ -49,6 +47,7 @@ public partial class Program
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseAuthentication();
+        app.UseAuthorization();
         app.UseCustomMiddleware();
 
         app.AddAuthEndPoints();

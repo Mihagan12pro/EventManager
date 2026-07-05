@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shared.AspNet.CustomMiddlewares.Exceptions;
 
@@ -20,6 +22,11 @@ namespace Shared.AspNet.Extensions
             return app;
         }
 
+        /// <summary>
+        /// Registers WebApiExceptionMiddleware and DbExceptionsMiddleware
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
         public static IApplicationBuilder UseCustomMiddleware(this IApplicationBuilder app)
         {
             app.UseMiddleware<WebApiExceptionMiddleware>();
