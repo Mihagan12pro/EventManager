@@ -8,7 +8,13 @@ namespace Users.Application.Services.Auth
             RegisterDto register, 
             CancellationToken token);
 
-        Task<string> LoginAsync(
+        /// <summary>
+        /// Logins users
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="token"></param>
+        /// <returns>Token and user id</returns>
+        Task<(string, Guid)> LoginAsync(
             LoginDto login,  
             CancellationToken token);
     }
