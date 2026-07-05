@@ -1,4 +1,4 @@
 ﻿namespace Users.API.Contracts
 {
-    public class JwtTokenContract(Guid Id, string Token);
+    public class JwtTokenContract(string Id, string Token);
 }

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shared.Infrastracture.Kafka.Producers;
+using Users.API.Contracts;
 using Users.Application.Dtos.Auth;
 using Users.Application.Services.Auth;
 
@@ -12,11 +14,16 @@ namespace Users.API.Api
             apiGroup.MapPost("/login", async (
                 [FromBody] LoginDto login,
                 IAuthService authService,
+                IKafkaProducer<JwtTokenContract> producer,
                 CancellationToken cancellationToken) =>
             {
-                string token = await authService.LoginAsync(login, cancellationToken);
+                var tokenUserId = await authService.LoginAsync(login, cancellationToken);
 
-                return Results.Ok(token);
+                JwtTokenContract contract = new JwtTokenContract(tokenUserId.Item2.ToString(), tokenUserId.Item1);
+
+                await producer.ProduceAsync(contract, cancellationToken);
+
+                return Results.Ok(tokenUserId.Item1);
             });
 
             apiGroup.MapPost("/register", async (
