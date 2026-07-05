@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared.AspNet.Extensions;
+using Users.API.Api;
 using Users.Application;
 using Users.Application.Contracts.Auth;
 using Users.Application.Services.Auth;
@@ -46,35 +47,12 @@ public partial class Program
         }
 
         app.UseSwaggerForDebugging();
-
         app.UseHttpsRedirection();
         app.UseRouting();
-
         app.UseAuthentication();
-        app.UseAuthorization();
-
         app.UseCustomMiddleware();
 
-        var apiGroup = app.MapGroup("auth/api");
-        apiGroup.MapPost("/login", async (
-            [FromBody] LoginDto login,
-            IAuthService authService,
-            CancellationToken cancellationToken) =>
-        {
-            string token = await authService.LoginAsync(login, cancellationToken);
-
-            return Results.Ok(token);
-        });
-
-        apiGroup.MapPost("/register", async (
-            [FromBody] RegisterDto register,
-            IAuthService authService,
-            CancellationToken cancellationToken) =>
-        {
-            await authService.RegisterAsync(register, cancellationToken);
-
-            return Results.NoContent();
-        });
+        app.AddAuthEndPoints();
 
         app.Run();
     }
