@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\SharedLibs\Shared.AspNet\Shared.AspNet.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastracture.Kafka\Shared.Infrastracture.Kafka.csproj" />
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Objects\Shared.Objects.csproj" />
     <ProjectReference Include="..\Users.Application\Users.Application.csproj" />
     <ProjectReference Include="..\Users.Infrastructure.Postgre\Users.Infrastructure.Postgre.csproj" />

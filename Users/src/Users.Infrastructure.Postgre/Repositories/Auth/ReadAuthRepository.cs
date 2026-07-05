@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Users.Application.Contracts.Auth;
+using Users.Application.Dtos.Auth;
 using Users.Application.Repositories.Auth;
 using Users.Domain;
 

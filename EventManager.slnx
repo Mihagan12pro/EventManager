@@ -20,6 +20,9 @@
     <Project Path="SharedLibs/Shared.Objects/Shared.Objects.csproj" Id="c4740abb-0d9d-44a2-8880-4f42ff2ea17a" />
     <Project Path="SharedLibs/Shared.Validation/Shared.Validation.csproj" Id="0886a2ca-74be-41ad-bb80-b7f2121b187c" />
   </Folder>
+  <Folder Name="/SharedLibs/Kafka/">
+    <Project Path="SharedLibs/Shared.Infrastracture.Kafka/Shared.Infrastracture.Kafka.csproj" Id="c9eddf9f-e03b-42f5-a6d2-399f460c5bef" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />
     <File Path="docker-compose.yml" />

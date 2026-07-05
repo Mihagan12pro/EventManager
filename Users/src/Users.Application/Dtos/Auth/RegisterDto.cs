@@ -1,7 +1,7 @@
 ﻿using Shared.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace Users.Application.Contracts.Auth
+namespace Users.Application.Dtos.Auth
 {
     public record RegisterDto(
         [Required, Length(3, 256)] string Login, 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Users.Application.Contracts.Auth;
+using Users.Application.Dtos.Auth;
 using Users.Application.Services.Auth;
 
 namespace Users.API.Api

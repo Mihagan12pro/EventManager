@@ -1,6 +1,6 @@
 ﻿using Shared.Enums;
 
-namespace Users.Application.Contracts.Auth
+namespace Users.Application.Dtos.Auth
 {
     public record CreateTokenDto(
         string Login, 

@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Shared.AspNet.Extensions;
+using Shared.Infrastracture.Kafka;
 using Users.API.Api;
+using Users.API.Contracts;
+using Users.API.Extensions;
 using Users.Application;
 using Users.Infrastructure.Postgre;
 using Users.Infrastructure.Security;
@@ -27,6 +30,8 @@ public partial class Program
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddValidation();
+
+        builder.Services.AddKafkaProducers();
 
         builder.Services.AddAuthServises();
         builder.Services.AddSecurity();

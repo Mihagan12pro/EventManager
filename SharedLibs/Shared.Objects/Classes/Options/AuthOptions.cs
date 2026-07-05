@@ -1,10 +1,9 @@
-﻿
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System.Text;
 
-namespace Shared.Objects.Classes
+namespace Shared.Objects.Classes.Options
 {
-    public class AuthOptions
+    public class AuthOptions : GlobalOptions
     {
         private readonly IConfigurationSection _jwtOptions;
 
@@ -23,10 +22,7 @@ namespace Shared.Objects.Classes
 
         public AuthOptions()
         {
-            _jwtOptions = new ConfigurationBuilder()
-                                .AddJsonFile(new DirectoryInfo(@"..\..\..\global.json").FullName)
-                                .Build()
-                                .GetRequiredSection("JwtOptions");
+            _jwtOptions = globalConfiguration.GetRequiredSection("JwtOptions");
 
             Issuer = _jwtOptions.GetRequiredSection("Issuer").Value;
             SecretKey = _jwtOptions.GetRequiredSection("SecretKey").Value;

@@ -1,4 +1,4 @@
-﻿using Events.Application.Contracts;
+﻿using Events.Application.Dtos;
 using System.Validation;
 
 namespace Events.API.Validators

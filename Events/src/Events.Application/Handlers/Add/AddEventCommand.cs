@@ -1,4 +1,4 @@
-﻿using Events.Application.Contracts;
+﻿using Events.Application.Dtos;
 using Shared.Objects.Interfaces;
 
 namespace Events.Application.Handlers.Add

@@ -1,4 +1,4 @@
-﻿using Users.Application.Contracts.Auth;
+﻿using Users.Application.Dtos.Auth;
 
 namespace Users.Application.Services.Auth
 {

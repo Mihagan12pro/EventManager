@@ -1,4 +1,4 @@
-﻿using Events.Application.Contracts;
+﻿using Events.Application.Dtos;
 using Events.Application.Handlers.Add;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Objects.Interfaces;

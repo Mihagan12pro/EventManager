@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Headers;
-using Users.Application.Contracts.Auth;
+﻿using Users.Application.Dtos.Auth;
 using Users.Application.Repositories.Auth;
 using Users.Application.Security;
 using Users.Application.Security.Jwt;

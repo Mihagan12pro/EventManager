@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Events.Application.Contracts
+namespace Events.Application.Dtos
 {
     public record NewEventDto(
         [Required, Length(3, 256)] string Title,
