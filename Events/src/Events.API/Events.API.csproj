@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\SharedLibs\Shared.AspNet\Shared.AspNet.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastructure.Security\Shared.Infrastructure.Security.csproj" />
     <ProjectReference Include="..\Events.Application\Events.Application.csproj" />
   </ItemGroup>
 

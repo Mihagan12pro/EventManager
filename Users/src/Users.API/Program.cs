@@ -11,7 +11,7 @@ public partial class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddJwtAuthentification();
+        builder.Services.AddJwtAuthentication();
         builder.Services.AddAuthorization();
 
         builder.Services.AddSwaggerGen(options =>

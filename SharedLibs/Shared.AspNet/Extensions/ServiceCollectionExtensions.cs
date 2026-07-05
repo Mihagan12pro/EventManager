@@ -8,7 +8,7 @@ namespace Shared.AspNet.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddJwtAuthentification(this IServiceCollection services)
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication(options =>
             {

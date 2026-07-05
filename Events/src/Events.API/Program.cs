@@ -1,6 +1,7 @@
 using Events.API.Api;
 using Events.Application;
 using Shared.AspNet.Extensions;
+using Shared.Infrastructure.Security;
 
 public partial class Program
 {
@@ -23,8 +24,9 @@ public partial class Program
         builder.Services.AddValidation();
 
         builder.Services.AddHandlers();
+        builder.Services.AddSharedSecurity();
 
-        builder.Services.AddJwtAuthentification();
+        builder.Services.AddJwtAuthentication();
         builder.Services.AddAuthorization();
 
         var app = builder.Build();
