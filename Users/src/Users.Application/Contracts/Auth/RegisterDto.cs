@@ -1,4 +1,4 @@
-﻿using Users.Domain.Enums;
+﻿using Shared.Enums;
 
 namespace Users.Application.Contracts.Auth
 {

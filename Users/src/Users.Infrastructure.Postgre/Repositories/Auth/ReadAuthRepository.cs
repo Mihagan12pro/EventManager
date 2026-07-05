@@ -9,7 +9,7 @@ namespace Users.Infrastructure.Postgre.Repositories.Auth
     {
         private readonly UsersDbContext _dbContext;
 
-        public async Task<UserEntity> FindUserAsync(
+        public async Task<User> FindUserAsync(
             LoginDto login, 
             CancellationToken cancellationToken)
                 => await _dbContext.Users.FirstAsync(u => u.Login == login.Login && u.HashedPassword == login.Password);

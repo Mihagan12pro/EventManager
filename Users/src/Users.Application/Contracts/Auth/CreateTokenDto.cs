@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Users.Domain.Enums;
+﻿using Shared.Enums;
 
 namespace Users.Application.Contracts.Auth
 {

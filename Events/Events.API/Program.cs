@@ -1,8 +1,10 @@
-using static System.Runtime.InteropServices.JavaScript.JSType;
+public partial class Program
+{
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+        var app = builder.Build();
 
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
-
-app.MapGet("/", () => "Hello World!");
-
-app.Run();
+        app.Run();
+    }
+}

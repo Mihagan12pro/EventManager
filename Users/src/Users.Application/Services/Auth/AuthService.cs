@@ -37,7 +37,7 @@ namespace Users.Application.Services.Auth
                 Password = _passwordHasher.Hash(login.Password)
             };
 
-            UserEntity user = await _readAuthRepository.FindUserAsync(login, cancellationToken);
+            User user = await _readAuthRepository.FindUserAsync(login, cancellationToken);
 
             string token = _jwtWizard.Create(new CreateTokenDto(login.Login, user.Id, user.Role));
 

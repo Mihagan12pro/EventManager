@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Enums\Shared.Enums.csproj" />
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Failures\Shared.Failures.csproj" />
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Validation\Shared.Validation.csproj" />
   </ItemGroup>

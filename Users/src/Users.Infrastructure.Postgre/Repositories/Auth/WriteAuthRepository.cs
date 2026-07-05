@@ -13,7 +13,7 @@ namespace Users.Infrastructure.Postgre.Repositories.Auth
             RegisterDto register, 
             CancellationToken cancellationToken)
         {
-            UserEntity user = new UserEntity()
+            User user = new User()
             {
                 HashedPassword = register.Password,
 

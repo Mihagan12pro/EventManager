@@ -1,15 +1,15 @@
 ﻿using Shared.Failures.Errors;
+using Shared.Enums;
 using Shared.Failures.Exceptions.WebApi.ClientErrors;
 using Shared.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using Users.Domain.Enums;
 using Users.Domain.ValueObjects;
 
 namespace Users.Domain
 {
-    public class UserEntity : IValidatableEntity
+    public class User : IValidatableEntity
     {
         public Guid Id { get; private set; }
 

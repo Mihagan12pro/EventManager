@@ -13,6 +13,7 @@
   </Folder>
   <Folder Name="/SharedLibs/">
     <Project Path="SharedLibs/Shared.AspNet/Shared.AspNet.csproj" Id="4a5c9dc4-689e-49c7-8448-b4590d376c73" />
+    <Project Path="SharedLibs/Shared.Enums/Shared.Enums.csproj" Id="52f41aec-4f18-42c1-a848-4bd8fc0f47a5" />
     <Project Path="SharedLibs/Shared.Failures/Shared.Failures.csproj" Id="a4c8d169-a1a0-43de-b7bd-603e772b5a1d" />
     <Project Path="SharedLibs/Shared.Objects/Shared.Objects.csproj" Id="c4740abb-0d9d-44a2-8880-4f42ff2ea17a" />
     <Project Path="SharedLibs/Shared.Validation/Shared.Validation.csproj" Id="0886a2ca-74be-41ad-bb80-b7f2121b187c" />

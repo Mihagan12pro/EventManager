@@ -4,9 +4,9 @@ using Users.Domain;
 
 namespace Users.Infrastructure.Postgre.Configirations
 {
-    internal class UsersConfigiration : IEntityTypeConfiguration<UserEntity>
+    internal class UsersConfigiration : IEntityTypeConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<UserEntity> builder)
+        public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.Property(u => u.Role)
                    .HasConversion<string>();
