@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Options;
+using Shared.Infrastracture.Kafka.SerializeDeserialize;
 
 namespace Shared.Infrastracture.Kafka.Producers
 {

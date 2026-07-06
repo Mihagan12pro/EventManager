@@ -27,7 +27,7 @@ namespace Users.Application.Services.Auth
             await _writeAuthRepository.RegisterAsync(register, cancellationToken);
         }
 
-        public async Task<(string, Guid)> LoginAsync(
+        public async Task<string> LoginAsync(
             LoginDto login, 
             CancellationToken cancellationToken)
         {
@@ -40,7 +40,7 @@ namespace Users.Application.Services.Auth
 
             string token = _jwtWizard.Create(new CreateTokenDto(login.Login, user.Id, user.Role));
 
-            return (token, user.Id);
+            return token;
         }
 
         public AuthService(

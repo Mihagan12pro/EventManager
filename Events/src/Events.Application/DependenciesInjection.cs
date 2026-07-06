@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Shared.Infrastracture.Kafka;
+using Shared.Objects.Classes.Options;
 using Shared.Objects.Interfaces;
 
 namespace Events.Application
@@ -19,6 +21,15 @@ namespace Events.Application
                 )
                 .AsSelfWithInterfaces()
             .WithScopedLifetime());
+
+            return services;
+        }
+
+        public static IServiceCollection AddKafkaInfrastracture(this IServiceCollection services)
+        {
+            KafkaOptions kafkaOptions = new KafkaOptions();
+
+            //services.AddProducer<JwtTokenContract>(kafkaOptions.FirstProducer("Jwt"));
 
             return services;
         }

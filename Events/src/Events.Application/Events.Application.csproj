@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastracture.Kafka\Shared.Infrastracture.Kafka.csproj" />
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Objects\Shared.Objects.csproj" />
   </ItemGroup>
 

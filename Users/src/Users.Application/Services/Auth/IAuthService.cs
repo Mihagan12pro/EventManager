@@ -13,8 +13,8 @@ namespace Users.Application.Services.Auth
         /// </summary>
         /// <param name="login"></param>
         /// <param name="token"></param>
-        /// <returns>Token and user id</returns>
-        Task<(string, Guid)> LoginAsync(
+        /// <returns></returns>
+        Task<string> LoginAsync(
             LoginDto login,  
             CancellationToken token);
     }

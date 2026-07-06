@@ -19,7 +19,7 @@ namespace Events.API.Api
                 Guid id = await handler.HandleAsync(new AddEventCommand(@event), token);
 
                 return Results.Ok(id);
-            });
+            }).RequireAuthorization();
            
 
             return app;

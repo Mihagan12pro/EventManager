@@ -1,5 +1,6 @@
 using Events.API.Api;
 using Events.Application;
+using Microsoft.OpenApi;
 using Shared.AspNet.Extensions;
 using Shared.Infrastructure.Security;
 
@@ -18,12 +19,27 @@ public partial class Program
             {
                 options.IncludeXmlComments(file.FullName);
             }
+
+            options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                Description = "JWT Authorization header using the Bearer scheme."
+            });
+
+            options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+            {
+                [new OpenApiSecuritySchemeReference("bearer", document)] = []
+            });
         });
+
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddValidation();
 
         builder.Services.AddHandlers();
+        builder.Services.AddKafkaInfrastracture();
         builder.Services.AddSharedSecurity();
 
         builder.Services.AddJwtAuthentication();

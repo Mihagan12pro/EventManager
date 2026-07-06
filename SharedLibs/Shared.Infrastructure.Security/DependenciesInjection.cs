@@ -12,7 +12,7 @@ namespace Shared.Infrastructure.Security
         /// <returns></returns>
         public static IServiceCollection AddSharedSecurity(this IServiceCollection services)
         {
-            services.AddScoped<IJwtClaimsExtractor, JwtClaimsExtractor>();
+            //services.AddScoped<IJwtClaimsExtractor, JwtClaimsExtractor>();
 
             return services;
         }
