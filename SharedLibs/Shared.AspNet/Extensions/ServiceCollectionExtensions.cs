@@ -20,6 +20,7 @@ namespace Shared.AspNet.Extensions
             {
                 var authOptions = new AuthOptions();
 
+                options.MapInboundClaims = false;
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
