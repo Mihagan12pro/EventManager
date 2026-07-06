@@ -24,7 +24,7 @@ namespace Shared.Infrastracture.Kafka.Producers
             }, cancellationToken);
         }
 
-        public KafkaProducer(IOptions<KafkaSettings> kafkaSettings)
+        public KafkaProducer(IOptions<KafkaProducerSettings> kafkaSettings)
         {
             var config = new ProducerConfig
             {

@@ -9,7 +9,7 @@ namespace Shared.Infrastracture.Kafka
         public static void AddProducer<TMessage>(this IServiceCollection services,
             IConfigurationSection configurationSection)
         {
-            services.Configure<KafkaSettings>(configurationSection);
+            services.Configure<KafkaProducerSettings>(configurationSection);
             services.AddSingleton<IKafkaProducer<TMessage>, KafkaProducer<TMessage>>();
         }
     }

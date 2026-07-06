@@ -10,7 +10,7 @@ namespace Users.API.Extensions
         {
             KafkaOptions kafkaOptions = new KafkaOptions();
 
-            services.AddProducer<JwtTokenContract>(kafkaOptions.First("Jwt"));
+            services.AddProducer<JwtTokenContract>(kafkaOptions.FirstProducer("Jwt"));
 
             return services;
         }

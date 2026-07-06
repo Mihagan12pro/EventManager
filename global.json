@@ -10,10 +10,20 @@
   "AllowedHosts": "*",
 
   "Kafka": {
-     "Jwt": {
-      "BootstrapServers": "localhost:9092",
-      "Topic": "jwt-token",
-      "Acks": "All"
-     }
+    "Producers": {
+      "Jwt": {
+        "BootstrapServers": "localhost:9092",
+        "Topic": "jwt-token",
+        "Acks": "All"
+      }
+    },
+
+    "Consumers": {
+      "Jwt": {
+        "BootstrapServers": "localhost:9092",
+        "Topic": "jwt-token",
+        "GroupId": "jwt-consumers"
+      }
+    }
   }
 }

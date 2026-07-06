@@ -1,6 +1,6 @@
-﻿namespace Shared.Infrastracture.Kafka
+﻿namespace Shared.Infrastracture.Kafka.Producers
 {
-    public class KafkaSettings
+    public class KafkaProducerSettings
     {
         public string Topic { get; set;  }
 
