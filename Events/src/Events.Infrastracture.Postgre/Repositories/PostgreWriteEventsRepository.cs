@@ -44,13 +44,23 @@ namespace Events.Infrastracture.Postgre.Repositories
 
             if (@event != null)
             {
-                @event.EventNaming = @event.EventNaming.Update(
+                EventNaming naming = new EventNaming(
+                    @event.Title,
+                    @event.Description);
+
+                EventDateTime dateTime = new EventDateTime(
+                    @event.StartAt, 
+                    @event.EndAt);
+
+                @event.EventNaming = naming.Update(
                     updateEvent.Title, 
                     updateEvent.Description);
 
-                @event.EventDateTime = @event.EventDateTime.Update(
+                @event.EventDateTime = dateTime.Update(
                     updateEvent.From, 
                     updateEvent.To);
+
+                @event.Validate();
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
             }

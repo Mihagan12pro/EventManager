@@ -96,6 +96,15 @@ namespace Events.Domain
         {
             ErrorsCollection errors = new ErrorsCollection();
 
+            if (Seats == null)
+                Seats = new Seats(TotalSeats, AvailableSeats);
+
+            if (EventNaming == null)
+                EventNaming = new EventNaming(Title, Description);
+
+            if (EventDateTime == null)
+                EventDateTime = new EventDateTime(StartAt, EndAt);
+
             errors.AddRange(
                 Seats.Validate(),
 

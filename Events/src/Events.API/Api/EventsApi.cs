@@ -1,6 +1,7 @@
 ﻿using Events.Application.Dtos;
 using Events.Application.Handlers.Add;
 using Events.Application.Handlers.Cancel;
+using Events.Application.Handlers.CompleteUpdate;
 using Events.Application.Handlers.GetByIdEvent;
 using Events.Application.Handlers.GetEventsCommand;
 using Microsoft.AspNetCore.Authorization;
@@ -66,6 +67,21 @@ namespace Events.API.Api
                 CancellationToken token) => 
             {
                 await handler.HandleAsync(new CancelEventCommand(id), token);
+
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });
+
+            apiGroup.MapPut("{id}", async (
+                [FromServices] ICommandHandler <CompleteEventUpdateCommand> handler,
+                [FromRoute] Guid id,
+                [FromBody] UpdateEventDto updateEvent,
+                CancellationToken token) => 
+            {
+                CompleteEventUpdateCommand command = new CompleteEventUpdateCommand(
+                    id,
+                    updateEvent
+                );
+
+                await handler.HandleAsync(command, token);
 
             }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" }); ;
 

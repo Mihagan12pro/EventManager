@@ -27,12 +27,6 @@ namespace Events.Application.Dtos
             this.To = To;
 
             this.From = From;
-
-            if (this.To != null && this.From != null)
-            {
-                if (this.To <= this.From)
-                    throw new BadRequestException("'To' must be laster than 'From'!");
-            }
         }
     }
 }
