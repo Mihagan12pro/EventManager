@@ -12,6 +12,7 @@
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastracture.Kafka\Shared.Infrastracture.Kafka.csproj" />
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastructure.Security\Shared.Infrastructure.Security.csproj" />
     <ProjectReference Include="..\Events.Application\Events.Application.csproj" />
+    <ProjectReference Include="..\Events.Infrastracture.Postgre\Events.Infrastracture.Postgre.csproj" />
   </ItemGroup>
 
 </Project>

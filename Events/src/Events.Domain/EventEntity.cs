@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Events.Domain
 {
-    public class EventEntity
+    public class Event
     {
         public Guid Id { get; private set; }
 

@@ -1,5 +1,7 @@
 using Events.API.Api;
 using Events.Application;
+using Events.Infrastracture.Postgre;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Shared.AspNet.Extensions;
 using Shared.Infrastructure.Security;
@@ -41,6 +43,10 @@ public partial class Program
         builder.Services.AddHandlers();
         builder.Services.AddKafkaInfrastracture();
         builder.Services.AddSharedSecurity();
+        builder.Services.AddRepositories();
+        builder.Services.AddDbContext(new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json")
+                    .Build());
 
         builder.Services.AddJwtAuthentication();
         builder.Services.AddAuthorization();
@@ -52,6 +58,13 @@ public partial class Program
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<EventsDbContext>();
+
+            db.Database.Migrate();
+        }
 
         app.UseCustomMiddleware();
 
