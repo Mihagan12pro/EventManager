@@ -1,5 +1,4 @@
-﻿using Shared.Failures.Exceptions.WebApi.ClientErrors;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Events.Application.Dtos
 {

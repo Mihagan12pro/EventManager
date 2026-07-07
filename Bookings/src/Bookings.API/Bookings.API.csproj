@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.AspNet\Shared.AspNet.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Enums\Shared.Enums.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Failures\Shared.Failures.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastracture.Kafka\Shared.Infrastracture.Kafka.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastructure.Security\Shared.Infrastructure.Security.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Objects\Shared.Objects.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,5 +1,8 @@
 <Solution>
   <Folder Name="/Microservices/" />
+  <Folder Name="/Microservices/Bookings/">
+    <Project Path="Bookings/src/Bookings.API/Bookings.API.csproj" Id="c5378df5-6dc7-4d42-9683-4daed70c8714" />
+  </Folder>
   <Folder Name="/Microservices/Events/">
     <Project Path="Events/src/Events.API/Events.API.csproj" />
     <Project Path="Events/src/Events.Application/Events.Application.csproj" Id="6338c94c-00e1-4b95-9d29-4aca6c330ffc" />
