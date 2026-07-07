@@ -61,6 +61,23 @@ namespace Events.Domain.ValueObjects
             return errors;
         }
 
+        public EventDateTime Update(
+            DateTime? updatedStartAt, 
+            DateTime? updatedEndAt)
+        {
+            DateTime startAt = StartAt;
+
+            DateTime endAt = EndAt;
+
+            if (updatedEndAt != null)
+                endAt = updatedEndAt.Value;
+
+            if (updatedStartAt != null)
+                startAt = updatedStartAt.Value;
+
+            return new EventDateTime(startAt, endAt);
+        }
+
         public EventDateTime(DateTime start, DateTime end)
         {
             StartAt = start;

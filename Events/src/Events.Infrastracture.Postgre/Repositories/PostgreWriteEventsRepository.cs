@@ -47,6 +47,12 @@ namespace Events.Infrastracture.Postgre.Repositories
                 @event.EventNaming = @event.EventNaming.Update(
                     updateEvent.Title, 
                     updateEvent.Description);
+
+                @event.EventDateTime = @event.EventDateTime.Update(
+                    updateEvent.From, 
+                    updateEvent.To);
+
+                await _dbContext.SaveChangesAsync(cancellationToken);
             }
         }
 
