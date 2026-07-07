@@ -1,5 +1,6 @@
 ﻿using Events.Application.Dtos;
 using Events.Application.Handlers.Add;
+using Events.Application.Handlers.GetByIdEvent;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Enums;
@@ -12,7 +13,7 @@ namespace Events.API.Api
     {
         public static WebApplication AddEventsEndPoints(this WebApplication app)
         {
-            var apiGroup = app.MapGroup("events/api");
+            var apiGroup = app.MapGroup("api/events");
 
             apiGroup.MapPost("", async (
                 NewEventDto @event,
@@ -26,6 +27,17 @@ namespace Events.API.Api
                 return Results.Ok(id);
 
             }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" });
+
+            apiGroup.MapGet("{id}", async (
+                [FromRoute] Guid id,
+                [FromServices]ICommandHandler < GetEventDto, GetByIdEventCommand> handler,
+                CancellationToken token) => 
+            {
+                var @event = await handler.HandleAsync(new GetByIdEventCommand(id), token);
+
+                return @event;
+
+            }).RequireAuthorization();
 
 
            return app;

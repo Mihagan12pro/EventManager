@@ -5,11 +5,22 @@ namespace Events.Infrastracture.Postgre.Repositories
 {
     internal class PostgreWriteEventsRepository : IWriteEventsRepository
     {
-        public Task<Guid> AddAsync(
+        private readonly EventsDbContext _dbContext;
+
+        public async Task<Guid> AddAsync(
             Event @event,
             CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _dbContext.Events.AddAsync(@event, cancellationToken);
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            return @event.Id;
+        }
+
+        public PostgreWriteEventsRepository(EventsDbContext dbContext)
+        {
+            _dbContext = dbContext;
         }
     }
 }

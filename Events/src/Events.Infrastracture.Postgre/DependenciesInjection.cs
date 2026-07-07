@@ -10,6 +10,7 @@ namespace Events.Infrastracture.Postgre
     {
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
+            services.AddScoped<IReadEventsRepository, PostgreReadEventsRepository>();
             services.AddScoped<IWriteEventsRepository, PostgreWriteEventsRepository>();
 
             return services;

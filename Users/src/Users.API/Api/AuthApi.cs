@@ -8,7 +8,7 @@ namespace Users.API.Api
     {
         public static WebApplication AddAuthEndPoints(this WebApplication app)
         {
-            var apiGroup = app.MapGroup("auth/api");
+            var apiGroup = app.MapGroup("api/auth");
             apiGroup.MapPost("/login", async (
                 [FromBody] LoginDto login,
                 IAuthService authService,
