@@ -8,5 +8,14 @@ namespace Events.Application.Repositories
         Task<Guid> AddAsync(
             Event @event, 
             CancellationToken cancellationToken);
+
+        Task DeleteAsync(
+            Guid id,
+            CancellationToken cancellationToken);
+
+        Task UpdateAsync(
+            Guid id,
+            UpdateEventDto updateEvent,
+            CancellationToken cancellationToken);
     }
 }

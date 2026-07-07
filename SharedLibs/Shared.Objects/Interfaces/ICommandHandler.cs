@@ -1,9 +1,9 @@
 ﻿namespace Shared.Objects.Interfaces
 {
-    public interface ICommandHandler<T, TCommand>
+    public interface ICommandHandler<TOutput, TCommand>
         where TCommand : ICommand
     {
-        Task<T> HandleAsync(
+        Task<TOutput> HandleAsync(
             TCommand command,
             CancellationToken cancellationToken);
     }

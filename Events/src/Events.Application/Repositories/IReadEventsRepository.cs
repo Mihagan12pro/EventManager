@@ -1,4 +1,7 @@
-﻿using Events.Domain;
+﻿using Events.Application.Dtos;
+using Events.Domain;
+using Shared.Objects.Classes.Collections;
+using Shared.Objects.Records;
 
 namespace Events.Application.Repositories
 {
@@ -6,6 +9,11 @@ namespace Events.Application.Repositories
     {
         Task<Event> GetEventAsync(
             Guid eventId, 
+            CancellationToken token);
+
+        Task<PaginatedEventsDto> GetPaginatedEventsAsync(
+            Filters<Event> filters,
+            Pagination pagination,
             CancellationToken token);
     }
 }

@@ -12,7 +12,7 @@ namespace Events.Domain.ValueObjects
 
         public EventNaming(string title, string description = "")
         {
-            Title = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(title); ;
+            Title = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(title);
 
             Description = description;
         }
@@ -28,6 +28,22 @@ namespace Events.Domain.ValueObjects
                 errors.Add(new Error("Title can't be shorter than 3 symbols!"));
 
             return errors;
+        }
+
+        public EventNaming Update(
+            string? newTitle,
+            string? newDescription)
+        {
+            string title = Title;
+            string description = Description;
+
+            if (newTitle != null)
+                title = newTitle;
+
+            if (newDescription != null)
+                description = newDescription;
+
+            return new EventNaming(title, description);
         }
     }
 }

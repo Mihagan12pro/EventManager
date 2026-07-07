@@ -1,10 +1,12 @@
 ﻿using Events.Application.Dtos;
 using Events.Application.Handlers.Add;
+using Events.Application.Handlers.Cancel;
 using Events.Application.Handlers.GetByIdEvent;
+using Events.Application.Handlers.GetEventsCommand;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Enums;
 using Shared.Objects.Interfaces;
+using Shared.Objects.Records;
 using System.Security.Claims;
 
 namespace Events.API.Api
@@ -30,7 +32,7 @@ namespace Events.API.Api
 
             apiGroup.MapGet("{id}", async (
                 [FromRoute] Guid id,
-                [FromServices]ICommandHandler < GetEventDto, GetByIdEventCommand> handler,
+                [FromServices]ICommandHandler <GetEventDto, GetByIdEventCommand> handler,
                 CancellationToken token) => 
             {
                 var @event = await handler.HandleAsync(new GetByIdEventCommand(id), token);
@@ -38,6 +40,34 @@ namespace Events.API.Api
                 return @event;
 
             }).RequireAuthorization();
+
+            apiGroup.MapGet("", async (
+                [FromServices]ICommandHandler <PaginatedEventsDto, GetEventsCommand> handler,
+                CancellationToken token,
+                [FromQuery] string? title,
+                [FromQuery] DateTime? from,
+                [FromQuery] DateTime? to,
+                [FromQuery] int page = 1,
+                [FromQuery] int pageSize = 10) => 
+            {
+                GetEventsCommand command = new GetEventsCommand(
+                    title,
+                    from,
+                    to,
+                    new Pagination(page, pageSize)
+                );
+
+                return await handler.HandleAsync(command, token);
+            });
+
+            apiGroup.MapDelete("", async (
+                [FromServices] ICommandHandler <CancelEventCommand> handler,
+                Guid id, 
+                CancellationToken token) => 
+            {
+                await handler.HandleAsync(new CancelEventCommand(id), token);
+
+            }).RequireAuthorization(new AuthorizeAttribute { Roles = "Admin" }); ;
 
 
            return app;
