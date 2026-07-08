@@ -1,6 +1,6 @@
 using Events.API.Api;
 using Events.Application;
-using Events.Infrastracture.Postgre;
+using Events.Infrastracture;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Shared.AspNet.Extensions;
@@ -40,11 +40,10 @@ public partial class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddValidation();
 
+
         builder.Services.AddHandlers();
-        builder.Services.AddKafkaInfrastracture();
         builder.Services.AddSharedSecurity();
-        builder.Services.AddRepositories();
-        builder.Services.AddDbContext(new ConfigurationBuilder()
+        builder.Services.AddInfrastructure(new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json")
                     .Build());
 
@@ -68,7 +67,7 @@ public partial class Program
 
         app.UseCustomMiddleware();
 
-        app.AddEventsEndPoints();
+        app.AddApi();
 
         app.Run();
     }

@@ -1,10 +1,12 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Shared.Messaging;
 
 namespace Shared.Infrastracture.Kafka.Consumers
 {
     public class KafkaConsumer<TMessage> : BackgroundService
+        where TMessage : IMessage
     {
         private readonly IConsumer<string, TMessage> _consumer; 
         private readonly IMessageHandler<TMessage> _messageHandler;

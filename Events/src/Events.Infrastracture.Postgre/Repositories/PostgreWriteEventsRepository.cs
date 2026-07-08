@@ -4,7 +4,7 @@ using Events.Domain;
 using Events.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace Events.Infrastracture.Postgre.Repositories
+namespace Events.Infrastracture.Repositories
 {
     internal class PostgreWriteEventsRepository : IWriteEventsRepository
     {

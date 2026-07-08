@@ -1,14 +1,24 @@
 ﻿using Events.Application.Repositories;
-using Events.Infrastracture.Postgre.Repositories;
+using Events.Infrastracture.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Events.Infrastracture.Postgre
+namespace Events.Infrastracture
 {
     public static class DependenciesInjection
     {
-        public static IServiceCollection AddRepositories(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructure(
+            this IServiceCollection services, 
+            IConfiguration configuration)
+        {
+            services.AddRepositories();
+            services.AddDbContext(configuration);
+
+            return services;
+        }
+
+        private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IReadEventsRepository, PostgreReadEventsRepository>();
             services.AddScoped<IWriteEventsRepository, PostgreWriteEventsRepository>();
@@ -16,7 +26,7 @@ namespace Events.Infrastracture.Postgre
             return services;
         }
 
-        public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
+        private static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<EventsDbContext>((options) =>
             {

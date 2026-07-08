@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Events.Infrastracture.Postgre
+namespace Events.Infrastracture
 {
     internal class EventsDesignFactory : IDesignTimeDbContextFactory<EventsDbContext>
     {

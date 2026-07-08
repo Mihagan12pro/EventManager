@@ -1,10 +1,12 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Options;
 using Shared.Infrastracture.Kafka.SerializeDeserialize;
+using Shared.Messaging;
 
 namespace Shared.Infrastracture.Kafka.Producers
 {
     internal class KafkaProducer<TMessage> : IKafkaProducer<TMessage>
+        where TMessage : IMessage
     {
         private readonly IProducer<string, TMessage> _producer;
 

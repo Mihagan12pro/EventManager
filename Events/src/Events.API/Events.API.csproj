@@ -11,7 +11,9 @@
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Enums\Shared.Enums.csproj" />
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastracture.Kafka\Shared.Infrastracture.Kafka.csproj" />
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastructure.Security\Shared.Infrastructure.Security.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Messaging\Shared.Messaging.csproj" />
     <ProjectReference Include="..\Events.Application\Events.Application.csproj" />
+    <ProjectReference Include="..\Events.Infrastracture.Postgre\Events.Infrastracture.csproj" />
     <ProjectReference Include="..\Events.Infrastracture.Postgre\Events.Infrastracture.Postgre.csproj" />
   </ItemGroup>
 

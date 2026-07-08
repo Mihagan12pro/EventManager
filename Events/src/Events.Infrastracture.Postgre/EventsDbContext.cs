@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace Events.Infrastracture.Postgre
+namespace Events.Infrastracture
 {
     public class EventsDbContext : DbContext
     {

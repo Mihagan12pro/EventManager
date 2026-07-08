@@ -12,9 +12,9 @@ using System.Security.Claims;
 
 namespace Events.API.Api
 {
-    public static class EventsApi
+    public static class Api
     {
-        public static WebApplication AddEventsEndPoints(this WebApplication app)
+        public static WebApplication AddApi(this WebApplication app)
         {
             var apiGroup = app.MapGroup("api/events");
 

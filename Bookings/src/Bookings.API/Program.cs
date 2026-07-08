@@ -1,5 +1,62 @@
-var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+using Bookings.API.Api;
+using Bookings.Application;
+using Microsoft.OpenApi;
+using Shared.AspNet.Extensions;
+using Shared.Infrastructure.Security;
 
+public partial class Program
+{
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-app.Run();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            var binDirectory = new DirectoryInfo(AppContext.BaseDirectory);
+            var files = binDirectory.GetFiles("*.xml");
+
+            foreach (var file in files)
+            {
+                options.IncludeXmlComments(file.FullName);
+            }
+
+            options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                Description = "JWT Authorization header using the Bearer scheme."
+            });
+
+            options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+            {
+                [new OpenApiSecuritySchemeReference("bearer", document)] = []
+            });
+        });
+
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddValidation();
+
+        builder.Services.AddHandlers();
+
+        builder.Services.AddSharedSecurity();
+        builder.Services.AddHttpContextAccessor();
+
+        builder.Services.AddJwtAuthentication();
+        builder.Services.AddAuthorization();
+
+        var app = builder.Build();
+
+        app.UseSwaggerForDebugging();
+        app.UseHttpsRedirection();
+        app.UseRouting();
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.UseCustomMiddleware();
+
+        app.AddApi();
+
+        app.Run();
+    }
+}

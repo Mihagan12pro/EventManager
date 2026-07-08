@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Shared.Objects.Classes.Options;
 using Shared.Objects.Interfaces;
 
-namespace Events.Application
+namespace Bookings.Application
 {
     public static class DependenciesInjection
     {

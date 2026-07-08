@@ -2,12 +2,14 @@
   <Folder Name="/Microservices/" />
   <Folder Name="/Microservices/Bookings/">
     <Project Path="Bookings/src/Bookings.API/Bookings.API.csproj" Id="c5378df5-6dc7-4d42-9683-4daed70c8714" />
+    <Project Path="Bookings/src/Bookings.Application/Bookings.Application.csproj" Id="37cd1154-782e-42b4-bf91-d09d017b5893" />
+    <Project Path="Bookings/src/Bookings.Domain/Bookings.Domain.csproj" Id="3168ba2d-1dac-4a1a-92d6-4f5b90bd8980" />
   </Folder>
   <Folder Name="/Microservices/Events/">
     <Project Path="Events/src/Events.API/Events.API.csproj" />
     <Project Path="Events/src/Events.Application/Events.Application.csproj" Id="6338c94c-00e1-4b95-9d29-4aca6c330ffc" />
     <Project Path="Events/src/Events.Domain/Events.Domain.csproj" Id="c6343957-18b2-49fb-8219-e7bbb63d713b" />
-    <Project Path="Events/src/Events.Infrastracture.Postgre/Events.Infrastracture.Postgre.csproj" Id="d1f1825f-b262-4699-af12-d2c314b239bd" />
+    <Project Path="Events/src/Events.Infrastracture.Postgre/Events.Infrastracture.csproj" Id="d1f1825f-b262-4699-af12-d2c314b239bd" />
   </Folder>
   <Folder Name="/Microservices/Users/">
     <Project Path="Users/src/Users.API/Users.API.csproj" Id="066dfb9e-d3e1-4c1b-8d88-c4d75e81b709" />
@@ -20,8 +22,9 @@
     <Project Path="SharedLibs/Shared.AspNet/Shared.AspNet.csproj" Id="4a5c9dc4-689e-49c7-8448-b4590d376c73" />
     <Project Path="SharedLibs/Shared.Enums/Shared.Enums.csproj" Id="52f41aec-4f18-42c1-a848-4bd8fc0f47a5" />
     <Project Path="SharedLibs/Shared.Failures/Shared.Failures.csproj" Id="a4c8d169-a1a0-43de-b7bd-603e772b5a1d" />
-    <Project Path="SharedLibs/Shared.Infrastracture.Kafka/Shared.Infrastracture.Kafka.csproj" Id="c9eddf9f-e03b-42f5-a6d2-399f460c5bef" />
+    <Project Path="SharedLibs/Shared.Infrastracture.Kafka/Shared.Infrastructure.Kafka.csproj" Id="c9eddf9f-e03b-42f5-a6d2-399f460c5bef" />
     <Project Path="SharedLibs/Shared.Infrastructure.Security/Shared.Infrastructure.Security.csproj" Id="16f46d12-dd18-45ab-a947-0a4b44c3f8eb" />
+    <Project Path="SharedLibs/Shared.Messaging/Shared.Messaging.csproj" Id="40399c2f-3f4c-4394-90d2-6a7b497d4e7a" />
     <Project Path="SharedLibs/Shared.Objects/Shared.Objects.csproj" Id="c4740abb-0d9d-44a2-8880-4f42ff2ea17a" />
     <Project Path="SharedLibs/Shared.Validation/Shared.Validation.csproj" Id="0886a2ca-74be-41ad-bb80-b7f2121b187c" />
   </Folder>

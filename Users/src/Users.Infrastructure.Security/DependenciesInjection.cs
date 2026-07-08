@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Shared.Objects.Interfaces;
 using Users.Application.Security;
 using Users.Application.Security.Jwt;
 using Users.Infrastructure.Security.Jwt;
