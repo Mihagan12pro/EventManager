@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Infrastracture.Kafka;
-using Shared.Messaging.Contracts;
+using Shared.Messaging.Contracts.Bookings;
 
 namespace Bookings.Infrastructure
 {

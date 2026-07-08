@@ -1,6 +1,6 @@
-﻿namespace Shared.Messaging.Contracts
+﻿namespace Shared.Messaging.Contracts.Bookings
 {
-    public class PendingBooking : IMessage
+    public class BookingWithStatus : IMessage
     {
         /// <summary>
         /// Message Id

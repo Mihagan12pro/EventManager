@@ -1,6 +1,7 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Shared.Infrastracture.Kafka.SerializeDeserialize;
 using Shared.Messaging;
 
 namespace Shared.Infrastracture.Kafka.Consumers
@@ -44,9 +45,11 @@ namespace Shared.Infrastracture.Kafka.Consumers
             IOptions<KafkaConsumerSettings> options,
             IMessageHandler<TMessage> messsageHandler)
         {
-            var config = new ConsumerConfig 
+            var config = new ConsumerConfig
             {
                 BootstrapServers = options.Value.BootstrapServers,
+
+                Acks = Enum.Parse<Acks>(options.Value.Acks),
 
                 GroupId = options.Value.GroupId
             };
@@ -54,6 +57,7 @@ namespace Shared.Infrastracture.Kafka.Consumers
             _topic = options.Value.Topic;
 
             _consumer = new ConsumerBuilder<string, TMessage>(config)
+                .SetValueDeserializer(new KafkaJsonDeserializer<TMessage>())
                 .Build();
 
             _messageHandler = messsageHandler;

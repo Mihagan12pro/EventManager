@@ -40,6 +40,8 @@ public partial class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddValidation();
 
+        builder.Services.AddHttpContextAccessor();
+
 
         builder.Services.AddHandlers();
         builder.Services.AddSharedSecurity();

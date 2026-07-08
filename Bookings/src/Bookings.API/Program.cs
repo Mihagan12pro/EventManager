@@ -44,8 +44,8 @@ public partial class Program
             .AddJsonFile("appsettings.json")
             .Build());
 
-        builder.Services.AddSharedSecurity();
         builder.Services.AddHttpContextAccessor();
+        builder.Services.AddSharedSecurity();
 
         builder.Services.AddJwtAuthentication();
         builder.Services.AddAuthorization();

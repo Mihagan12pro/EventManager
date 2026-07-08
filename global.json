@@ -19,7 +19,12 @@
     },
 
     "Consumers": {
-
+      "PendingBookings": {
+        "BootstrapServers": "localhost:9092",
+        "Topic": "pending-bookings",
+        "Acks": "All",
+        "GroupId": "pending-bookings-consumers"
+      }
     }
   }
 }

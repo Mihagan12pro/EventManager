@@ -22,12 +22,14 @@ namespace Shared.Infrastracture.Kafka
         }
 
         public static IServiceCollection AddConsumer<TMessage, TMessageHandler>(
-            this IServiceCollection services, IConfigurationSection configurationSection) 
+            this IServiceCollection services, string topic) 
             where TMessageHandler : class, IMessageHandler<TMessage>
             where TMessage : IMessage
         {
-            services.Configure<KafkaConsumerSettings>(configurationSection);
-            services.AddSingleton<KafkaConsumer<TMessage>>();
+            KafkaOptions options = new KafkaOptions();
+
+            services.Configure<KafkaConsumerSettings>(options.FirstConsumer(topic));
+            services.AddHostedService<KafkaConsumer<TMessage>>();
             services.AddSingleton<IMessageHandler<TMessage>, TMessageHandler>();
 
             return services;
