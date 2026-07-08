@@ -14,6 +14,7 @@
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastructure.Security\Shared.Infrastructure.Security.csproj" />
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Objects\Shared.Objects.csproj" />
     <ProjectReference Include="..\Bookings.Application\Bookings.Application.csproj" />
+    <ProjectReference Include="..\Bookings.Infrastructure\Bookings.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

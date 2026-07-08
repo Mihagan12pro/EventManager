@@ -4,6 +4,7 @@
     <Project Path="Bookings/src/Bookings.API/Bookings.API.csproj" Id="c5378df5-6dc7-4d42-9683-4daed70c8714" />
     <Project Path="Bookings/src/Bookings.Application/Bookings.Application.csproj" Id="37cd1154-782e-42b4-bf91-d09d017b5893" />
     <Project Path="Bookings/src/Bookings.Domain/Bookings.Domain.csproj" Id="3168ba2d-1dac-4a1a-92d6-4f5b90bd8980" />
+    <Project Path="Bookings/src/Bookings.Infrastructure/Bookings.Infrastructure.csproj" Id="a2f316a5-267f-461c-bb04-c31df00777a8" />
   </Folder>
   <Folder Name="/Microservices/Events/">
     <Project Path="Events/src/Events.API/Events.API.csproj" />
