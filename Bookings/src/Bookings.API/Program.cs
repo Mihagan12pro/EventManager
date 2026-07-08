@@ -1,5 +1,7 @@
 using Bookings.API.Api;
 using Bookings.Application;
+using Bookings.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Shared.AspNet.Extensions;
 using Shared.Infrastructure.Security;
@@ -38,6 +40,9 @@ public partial class Program
         builder.Services.AddValidation();
 
         builder.Services.AddHandlers();
+        builder.Services.AddInfrastructure(new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build());
 
         builder.Services.AddSharedSecurity();
         builder.Services.AddHttpContextAccessor();
@@ -46,6 +51,13 @@ public partial class Program
         builder.Services.AddAuthorization();
 
         var app = builder.Build();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<BookingsDbContext>();
+
+            db.Database.Migrate();
+        }
 
         app.UseSwaggerForDebugging();
         app.UseHttpsRedirection();

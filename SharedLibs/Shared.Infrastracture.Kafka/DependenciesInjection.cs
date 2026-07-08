@@ -3,15 +3,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Shared.Infrastracture.Kafka.Consumers;
 using Shared.Infrastracture.Kafka.Producers;
 using Shared.Messaging;
+using Shared.Objects.Classes.Options;
 
 namespace Shared.Infrastracture.Kafka
 {
     public static class DependenciesInjection
     {
-        public static IServiceCollection AddProducer<TMessage>(this IServiceCollection services,
-            IConfigurationSection configurationSection) where TMessage : IMessage
+        public static IServiceCollection AddProducer<TMessage>(
+            this IServiceCollection services,
+            string topic) where TMessage : IMessage
         {
-            services.Configure<KafkaProducerSettings>(configurationSection);
+            KafkaOptions options = new KafkaOptions();
+
+            services.Configure<KafkaProducerSettings>(options.FirstProducer(topic));
             services.AddSingleton<IKafkaProducer<TMessage>, KafkaProducer<TMessage>>();
 
             return services;

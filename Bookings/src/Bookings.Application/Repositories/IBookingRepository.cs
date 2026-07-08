@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Bookings.Domain;
 
 namespace Bookings.Application.Repositories
 {
     public interface IBookingRepository
     {
         Task CreateAsync(
-            Guid eventId, 
+            Booking booking,
             CancellationToken cancellationToken);
     }
 }

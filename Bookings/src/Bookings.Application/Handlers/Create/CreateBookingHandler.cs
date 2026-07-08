@@ -1,4 +1,5 @@
-﻿using Bookings.Domain;
+﻿using Bookings.Application.Repositories;
+using Bookings.Domain;
 using Bookings.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Shared.Objects.Interfaces;
@@ -8,6 +9,7 @@ namespace Bookings.Application.Handlers.Create
     internal class CreateBookingHandler 
         : ICommandHandler<CreateBookingCommand>
     {
+        private readonly IBookingRepository _bookingRepository;
         private readonly IHttpContextAccessor _httpContext;
         private readonly IJwtClaimsExtractor _jwtClaimsExtractor;
 
@@ -25,12 +27,17 @@ namespace Bookings.Application.Handlers.Create
 
                 UserId = Guid.Parse(_jwtClaimsExtractor.Extract("sub"))
             };
+
+            await _bookingRepository.CreateAsync(booking, cancellationToken);
         }
 
         public CreateBookingHandler(
+            IBookingRepository bookingRepository,
             IHttpContextAccessor httpContext,
             IJwtClaimsExtractor jwtClaimsExtractor)
         {
+            _bookingRepository = bookingRepository;
+
             _jwtClaimsExtractor = jwtClaimsExtractor;
             _httpContext = httpContext;
         }

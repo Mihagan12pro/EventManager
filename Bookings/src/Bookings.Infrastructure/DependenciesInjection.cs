@@ -1,5 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Bookings.Application.Repositories;
+using Bookings.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Infrastracture.Kafka;
+using Shared.Messaging.Contracts;
 
 namespace Bookings.Infrastructure
 {
@@ -9,6 +14,30 @@ namespace Bookings.Infrastructure
             this IServiceCollection services, 
             IConfiguration configuration)
         {
+            services.AddPublishers();
+            services.AdDbInteraction(configuration);
+
+            return services;
+        }
+
+        private static IServiceCollection AddPublishers(this IServiceCollection services)
+        {
+            services.AddProducer<PendingBooking>("PendingBookings");
+
+            return services;
+        }
+
+        private static IServiceCollection AdDbInteraction(
+            this IServiceCollection services, 
+            IConfiguration configuration)
+        {
+            services.AddDbContext<BookingsDbContext>((options) =>
+            {
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            services.AddScoped<IBookingRepository, PostgreBookingsRepository>();
+
             return services;
         }
     }
