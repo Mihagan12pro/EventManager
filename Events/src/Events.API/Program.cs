@@ -1,10 +1,10 @@
 using Events.API.Api;
 using Events.Application;
+using Shared.Infrastructure.Security;
+using Shared.AspNet.Extensions;
+using Microsoft.OpenApi;
 using Events.Infrastracture;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
-using Shared.AspNet.Extensions;
-using Shared.Infrastructure.Security;
 
 public partial class Program
 {

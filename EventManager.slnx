@@ -10,7 +10,7 @@
     <Project Path="Events/src/Events.API/Events.API.csproj" />
     <Project Path="Events/src/Events.Application/Events.Application.csproj" Id="6338c94c-00e1-4b95-9d29-4aca6c330ffc" />
     <Project Path="Events/src/Events.Domain/Events.Domain.csproj" Id="c6343957-18b2-49fb-8219-e7bbb63d713b" />
-    <Project Path="Events/src/Events.Infrastracture.Postgre/Events.Infrastracture.csproj" Id="d1f1825f-b262-4699-af12-d2c314b239bd" />
+    <Project Path="Events/src/Events.Infrastracture/Events.Infrastracture.csproj" />
   </Folder>
   <Folder Name="/Microservices/Users/">
     <Project Path="Users/src/Users.API/Users.API.csproj" Id="066dfb9e-d3e1-4c1b-8d88-c4d75e81b709" />
