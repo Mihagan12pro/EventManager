@@ -3,13 +3,10 @@
     "SecretKey": "00000000-0000-0000-0000-000000000000",
     "ExpiredMinutes": "15",
     "Audiences": {
-      "Users": "https://localhost:7183"
+      "Bookings": "https://localhost:7178",
+      "Events": "https://localhost:7183"
     },
     "Issuer": "https://localhost:7066"
   },
-  "AllowedHosts": "*",
-
-  "Kafka": {
-    "BootstrapServers": "localhost:9092"
-  }
+  "AllowedHosts": "*"
 }

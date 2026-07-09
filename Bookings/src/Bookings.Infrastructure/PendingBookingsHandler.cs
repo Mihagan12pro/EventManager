@@ -1,6 +1,7 @@
 ﻿using Bookings.Application.Repositories;
 using Bookings.Domain;
 using Bookings.Domain.Enums;
+using Bookings.Infrastructure.Messaging.Publishers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shared.Messaging.Contracts.Bookings;
@@ -11,6 +12,7 @@ namespace Bookings.Infrastructure
     internal class PendingBookingsHandler : BackgroundService
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly IPublisher _publisher;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -55,11 +57,17 @@ namespace Bookings.Infrastructure
 
                  Id = Guid.NewGuid().ToString(),
             };
+
+            await _publisher.ProduceAsync(pendingMessage, stoppingToken);
         }
 
 
-        public PendingBookingsHandler(IServiceScopeFactory serviceScopeFactory)
+        public PendingBookingsHandler(
+            IServiceScopeFactory serviceScopeFactory,
+            IPublisher publisher)
         {
+            _publisher = publisher;
+
             _serviceScopeFactory = serviceScopeFactory;
         }
     }

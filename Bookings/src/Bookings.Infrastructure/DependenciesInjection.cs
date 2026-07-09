@@ -1,4 +1,5 @@
 ﻿using Bookings.Application.Repositories;
+using Bookings.Infrastructure.Messaging.Publishers;
 using Bookings.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,7 @@ namespace Bookings.Infrastructure
 
         private static IServiceCollection AddPublishers(this IServiceCollection services)
         {
+            services.AddSingleton<IPublisher, KafkaPublisher>();
             //services.AddProducer<PendingBooking>("PendingBookings");
 
             return services;
