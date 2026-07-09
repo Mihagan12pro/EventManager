@@ -3,26 +3,13 @@
     "SecretKey": "00000000-0000-0000-0000-000000000000",
     "ExpiredMinutes": "15",
     "Audiences": {
-      "Users":  "https://localhost:7183"
+      "Users": "https://localhost:7183"
     },
     "Issuer": "https://localhost:7066"
   },
   "AllowedHosts": "*",
 
   "Kafka": {
-    "Producers": {
-      "PendingBookings": {
-        "BootstrapServers": "localhost:9092",
-        "Topic": "pending-bookings"
-      }
-    },
-
-    "Consumers": {
-      "PendingBookings": {
-        "BootstrapServers": "localhost:9092",
-        "Topic": "pending-bookings",
-        "GroupId": "pending-bookings-consumers"
-      }
-    }
+    "BootstrapServers": "localhost:9092"
   }
 }

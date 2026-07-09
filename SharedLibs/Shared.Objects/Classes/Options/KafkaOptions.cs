@@ -9,17 +9,11 @@ namespace Shared.Objects.Classes.Options
     {
         private readonly IConfigurationSection _kafkaSection;
 
-        public IConfigurationSection FirstProducer(string sectionName)
-            => _kafkaSection.GetRequiredSection($"Producers:{sectionName}");
+        public IConfigurationSection First(string sectionName)
+            => _kafkaSection.GetRequiredSection(sectionName);
 
-        public IConfigurationSection FirstProducerOrDefault(string sectionName)
-            => _kafkaSection.GetSection($"Producers:{sectionName}");
-
-        public IConfigurationSection FirstConsumer(string sectionName)
-            => _kafkaSection.GetRequiredSection($"Consumers:{sectionName}");
-
-        public IConfigurationSection FirstConsumerOrDefault(string sectionName)
-            => _kafkaSection.GetSection($"Consumers:{sectionName}");
+        public IConfigurationSection FirstOrDefault(string sectionName)
+            => _kafkaSection.GetSection(sectionName);
 
         public KafkaOptions()
         {

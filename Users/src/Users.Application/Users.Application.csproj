@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Enums\Shared.Enums.csproj" />
-    <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastracture.Kafka\Shared.Infrastructure.Kafka.csproj" />
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Objects\Shared.Objects.csproj" />
     <ProjectReference Include="..\Users.Domain\Users.Domain.csproj" />
   </ItemGroup>

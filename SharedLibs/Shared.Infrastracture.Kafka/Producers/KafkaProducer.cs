@@ -34,8 +34,6 @@ namespace Shared.Infrastracture.Kafka.Producers
                 BootstrapServers = kafkaSettings.Value.BootstrapServers,
             };
 
-            _topic = kafkaSettings.Value.Topic;
-
             _producer = new ProducerBuilder<string, TMessage>(config)
                 .SetValueSerializer(new KafkaJsonSerializer<TMessage>())
                 .Build();

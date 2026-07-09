@@ -1,11 +1,8 @@
 ﻿using Events.Application.Repositories;
-using Events.Infrastracture.Consumers.Pending;
 using Events.Infrastracture.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Infrastracture.Kafka;
-using Shared.Messaging.Contracts.Bookings;
 
 namespace Events.Infrastracture
 {
@@ -18,7 +15,7 @@ namespace Events.Infrastracture
             services.AddRepositories();
             services.AddDbContext(configuration);
 
-            services.AddConsumer<PendingBooking, PendingBookingsHandler>("PendingBookings");
+            //services.AddConsumer<PendingBooking, PendingBookingsHandler>("PendingBookings");
 
             return services;
         }

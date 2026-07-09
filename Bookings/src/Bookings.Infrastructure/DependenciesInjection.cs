@@ -3,7 +3,6 @@ using Bookings.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Infrastracture.Kafka;
 using Shared.Messaging.Contracts.Bookings;
 
 namespace Bookings.Infrastructure
@@ -22,7 +21,7 @@ namespace Bookings.Infrastructure
 
         private static IServiceCollection AddPublishers(this IServiceCollection services)
         {
-            services.AddProducer<PendingBooking>("PendingBookings");
+            //services.AddProducer<PendingBooking>("PendingBookings");
 
             return services;
         }
