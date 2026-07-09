@@ -8,7 +8,7 @@ namespace Events.Application.Repositories
     public interface IReadEventsRepository
     {
         Task<Event> GetEventAsync(
-            Guid eventId, 
+            Guid id,
             CancellationToken token);
 
         Task<PaginatedEventsDto> GetPaginatedEventsAsync(

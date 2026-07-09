@@ -11,7 +11,7 @@ namespace Shared.Infrastructure.Kafka
         {
             var config = new AdminClientConfig
             {
-                BootstrapServers = "localhost:9092"
+                BootstrapServers ="localhost:9092"
             };
 
             using (var adminClient = new AdminClientBuilder(config).Build())
@@ -23,7 +23,9 @@ namespace Shared.Infrastructure.Kafka
                       new TopicSpecification
                         {
                             Name = nameof(PendingBooking),
+
                             NumPartitions = 1,
+                            
                             ReplicationFactor = 1
                         },
                    ]);

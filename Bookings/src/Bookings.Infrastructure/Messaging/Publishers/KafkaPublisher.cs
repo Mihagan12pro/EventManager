@@ -26,7 +26,7 @@ namespace Bookings.Infrastructure.Messaging.Publishers
         {
             var config = new ProducerConfig
             {
-                BootstrapServers = "localhost:9092"
+                BootstrapServers ="localhost:9092"
             };
 
             _producer = new ProducerBuilder<string, string>(config).Build();

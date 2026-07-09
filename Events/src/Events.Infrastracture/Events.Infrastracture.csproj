@@ -17,12 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastructure.Kafka\Shared.Infrastructure.Kafka.csproj" />
     <ProjectReference Include="..\..\..\SharedLibs\Shared.Messaging\Shared.Messaging.csproj" />
     <ProjectReference Include="..\Events.Application\Events.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Messaging\" />
   </ItemGroup>
 
 </Project>
