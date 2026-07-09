@@ -5,7 +5,5 @@
         public string Topic { get; set;  }
 
         public string BootstrapServers { get; set; }
-
-        public string Acks { get; set; }
     }
 }

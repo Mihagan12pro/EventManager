@@ -49,9 +49,9 @@ namespace Shared.Infrastracture.Kafka.Consumers
             {
                 BootstrapServers = options.Value.BootstrapServers,
 
-                Acks = Enum.Parse<Acks>(options.Value.Acks),
+                GroupId = options.Value.GroupId,
 
-                GroupId = options.Value.GroupId
+                AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
             _topic = options.Value.Topic;

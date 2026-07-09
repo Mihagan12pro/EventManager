@@ -32,8 +32,6 @@ namespace Shared.Infrastracture.Kafka.Producers
             var config = new ProducerConfig
             {
                 BootstrapServers = kafkaSettings.Value.BootstrapServers,
-
-                Acks = Enum.Parse<Acks>(kafkaSettings.Value.Acks)
             };
 
             _topic = kafkaSettings.Value.Topic;
