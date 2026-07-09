@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Shared.Messaging.Contracts.Bookings;
 using Shared.Objects.Classes.Collections;
 
-namespace Bookings.Infrastructure
+namespace Bookings.Infrastructure.Hosted
 {
     internal class PendingBookingsHandler : BackgroundService
     {

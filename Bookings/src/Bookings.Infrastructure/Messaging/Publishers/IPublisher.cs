@@ -4,7 +4,7 @@ namespace Bookings.Infrastructure.Messaging.Publishers
 {
     internal interface IPublisher
     {
-        Task<IPublisher> ProduceAsync(
+        Task ProduceAsync(
             PendingBooking pendingBooking,
             CancellationToken cancellationToken);
     }

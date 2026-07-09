@@ -1,9 +1,12 @@
 ﻿using Bookings.Application.Repositories;
+using Bookings.Infrastructure.Hosted;
 using Bookings.Infrastructure.Messaging.Publishers;
 using Bookings.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Infrastructure.Kafka;
+using Shared.Messaging;
 using Shared.Messaging.Contracts.Bookings;
 
 namespace Bookings.Infrastructure
@@ -19,13 +22,14 @@ namespace Bookings.Infrastructure
 
             services.AddHostedService<PendingBookingsHandler>();
 
+            services.AddHostedService<TopicInitializer>();
+
             return services;
         }
 
         private static IServiceCollection AddPublishers(this IServiceCollection services)
         {
             services.AddSingleton<IPublisher, KafkaPublisher>();
-            //services.AddProducer<PendingBooking>("PendingBookings");
 
             return services;
         }
