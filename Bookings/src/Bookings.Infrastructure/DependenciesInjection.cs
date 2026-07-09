@@ -16,6 +16,8 @@ namespace Bookings.Infrastructure
             services.AddPublishers();
             services.AdDbInteraction(configuration);
 
+            services.AddHostedService<PendingBookingsHandler>();
+
             return services;
         }
 

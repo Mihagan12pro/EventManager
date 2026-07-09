@@ -14,7 +14,7 @@ namespace Events.Infrastracture
 
         public DbSet<Event> Events { get; set; }
 
-        public DbSet<Message> Outbox { get; set; }
+        public DbSet<Message> InboxMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
             => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

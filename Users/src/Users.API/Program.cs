@@ -14,6 +14,12 @@ public partial class Program
         builder.Services.AddJwtAuthentication();
         builder.Services.AddAuthorization();
 
+        builder.Host.ConfigureLogging(opt =>
+        {
+            opt.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Error);
+            opt.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
+        });
+
         builder.Services.AddSwaggerGen(options =>
         {
             var binDirectory = new DirectoryInfo(AppContext.BaseDirectory);

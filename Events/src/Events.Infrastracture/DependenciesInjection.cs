@@ -15,6 +15,8 @@ namespace Events.Infrastracture
             services.AddRepositories();
             services.AddDbContext(configuration);
 
+            //services.AddSingleton();
+            //services.AddHosted
             //services.AddConsumer<PendingBooking, PendingBookingsHandler>("PendingBookings");
 
             return services;

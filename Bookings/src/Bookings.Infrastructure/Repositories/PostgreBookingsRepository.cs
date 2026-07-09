@@ -1,6 +1,7 @@
 ﻿using Bookings.Application.Repositories;
 using Bookings.Domain;
 using Shared.Messaging.Contracts.Bookings;
+using Shared.Objects.Classes.Collections;
 
 namespace Bookings.Infrastructure.Repositories
 {
@@ -14,20 +15,21 @@ namespace Bookings.Infrastructure.Repositories
         {
             await _dbContext.Bookings.AddAsync(booking, cancellationToken);
 
-            //await _kafkaProducer.ProduceAsync(
-            //   new PendingBooking()
-            //   {
-            //       EventId = booking.EventId.ToString(),
-
-            //       BookingId = booking.Id.ToString(),
-
-            //       Id = Guid.NewGuid().ToString()
-            //   },
-
-           //    cancellationToken
-           //);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<IEnumerable<Booking>> GetAllWithFiltersAsync(
+            Filters<Booking> filters, 
+            CancellationToken cancellationToken)
+        {
+
+            IQueryable<Booking> bookings = _dbContext.Bookings;
+
+            foreach(var filter in filters)
+                bookings = bookings.Where(filter);
+
+            return bookings;
         }
 
         public PostgreBookingsRepository(

@@ -1,0 +1,66 @@
+﻿using Bookings.Application.Repositories;
+using Bookings.Domain;
+using Bookings.Domain.Enums;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Shared.Messaging.Contracts.Bookings;
+using Shared.Objects.Classes.Collections;
+
+namespace Bookings.Infrastructure
+{
+    internal class PendingBookingsHandler : BackgroundService
+    {
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                try
+                {
+                    using (var scope = _serviceScopeFactory.CreateScope())
+                    {
+                        IBookingRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
+
+                        var pendingBookings = await bookingRepository.GetAllWithFiltersAsync(
+                                new Filters<Booking>() 
+                                {
+                                    (Booking b) => b.Status == BookingStatus.Pending
+                                },
+
+                                stoppingToken
+                            );
+
+                        var tasks = pendingBookings.Select(pb => SendMessageAsync(pb, stoppingToken)).ToArray();
+
+                        await Task.WhenAll(tasks);
+                    }
+                }
+                catch (OperationCanceledException ex)
+                {
+                    
+                }
+            }
+        }
+
+        private async Task SendMessageAsync(
+            Booking pendingBooking, 
+            CancellationToken stoppingToken)
+        {
+            PendingBooking pendingMessage = new PendingBooking() 
+            {
+                 BookingId = pendingBooking.Id.ToString(),
+
+                 EventId = pendingBooking.EventId.ToString(),
+
+                 Id = Guid.NewGuid().ToString(),
+            };
+        }
+
+
+        public PendingBookingsHandler(IServiceScopeFactory serviceScopeFactory)
+        {
+            _serviceScopeFactory = serviceScopeFactory;
+        }
+    }
+}
