@@ -34,7 +34,7 @@ namespace Events.Infrastracture
             services.AddScoped<IReadEventsRepository, PostgreReadEventsRepository>();
             services.AddScoped<IWriteEventsRepository, PostgreWriteEventsRepository>();
 
-            services.AddScoped<InboxMessagesRepository, PostgreInboxMessagesRepository>();
+            services.AddScoped<IInboxMessagesRepository, PostgreInboxMessagesRepository>();
 
             return services;
         }

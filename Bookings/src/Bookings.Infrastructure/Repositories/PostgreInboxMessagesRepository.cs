@@ -1,18 +1,15 @@
-﻿using Events.Application.Repositories.InboxMessages;
+﻿using Bookings.Application.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Shared.Messaging;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Events.Infrastracture.Repositories.InboxMessages
+namespace Bookings.Infrastructure.Repositories
 {
     internal class PostgreInboxMessagesRepository : IInboxMessagesRepository
     {
-        private readonly EventsDbContext _dbContext;
+        private readonly BookingsDbContext _dbContext;
 
         public async Task AddMessageAsync(
-            Message message,
+            Message message, 
             CancellationToken cancellationToken)
         {
             await _dbContext.InboxMessages.AddAsync(message, cancellationToken);
@@ -21,16 +18,15 @@ namespace Events.Infrastracture.Repositories.InboxMessages
         }
 
         public async Task<bool> FindMessageAsync(
-            Guid messageId,
+            Guid id,
             CancellationToken cancellationToken)
         {
-            Message? message = await _dbContext.InboxMessages.FirstOrDefaultAsync(
-                m => m.Id == messageId, cancellationToken); 
+            Message? message = await _dbContext.InboxMessages.FirstOrDefaultAsync(m => m.Id == id);
 
             return message != null;
         }
 
-        public PostgreInboxMessagesRepository(EventsDbContext dbContext)
+        public PostgreInboxMessagesRepository(BookingsDbContext dbContext)
         {
             _dbContext = dbContext;
         }

@@ -59,6 +59,7 @@ namespace Bookings.Infrastructure
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddScoped<IInboxMessagesRepository, PostgreInboxMessagesRepository>();
             services.AddScoped<IBookingRepository, PostgreBookingsRepository>();
 
             return services;

@@ -1,12 +1,97 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Bookings.Application.Repositories;
+using Bookings.Domain.Enums;
+using Confluent.Kafka;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Shared.Messaging;
+using Shared.Messaging.Contracts.Bookings;
+using Shared.Objects.Classes.Options;
+using System.Text.Json;
 
 namespace Bookings.Infrastructure.Messaging.Consumers
 {
     internal class ConfirmedBookingsConsumer : BackgroundService
     {
+        private readonly ILogger<ConfirmedBookingsConsumer> _logger;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+
+        private readonly KafkaOptions kafkaOptions = new KafkaOptions();
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            throw new NotImplementedException();
+            var config = new ConsumerConfig
+            {
+                BootstrapServers = kafkaOptions.BootstrapServers,
+                GroupId = "bookings-service",
+                AutoOffsetReset = AutoOffsetReset.Earliest,
+                EnableAutoCommit = false
+            };
+
+            using var consumer = new ConsumerBuilder<string, string>(config).Build();
+
+            consumer.Subscribe(nameof(ConfirmedBooking));
+
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                try
+                {
+                    var consumeResult = consumer.Consume(stoppingToken);
+
+                    if (consumeResult?.Message?.Value == null)
+                        continue;
+
+                    var confirmedBooking = JsonSerializer.Deserialize<PendingBooking>(consumeResult.Message.Value);
+
+                    using (var scope = _serviceScopeFactory.CreateScope())
+                    {
+                        var messagesRepository = scope.ServiceProvider.GetRequiredService<IInboxMessagesRepository>();
+
+                        if (!await messagesRepository.FindMessageAsync(Guid.Parse(confirmedBooking.Id), stoppingToken))
+                        {
+                            try
+                            {
+                                IBookingRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
+
+                                await bookingRepository.ChangeBookingStatus(
+                                    Guid.Parse(confirmedBooking.BookingId),
+
+                                    BookingStatus.Confirmed,
+
+                                    stoppingToken
+                                );
+                            }
+                            finally
+                            {
+                                await messagesRepository.AddMessageAsync(
+                                    new Message()
+                                    {
+                                        Id = Guid.Parse(confirmedBooking.Id) 
+                                    },
+
+                                    stoppingToken
+                                );
+                            }
+                        }
+                    }
+
+
+                    consumer.Commit(consumeResult);
+                }
+                catch (OperationCanceledException ex)
+                {
+                    _logger.LogInformation("Operation cancelled!");
+                }
+            }
+        }
+
+        public ConfirmedBookingsConsumer(
+            ILogger<ConfirmedBookingsConsumer> logger,
+            IServiceScopeFactory serviceScopeFactory)
+        {
+            _logger = logger;
+
+            _serviceScopeFactory = serviceScopeFactory;
         }
     }
 }

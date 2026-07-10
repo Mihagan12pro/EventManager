@@ -1,4 +1,5 @@
 ﻿using Bookings.Domain;
+using Bookings.Domain.Enums;
 using Shared.Objects.Classes.Collections;
 
 namespace Bookings.Application.Repositories
@@ -11,6 +12,11 @@ namespace Bookings.Application.Repositories
 
         Task<IEnumerable<Booking>> GetAllWithFiltersAsync(
             Filters<Booking> filters,
+            CancellationToken cancellationToken);
+
+        Task ChangeBookingStatus(
+            Guid id, 
+            BookingStatus status,
             CancellationToken cancellationToken);
     }
 }

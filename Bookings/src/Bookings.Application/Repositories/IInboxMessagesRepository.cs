@@ -1,15 +1,15 @@
 ﻿using Shared.Messaging;
 
-namespace Events.Application.Repositories.InboxMessages
+namespace Bookings.Application.Repositories
 {
-    public interface InboxMessagesRepository
+    public interface IInboxMessagesRepository
     {
         Task<bool> FindMessageAsync(
-            Guid messageId,
+            Guid id,
             CancellationToken cancellationToken);
 
         Task AddMessageAsync(
-            Message message,
+            Message message, 
             CancellationToken cancellationToken);
     }
 }
