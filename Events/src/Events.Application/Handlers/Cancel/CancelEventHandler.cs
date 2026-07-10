@@ -1,4 +1,4 @@
-﻿using Events.Application.Repositories;
+﻿using Events.Application.Repositories.Events;
 using Shared.Objects.Interfaces;
 using System;
 using System.Collections.Generic;

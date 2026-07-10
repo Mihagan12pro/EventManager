@@ -1,10 +1,13 @@
-﻿using Events.Application.Repositories;
+﻿using Events.Application.Repositories.Events;
+using Events.Application.Repositories.InboxMessages;
 using Events.Infrastracture.Messaging.Consumers;
-using Events.Infrastracture.Repositories;
+using Events.Infrastracture.Repositories.Events;
+using Events.Infrastracture.Repositories.InboxMessages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Infrastructure.Kafka;
+using Shared.Objects.Classes.Options;
 
 namespace Events.Infrastracture
 {
@@ -27,6 +30,8 @@ namespace Events.Infrastracture
         {
             services.AddScoped<IReadEventsRepository, PostgreReadEventsRepository>();
             services.AddScoped<IWriteEventsRepository, PostgreWriteEventsRepository>();
+
+            services.AddScoped<InboxMessagesRepository, PostgreInboxMessagesRepository>();
 
             return services;
         }

@@ -15,9 +15,12 @@ namespace Shared.Objects.Classes.Options
         public IConfigurationSection FirstOrDefault(string sectionName)
             => _kafkaSection.GetSection(sectionName);
 
+        public string BootstrapServers
+            => First(nameof(BootstrapServers)).Value!; 
+
         public KafkaOptions()
         {
-            _kafkaSection = globalConfiguration.GetRequiredSection("Kafka");
+            _kafkaSection = globalConfiguration.GetRequiredSection(nameof(KafkaOptions));
         }
     }
 }

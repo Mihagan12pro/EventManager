@@ -1,11 +1,11 @@
 ﻿using Events.Application.Dtos;
-using Events.Application.Repositories;
+using Events.Application.Repositories.Events;
 using Events.Domain;
 using Microsoft.EntityFrameworkCore;
 using Shared.Objects.Classes.Collections;
 using Shared.Objects.Records;
 
-namespace Events.Infrastracture.Repositories
+namespace Events.Infrastracture.Repositories.Events
 {
     internal class PostgreReadEventsRepository : IReadEventsRepository
     {

@@ -1,7 +1,7 @@
 ﻿using Events.Domain;
-using Events.Application.Repositories;
 using Shared.Objects.Interfaces;
 using Events.Domain.ValueObjects;
+using Events.Application.Repositories.Events;
 
 namespace Events.Application.Handlers.Add
 {

@@ -3,7 +3,7 @@ using Events.Domain;
 using Shared.Objects.Classes.Collections;
 using Shared.Objects.Records;
 
-namespace Events.Application.Repositories
+namespace Events.Application.Repositories.Events
 {
     public interface IReadEventsRepository
     {

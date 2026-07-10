@@ -1,7 +1,7 @@
 ﻿using Events.Application.Dtos;
 using Events.Domain;
 
-namespace Events.Application.Repositories
+namespace Events.Application.Repositories.Events
 {
     public interface IWriteEventsRepository
     {

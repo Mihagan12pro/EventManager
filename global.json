@@ -8,5 +8,9 @@
     },
     "Issuer": "https://localhost:7066"
   },
-  "AllowedHosts": "*"
+  "AllowedHosts": "*",
+
+  "KafkaOptions": {
+    "BootstrapServers": "127.0.0.1:9092"
+  }
 }

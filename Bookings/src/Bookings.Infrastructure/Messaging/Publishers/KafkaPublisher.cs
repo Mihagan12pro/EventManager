@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using Shared.Messaging.Contracts.Bookings;
+using Shared.Objects.Classes.Options;
 using System.Text.Json;
 
 namespace Bookings.Infrastructure.Messaging.Publishers
@@ -7,6 +8,7 @@ namespace Bookings.Infrastructure.Messaging.Publishers
     internal class KafkaPublisher : IPublisher
     {
         private readonly IProducer<string, string> _producer;
+        private readonly KafkaOptions _kafkaOptions = new KafkaOptions();
 
         public async Task ProduceAsync(
             PendingBooking pendingBooking, 
@@ -26,7 +28,7 @@ namespace Bookings.Infrastructure.Messaging.Publishers
         {
             var config = new ProducerConfig
             {
-                BootstrapServers ="localhost:9092"
+                BootstrapServers = _kafkaOptions.BootstrapServers
             };
 
             _producer = new ProducerBuilder<string, string>(config).Build();

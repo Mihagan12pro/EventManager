@@ -1,4 +1,4 @@
-﻿using Events.Application.Repositories;
+﻿using Events.Application.Repositories.Events;
 using Shared.Objects.Interfaces;
 
 namespace Events.Application.Handlers.CompleteUpdate

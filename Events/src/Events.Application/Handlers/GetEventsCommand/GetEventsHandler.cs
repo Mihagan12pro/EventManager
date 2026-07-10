@@ -1,5 +1,5 @@
 ﻿using Events.Application.Dtos;
-using Events.Application.Repositories;
+using Events.Application.Repositories.Events;
 using Events.Domain;
 using Shared.Objects.Classes.Collections;
 using Shared.Objects.Interfaces;

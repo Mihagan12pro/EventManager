@@ -1,10 +1,10 @@
 ﻿using Events.Application.Dtos;
-using Events.Application.Repositories;
+using Events.Application.Repositories.Events;
 using Events.Domain;
 using Events.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace Events.Infrastracture.Repositories
+namespace Events.Infrastracture.Repositories.Events
 {
     internal class PostgreWriteEventsRepository : IWriteEventsRepository
     {
