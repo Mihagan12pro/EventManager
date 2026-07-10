@@ -1,5 +1,6 @@
 ﻿using Bookings.Application.Repositories;
 using Bookings.Infrastructure.Hosted;
+using Bookings.Infrastructure.Messaging.Consumers;
 using Bookings.Infrastructure.Messaging.Publishers;
 using Bookings.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -17,12 +18,27 @@ namespace Bookings.Infrastructure
             this IServiceCollection services, 
             IConfiguration configuration)
         {
+            services.AddHostedServices();
+
             services.AddPublishers();
+            services.AddConsumers();
+
             services.AdDbInteraction(configuration);
 
-            services.AddHostedService<PendingBookingsHandler>();
+            return services;
+        }
 
+        private static IServiceCollection AddHostedServices(this IServiceCollection services)
+        {
+            services.AddHostedService<PendingBookingsHandler>();
             services.AddHostedService<TopicInitializer>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddConsumers(this IServiceCollection services)
+        {
+            services.AddHostedService<ConfirmedBookingsConsumer>();
 
             return services;
         }

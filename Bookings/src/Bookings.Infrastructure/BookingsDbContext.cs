@@ -1,5 +1,6 @@
 ﻿using Bookings.Domain;
 using Microsoft.EntityFrameworkCore;
+using Shared.Messaging;
 using System.Reflection;
 
 namespace Bookings.Infrastructure
@@ -7,6 +8,8 @@ namespace Bookings.Infrastructure
     public class BookingsDbContext : DbContext
     {
         public DbSet<Booking> Bookings { get; set; }
+
+        public DbSet<Message> InboxMessages { get; set; }
 
 
         public BookingsDbContext(DbContextOptions<BookingsDbContext> contextOptions) : base(contextOptions)
