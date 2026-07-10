@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Shared.Messaging.Contracts.Bookings
 {
-    public class BookingConfirmed : BookingWithStatus
+    public class ConfirmedBooking : BookingWithStatus
     {
     }
 }

@@ -23,7 +23,7 @@ namespace Shared.Infrastructure.Kafka
                 try
                 {
                     await adminClient.CreateTopicsAsync(
-                  [
+                    [
                       new TopicSpecification
                         {
                             Name = nameof(PendingBooking),
@@ -32,7 +32,16 @@ namespace Shared.Infrastructure.Kafka
                             
                             ReplicationFactor = 1
                         },
-                   ]);
+
+                        new TopicSpecification
+                        {
+                            Name = nameof(ConfirmedBooking),
+
+                            NumPartitions = 1,
+
+                            ReplicationFactor = 1
+                        },
+                    ]);
                 }
                 catch (CreateTopicsException ex) when (ex.Results.All(r => r.Error.Code == ErrorCode.TopicAlreadyExists))
                 {

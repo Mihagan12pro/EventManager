@@ -9,7 +9,7 @@ namespace Bookings.Infrastructure.Repositories
     {
         private readonly BookingsDbContext _dbContext;
 
-        public async Task CreateAsync(
+        public async Task<Guid> CreateAsync(
             Booking booking,
             CancellationToken cancellationToken)
         {
@@ -17,6 +17,8 @@ namespace Bookings.Infrastructure.Repositories
 
 
             await _dbContext.SaveChangesAsync(cancellationToken);
+
+            return booking.Id;
         }
 
         public async Task<IEnumerable<Booking>> GetAllWithFiltersAsync(

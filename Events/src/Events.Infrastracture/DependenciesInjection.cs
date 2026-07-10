@@ -1,6 +1,7 @@
 ﻿using Events.Application.Repositories.Events;
 using Events.Application.Repositories.InboxMessages;
 using Events.Infrastracture.Messaging.Consumers;
+using Events.Infrastracture.Messaging.Publishers;
 using Events.Infrastracture.Repositories.Events;
 using Events.Infrastracture.Repositories.InboxMessages;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,8 @@ namespace Events.Infrastracture
 
             services.AddHostedService<TopicInitializer>();
             services.AddHostedService<PendingBookingsConsumer>();
+
+            services.AddSingleton<IPublisher, KafkaPublisher>();
 
             return services;
         }

@@ -5,7 +5,7 @@ namespace Bookings.Application.Repositories
 {
     public interface IBookingRepository
     {
-        Task CreateAsync(
+        Task<Guid> CreateAsync(
             Booking booking,
             CancellationToken cancellationToken);
 

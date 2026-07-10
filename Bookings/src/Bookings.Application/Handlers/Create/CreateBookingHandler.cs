@@ -7,13 +7,13 @@ using Shared.Objects.Interfaces;
 namespace Bookings.Application.Handlers.Create
 {
     internal class CreateBookingHandler 
-        : ICommandHandler<CreateBookingCommand>
+        : ICommandHandler<Guid, CreateBookingCommand>
     {
         private readonly IBookingRepository _bookingRepository;
         private readonly IHttpContextAccessor _httpContext;
         private readonly IJwtClaimsExtractor _jwtClaimsExtractor;
 
-        public async Task HandleAsync(
+        public async Task<Guid> HandleAsync(
             CreateBookingCommand command,
             CancellationToken cancellationToken)
         {
@@ -28,7 +28,7 @@ namespace Bookings.Application.Handlers.Create
                 UserId = Guid.Parse(_jwtClaimsExtractor.Extract("sub"))
             };
 
-            await _bookingRepository.CreateAsync(booking, cancellationToken);
+            return await _bookingRepository.CreateAsync(booking, cancellationToken);
         }
 
         public CreateBookingHandler(

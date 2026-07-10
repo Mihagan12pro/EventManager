@@ -1,5 +1,7 @@
 ﻿using Bookings.Application.Handlers.Create;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Shared.AspNet.Utils;
 using Shared.Objects.Interfaces;
 
 namespace Bookings.API.Api
@@ -10,12 +12,17 @@ namespace Bookings.API.Api
         {
             app.MapPost(@"api/events/{id}/book", async(
                 Guid id,
-                [FromServices] ICommandHandler<CreateBookingCommand> handler,
+                HttpContext context,
+                [FromServices] ICommandHandler<Guid, CreateBookingCommand> handler,
                 CancellationToken token) => 
             {
             
-                await handler.HandleAsync(new CreateBookingCommand(id), token);
-            
+                Guid result = await handler.HandleAsync(new CreateBookingCommand(id), token);
+
+                var location = UrlMaster.CreateWithoutPath(context.Request, "api/bookings", result);
+
+                return Results.Accepted(location, result);
+
             }).RequireAuthorization();
 
             return app;
