@@ -73,6 +73,8 @@ services:
       - postgres-bookings
   kafka:
     image: confluentinc/cp-kafka:7.6.0
+    volumes:
+      - kafka_data:/var/lib/kafka/data
     ports:
       - "9092:9092"
     environment:
@@ -91,3 +93,4 @@ volumes:
   pg_events_data:
   pg_bookings_data:
   pgadmin_data:
+  kafka_data:

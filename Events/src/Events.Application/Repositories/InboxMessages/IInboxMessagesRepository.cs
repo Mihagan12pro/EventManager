@@ -1,4 +1,5 @@
 ﻿using Shared.Messaging;
+using Shared.Messaging.Contracts.Bookings;
 
 namespace Events.Application.Repositories.InboxMessages
 {
@@ -9,7 +10,7 @@ namespace Events.Application.Repositories.InboxMessages
             CancellationToken cancellationToken);
 
         Task AddMessageAsync(
-            Message message,
+            PendingBooking message,
             CancellationToken cancellationToken);
     }
 }

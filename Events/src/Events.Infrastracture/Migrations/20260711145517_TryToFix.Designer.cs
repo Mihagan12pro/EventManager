@@ -3,6 +3,7 @@ using System;
 using Events.Infrastracture;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Events.Infrastracture.Postgre.Migrations
 {
     [DbContext(typeof(EventsDbContext))]
-    partial class EventsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260711145517_TryToFix")]
+    partial class TryToFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,29 +56,15 @@ namespace Events.Infrastracture.Postgre.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("Shared.Messaging.Contracts.Bookings.PendingBooking", b =>
+            modelBuilder.Entity("Shared.Messaging.Message", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("BookingId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("EventId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("OccurredAt")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookingId")
-                        .IsUnique();
-
-                    b.ToTable("InboxPendingMessages");
+                    b.ToTable("InboxMessages");
                 });
 #pragma warning restore 612, 618
         }

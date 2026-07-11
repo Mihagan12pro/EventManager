@@ -49,11 +49,16 @@ namespace Bookings.Infrastructure.Hosted
             Booking pendingBooking, 
             CancellationToken stoppingToken)
         {
-            PendingBooking pendingMessage = new PendingBooking(
-                Guid.NewGuid().ToString(),
-                pendingBooking.EventId.ToString(),
-                pendingBooking.Id.ToString(), 
-                DateTime.UtcNow.ToString());
+            PendingBooking pendingMessage = new PendingBooking
+            {
+                OccurredAt = DateTime.UtcNow.ToString(),
+
+                BookingId = pendingBooking.Id.ToString(),
+                
+                EventId = pendingBooking.EventId.ToString(),
+
+                Id = Guid.NewGuid().ToString(),
+            };
 
             await _publisher.ProduceAsync(pendingMessage, stoppingToken);
         }

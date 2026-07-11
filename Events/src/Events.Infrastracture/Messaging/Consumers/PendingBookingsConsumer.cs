@@ -62,15 +62,16 @@ namespace Events.Infrastracture.Messaging.Consumers
 
                                 @event.ReverseSeats();
 
-                                ConfirmedBooking confirmedBooking = new ConfirmedBooking(
-                                    pendingBooking.Id, 
-                                    
-                                    pendingBooking.EventId,
-                                    
-                                    pendingBooking.BookingId, 
+                                ConfirmedBooking confirmedBooking = new ConfirmedBooking 
+                                {
+                                    Id = pendingBooking.Id,
 
-                                    DateTime.UtcNow.ToString()
-                               );
+                                    EventId = pendingBooking.EventId,
+
+                                    BookingId = pendingBooking.BookingId,
+
+                                    OccurredAt = DateTime.UtcNow.ToString()
+                                };
                                 
                                 await _publisher.PublishConfirmedAsync(confirmedBooking, stoppingToken);
                             }
@@ -89,10 +90,8 @@ namespace Events.Infrastracture.Messaging.Consumers
                             finally
                             {
                                 await messagesRepository.AddMessageAsync(
-                                    new Message()
-                                    {
-                                        Id = Guid.Parse(pendingBooking.Id) 
-                                    },
+                                    pendingBooking,
+
                                     stoppingToken
                                 );
                             }

@@ -1,31 +1,16 @@
 ﻿namespace Shared.Messaging.Contracts.Bookings
 {
-    public record BookingWithStatus : IMessage
+    public class BookingWithStatus : IMessage
     {
         /// <summary>
         /// Message Id
         /// </summary>
-        public string Id { get; init; }
+        public required string Id { get; set; }
 
-        public string EventId { get; init; }
+        public required string EventId { get; set; }
 
-        public string BookingId { get; init; }
+        public required string BookingId { get; set; }
 
-        public string OccurredAt { get; init; }
-
-        public BookingWithStatus(
-            string Id,
-            string EventId,
-            string BookingId,
-            string OccuredAt)
-        {
-            this.Id = Id;
-
-            this.BookingId = BookingId;
-
-            this.OccurredAt = OccuredAt;
-
-            this.EventId = EventId;
-        }
+        public required string OccurredAt { get; set; }
     }
 }

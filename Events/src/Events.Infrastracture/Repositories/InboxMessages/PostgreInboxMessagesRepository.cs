@@ -1,6 +1,7 @@
 ﻿using Events.Application.Repositories.InboxMessages;
 using Microsoft.EntityFrameworkCore;
 using Shared.Messaging;
+using Shared.Messaging.Contracts.Bookings;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,10 +13,10 @@ namespace Events.Infrastracture.Repositories.InboxMessages
         private readonly EventsDbContext _dbContext;
 
         public async Task AddMessageAsync(
-            Message message,
+            PendingBooking message,
             CancellationToken cancellationToken)
         {
-            await _dbContext.InboxMessages.AddAsync(message, cancellationToken);
+            await _dbContext.InboxPendingMessages.AddAsync(message, cancellationToken);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
@@ -24,8 +25,8 @@ namespace Events.Infrastracture.Repositories.InboxMessages
             Guid messageId,
             CancellationToken cancellationToken)
         {
-            Message? message = await _dbContext.InboxMessages.FirstOrDefaultAsync(
-                m => m.Id == messageId, cancellationToken); 
+            var message = await _dbContext.InboxPendingMessages.FirstOrDefaultAsync(
+                m => m.BookingId == messageId.ToString(), cancellationToken); 
 
             return message != null;
         }

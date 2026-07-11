@@ -1,10 +1,7 @@
 ﻿namespace Shared.Messaging.Contracts.Bookings
 {
-    public record PendingBooking : BookingWithStatus
+    public class PendingBooking : BookingWithStatus
     {
-        public PendingBooking(string Id, string EventId, string BookingId, string OccuredAt) 
-            : base(Id, EventId, BookingId, OccuredAt)
-        {
-        }
+
     }
 }
