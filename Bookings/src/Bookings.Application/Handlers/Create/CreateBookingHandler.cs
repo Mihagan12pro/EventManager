@@ -1,7 +1,8 @@
-﻿using Bookings.Application.Repositories;
+﻿using Bookings.Application.Publishers;
+using Bookings.Application.Repositories;
 using Bookings.Domain;
 using Bookings.Domain.Enums;
-using Microsoft.AspNetCore.Http;
+using Shared.Messaging.Contracts.Bookings;
 using Shared.Objects.Interfaces;
 
 namespace Bookings.Application.Handlers.Create
@@ -10,8 +11,8 @@ namespace Bookings.Application.Handlers.Create
         : ICommandHandler<Guid, CreateBookingCommand>
     {
         private readonly IBookingRepository _bookingRepository;
-        private readonly IHttpContextAccessor _httpContext;
         private readonly IJwtClaimsExtractor _jwtClaimsExtractor;
+        private readonly IPublisher _publisher;
 
         public async Task<Guid> HandleAsync(
             CreateBookingCommand command,
@@ -28,18 +29,36 @@ namespace Bookings.Application.Handlers.Create
                 UserId = Guid.Parse(_jwtClaimsExtractor.Extract("sub"))
             };
 
-            return await _bookingRepository.CreateAsync(booking, cancellationToken);
+            Guid id = await _bookingRepository.CreateAsync(booking, cancellationToken);
+
+            await _publisher.ProduceAsync(
+                new PendingBooking()
+                {
+                    BookingId = id,
+                    
+                    EventId = booking.EventId.Value,
+                    
+                    Id = Guid.NewGuid(),
+                    
+                    OccurredAt = DateTime.UtcNow
+                },
+                
+                cancellationToken
+            );
+
+            return id;
         }
 
         public CreateBookingHandler(
+            IPublisher publisher,
             IBookingRepository bookingRepository,
-            IHttpContextAccessor httpContext,
             IJwtClaimsExtractor jwtClaimsExtractor)
         {
             _bookingRepository = bookingRepository;
 
             _jwtClaimsExtractor = jwtClaimsExtractor;
-            _httpContext = httpContext;
+
+            _publisher = publisher;
         }
     }
 }

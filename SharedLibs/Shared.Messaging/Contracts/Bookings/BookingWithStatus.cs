@@ -1,6 +1,10 @@
-﻿namespace Shared.Messaging.Contracts.Bookings
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Shared.Messaging.Contracts.Bookings
 {
-    public class BookingWithStatus : IMessage
+    public abstract class BookingWithStatus : IMessage
     {
         /// <summary>
         /// Message Id

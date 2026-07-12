@@ -41,7 +41,7 @@ namespace Bookings.Infrastructure.Messaging.Consumers
                     if (consumeResult?.Message?.Value == null)
                         continue;
 
-                    var confirmedBooking = JsonSerializer.Deserialize<PendingBooking>(consumeResult.Message.Value);
+                    var confirmedBooking = JsonSerializer.Deserialize<ConfirmedBooking>(consumeResult.Message.Value);
 
                     using (var scope = _serviceScopeFactory.CreateScope())
                     {

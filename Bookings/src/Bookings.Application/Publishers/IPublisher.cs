@@ -1,8 +1,8 @@
 ﻿using Shared.Messaging.Contracts.Bookings;
 
-namespace Bookings.Infrastructure.Messaging.Publishers
+namespace Bookings.Application.Publishers
 {
-    internal interface IPublisher
+    public interface IPublisher
     {
         Task ProduceAsync(
             PendingBooking pendingBooking,

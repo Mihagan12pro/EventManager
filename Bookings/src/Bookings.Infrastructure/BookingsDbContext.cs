@@ -1,4 +1,5 @@
 ﻿using Bookings.Domain;
+using Bookings.Infrastructure.SummaryTables;
 using Microsoft.EntityFrameworkCore;
 using Shared.Messaging;
 using System.Reflection;

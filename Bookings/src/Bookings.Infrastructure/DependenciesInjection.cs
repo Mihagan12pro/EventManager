@@ -1,5 +1,5 @@
-﻿using Bookings.Application.Repositories;
-using Bookings.Infrastructure.Hosted;
+﻿using Bookings.Application.Publishers;
+using Bookings.Application.Repositories;
 using Bookings.Infrastructure.Messaging.Consumers;
 using Bookings.Infrastructure.Messaging.Publishers;
 using Bookings.Infrastructure.Repositories;
@@ -7,8 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Infrastructure.Kafka;
-using Shared.Messaging;
-using Shared.Messaging.Contracts.Bookings;
 
 namespace Bookings.Infrastructure
 {
@@ -30,7 +28,6 @@ namespace Bookings.Infrastructure
 
         private static IServiceCollection AddHostedServices(this IServiceCollection services)
         {
-            services.AddHostedService<PendingBookingsHandler>();
             services.AddHostedService<TopicInitializer>();
 
             return services;

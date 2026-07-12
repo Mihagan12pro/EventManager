@@ -35,7 +35,7 @@ namespace Events.Infrastracture.Messaging.Publishers
                 Value = JsonSerializer.Serialize(rejected)
             };
 
-            await _producer.ProduceAsync(nameof(ConfirmedBooking), message, cancellationToken);
+            await _producer.ProduceAsync(nameof(RejectedBooking), message, cancellationToken);
         }
 
         public KafkaPublisher()

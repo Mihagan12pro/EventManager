@@ -25,4 +25,8 @@
     <ProjectReference Include="..\Bookings.Application\Bookings.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\Outbox\" />
+  </ItemGroup>
+
 </Project>

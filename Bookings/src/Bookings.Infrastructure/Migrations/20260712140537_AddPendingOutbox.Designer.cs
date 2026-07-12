@@ -3,6 +3,7 @@ using System;
 using Bookings.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bookings.Infrastructure.Migrations
 {
     [DbContext(typeof(BookingsDbContext))]
-    partial class BookingsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260712140537_AddPendingOutbox")]
+    partial class AddPendingOutbox
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +61,7 @@ namespace Bookings.Infrastructure.Migrations
                     b.HasIndex("BookingId")
                         .IsUnique();
 
-                    b.ToTable("PendingBookingMessage");
+                    b.ToTable("OutboxPendingMessages");
                 });
 
             modelBuilder.Entity("Shared.Messaging.Message", b =>

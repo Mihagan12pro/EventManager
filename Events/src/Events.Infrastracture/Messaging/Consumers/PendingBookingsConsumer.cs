@@ -53,7 +53,8 @@ namespace Events.Infrastracture.Messaging.Consumers
 
                         if (!result)
                         {
-                            IReadEventsRepository readEventsRepository = scope.ServiceProvider.GetRequiredService<IReadEventsRepository>();
+                            IReadEventsRepository readEventsRepository = scope.ServiceProvider
+                                .GetRequiredService<IReadEventsRepository>();
 
                             try
                             {
