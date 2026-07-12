@@ -10,8 +10,6 @@ namespace Bookings.Infrastructure
     {
         public DbSet<Booking> Bookings { get; set; }
 
-        public DbSet<Message> InboxMessages { get; set; }
-
 
         public BookingsDbContext(DbContextOptions<BookingsDbContext> contextOptions) : base(contextOptions)
         {

@@ -36,6 +36,7 @@ namespace Bookings.Infrastructure
         private static IServiceCollection AddConsumers(this IServiceCollection services)
         {
             services.AddHostedService<ConfirmedBookingsConsumer>();
+            services.AddHostedService<RejectedBookingsConsumer>();
 
             return services;
         }
@@ -56,7 +57,6 @@ namespace Bookings.Infrastructure
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddScoped<IInboxMessagesRepository, PostgreInboxMessagesRepository>();
             services.AddScoped<IBookingRepository, PostgreBookingsRepository>();
 
             return services;

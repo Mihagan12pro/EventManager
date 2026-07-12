@@ -4,25 +4,24 @@ using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Shared.Messaging;
 using Shared.Messaging.Contracts.Bookings;
 using Shared.Objects.Classes.Options;
 using System.Text.Json;
 
 namespace Bookings.Infrastructure.Messaging.Consumers
 {
-    internal class ConfirmedBookingsConsumer : BackgroundService
+    internal class RejectedBookingsConsumer : BackgroundService
     {
-        private readonly ILogger<ConfirmedBookingsConsumer> _logger;
+        private readonly ILogger<RejectedBookingsConsumer> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        private readonly KafkaOptions kafkaOptions = new KafkaOptions();
+        private readonly KafkaOptions _kafkaOptions = new KafkaOptions();
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var config = new ConsumerConfig
             {
-                BootstrapServers = kafkaOptions.BootstrapServers,
+                BootstrapServers = _kafkaOptions.BootstrapServers,
                 GroupId = "bookings-service",
                 AutoOffsetReset = AutoOffsetReset.Earliest,
                 EnableAutoCommit = false
@@ -30,7 +29,7 @@ namespace Bookings.Infrastructure.Messaging.Consumers
 
             using var consumer = new ConsumerBuilder<string, string>(config).Build();
 
-            consumer.Subscribe(nameof(ConfirmedBooking));
+            consumer.Subscribe(nameof(RejectedBooking));
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -41,7 +40,7 @@ namespace Bookings.Infrastructure.Messaging.Consumers
                     if (consumeResult?.Message?.Value == null)
                         continue;
 
-                    var confirmedBooking = JsonSerializer.Deserialize<ConfirmedBooking>(consumeResult.Message.Value);
+                    var confirmedBooking = JsonSerializer.Deserialize<RejectedBooking>(consumeResult.Message.Value);
 
                     using (var scope = _serviceScopeFactory.CreateScope())
                     {
@@ -52,7 +51,7 @@ namespace Bookings.Infrastructure.Messaging.Consumers
                             await bookingRepository.ChangeBookingStatusAsync(
                                 confirmedBooking.BookingId,
 
-                                BookingStatus.Confirmed,
+                                BookingStatus.Rejected,
 
                                 confirmedBooking.OccurredAt,
 
@@ -70,13 +69,13 @@ namespace Bookings.Infrastructure.Messaging.Consumers
                 }
                 catch (OperationCanceledException ex)
                 {
-                    _logger.LogInformation("The operation in confirmed consumer has been cancelled!");
+                    _logger.LogInformation("The operation in rejected consumer has been cancelled!");
                 }
             }
         }
 
-        public ConfirmedBookingsConsumer(
-            ILogger<ConfirmedBookingsConsumer> logger,
+        public RejectedBookingsConsumer(
+            ILogger<RejectedBookingsConsumer> logger,
             IServiceScopeFactory serviceScopeFactory)
         {
             _logger = logger;

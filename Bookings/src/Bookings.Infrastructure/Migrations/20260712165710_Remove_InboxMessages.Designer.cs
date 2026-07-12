@@ -3,6 +3,7 @@ using System;
 using Bookings.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bookings.Infrastructure.Migrations
 {
     [DbContext(typeof(BookingsDbContext))]
-    partial class BookingsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260712165710_Remove_InboxMessages")]
+    partial class Remove_InboxMessages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,6 +51,17 @@ namespace Bookings.Infrastructure.Migrations
                     b.HasIndex("EventId");
 
                     b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("Shared.Messaging.Message", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InboxMessages");
                 });
 #pragma warning restore 612, 618
         }
