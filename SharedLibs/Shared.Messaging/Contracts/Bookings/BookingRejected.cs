@@ -1,6 +1,6 @@
 ﻿namespace Shared.Messaging.Contracts.Bookings
 {
-    public class BookingRejected : BookingWithStatus
+    public class RejectedBooking : BookingWithStatus
     {
 
     }

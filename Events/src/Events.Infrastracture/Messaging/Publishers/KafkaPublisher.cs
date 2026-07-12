@@ -25,10 +25,17 @@ namespace Events.Infrastracture.Messaging.Publishers
         }
 
         public async Task PublishRejectedAsync(
-            BookingRejected rejected,
+            RejectedBooking rejected,
             CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            Message<string, string> message = new Message<string, string>()
+            {
+                Key = "key1",
+
+                Value = JsonSerializer.Serialize(rejected)
+            };
+
+            await _producer.ProduceAsync(nameof(ConfirmedBooking), message, cancellationToken);
         }
 
         public KafkaPublisher()

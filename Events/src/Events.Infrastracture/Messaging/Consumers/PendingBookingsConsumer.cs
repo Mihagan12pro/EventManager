@@ -63,7 +63,7 @@ namespace Events.Infrastracture.Messaging.Consumers
 
                                 ConfirmedBooking confirmedBooking = new ConfirmedBooking 
                                 {
-                                    Id = pendingBooking.Id,
+                                    Id = Guid.NewGuid(),
 
                                     EventId = pendingBooking.EventId,
 
@@ -76,12 +76,46 @@ namespace Events.Infrastracture.Messaging.Consumers
                             }
                             catch (InvalidOperationException ex)
                             {
+                                RejectedBooking rejectedBooking = new RejectedBooking
+                                {
+                                    Id = Guid.NewGuid(),
+
+                                    BookingId = pendingBooking.BookingId,
+
+                                    EventId = pendingBooking.EventId,
+
+                                    OccurredAt = DateTime.UtcNow
+                                };
+
+                                await _publisher.PublishRejectedAsync(
+                                    rejectedBooking,
+
+                                    stoppingToken
+                                );
+
                                 _logger.LogInformation(
                                     "Event with id = {id} does not exists!",
                                     pendingBooking.EventId);
                             }
                             catch(NoAvailableSeatsException ex)
                             {
+                                RejectedBooking rejectedBooking = new RejectedBooking 
+                                {
+                                    Id = Guid.NewGuid(),
+
+                                    BookingId = pendingBooking.BookingId,
+
+                                    EventId = pendingBooking.EventId,
+
+                                    OccurredAt = DateTime.UtcNow
+                                };
+
+                                await _publisher.PublishRejectedAsync(
+                                    rejectedBooking, 
+                                    
+                                    stoppingToken
+                                );
+
                                 _logger.LogInformation(
                                     "Event with id = {id} has no avaliable seats!",
                                     pendingBooking.EventId);

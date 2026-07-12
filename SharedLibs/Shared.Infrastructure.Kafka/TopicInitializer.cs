@@ -11,6 +11,8 @@ namespace Shared.Infrastructure.Kafka
     {
         private readonly KafkaOptions _kafkaOptions = new KafkaOptions();
 
+        private readonly ILogger<TopicInitializer> _logger;
+
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             var config = new AdminClientConfig
@@ -41,16 +43,33 @@ namespace Shared.Infrastructure.Kafka
 
                             ReplicationFactor = 1
                         },
+
+                        new TopicSpecification
+                        {
+                            Name = nameof(RejectedBooking),
+
+                            NumPartitions = 1,
+
+                            ReplicationFactor = 1
+                        }
                     ]);
                 }
-                catch (CreateTopicsException ex) when (ex.Results.All(r => r.Error.Code == ErrorCode.TopicAlreadyExists))
+                catch (CreateTopicsException ex) when (
+                    ex.Results.All(
+                        r => r.Error.Code == ErrorCode.TopicAlreadyExists)
+                    )
                 {
-                    
+                    _logger.LogInformation("This topic already exists!");
                 }
             }
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
             => Task.CompletedTask;
+
+        public TopicInitializer(ILogger<TopicInitializer> logger)
+        {
+            _logger = logger;
+        }
     }
 }

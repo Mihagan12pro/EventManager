@@ -9,7 +9,7 @@ namespace Events.Infrastracture.Messaging.Publishers
             CancellationToken cancellationToken);
 
         Task PublishRejectedAsync(
-            BookingRejected rejected, 
+            RejectedBooking rejected, 
             CancellationToken cancellationToken);
     }
 }
