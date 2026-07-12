@@ -35,7 +35,7 @@ namespace Bookings.Infrastructure.Repositories
             return bookings;
         }
 
-        public async Task ChangeBookingStatus(
+        public async Task ChangeBookingStatusAsync(
             Guid id, 
             BookingStatus status,
             DateTime processedAt,
@@ -46,6 +46,15 @@ namespace Bookings.Infrastructure.Repositories
             booking.Status = status;
 
             await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<Booking> GetByIdAsync(
+            Guid id,
+            CancellationToken cancellationToken)
+        {
+            Booking booking = await _dbContext.Bookings.FirstAsync(b => b.Id == id, cancellationToken);
+
+            return booking;
         }
 
         public PostgreBookingsRepository(

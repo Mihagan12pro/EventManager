@@ -53,7 +53,7 @@ namespace Bookings.Infrastructure.Messaging.Consumers
                             {
                                 IBookingRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
 
-                                await bookingRepository.ChangeBookingStatus(
+                                await bookingRepository.ChangeBookingStatusAsync(
                                     confirmedBooking.BookingId,
 
                                     BookingStatus.Confirmed,

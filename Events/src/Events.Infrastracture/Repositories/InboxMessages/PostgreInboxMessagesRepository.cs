@@ -1,10 +1,6 @@
 ﻿using Events.Application.Repositories.InboxMessages;
 using Microsoft.EntityFrameworkCore;
-using Shared.Messaging;
 using Shared.Messaging.Contracts.Bookings;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Events.Infrastracture.Repositories.InboxMessages
 {

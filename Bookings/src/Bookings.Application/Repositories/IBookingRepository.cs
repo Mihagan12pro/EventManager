@@ -14,10 +14,14 @@ namespace Bookings.Application.Repositories
             Filters<Booking> filters,
             CancellationToken cancellationToken);
 
-        Task ChangeBookingStatus(
+        Task ChangeBookingStatusAsync(
             Guid id, 
             BookingStatus status,
             DateTime OccuredAt,
+            CancellationToken cancellationToken);
+
+        Task<Booking> GetByIdAsync(
+            Guid id, 
             CancellationToken cancellationToken);
     }
 }
