@@ -5,7 +5,7 @@ namespace Events.Application.Repositories.InboxMessages
 {
     public interface IInboxMessagesRepository
     {
-        Task<bool> FindMessageAsync(
+        Task<bool> FindPendingMessageAsync(
             Guid messageId,
             CancellationToken cancellationToken);
 

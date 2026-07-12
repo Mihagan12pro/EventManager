@@ -5,12 +5,12 @@
         /// <summary>
         /// Message Id
         /// </summary>
-        public required string Id { get; set; }
+        public required Guid Id { get; set; }
 
-        public required string EventId { get; set; }
+        public required Guid EventId { get; set; }
 
-        public required string BookingId { get; set; }
+        public required Guid BookingId { get; set; }
 
-        public required string OccurredAt { get; set; }
+        public required DateTime OccurredAt { get; set; }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Shared.Messaging.Contracts.Bookings;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Events.Infrastracture.Configurations
 {

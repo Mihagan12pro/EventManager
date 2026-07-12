@@ -38,9 +38,11 @@ namespace Bookings.Infrastructure.Repositories
         public async Task ChangeBookingStatus(
             Guid id, 
             BookingStatus status,
+            DateTime processedAt,
             CancellationToken cancellationToken)
         {
             Booking booking = await _dbContext.Bookings.FirstAsync(b => b.Id == id, cancellationToken);
+            booking.ProcessedAt = processedAt;
             booking.Status = status;
 
             await _dbContext.SaveChangesAsync(cancellationToken);

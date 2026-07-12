@@ -47,16 +47,18 @@ namespace Bookings.Infrastructure.Messaging.Consumers
                     {
                         var messagesRepository = scope.ServiceProvider.GetRequiredService<IInboxMessagesRepository>();
 
-                        if (!await messagesRepository.FindMessageAsync(Guid.Parse(confirmedBooking.Id), stoppingToken))
+                        if (!await messagesRepository.FindMessageAsync(confirmedBooking.Id, stoppingToken))
                         {
                             try
                             {
                                 IBookingRepository bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
 
                                 await bookingRepository.ChangeBookingStatus(
-                                    Guid.Parse(confirmedBooking.BookingId),
+                                    confirmedBooking.BookingId,
 
                                     BookingStatus.Confirmed,
+
+                                    confirmedBooking.OccurredAt,
 
                                     stoppingToken
                                 );
@@ -66,7 +68,7 @@ namespace Bookings.Infrastructure.Messaging.Consumers
                                 await messagesRepository.AddMessageAsync(
                                     new Message()
                                     {
-                                        Id = Guid.Parse(confirmedBooking.Id) 
+                                        Id = confirmedBooking.Id
                                     },
 
                                     stoppingToken

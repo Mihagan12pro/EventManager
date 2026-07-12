@@ -51,13 +51,13 @@ namespace Bookings.Infrastructure.Hosted
         {
             PendingBooking pendingMessage = new PendingBooking
             {
-                OccurredAt = DateTime.UtcNow.ToString(),
+                OccurredAt = DateTime.UtcNow,
 
-                BookingId = pendingBooking.Id.ToString(),
+                BookingId = pendingBooking.Id,
                 
-                EventId = pendingBooking.EventId.ToString(),
+                EventId = pendingBooking.EventId.Value,
 
-                Id = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid(),
             };
 
             await _publisher.ProduceAsync(pendingMessage, stoppingToken);

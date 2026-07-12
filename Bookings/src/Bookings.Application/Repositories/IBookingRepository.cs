@@ -17,6 +17,7 @@ namespace Bookings.Application.Repositories
         Task ChangeBookingStatus(
             Guid id, 
             BookingStatus status,
+            DateTime OccuredAt,
             CancellationToken cancellationToken);
     }
 }

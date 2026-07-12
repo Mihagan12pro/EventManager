@@ -6,7 +6,6 @@ using Events.Infrastracture.Messaging.Publishers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Shared.Messaging;
 using Shared.Messaging.Contracts.Bookings;
 using Shared.Objects.Classes.Options;
 using System.Text.Json;
@@ -50,7 +49,7 @@ namespace Events.Infrastracture.Messaging.Consumers
                     {
                         var messagesRepository = scope.ServiceProvider.GetRequiredService<IInboxMessagesRepository>();
 
-                        bool result = await messagesRepository.FindMessageAsync(Guid.Parse(pendingBooking.Id), stoppingToken);
+                        bool result = await messagesRepository.FindPendingMessageAsync(pendingBooking.BookingId, stoppingToken);
 
                         if (!result)
                         {
@@ -58,7 +57,7 @@ namespace Events.Infrastracture.Messaging.Consumers
 
                             try
                             {
-                                var @event = await readEventsRepository.GetEventAsync(Guid.Parse(pendingBooking.EventId), stoppingToken);
+                                var @event = await readEventsRepository.GetEventAsync(pendingBooking.EventId, stoppingToken);
 
                                 @event.ReverseSeats();
 
@@ -70,7 +69,7 @@ namespace Events.Infrastracture.Messaging.Consumers
 
                                     BookingId = pendingBooking.BookingId,
 
-                                    OccurredAt = DateTime.UtcNow.ToString()
+                                    OccurredAt = DateTime.UtcNow
                                 };
                                 
                                 await _publisher.PublishConfirmedAsync(confirmedBooking, stoppingToken);

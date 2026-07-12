@@ -21,12 +21,12 @@ namespace Events.Infrastracture.Repositories.InboxMessages
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<bool> FindMessageAsync(
+        public async Task<bool> FindPendingMessageAsync(
             Guid messageId,
             CancellationToken cancellationToken)
         {
             var message = await _dbContext.InboxPendingMessages.FirstOrDefaultAsync(
-                m => m.BookingId == messageId.ToString(), cancellationToken); 
+                m => m.BookingId == messageId, cancellationToken);
 
             return message != null;
         }
