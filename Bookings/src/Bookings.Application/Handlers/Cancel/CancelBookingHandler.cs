@@ -51,7 +51,9 @@ namespace Bookings.Application.Handlers.Cancel
 
                         Id = Guid.NewGuid(),
 
-                        OccurredAt = DateTime.UtcNow
+                        OccurredAt = DateTime.UtcNow,
+
+                        UserId = userId
                     },
 
                     cancellationToken

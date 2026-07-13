@@ -1,6 +1,6 @@
 ﻿using Confluent.Kafka;
 using Events.Application.Repositories.Events;
-using Events.Application.Repositories.InboxMessages;
+using Events.Application.Repositories.Messages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

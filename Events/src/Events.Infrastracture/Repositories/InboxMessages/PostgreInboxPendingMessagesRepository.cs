@@ -1,4 +1,4 @@
-﻿using Events.Application.Repositories.InboxMessages;
+﻿using Events.Application.Repositories.Messages;
 using Microsoft.EntityFrameworkCore;
 using Shared.Messaging.Contracts.Bookings;
 

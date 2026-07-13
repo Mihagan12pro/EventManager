@@ -19,6 +19,8 @@ namespace Events.Infrastracture
 
         public DbSet<CancelledBooking> InboxCancelledMessages { get; set; }
 
+        public DbSet<ConfirmedBooking> ConfirmedBookingsMessages { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
             => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 

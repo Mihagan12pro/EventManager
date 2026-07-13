@@ -2,7 +2,9 @@
 using Bookings.Application.Repositories;
 using Bookings.Domain;
 using Bookings.Domain.Enums;
+using Shared.Failures.Exceptions.WebApi.ClientErrors;
 using Shared.Messaging.Contracts.Bookings;
+using Shared.Objects.Classes.Collections;
 using Shared.Objects.Interfaces;
 
 namespace Bookings.Application.Handlers.Create
@@ -18,6 +20,8 @@ namespace Bookings.Application.Handlers.Create
             CreateBookingCommand command,
             CancellationToken cancellationToken)
         {
+            Guid userId = Guid.Parse(_jwtClaimsExtractor.Extract("sub"));
+
             Booking booking = new Booking
             {
                 CreatedAt = DateTime.UtcNow,
@@ -26,7 +30,7 @@ namespace Bookings.Application.Handlers.Create
 
                 EventId = command.Id,
 
-                UserId = Guid.Parse(_jwtClaimsExtractor.Extract("sub"))
+                UserId = userId
             };
 
             Guid id = await _bookingRepository.CreateAsync(booking, cancellationToken);
@@ -39,6 +43,8 @@ namespace Bookings.Application.Handlers.Create
                     EventId = booking.EventId.Value,
                     
                     Id = Guid.NewGuid(),
+
+                    UserId = userId,
                     
                     OccurredAt = DateTime.UtcNow
                 },

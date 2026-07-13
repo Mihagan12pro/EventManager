@@ -1,6 +1,6 @@
 ﻿using Shared.Messaging;
 
-namespace Events.Application.Repositories.InboxMessages
+namespace Events.Application.Repositories.Messages
 {
     public interface IInboxMessagesRepository<TMessage>
         where TMessage : IMessage

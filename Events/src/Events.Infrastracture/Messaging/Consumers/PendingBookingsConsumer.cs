@@ -1,7 +1,7 @@
 ﻿using Confluent.Kafka;
 using Events.Application;
 using Events.Application.Repositories.Events;
-using Events.Application.Repositories.InboxMessages;
+using Events.Application.Repositories.Messages;
 using Events.Domain.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -74,7 +74,9 @@ namespace Events.Infrastracture.Messaging.Consumers
 
                                         BookingId = pendingBooking.BookingId,
 
-                                        OccurredAt = DateTime.UtcNow
+                                        OccurredAt = DateTime.UtcNow,
+
+                                        UserId = pendingBooking.UserId
                                     };
 
                                     await _publisher.PublishConfirmedAsync(confirmedBooking, stoppingToken);
@@ -89,7 +91,9 @@ namespace Events.Infrastracture.Messaging.Consumers
 
                                         EventId = pendingBooking.EventId,
 
-                                        OccurredAt = DateTime.UtcNow
+                                        OccurredAt = DateTime.UtcNow,
+
+                                        UserId = pendingBooking.UserId
                                     };
 
                                     await _publisher.PublishRejectedAsync(
@@ -113,7 +117,9 @@ namespace Events.Infrastracture.Messaging.Consumers
 
                                     EventId = pendingBooking.EventId,
 
-                                    OccurredAt = DateTime.UtcNow
+                                    OccurredAt = DateTime.UtcNow,
+
+                                    UserId = pendingBooking.UserId
                                 };
 
                                 await _publisher.PublishRejectedAsync(
@@ -136,7 +142,9 @@ namespace Events.Infrastracture.Messaging.Consumers
 
                                     EventId = pendingBooking.EventId,
 
-                                    OccurredAt = DateTime.UtcNow
+                                    OccurredAt = DateTime.UtcNow,
+
+                                    UserId = pendingBooking.UserId
                                 };
 
                                 await _publisher.PublishRejectedAsync(
