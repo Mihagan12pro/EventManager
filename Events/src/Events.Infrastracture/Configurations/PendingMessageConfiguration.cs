@@ -5,9 +5,9 @@ using Shared.Messaging.Contracts.Bookings;
 namespace Events.Infrastracture.Configurations
 {
     internal class PendingMessageConfiguration
-        : IEntityTypeConfiguration<PendingBooking>
+        : IEntityTypeConfiguration<CancelledBooking>
     {
-        public void Configure(EntityTypeBuilder<PendingBooking> builder)
+        public void Configure(EntityTypeBuilder<CancelledBooking> builder)
         {
             builder.HasIndex(b => b.BookingId)
                    .IsUnique();

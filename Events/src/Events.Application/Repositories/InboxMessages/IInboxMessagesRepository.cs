@@ -1,16 +1,16 @@
 ﻿using Shared.Messaging;
-using Shared.Messaging.Contracts.Bookings;
 
 namespace Events.Application.Repositories.InboxMessages
 {
-    public interface IInboxMessagesRepository
+    public interface IInboxMessagesRepository<TMessage>
+        where TMessage : IMessage
     {
         Task<bool> FindPendingMessageAsync(
             Guid messageId,
             CancellationToken cancellationToken);
 
         Task AddMessageAsync(
-            PendingBooking message,
+            TMessage message,
             CancellationToken cancellationToken);
     }
 }

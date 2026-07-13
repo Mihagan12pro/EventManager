@@ -4,7 +4,7 @@ using Shared.Messaging.Contracts.Bookings;
 
 namespace Events.Infrastracture.Repositories.InboxMessages
 {
-    internal class PostgreInboxMessagesRepository : IInboxMessagesRepository
+    internal class PostgreInboxPendingMessagesRepository : IInboxMessagesRepository<PendingBooking>
     {
         private readonly EventsDbContext _dbContext;
 
@@ -27,7 +27,7 @@ namespace Events.Infrastracture.Repositories.InboxMessages
             return message != null;
         }
 
-        public PostgreInboxMessagesRepository(EventsDbContext dbContext)
+        public PostgreInboxPendingMessagesRepository(EventsDbContext dbContext)
         {
             _dbContext = dbContext;
         }

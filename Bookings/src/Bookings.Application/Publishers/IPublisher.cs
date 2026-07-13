@@ -5,11 +5,11 @@ namespace Bookings.Application.Publishers
     public interface IPublisher
     {
         Task ProduceAsync(
-            PendingBooking pendingBooking,
+            CancelledBooking pendingBooking,
             CancellationToken cancellationToken);
 
         Task ProduceAsync(
-            CancelledBooking cancelledBooking,
+            PendingBooking cancelledBooking,
             CancellationToken cancellationToken);
     }
 }

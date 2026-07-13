@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Infrastructure.Kafka;
+using Shared.Messaging.Contracts.Bookings;
 using Shared.Objects.Classes.Options;
 
 namespace Events.Infrastracture
@@ -35,7 +36,8 @@ namespace Events.Infrastracture
             services.AddScoped<IReadEventsRepository, PostgreReadEventsRepository>();
             services.AddScoped<IWriteEventsRepository, PostgreWriteEventsRepository>();
 
-            services.AddScoped<IInboxMessagesRepository, PostgreInboxMessagesRepository>();
+            services.AddScoped<IInboxMessagesRepository<PendingBooking>, PostgreInboxPendingMessagesRepository>();
+            services.AddScoped<IInboxMessagesRepository<CancelledBooking>, PostgreInboxCancelledMessagesRepository>();
 
             return services;
         }

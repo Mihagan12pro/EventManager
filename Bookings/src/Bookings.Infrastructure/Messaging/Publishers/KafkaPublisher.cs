@@ -22,7 +22,7 @@ namespace Bookings.Infrastructure.Messaging.Publishers
                 Value = JsonSerializer.Serialize(pendingBooking)
             };
 
-            await _producer.ProduceAsync(nameof(PendingBooking), message, cancellationToken);
+            await _producer.ProduceAsync(nameof(CancelledBooking), message, cancellationToken);
         }
 
         public async Task ProduceAsync(
