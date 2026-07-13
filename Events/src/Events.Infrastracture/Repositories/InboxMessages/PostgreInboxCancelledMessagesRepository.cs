@@ -1,18 +1,32 @@
 ﻿using Events.Application.Repositories.InboxMessages;
+using Microsoft.EntityFrameworkCore;
 using Shared.Messaging.Contracts.Bookings;
 
 namespace Events.Infrastracture.Repositories.InboxMessages
 {
     internal class PostgreInboxCancelledMessagesRepository : IInboxMessagesRepository<CancelledBooking>
     {
-        public Task AddMessageAsync(CancelledBooking message, CancellationToken cancellationToken)
+        private readonly EventsDbContext _dbContext;
+
+        public async Task AddMessageAsync(
+            CancelledBooking message,
+            CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _dbContext.AddAsync(message, cancellationToken);
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public Task<bool> FindMessageAsync(CancelledBooking message, CancellationToken cancellationToken)
+        public async Task<bool> FindMessageAsync(
+            CancelledBooking message,
+            CancellationToken cancellationToken)
+                => await _dbContext.InboxCancelledMessages.FirstOrDefaultAsync(
+                    m => m.BookingId == message.BookingId
+                   ) != null;
+
+        public PostgreInboxCancelledMessagesRepository(EventsDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
         }
     }
 }

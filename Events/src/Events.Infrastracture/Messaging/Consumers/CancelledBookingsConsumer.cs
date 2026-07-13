@@ -1,8 +1,11 @@
 ﻿using Confluent.Kafka;
+using Events.Application.Repositories.Events;
 using Events.Application.Repositories.InboxMessages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Shared.Failures.Exceptions.WebApi.ClientErrors;
+using Shared.Failures.Exceptions.WebApi.ServerErrors;
 using Shared.Messaging.Contracts.Bookings;
 using Shared.Objects.Classes.Options;
 using System.Text.Json;
@@ -40,11 +43,40 @@ namespace Events.Infrastracture.Messaging.Consumers
                         continue;
 
                     var cancelledBooking = JsonSerializer.Deserialize<CancelledBooking>(consumeResult.Message.Value);
+                    
+                    if (cancelledBooking == null)
+                        throw new InternalServerErrorException();
 
                     using (var scoped = _serviceScopeFactory.CreateScope())
                     {
                         var inboxRepository = scoped.ServiceProvider.GetRequiredService<IInboxMessagesRepository<CancelledBooking>>();
-                        //if (await inboxRepository.FindMessageAsync(can))
+                        
+                        if (!await inboxRepository.FindMessageAsync(cancelledBooking, stoppingToken))
+                        {
+                            try
+                            {
+                                var eventsRepository = scoped.ServiceProvider.GetRequiredService<IReadEventsRepository>();
+
+                                var @event = await eventsRepository.GetEventAsync(cancelledBooking.EventId, stoppingToken);
+                                @event.ReleaseSeats();
+                            }
+                            catch(InvalidOperationException ex)
+                            {
+                                _logger.LogInformation(
+                                   "Event with id = {id} does not exists!",
+                                   cancelledBooking.EventId);
+                            }
+                            catch(ConflictException ex)
+                            {
+                                _logger.LogInformation(
+                                   "Event with id = {id} has no reversed seats!",
+                                   cancelledBooking.EventId);
+                            }
+                            finally
+                            {
+                                await inboxRepository.AddMessageAsync(cancelledBooking, stoppingToken);
+                            }
+                        }
                     }
                 }
                 catch (OperationCanceledException ex)

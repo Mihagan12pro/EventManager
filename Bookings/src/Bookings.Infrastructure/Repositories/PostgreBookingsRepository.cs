@@ -2,7 +2,6 @@
 using Bookings.Domain;
 using Bookings.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using Shared.Messaging.Contracts.Bookings;
 using Shared.Objects.Classes.Collections;
 
 namespace Bookings.Infrastructure.Repositories

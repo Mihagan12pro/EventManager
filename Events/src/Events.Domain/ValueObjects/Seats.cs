@@ -28,7 +28,7 @@ namespace Events.Domain.ValueObjects
             init
             {
                 if (value > Total)
-                    throw new ConflictException("Count of avaliable seats can't be greater than count of total seats!");
+                    throw new ConflictException("Available seat count cannot exceed total seat count!");
 
                 if (value < 0)
                     throw new NoAvailableSeatsException("There are no avaliable seats!");
