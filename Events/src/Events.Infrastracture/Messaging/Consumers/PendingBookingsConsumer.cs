@@ -49,7 +49,7 @@ namespace Events.Infrastracture.Messaging.Consumers
                     {
                         var messagesRepository = scope.ServiceProvider.GetRequiredService<IInboxMessagesRepository<PendingBooking>>();
 
-                        bool result = await messagesRepository.FindPendingMessageAsync(pendingBooking.BookingId, stoppingToken);
+                        bool result = await messagesRepository.FindMessageAsync(pendingBooking, stoppingToken);
 
                         if (!result)
                         {

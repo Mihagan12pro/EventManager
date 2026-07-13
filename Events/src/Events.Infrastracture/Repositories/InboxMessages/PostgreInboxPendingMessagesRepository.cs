@@ -17,14 +17,14 @@ namespace Events.Infrastracture.Repositories.InboxMessages
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<bool> FindPendingMessageAsync(
-            Guid messageId,
+        public async Task<bool> FindMessageAsync(
+            PendingBooking message,
             CancellationToken cancellationToken)
         {
-            var message = await _dbContext.InboxPendingMessages.FirstOrDefaultAsync(
-                m => m.BookingId == messageId, cancellationToken);
+            var result = await _dbContext.InboxPendingMessages.FirstOrDefaultAsync(
+                m => m.BookingId == message.BookingId, cancellationToken);
 
-            return message != null;
+            return result != null;
         }
 
         public PostgreInboxPendingMessagesRepository(EventsDbContext dbContext)

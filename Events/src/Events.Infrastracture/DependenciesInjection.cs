@@ -24,7 +24,9 @@ namespace Events.Infrastracture
             services.AddDbContext(configuration);
 
             services.AddHostedService<TopicInitializer>();
+
             services.AddHostedService<PendingBookingsConsumer>();
+            services.AddHostedService<CancelledBookingsConsumer>();
 
             services.AddSingleton<IPublisher, KafkaPublisher>();
 

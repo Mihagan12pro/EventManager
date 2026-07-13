@@ -1,9 +1,11 @@
 ﻿using Confluent.Kafka;
+using Events.Application.Repositories.InboxMessages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Shared.Messaging.Contracts.Bookings;
 using Shared.Objects.Classes.Options;
+using System.Text.Json;
 
 namespace Events.Infrastracture.Messaging.Consumers
 {
@@ -29,8 +31,26 @@ namespace Events.Infrastracture.Messaging.Consumers
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                
 
+                try
+                {
+                    var consumeResult = consumer.Consume(stoppingToken);
+
+                    if (consumeResult?.Message?.Value == null)
+                        continue;
+
+                    var cancelledBooking = JsonSerializer.Deserialize<CancelledBooking>(consumeResult.Message.Value);
+
+                    using (var scoped = _serviceScopeFactory.CreateScope())
+                    {
+                        var inboxRepository = scoped.ServiceProvider.GetRequiredService<IInboxMessagesRepository<CancelledBooking>>();
+                        //if (await inboxRepository.FindMessageAsync(can))
+                    }
+                }
+                catch (OperationCanceledException ex)
+                {
+                    _logger.LogInformation("Operation cancelled!");
+                }
             }
         }
 

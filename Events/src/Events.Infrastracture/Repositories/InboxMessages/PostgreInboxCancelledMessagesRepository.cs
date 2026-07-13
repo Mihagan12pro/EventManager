@@ -10,7 +10,7 @@ namespace Events.Infrastracture.Repositories.InboxMessages
             throw new NotImplementedException();
         }
 
-        public Task<bool> FindPendingMessageAsync(Guid messageId, CancellationToken cancellationToken)
+        public Task<bool> FindMessageAsync(CancelledBooking message, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

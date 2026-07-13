@@ -5,8 +5,8 @@ namespace Events.Application.Repositories.InboxMessages
     public interface IInboxMessagesRepository<TMessage>
         where TMessage : IMessage
     {
-        Task<bool> FindPendingMessageAsync(
-            Guid messageId,
+        Task<bool> FindMessageAsync(
+            TMessage message,
             CancellationToken cancellationToken);
 
         Task AddMessageAsync(
