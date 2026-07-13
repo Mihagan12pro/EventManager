@@ -1,6 +1,7 @@
 ﻿using Shared.Messaging.Contracts.Bookings;
+using Shared.Messaging.Contracts.Events;
 
-namespace Events.Infrastracture.Messaging.Publishers
+namespace Events.Application
 {
     public interface IPublisher
     {
@@ -10,6 +11,10 @@ namespace Events.Infrastracture.Messaging.Publishers
 
         Task PublishRejectedAsync(
             RejectedBooking rejected, 
+            CancellationToken cancellationToken);
+
+        Task PublishEventDeletedAsync(
+            DeletedEvent deleted,
             CancellationToken cancellationToken);
     }
 }

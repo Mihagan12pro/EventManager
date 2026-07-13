@@ -1,4 +1,5 @@
-﻿using Events.Application.Repositories.Events;
+﻿using Events.Application;
+using Events.Application.Repositories.Events;
 using Events.Application.Repositories.InboxMessages;
 using Events.Infrastracture.Messaging.Consumers;
 using Events.Infrastracture.Messaging.Publishers;

@@ -3,6 +3,7 @@ using Confluent.Kafka.Admin;
 using Microsoft.Extensions.Logging;
 using Shared.Messaging;
 using Shared.Messaging.Contracts.Bookings;
+using Shared.Messaging.Contracts.Events;
 using Shared.Objects.Classes.Options;
 
 namespace Shared.Infrastructure.Kafka
@@ -47,6 +48,15 @@ namespace Shared.Infrastructure.Kafka
                         new TopicSpecification
                         {
                             Name = nameof(RejectedBooking),
+
+                            NumPartitions = 1,
+
+                            ReplicationFactor = 1
+                        },
+
+                        new TopicSpecification
+                        {
+                            Name = nameof(DeletedEvent),
 
                             NumPartitions = 1,
 

@@ -37,6 +37,7 @@ namespace Bookings.Infrastructure
         {
             services.AddHostedService<ConfirmedBookingsConsumer>();
             services.AddHostedService<RejectedBookingsConsumer>();
+            services.AddHostedService<DeletedEventsConsumer>();
 
             return services;
         }

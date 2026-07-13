@@ -1,5 +1,7 @@
 ﻿using Confluent.Kafka;
+using Events.Application;
 using Shared.Messaging.Contracts.Bookings;
+using Shared.Messaging.Contracts.Events;
 using Shared.Objects.Classes.Options;
 using System.Text.Json;
 
@@ -36,6 +38,20 @@ namespace Events.Infrastracture.Messaging.Publishers
             };
 
             await _producer.ProduceAsync(nameof(RejectedBooking), message, cancellationToken);
+        }
+
+        public async Task PublishEventDeletedAsync(
+            DeletedEvent deleted,
+            CancellationToken cancellationToken)
+        {
+            Message<string, string> message = new Message<string, string>()
+            {
+                Key = "key1",
+
+                Value = JsonSerializer.Serialize(deleted)
+            };
+
+            await _producer.ProduceAsync(nameof(DeletedEvent), message, cancellationToken);
         }
 
         public KafkaPublisher()

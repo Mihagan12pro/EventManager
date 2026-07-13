@@ -1,8 +1,8 @@
 ﻿using Confluent.Kafka;
+using Events.Application;
 using Events.Application.Repositories.Events;
 using Events.Application.Repositories.InboxMessages;
 using Events.Domain.Exceptions;
-using Events.Infrastracture.Messaging.Publishers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -60,20 +60,48 @@ namespace Events.Infrastracture.Messaging.Consumers
                             {
                                 var @event = await readEventsRepository.GetEventAsync(pendingBooking.EventId, stoppingToken);
 
-                                @event.ReverseSeats();
+                                DateTime now = DateTime.UtcNow;
 
-                                ConfirmedBooking confirmedBooking = new ConfirmedBooking 
+                                if (@event.StartAt > now)
                                 {
-                                    Id = Guid.NewGuid(),
+                                    @event.ReverseSeats();
 
-                                    EventId = pendingBooking.EventId,
+                                    ConfirmedBooking confirmedBooking = new ConfirmedBooking
+                                    {
+                                        Id = Guid.NewGuid(),
 
-                                    BookingId = pendingBooking.BookingId,
+                                        EventId = pendingBooking.EventId,
 
-                                    OccurredAt = DateTime.UtcNow
-                                };
-                                
-                                await _publisher.PublishConfirmedAsync(confirmedBooking, stoppingToken);
+                                        BookingId = pendingBooking.BookingId,
+
+                                        OccurredAt = DateTime.UtcNow
+                                    };
+
+                                    await _publisher.PublishConfirmedAsync(confirmedBooking, stoppingToken);
+                                }
+                                else
+                                {
+                                    RejectedBooking rejectedBooking = new RejectedBooking
+                                    {
+                                        Id = Guid.NewGuid(),
+
+                                        BookingId = pendingBooking.BookingId,
+
+                                        EventId = pendingBooking.EventId,
+
+                                        OccurredAt = DateTime.UtcNow
+                                    };
+
+                                    await _publisher.PublishRejectedAsync(
+                                        rejectedBooking,
+
+                                        stoppingToken
+                                    );
+
+                                    _logger.LogInformation(
+                                        "Event with id = {id} had been already started!",
+                                        pendingBooking.EventId);
+                                }
                             }
                             catch (InvalidOperationException ex)
                             {
