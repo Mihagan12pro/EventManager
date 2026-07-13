@@ -7,5 +7,9 @@ namespace Bookings.Application.Publishers
         Task ProduceAsync(
             PendingBooking pendingBooking,
             CancellationToken cancellationToken);
+
+        Task ProduceAsync(
+            CancelledBooking cancelledBooking,
+            CancellationToken cancellationToken);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Bookings.Application.Dtos;
+using Bookings.Application.Handlers.Cancel;
 using Bookings.Application.Handlers.Create;
 using Bookings.Application.Handlers.Get;
 using Microsoft.AspNetCore.Http;
@@ -39,6 +40,17 @@ namespace Bookings.API.Api
                 var reponse = await handler.HandleAsync(command, token);
 
                 return Results.Ok(reponse);
+
+            }).RequireAuthorization();
+
+            apiGroup.MapDelete("{id}", async (
+               [FromServices] ICommandHandler<CancelBookingCommand> handler,
+               Guid id,
+               CancellationToken token) =>
+            {
+                var command = new CancelBookingCommand(id);
+
+                await handler.HandleAsync(command, token);
 
             }).RequireAuthorization();
 

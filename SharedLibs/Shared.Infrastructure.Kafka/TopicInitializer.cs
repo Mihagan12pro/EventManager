@@ -56,6 +56,15 @@ namespace Shared.Infrastructure.Kafka
 
                         new TopicSpecification
                         {
+                            Name = nameof(CancelledBooking),
+
+                            NumPartitions = 1,
+
+                            ReplicationFactor = 1
+                        },
+
+                        new TopicSpecification
+                        {
                             Name = nameof(DeletedEvent),
 
                             NumPartitions = 1,
