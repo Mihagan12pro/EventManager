@@ -1,4 +1,5 @@
 ﻿using Events.Application.Repositories.OutboxMessages;
+using Microsoft.EntityFrameworkCore;
 using Shared.Messaging.Contracts.Bookings;
 
 namespace Events.Infrastracture.Repositories.OutboxMessages
@@ -36,6 +37,36 @@ namespace Events.Infrastracture.Repositories.OutboxMessages
                 ).Where(r => r.StartAt > now);
 
             return eventBooking.Count();
+        }
+
+        public async Task DeleteAllAsync(
+            Guid eventId,
+            CancellationToken cancellationToken)
+        {
+            var confirmedBookings = _dbContext.OutboxConfirmedBookingsMessages.Where(cb => cb.EventId == eventId);
+
+            foreach(var i in confirmedBookings)
+            {
+                _dbContext.OutboxConfirmedBookingsMessages.Remove(i);
+            }
+
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task DeleteAsync(
+            Guid bookingId,
+            CancellationToken cancellationToken)
+        {
+            var booking = await _dbContext.OutboxConfirmedBookingsMessages.FirstOrDefaultAsync(
+                b => b.BookingId == bookingId, cancellationToken
+            );
+            
+            if (booking != null)
+            {
+                _dbContext.OutboxConfirmedBookingsMessages.Remove(booking);
+
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
         }
 
         public PostgreOutboxConfirmedMessagesRepository(EventsDbContext dbContext)

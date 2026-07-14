@@ -1,6 +1,7 @@
 ﻿using Confluent.Kafka;
 using Events.Application.Repositories.Events;
 using Events.Application.Repositories.Messages;
+using Events.Application.Repositories.OutboxMessages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -59,6 +60,9 @@ namespace Events.Infrastracture.Messaging.Consumers
 
                                 var @event = await eventsRepository.GetEventAsync(cancelledBooking.EventId, stoppingToken);
                                 @event.ReleaseSeats();
+
+                                var outboxRepository = scoped.ServiceProvider.GetRequiredService<IOutboxConfirmedMessagesRepository>();
+                                await outboxRepository.DeleteAsync(cancelledBooking.BookingId, stoppingToken);
                             }
                             catch(InvalidOperationException ex)
                             {

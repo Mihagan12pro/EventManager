@@ -23,7 +23,7 @@ namespace Bookings.Application.Handlers.Cancel
                 cancellationToken
             );
 
-            if (booking.Status != BookingStatus.Rejected || booking.Status != BookingStatus.Cancelled)
+            if (booking.Status == BookingStatus.Confirmed || booking.Status == BookingStatus.Pending)
             {
                 Guid userId = Guid.Parse(_jwtClaimsExtractor.Extract("sub"));
 
