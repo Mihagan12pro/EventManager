@@ -67,7 +67,7 @@ namespace Events.Infrastracture.Messaging.Consumers
                                 {
                                     var confirmedOutboxRepository = scope.ServiceProvider.GetRequiredService<IOutboxConfirmedMessagesRepository>();
 
-                                    if (await confirmedOutboxRepository.GetActiveCountAsync(pendingBooking.UserId.Value, stoppingToken) <= 10)
+                                    if (await confirmedOutboxRepository.GetActiveCountAsync(pendingBooking.UserId.Value, stoppingToken) < 10)
                                     {
                                         @event.ReverseSeats();
 
