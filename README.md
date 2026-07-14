@@ -1,30 +1,24 @@
 How to get and run this application on your computer?
 
-Via .NET CLI:
-1. Open terminal or cmd (on Windows) and write this command: git clone [repository url]. Press ENTER
-2. Write: cd (.\EventManager\src\Presentation\EventManager\ on Windows or ./EventManager/src/Presentation/EventManager/
- on Unix). Press ENTER
-3. Write: dotnet build. If everything is ok, press ENTER
-4. Write: dotnet run --project EventManager.csproj. Press ENTER
-5. Have fun with my application!
+I.  Before sprint 9 (legacy)
+	1. Open the projects's root folder (e.g. C:\EventManager) in terminal or cmd (on Windows)
+	2. Navigate to the EventManager folder.
+	3. Enter the command: "dotnet build". If everything is ok, press ENTER
+	4. Enter the command: "dotnet run --project EventManager.csproj". Press ENTER
+	5. Have fun with EventManager!
 
-Via Visual Studio 2026:
-1. Open Visual Studio.
-2. Press on the button "Clone a repository"
-3. Write [repository url] to text box for repository location and press on the button "Clone"
-4. Build -> Build solution (or use shortcut: ctrl + B or ctrl + Shift + B). If everything is ok, next step
-5. Press on the button "Start Without Debugging" (or use shortcut: Shift + F5)
-6. Have fun with my application!
+II. After sprint 9
+	The application had been splited into 3 microservices.
+	In this topic we will look at how to run the Users microservice.
+	Each of the microservices has the same running instructions.
 
-How to run tests?
-1. Open the EventsManager.Tests directory via cli
-2. Write: dotnet build. If everything is ok, press ENTER
-3. Then you will have 2 ways:
-3.1 If you want to run all tests, write:  'dotnet test' or 'dotnet test path_to_your_foler\EventManager\src\EventsManager.Tests\EventsManager.Tests.csproj"'.
-3.2 If you want to run group of tests, write:  dotnet test --filter <Group tittle>.
-	For example: 'dotnet test --filter GetEvents' or 'dotnet test path_to_your_foler\EventManager\src\EventsManager.Tests\EventsManager.Tests.csproj" --filter GetEvents'
-	
-	
+	1. Open the projects's root folder (e.g. C:\EventManager) in terminal or cmd (on Windows)
+	2. Navigate to the Users folder.
+	3. Navigate to the Users.API folder.
+	4. Enter the command " dotnet run --launch-profile https" Press ENTER
+	5. Have fun with the Users microservice! 
+
+
 
 Features from the sprint2:
 1. The EventsController.All has parameters:
@@ -201,4 +195,112 @@ Features from the sprint 8:
 4. Modify appsettings.json. Now it contains the secret key for creating signatures.
    WARNING! In production secret key should be kept in user secrets or in environment
    variables!
+
+Features from the sprint 9:
+1. The EventManager application had been splited into 3 microservises:
+	a. Events.
+       The service provides basic CRUD operations for the events.
+	   The service's database contains 2 types of tables:
+	   1. Tables for storing domain entities (the Events table)
+	   2. Tables for storing Kafka messages (InboxPendingMessages, InboxCancelledMessages and OutboxConfirmedBookingsMessages). This enables the implementation of the Inbox and Outbox patterns.
+	   The file and folder structure of this microservice is as follows:
+	   Events/
+            ├─ Events.API/
+            │  ├─ Connected Services/
+            │  ├─ Properties/
+            │  ├─ Api/
+            │  ├─ Contracts/
+            │  ├─ Validators/
+            │  ├─ appsettings.json
+            │  └─ Program.cs
+            ├─ Events.Application/
+            │  ├─ Dtos/
+            │  ├─ Handlers/
+            │  ├─ Repositories/
+            │  ├─ DependenciesInjection.cs
+            │  └─ IPublisher.cs
+            ├─ Events.Domain/
+            │  ├─ Exceptions/
+            │  ├─ ValueObjects/
+            │  └─ EventEntity.cs
+            └─ Events.Infrastructure/
+               ├─ Configurations/
+               ├─ Messaging/
+               ├─ Migrations/
+               ├─ Repositories/
+               ├─ DependenciesInjection.cs
+               ├─ EventsDbContext.cs
+               └─ EventsDesignFactory.cs
+
+	b. Users
+	   This service handles authorization and aythentification. 
+	   The service's database stores user data.
+	   The file and folder structure of this microservice is as follows:
+	   Users/
+           ├─ Users.API/
+           │  ├─ Connected Services/
+           │  ├─ Properties/
+           │  ├─ Api/
+           │  ├─ Extensions/
+           │  ├─ appsettings.json
+           │  └─ Program.cs
+           ├─ Users.Application/
+           │  ├─ Contracts/
+           │  ├─ Dtos/
+           │  ├─ Repositories/
+           │  ├─ Security/
+           │  ├─ Services/
+           │  └─ DependenciesInjection.cs
+           ├─ Users.Domain/
+           │  ├─ ValueObjects/
+           │  └─ User.cs
+           ├─ Users.Infrastructure.Postgre/
+           │  ├─ Configurations/
+           │  ├─ Migrations/
+           │  ├─ Repositories/
+           │  ├─ DependenciesInjection.cs
+           │  ├─ UsersDbContext.cs
+           │  └─ UsersDesignFactory.cs
+           └─ Users.Infrastructure.Security/
+           ├─ Jwt/
+           ├─ DependenciesInjection.cs
+           └─ PasswordHasherSHA256.cs
+	
+	- Bookings
+		The service provides basic CRUD operations for the bookings.
+		The service's database stores bookings. Bookings has 4 statuses: Pending, Confirmed, Cancelled and Rejected.
+		The file and folder structure of this microservice is as follows:
+		Bookings/
+            ├─ Bookings.API/
+            │  ├─ Connected Services/
+            │  ├─ Properties/
+            │  ├─ Api/
+            │  ├─ appsettings.json
+            │  └─ Program.cs
+            ├─ Bookings.Application/
+            │  ├─ Dtos/
+            │  ├─ Handlers/
+            │  ├─ Publishers/
+            │  ├─ Repositories/
+            │  └─ DependenciesInjection.cs
+            ├─ Bookings.Domain/
+            │  ├─ Enums/
+            │  └─ Booking.cs
+            └─ Bookings.Infrastructure/
+               ├─ Configurations/
+               ├─ Messaging/
+               ├─ Migrations/
+               ├─ Repositories/
+               ├─ BookingsDbContext.cs
+               ├─ BookingsDesignFactory.cs
+               └─ DependenciesInjection.cs
+	
+2. Each microservice has its own database and migrations. All databases are run in a Docker container.
+
+3. Kafka is used as the message broker; the Kafka server runs in a Docker container.
+
+4. Add global.json that contains shared confuguration options (kafka, jwt and e.t.c.)
+
+5. Add a lot of shared libraries (e.g. Shared.Objects, Shared.Validation and e.t.c.)
+
 
