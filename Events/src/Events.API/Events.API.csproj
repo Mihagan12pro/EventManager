@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.AspNet\Shared.AspNet.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastructure.Security\Shared.Infrastructure.Security.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Objects\Shared.Objects.csproj" />
+    <ProjectReference Include="..\Events.Application\Events.Application.csproj" />
+    <ProjectReference Include="..\Events.Infrastracture\Events.Infrastracture.csproj" />
+  </ItemGroup>
+
+</Project>

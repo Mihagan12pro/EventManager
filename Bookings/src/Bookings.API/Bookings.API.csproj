@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.AspNet\Shared.AspNet.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Enums\Shared.Enums.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Failures\Shared.Failures.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Infrastructure.Security\Shared.Infrastructure.Security.csproj" />
+    <ProjectReference Include="..\..\..\SharedLibs\Shared.Objects\Shared.Objects.csproj" />
+    <ProjectReference Include="..\Bookings.Application\Bookings.Application.csproj" />
+    <ProjectReference Include="..\Bookings.Infrastructure\Bookings.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

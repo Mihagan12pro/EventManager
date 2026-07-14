@@ -1,21 +1,40 @@
 <Solution>
+  <Folder Name="/Microservices/" />
+  <Folder Name="/Microservices/Bookings/">
+    <Project Path="Bookings/src/Bookings.API/Bookings.API.csproj" Id="c5378df5-6dc7-4d42-9683-4daed70c8714" />
+    <Project Path="Bookings/src/Bookings.Application/Bookings.Application.csproj" Id="37cd1154-782e-42b4-bf91-d09d017b5893" />
+    <Project Path="Bookings/src/Bookings.Domain/Bookings.Domain.csproj" Id="3168ba2d-1dac-4a1a-92d6-4f5b90bd8980" />
+    <Project Path="Bookings/src/Bookings.Infrastructure/Bookings.Infrastructure.csproj" Id="a2f316a5-267f-461c-bb04-c31df00777a8" />
+  </Folder>
+  <Folder Name="/Microservices/Events/">
+    <Project Path="Events/src/Events.API/Events.API.csproj" />
+    <Project Path="Events/src/Events.Application/Events.Application.csproj" Id="6338c94c-00e1-4b95-9d29-4aca6c330ffc" />
+    <Project Path="Events/src/Events.Domain/Events.Domain.csproj" Id="c6343957-18b2-49fb-8219-e7bbb63d713b" />
+    <Project Path="Events/src/Events.Infrastracture/Events.Infrastracture.csproj" />
+  </Folder>
+  <Folder Name="/Microservices/Users/">
+    <Project Path="Users/src/Users.API/Users.API.csproj" Id="066dfb9e-d3e1-4c1b-8d88-c4d75e81b709" />
+    <Project Path="Users/src/Users.Application/Users.Application.csproj" Id="da375256-91c5-4891-8f79-ad28a44eb056" />
+    <Project Path="Users/src/Users.Domain/Users.Domain.csproj" Id="e5793c0c-7a14-4b12-9004-cd1fc60aa4f5" />
+    <Project Path="Users/src/Users.Infrastructure.Postgre/Users.Infrastructure.Postgre.csproj" Id="95c15a23-e3ba-4807-b7fd-02e9b57c9d3a" />
+    <Project Path="Users/src/Users.Infrastructure.Security/Users.Infrastructure.Security.csproj" Id="e5d28c33-6992-42f0-a4c2-312e94d3bbf2" />
+  </Folder>
+  <Folder Name="/SharedLibs/">
+    <Project Path="SharedLibs/Shared.AspNet/Shared.AspNet.csproj" Id="4a5c9dc4-689e-49c7-8448-b4590d376c73" />
+    <Project Path="SharedLibs/Shared.Enums/Shared.Enums.csproj" Id="52f41aec-4f18-42c1-a848-4bd8fc0f47a5" />
+    <Project Path="SharedLibs/Shared.Failures/Shared.Failures.csproj" Id="a4c8d169-a1a0-43de-b7bd-603e772b5a1d" />
+    <Project Path="SharedLibs/Shared.Infrastructure.Kafka/Shared.Infrastructure.Kafka.csproj" Id="5cb69a1a-5448-43c1-a2ab-cd4635c0d1cd" />
+    <Project Path="SharedLibs/Shared.Infrastructure.Security/Shared.Infrastructure.Security.csproj" Id="16f46d12-dd18-45ab-a947-0a4b44c3f8eb" />
+    <Project Path="SharedLibs/Shared.Messaging/Shared.Messaging.csproj" Id="40399c2f-3f4c-4394-90d2-6a7b497d4e7a" />
+    <Project Path="SharedLibs/Shared.Objects/Shared.Objects.csproj" Id="c4740abb-0d9d-44a2-8880-4f42ff2ea17a" />
+    <Project Path="SharedLibs/Shared.Validation/Shared.Validation.csproj" Id="0886a2ca-74be-41ad-bb80-b7f2121b187c" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />
     <File Path="docker-compose.yml" />
     <File Path="README.md" />
   </Folder>
-  <Folder Name="/src/">
-    <Project Path="src/EventManager.API/EventManager.API.csproj" />
-    <Project Path="src/EventManager.Application/EventManager.Application.csproj" />
-    <Project Path="src/EventManager.Domain/EventManager.Domain.csproj" />
-    <Project Path="src/EventManager.DTOs/EventManager.DTOs.csproj" />
-    <Project Path="src/EventManager.Infrastructure.PostgreSQL/EventManager.Infrastructure.PostgreSQL.csproj" />
-    <Project Path="src/EventManager.Infrastructure.Security/EventManager.Infrastructure.Security.csproj" Id="b86de8be-7dc8-4473-a1c5-03043a877edc" />
-    <Project Path="src/EventManager.Shared/EventManager.Shared.csproj" />
-    <Project Path="src/EventManager/EventManager.csproj" />
-  </Folder>
-  <Folder Name="/Tests/">
-    <Project Path="src/Tests/EventManager.Tests.Integration/EventManager.Tests.Integration.csproj" />
-    <Project Path="src/Tests/EventsManager.Tests.End2End/EventsManager.Tests.End2End.csproj" />
+  <Folder Name="/Элементы решения/">
+    <File Path="global.json" />
   </Folder>
 </Solution>
