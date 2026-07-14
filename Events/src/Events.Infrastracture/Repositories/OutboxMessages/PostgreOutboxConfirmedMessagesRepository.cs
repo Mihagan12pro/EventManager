@@ -1,8 +1,5 @@
 ﻿using Events.Application.Repositories.OutboxMessages;
 using Shared.Messaging.Contracts.Bookings;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Events.Infrastracture.Repositories.OutboxMessages
 {
@@ -25,19 +22,20 @@ namespace Events.Infrastracture.Repositories.OutboxMessages
         {
             DateTime now = DateTime.UtcNow;
 
-            //var eventBooking = _dbContext.ConfirmedBookingsMessages.Where(cbm => cbm.).Join(_dbContext.Events,
-            //        cbm => cbm.EventId,
-            //        e => e.Id,
+            var eventBooking = _dbContext.OutboxConfirmedBookingsMessages
+                .Where(cbm => cbm.UserId == userId)
+                .Join(_dbContext.Events,
+                    cbm => cbm.EventId,
 
-            //        (cbm, e) => new 
-            //        {
-            //            StartAt = e.StartAt,
+                    e => e.Id,
 
+                    (cbm, e) => new
+                    {
+                        StartAt = e.StartAt
+                    }
+                ).Where(r => r.StartAt > now);
 
-            //        }
-            //    );
-
-            throw new NotImplementedException();
+            return eventBooking.Count();
         }
 
         public PostgreOutboxConfirmedMessagesRepository(EventsDbContext dbContext)

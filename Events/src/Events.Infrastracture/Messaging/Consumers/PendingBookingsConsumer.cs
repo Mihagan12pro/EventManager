@@ -2,6 +2,7 @@
 using Events.Application;
 using Events.Application.Repositories.Events;
 using Events.Application.Repositories.Messages;
+using Events.Application.Repositories.OutboxMessages;
 using Events.Domain.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -64,22 +65,52 @@ namespace Events.Infrastracture.Messaging.Consumers
 
                                 if (@event.StartAt > now)
                                 {
-                                    @event.ReverseSeats();
+                                    var confirmedOutboxRepository = scope.ServiceProvider.GetRequiredService<IOutboxConfirmedMessagesRepository>();
 
-                                    ConfirmedBooking confirmedBooking = new ConfirmedBooking
+                                    if (await confirmedOutboxRepository.GetActiveCountAsync(pendingBooking.UserId.Value, stoppingToken) <= 10)
                                     {
-                                        Id = Guid.NewGuid(),
+                                        @event.ReverseSeats();
 
-                                        EventId = pendingBooking.EventId,
+                                        ConfirmedBooking confirmedBooking = new ConfirmedBooking
+                                        {
+                                            Id = Guid.NewGuid(),
 
-                                        BookingId = pendingBooking.BookingId,
+                                            EventId = pendingBooking.EventId,
 
-                                        OccurredAt = DateTime.UtcNow,
+                                            BookingId = pendingBooking.BookingId,
 
-                                        UserId = pendingBooking.UserId
-                                    };
+                                            OccurredAt = DateTime.UtcNow,
 
-                                    await _publisher.PublishConfirmedAsync(confirmedBooking, stoppingToken);
+                                            UserId = pendingBooking.UserId
+                                        };
+
+                                        await confirmedOutboxRepository.AddAsync(confirmedBooking, stoppingToken);
+
+                                        await _publisher.PublishConfirmedAsync(
+                                            confirmedBooking, 
+                                            
+                                            stoppingToken
+                                        );
+                                    }
+                                    else
+                                    {
+                                        await _publisher.PublishRejectedAsync(
+                                                new RejectedBooking()
+                                                {
+                                                    Id = Guid.NewGuid(),
+
+                                                    EventId = pendingBooking.EventId,
+
+                                                    BookingId = pendingBooking.BookingId,
+
+                                                    UserId = pendingBooking.UserId,
+                                                    
+                                                    OccurredAt = DateTime.UtcNow,
+                                                },
+
+                                                stoppingToken
+                                            );
+                                    }
                                 }
                                 else
                                 {

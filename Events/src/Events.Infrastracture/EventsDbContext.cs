@@ -1,6 +1,5 @@
 ﻿using Events.Domain;
 using Microsoft.EntityFrameworkCore;
-using Shared.Messaging;
 using Shared.Messaging.Contracts.Bookings;
 using System.Reflection;
 
@@ -19,7 +18,7 @@ namespace Events.Infrastracture
 
         public DbSet<CancelledBooking> InboxCancelledMessages { get; set; }
 
-        public DbSet<ConfirmedBooking> ConfirmedBookingsMessages { get; set; }
+        public DbSet<ConfirmedBooking> OutboxConfirmedBookingsMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
             => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

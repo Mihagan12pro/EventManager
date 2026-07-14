@@ -36,7 +36,7 @@ namespace Bookings.Application.Handlers.Create
             Guid id = await _bookingRepository.CreateAsync(booking, cancellationToken);
 
             await _publisher.ProduceAsync(
-                new CancelledBooking()
+                new PendingBooking()
                 {
                     BookingId = id,
                     

@@ -1,10 +1,12 @@
 ﻿using Events.Application;
 using Events.Application.Repositories.Events;
 using Events.Application.Repositories.Messages;
+using Events.Application.Repositories.OutboxMessages;
 using Events.Infrastracture.Messaging.Consumers;
 using Events.Infrastracture.Messaging.Publishers;
 using Events.Infrastracture.Repositories.Events;
 using Events.Infrastracture.Repositories.InboxMessages;
+using Events.Infrastracture.Repositories.OutboxMessages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,9 +27,23 @@ namespace Events.Infrastracture
 
             services.AddHostedService<TopicInitializer>();
 
+            services.AddConsumers();
+            services.AddPublishers();
+
+            return services;
+        }
+
+        private static IServiceCollection AddConsumers(this IServiceCollection services)
+        {
+
             services.AddHostedService<PendingBookingsConsumer>();
             services.AddHostedService<CancelledBookingsConsumer>();
 
+            return services;
+        }
+
+        private static IServiceCollection AddPublishers(this IServiceCollection services)
+        {
             services.AddSingleton<IPublisher, KafkaPublisher>();
 
             return services;
@@ -37,6 +53,8 @@ namespace Events.Infrastracture
         {
             services.AddScoped<IReadEventsRepository, PostgreReadEventsRepository>();
             services.AddScoped<IWriteEventsRepository, PostgreWriteEventsRepository>();
+
+            services.AddScoped<IOutboxConfirmedMessagesRepository, PostgreOutboxConfirmedMessagesRepository>();
 
             services.AddScoped<IInboxMessagesRepository<PendingBooking>, PostgreInboxPendingMessagesRepository>();
             services.AddScoped<IInboxMessagesRepository<CancelledBooking>, PostgreInboxCancelledMessagesRepository>();

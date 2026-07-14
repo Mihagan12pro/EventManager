@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Events.Infrastracture.Postgre.Migrations
+namespace Events.Infrastracture.Migrations
 {
     [DbContext(typeof(EventsDbContext))]
     [Migration("20260711193655_RemoveInbox_Add_InboxPendingMessages")]

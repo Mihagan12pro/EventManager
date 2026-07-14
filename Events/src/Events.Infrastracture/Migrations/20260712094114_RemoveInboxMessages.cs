@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Events.Infrastracture.Postgre.Migrations
+namespace Events.Infrastracture.Migrations
 {
     /// <inheritdoc />
     public partial class RemoveInboxMessages : Migration
