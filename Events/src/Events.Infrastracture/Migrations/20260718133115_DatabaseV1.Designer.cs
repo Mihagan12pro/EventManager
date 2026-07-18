@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Events.Infrastracture.Migrations
 {
     [DbContext(typeof(EventsDbContext))]
-    [Migration("20260712102545_InboxPendingMessages_WithUid")]
-    partial class InboxPendingMessages_WithUid
+    [Migration("20260718133115_DatabaseV1")]
+    partial class DatabaseV1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,55 @@ namespace Events.Infrastracture.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("Shared.Messaging.Contracts.Bookings.CancelledBooking", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BookingId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("OccurredAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookingId")
+                        .IsUnique();
+
+                    b.ToTable("InboxCancelledMessages");
+                });
+
+            modelBuilder.Entity("Shared.Messaging.Contracts.Bookings.ConfirmedBooking", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BookingId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("OccurredAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OutboxConfirmedBookingsMessages");
+                });
+
             modelBuilder.Entity("Shared.Messaging.Contracts.Bookings.PendingBooking", b =>
                 {
                     b.Property<Guid>("Id")
@@ -71,10 +120,10 @@ namespace Events.Infrastracture.Migrations
                     b.Property<DateTime>("OccurredAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("BookingId")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.ToTable("InboxPendingMessages");
                 });

@@ -8,7 +8,7 @@ using Shared.Infrastructure.Security;
 
 public partial class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -63,7 +63,7 @@ public partial class Program
         {
             var db = scope.ServiceProvider.GetRequiredService<BookingsDbContext>();
 
-            db.Database.Migrate();
+            await db.Database.MigrateAsync(); ;
         }
 
         app.UseSwaggerForDebugging();

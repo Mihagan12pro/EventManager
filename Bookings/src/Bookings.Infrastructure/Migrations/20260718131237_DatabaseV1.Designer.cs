@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Bookings.Infrastructure.Migrations
 {
     [DbContext(typeof(BookingsDbContext))]
-    [Migration("20260713132413_NewInboxTableAgain")]
-    partial class NewInboxTableAgain
+    [Migration("20260718131237_DatabaseV1")]
+    partial class DatabaseV1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
