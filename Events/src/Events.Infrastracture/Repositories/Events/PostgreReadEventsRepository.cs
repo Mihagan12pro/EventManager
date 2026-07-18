@@ -49,6 +49,17 @@ namespace Events.Infrastracture.Repositories.Events
                 pagination.PageSize);
         }
 
+        public async Task<IEnumerable<Event>> GetMostPopularAsync(
+            int count, 
+            CancellationToken token)
+        {
+            var events = _dbContext.Events.OrderByDescending(e =>
+                (double)(e.TotalSeats - e.AvailableSeats) / e.TotalSeats)
+                    .Take(count);
+
+            return events;
+        }
+
         public PostgreReadEventsRepository(EventsDbContext dbContext)
         {
             _dbContext = dbContext;

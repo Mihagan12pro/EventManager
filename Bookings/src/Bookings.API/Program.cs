@@ -63,7 +63,7 @@ public partial class Program
         {
             var db = scope.ServiceProvider.GetRequiredService<BookingsDbContext>();
 
-            await db.Database.MigrateAsync(); ;
+            db.Database.Migrate();
         }
 
         app.UseSwaggerForDebugging();

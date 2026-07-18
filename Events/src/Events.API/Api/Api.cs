@@ -4,6 +4,7 @@ using Events.Application.Handlers.Cancel;
 using Events.Application.Handlers.CompleteUpdate;
 using Events.Application.Handlers.GetByIdEvent;
 using Events.Application.Handlers.GetEventsCommand;
+using Events.Application.Handlers.GetTop10Events;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Objects.Interfaces;
@@ -41,6 +42,17 @@ namespace Events.API.Api
                 return @event;
 
             }).RequireAuthorization();
+
+            apiGroup.MapGet("top", async (
+                [FromServices] ICommandHandler<IEnumerable<GetEventDto>, GetTop10EventsCommand> handler,
+                CancellationToken token
+                ) =>
+            {
+                var result = await handler.HandleAsync(new GetTop10EventsCommand(), token);
+
+                return Results.Ok(result);
+            });
+
 
             apiGroup.MapGet("", async (
                 [FromServices]ICommandHandler <PaginatedEventsDto, GetEventsCommand> handler,

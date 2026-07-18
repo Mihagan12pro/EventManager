@@ -7,6 +7,10 @@ namespace Events.Application.Repositories.Events
 {
     public interface IReadEventsRepository
     {
+        Task<IEnumerable<Event>> GetMostPopularAsync(
+            int count,
+            CancellationToken token);
+
         Task<Event> GetEventAsync(
             Guid id,
             CancellationToken token);
