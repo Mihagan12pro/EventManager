@@ -3,7 +3,7 @@ using Events.Domain.ValueObjects;
 
 namespace Events.Infrastracture.Entities
 {
-    internal class EventEntity
+    public class EventEntity
     {
         public Guid Id { get; set; }
 
@@ -15,7 +15,7 @@ namespace Events.Infrastracture.Entities
 
         public required int TotalSeats { get; set; }
 
-        public required int AvaliableSeats { get; set; }
+        public required int AvailableSeats { get; set; }
 
         public string Description { get; set; }
 
@@ -29,7 +29,7 @@ namespace Events.Infrastracture.Entities
 
             Description = @event.Description;
 
-            AvaliableSeats = @event.AvailableSeats;
+            AvailableSeats = @event.AvailableSeats;
         }
 
         public static Event ExtractEvent(EventEntity eventEntity)
@@ -37,11 +37,27 @@ namespace Events.Infrastracture.Entities
                 {
                     EventDateTime = new EventDateTime(eventEntity.StartAt, eventEntity.EndAt),
 
-                    Seats = new Seats(eventEntity.TotalSeats, eventEntity.AvaliableSeats),
+                    Seats = new Seats(eventEntity.TotalSeats, eventEntity.AvailableSeats),
 
                     EventNaming = new EventNaming(eventEntity.Title, eventEntity.Description),
 
                     Id = eventEntity.Id,
                 };
+
+        public static EventEntity ExtractEntity(Event @event)
+            => new EventEntity()
+                { 
+                    AvailableSeats = @event.AvailableSeats,
+                
+                    Description = @event.Description, 
+                
+                    EndAt = @event.EndAt, 
+                
+                    StartAt = @event.StartAt, 
+                
+                    Title = @event.Title, 
+                
+                    TotalSeats = @event.TotalSeats
+            };
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Events.Application.Dtos;
 using Events.Application.Repositories.Events;
 using Events.Domain;
+using Events.Infrastracture.Entities;
 using Microsoft.EntityFrameworkCore;
 using Shared.Objects.Classes.Collections;
 using Shared.Objects.Records;
@@ -15,38 +16,9 @@ namespace Events.Infrastracture.Repositories.Events
             Guid eventId,
             CancellationToken token)
         {
-            Event @event = await _dbContext.Events.FirstAsync(e => e.Id == eventId, token);
+            Event @event = EventEntity.ExtractEvent(await _dbContext.Events.FirstAsync(e => e.Id == eventId, token));
 
             return @event;
-        }
-
-        public async Task<PaginatedEventsDto> GetPaginatedEventsAsync(
-            Filters<Event> filters,
-            Pagination pagination,
-            CancellationToken token)
-        {
-            IQueryable<Event> events = _dbContext.Events;
-
-            events = filters.ApplyFilters(events);
-
-            int count = events.Count();
-
-            events = events.Skip(pagination.Skip)
-                .Take(pagination.PageSize);
-
-            return new PaginatedEventsDto(
-                count,
-                events.Select(e => new GetEventDto(
-                    e.Id,
-                    e.Title,
-                    e.StartAt,
-                    e.EndAt,
-                    e.Description,
-                    e.TotalSeats,
-                    e.AvailableSeats)
-                ),
-                pagination.Page,
-                pagination.PageSize);
         }
 
         public async Task<IEnumerable<Event>> GetMostPopularAsync(
@@ -57,7 +29,54 @@ namespace Events.Infrastracture.Repositories.Events
                 (double)(e.TotalSeats - e.AvailableSeats) / e.TotalSeats)
                     .Take(count);
 
-            return events;
+            return events.Select(e => EventEntity.ExtractEvent(e));
+        }
+
+        public async Task<PaginatedEventsDto> GetPaginatedEventsAsync(
+            string? title, 
+            
+            DateTime? startAt,
+            
+            DateTime? endAt, 
+            
+            Pagination pagination,
+            
+            CancellationToken token)
+        {
+            IQueryable<EventEntity> entities = _dbContext.Events;
+
+            if (title != null)
+            {
+                entities = entities.Where(e => e.Title.StartsWith(title));
+            }
+
+            if (startAt != null)
+            {
+                entities = entities.Where(e => e.StartAt == startAt.Value);
+            }
+
+            if (endAt != null)
+            {
+                entities = entities.Where(e => e.EndAt == endAt.Value);
+            }
+
+            IEnumerable<GetEventDto> events = entities.Select(e => new GetEventDto(
+                e.Id, 
+                
+                e.Title, 
+                
+                e.StartAt, 
+                
+                e.EndAt, 
+                
+                e.Description, 
+                
+                e.TotalSeats,
+                
+                e.AvailableSeats)
+            );
+
+            return new PaginatedEventsDto(events.Count(), events, pagination.Page, pagination.PageSize);
         }
 
         public PostgreReadEventsRepository(EventsDbContext dbContext)

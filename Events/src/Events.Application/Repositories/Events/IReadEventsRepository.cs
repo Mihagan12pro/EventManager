@@ -16,7 +16,9 @@ namespace Events.Application.Repositories.Events
             CancellationToken token);
 
         Task<PaginatedEventsDto> GetPaginatedEventsAsync(
-            Filters<Event> filters,
+            string? title,
+            DateTime? startAt,
+            DateTime? endAt,
             Pagination pagination,
             CancellationToken token);
     }

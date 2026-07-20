@@ -31,7 +31,17 @@ namespace Events.Application.Handlers.GetEventsCommand
                 filters.Add((Event e) => e.EndAt >= command.To);
             }
 
-            var result = await _readEventsRepository.GetPaginatedEventsAsync(filters, command.Pagination, cancellationToken);
+            var result = await _readEventsRepository.GetPaginatedEventsAsync(
+                command.Title,
+                
+                command.From,
+                
+                command.To, 
+                
+                command.Pagination,
+                
+                cancellationToken
+            );
 
             return result;
         }
