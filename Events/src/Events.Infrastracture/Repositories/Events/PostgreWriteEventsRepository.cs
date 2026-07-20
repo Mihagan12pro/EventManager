@@ -73,6 +73,29 @@ namespace Events.Infrastracture.Repositories.Events
             }
         }
 
+        public async Task UpdateAvaliableSeats(
+            Guid id, 
+            int avaliableSeats,
+            CancellationToken cancellationToken)
+        {
+            EventEntity entity = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+
+            if (entity != null)
+            {
+                Event @event = EventEntity.ExtractEvent(entity);
+
+                Seats seats = new Seats(@event.TotalSeats, avaliableSeats);
+
+                @event.Seats = seats;
+
+                @event.Validate();
+
+                entity.Update(@event);
+
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+        }
+
         public PostgreWriteEventsRepository(EventsDbContext dbContext)
         {
             _dbContext = dbContext;

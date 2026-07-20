@@ -1,4 +1,5 @@
 ﻿using Confluent.Kafka;
+using Events.Application.Repositories.Cache;
 using Events.Application.Repositories.Events;
 using Events.Application.Repositories.Messages;
 using Events.Application.Repositories.OutboxMessages;
@@ -56,10 +57,15 @@ namespace Events.Infrastracture.Messaging.Consumers
                         {
                             try
                             {
-                                var eventsRepository = scoped.ServiceProvider.GetRequiredService<IReadEventsRepository>();
+                                var writeEventsRepository = scoped.ServiceProvider.GetRequiredService<IWriteEventsRepository>();
+                                var readEventsRepository = scoped.ServiceProvider.GetRequiredService<IReadEventsRepository>();
+                                var cacheRepository = scoped.ServiceProvider.GetRequiredService<ICacheRepository>();
 
-                                var @event = await eventsRepository.GetEventAsync(cancelledBooking.EventId, stoppingToken);
+                                var @event = await readEventsRepository.GetEventAsync(cancelledBooking.EventId, stoppingToken);
                                 @event.ReleaseSeats();
+
+                                await writeEventsRepository.UpdateAvaliableSeats(@event.Id, @event.AvailableSeats, stoppingToken);
+                                await cacheRepository.RemoveAsync($"events:event:{@event.Id}", stoppingToken);
 
                                 var outboxRepository = scoped.ServiceProvider.GetRequiredService<IOutboxConfirmedMessagesRepository>();
                                 await outboxRepository.DeleteAsync(cancelledBooking.BookingId, stoppingToken);

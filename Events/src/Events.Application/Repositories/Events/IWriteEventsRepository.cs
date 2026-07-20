@@ -17,5 +17,11 @@ namespace Events.Application.Repositories.Events
             Guid id,
             UpdateEventDto updateEvent,
             CancellationToken cancellationToken);
+
+        Task UpdateAvaliableSeats(
+                Guid id,
+                int avaliableSeats,
+                CancellationToken cancellationToken
+            );
     }
 }

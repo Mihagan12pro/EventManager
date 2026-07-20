@@ -62,6 +62,15 @@ namespace Events.Infrastracture.Repositories.Cache
             CancellationToken cancellationToken)
                 => await _redis.KeyDeleteAsync(key);
 
+        public async Task<bool> CheckKeyAsync(
+            string key, 
+            CancellationToken cancellationToken)
+        {
+            var value = await _redis.StringGetAsync(key);
+
+            return value.HasValue;
+        }
+
         public RedisRepository(
             EventsDbContext dbContext,
             IConnectionMultiplexer connection,

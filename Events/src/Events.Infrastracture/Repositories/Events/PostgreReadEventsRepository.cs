@@ -3,7 +3,6 @@ using Events.Application.Repositories.Events;
 using Events.Domain;
 using Events.Infrastracture.Entities;
 using Microsoft.EntityFrameworkCore;
-using Shared.Objects.Classes.Collections;
 using Shared.Objects.Records;
 
 namespace Events.Infrastracture.Repositories.Events

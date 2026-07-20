@@ -26,6 +26,16 @@ namespace Events.Application.Repositories.Cache
             CancellationToken cancellationToken);
 
         /// <summary>
+        /// Checks for the presence of the key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<bool> CheckKeyAsync(
+            string key,
+            CancellationToken cancellationToken);
+
+        /// <summary>
         /// Removes the specified key
         /// </summary>
         /// <returns></returns>

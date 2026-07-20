@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using Events.Application;
+using Events.Application.Repositories.Cache;
 using Events.Application.Repositories.Events;
 using Events.Application.Repositories.Messages;
 using Events.Application.Repositories.OutboxMessages;
@@ -69,7 +70,15 @@ namespace Events.Infrastracture.Messaging.Consumers
 
                                     if (await confirmedOutboxRepository.GetActiveCountAsync(pendingBooking.UserId.Value, stoppingToken) < 10)
                                     {
+                                        var scoped = _serviceScopeFactory.CreateScope();
+
+                                        var writeEventsRepository = scoped.ServiceProvider.GetRequiredService<IWriteEventsRepository>();
+                                        var cacheRepository = scoped.ServiceProvider.GetRequiredService<ICacheRepository>();
+
                                         @event.ReverseSeats();
+
+                                        await writeEventsRepository.UpdateAvaliableSeats(@event.Id, @event.AvailableSeats, stoppingToken);
+                                        await cacheRepository.RemoveAsync($"events:event:{@event.Id}", stoppingToken);
 
                                         ConfirmedBooking confirmedBooking = new ConfirmedBooking
                                         {
