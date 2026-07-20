@@ -5,6 +5,7 @@ using Shared.AspNet.Extensions;
 using Microsoft.OpenApi;
 using Events.Infrastracture;
 using Microsoft.EntityFrameworkCore;
+using Events.API;
 
 public partial class Program
 {
@@ -18,45 +19,9 @@ public partial class Program
             opt.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
         });
 
-        builder.Services.AddSwaggerGen(options =>
-        {
-            var binDirectory = new DirectoryInfo(AppContext.BaseDirectory);
-            var files = binDirectory.GetFiles("*.xml");
-
-            foreach (var file in files)
-            {
-                options.IncludeXmlComments(file.FullName);
-            }
-
-            options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
-            {
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer",
-                BearerFormat = "JWT",
-                Description = "JWT Authorization header using the Bearer scheme."
-            });
-
-            options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
-            {
-                [new OpenApiSecuritySchemeReference("bearer", document)] = []
-            });
-        });
-
-
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddValidation();
-
-        builder.Services.AddHttpContextAccessor();
-
-
-        builder.Services.AddHandlers();
-        builder.Services.AddSharedSecurity();
-        builder.Services.AddInfrastructure(new ConfigurationBuilder()
+        builder.Services.AddApplicationServices(new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json")
                     .Build());
-
-        builder.Services.AddJwtAuthentication();
-        builder.Services.AddAuthorization();
 
         var app = builder.Build();
 

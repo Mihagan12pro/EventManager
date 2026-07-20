@@ -1,14 +1,65 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Objects;
-using Shared.Objects.Classes;
+using Microsoft.OpenApi;
 using Shared.Objects.Classes.Options;
 
 namespace Shared.AspNet.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddWebAbstractions(this IServiceCollection services)
+        {
+            services.AddHttpContextAccessor();
+
+            return services;    
+        }
+
+        public static IServiceCollection AddMinimalApi(this IServiceCollection services)
+        {
+            services.AddEndpointsApiExplorer();
+            services.AddValidation();
+
+            return services;
+        }
+
+        public static IServiceCollection AddAuthorizationAuthentification(this IServiceCollection services)
+        {
+            services.AddJwtAuthentication();
+            services.AddAuthorization();
+
+            return services;
+        }
+
+        public static IServiceCollection AddSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(options =>
+            {
+                var binDirectory = new DirectoryInfo(AppContext.BaseDirectory);
+                var files = binDirectory.GetFiles("*.xml");
+
+                foreach (var file in files)
+                {
+                    options.IncludeXmlComments(file.FullName);
+                }
+
+                options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Description = "JWT Authorization header using the Bearer scheme."
+                });
+
+                options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+                {
+                    [new OpenApiSecuritySchemeReference("bearer", document)] = []
+                });
+            });
+
+            return services;
+        }
+
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
         {
             services.AddAuthentication(options =>
