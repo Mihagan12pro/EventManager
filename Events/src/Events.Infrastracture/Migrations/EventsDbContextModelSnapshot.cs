@@ -50,7 +50,7 @@ namespace Events.Infrastracture.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("Shared.Messaging.Contracts.Bookings.CancelledBooking", b =>
@@ -76,7 +76,7 @@ namespace Events.Infrastracture.Migrations
                     b.HasIndex("BookingId")
                         .IsUnique();
 
-                    b.ToTable("InboxCancelledMessages");
+                    b.ToTable("InboxCancelledMessages", (string)null);
                 });
 
             modelBuilder.Entity("Shared.Messaging.Contracts.Bookings.ConfirmedBooking", b =>
@@ -99,7 +99,7 @@ namespace Events.Infrastracture.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OutboxConfirmedBookingsMessages");
+                    b.ToTable("OutboxConfirmedBookingsMessages", (string)null);
                 });
 
             modelBuilder.Entity("Shared.Messaging.Contracts.Bookings.PendingBooking", b =>
@@ -122,7 +122,7 @@ namespace Events.Infrastracture.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InboxPendingMessages");
+                    b.ToTable("InboxPendingMessages", (string)null);
                 });
 #pragma warning restore 612, 618
         }

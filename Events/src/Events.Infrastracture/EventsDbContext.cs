@@ -1,5 +1,4 @@
-﻿using Events.Domain;
-using Events.Infrastracture.Entities;
+﻿using Events.Infrastracture.Entities;
 using Microsoft.EntityFrameworkCore;
 using Shared.Messaging.Contracts.Bookings;
 using System.Reflection;

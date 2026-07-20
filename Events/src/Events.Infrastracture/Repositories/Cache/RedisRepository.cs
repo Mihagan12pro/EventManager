@@ -1,6 +1,7 @@
 ﻿using Events.Application.Repositories.Cache;
 using Events.Application.Repositories.Events;
 using Events.Domain;
+using Events.Infrastracture.Entities;
 using StackExchange.Redis;
 using System.Text.Json;
 
@@ -20,13 +21,13 @@ namespace Events.Infrastracture.Repositories.Cache
 
             var cached = await _redis.StringGetAsync(key);
             if (cached.HasValue)
-                return JsonSerializer.Deserialize<IEnumerable<Event>>(cached.ToString());
+                return JsonSerializer.Deserialize<IEnumerable<EventEntity>>(cached.ToString()).Select(e => EventEntity.ExtractEvent(e));
 
             var events = await _eventsRepository.GetMostPopularAsync(10, cancellationToken);
 
             if (events != null)
             {
-                var serialized = JsonSerializer.Serialize(events);
+                var serialized = JsonSerializer.Serialize(events.Select(e => EventEntity.ExtractEntity(e)));
                 await _redis.StringSetAsync(key, serialized, TimeSpan.FromMinutes(5));
 
                 return events;

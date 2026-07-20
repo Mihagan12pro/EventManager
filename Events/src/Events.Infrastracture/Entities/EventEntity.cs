@@ -57,7 +57,9 @@ namespace Events.Infrastracture.Entities
                 
                     Title = @event.Title, 
                 
-                    TotalSeats = @event.TotalSeats
+                    TotalSeats = @event.TotalSeats,
+
+                    Id = @event.Id
             };
     }
 }
