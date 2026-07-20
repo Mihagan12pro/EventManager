@@ -1,9 +1,11 @@
 ﻿using Events.Application;
+using Events.Application.Repositories.Cache;
 using Events.Application.Repositories.Events;
 using Events.Application.Repositories.Messages;
 using Events.Application.Repositories.OutboxMessages;
 using Events.Infrastracture.Messaging.Consumers;
 using Events.Infrastracture.Messaging.Publishers;
+using Events.Infrastracture.Repositories.Cache;
 using Events.Infrastracture.Repositories.Events;
 using Events.Infrastracture.Repositories.InboxMessages;
 using Events.Infrastracture.Repositories.OutboxMessages;
@@ -98,6 +100,8 @@ namespace Events.Infrastracture
             services.AddSingleton<IConnectionMultiplexer>(
                 await ConnectionMultiplexer.ConnectAsync(redisOptions)   
                 );
+
+            services.AddScoped<ICacheRepository, RedisRepository>();
 
             return services;
         }
