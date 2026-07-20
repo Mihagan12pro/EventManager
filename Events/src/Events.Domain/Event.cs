@@ -7,7 +7,7 @@ namespace Events.Domain
 {
     public class Event
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         public DateTime StartAt { get; private set; }
 
