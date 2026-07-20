@@ -17,7 +17,7 @@ namespace Events.Infrastracture.Repositories.Cache
             int count,
             CancellationToken cancellationToken)
         {
-            var key = $"top:{count}";
+            var key = $"events:top:{count}";
 
             var cached = await _redis.StringGetAsync(key);
             if (cached.HasValue)
@@ -34,6 +34,13 @@ namespace Events.Infrastracture.Repositories.Cache
             }
 
             return null;
+        }
+
+        public async Task<Event> GetEventAsync(
+            Guid id, 
+            CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         public RedisRepository(

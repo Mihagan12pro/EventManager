@@ -14,5 +14,15 @@ namespace Events.Application.Repositories.Cache
             int count,
             CancellationToken cancellationToken
         );
+
+        /// <summary>
+        /// Implements Read-Throw
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Event> GetEventAsync(
+            Guid id,
+            CancellationToken cancellationToken);
     }
 }

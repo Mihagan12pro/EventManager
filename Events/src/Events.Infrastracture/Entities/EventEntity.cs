@@ -32,6 +32,19 @@ namespace Events.Infrastracture.Entities
             AvailableSeats = @event.AvailableSeats;
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is EventEntity entity)
+                return AvailableSeats == entity.AvailableSeats
+                    && TotalSeats == entity.TotalSeats
+                    && StartAt == entity.StartAt
+                    && EndAt == entity.EndAt
+                    && Title == entity.Title
+                    && Description == entity.Description;
+
+            return false;
+        }
+
         public static Event ExtractEvent(EventEntity eventEntity)
             => new Event()
                 {
