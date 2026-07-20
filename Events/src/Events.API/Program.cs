@@ -9,7 +9,7 @@ using Events.API;
 
 public partial class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +19,7 @@ public partial class Program
             opt.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
         });
 
-        builder.Services.AddApplicationServices(new ConfigurationBuilder()
+        await builder.Services.AddApplicationServices(new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json")
                     .Build());
 
