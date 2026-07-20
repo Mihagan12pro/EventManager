@@ -1,4 +1,5 @@
 ﻿using Events.Application.Dtos;
+using Events.Application.Repositories.Cache;
 using Events.Application.Repositories.Events;
 using Events.Domain;
 using Shared.Objects.Interfaces;
@@ -7,13 +8,13 @@ namespace Events.Application.Handlers.GetByIdEvent
 {
     internal class GetByIdEventHandler : ICommandHandler<GetEventDto, GetByIdEventCommand>
     {
-        private readonly IReadEventsRepository _readEventsRepository;
+        private readonly ICacheRepository _cacheRepository;
 
         public async Task<GetEventDto> HandleAsync(
             GetByIdEventCommand command, 
             CancellationToken cancellationToken)
         {
-            Event @event = await _readEventsRepository.GetEventAsync(command.Id, cancellationToken);
+            Event @event = await _cacheRepository.GetEventAsync(command.Id, cancellationToken);
 
             return new GetEventDto(
                 @event.Id,
@@ -32,9 +33,9 @@ namespace Events.Application.Handlers.GetByIdEvent
             );
         }
 
-        public GetByIdEventHandler(IReadEventsRepository readEventsRepository)
+        public GetByIdEventHandler(ICacheRepository cacheRepository)
         {
-            _readEventsRepository= readEventsRepository;
+            _cacheRepository = cacheRepository;
         }
     }
 }

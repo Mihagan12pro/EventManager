@@ -13,6 +13,8 @@ namespace Events.Infrastracture.Repositories.Cache
 
         private readonly IReadEventsRepository _eventsRepository;
 
+        private readonly EventsDbContext _dbContext;
+
         public async Task<IEnumerable<Event>> GetMostPopularAsync(
             int count,
             CancellationToken cancellationToken)
@@ -40,13 +42,28 @@ namespace Events.Infrastracture.Repositories.Cache
             Guid id, 
             CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var key = $"events:event:{id}";
+
+            var cached = await _redis.StringGetAsync(key);
+            if (cached.HasValue)
+                return EventEntity.ExtractEvent(JsonSerializer.Deserialize<EventEntity>(cached.ToString()));
+
+            var @event = await _eventsRepository.GetEventAsync(id, cancellationToken);
+            var entity = EventEntity.ExtractEntity(@event);
+
+            var serialized = JsonSerializer.Serialize(entity);
+            await _redis.StringSetAsync(key, serialized, TimeSpan.FromMinutes(1));
+
+            return @event;
         }
 
         public RedisRepository(
+            EventsDbContext dbContext,
             IConnectionMultiplexer connection,
             IReadEventsRepository eventsRepository)
         {
+            _dbContext = dbContext;
+
             _redis = connection.GetDatabase();
 
             _eventsRepository = eventsRepository;

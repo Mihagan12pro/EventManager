@@ -11,6 +11,13 @@ namespace Events.Application.Repositories.Events
             int count,
             CancellationToken token);
 
+        /// <summary>
+        /// Gets event by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="token"></param>
+        /// <exception cref="InvalidOperationException"
+        /// <returns></returns>
         Task<Event> GetEventAsync(
             Guid id,
             CancellationToken token);
