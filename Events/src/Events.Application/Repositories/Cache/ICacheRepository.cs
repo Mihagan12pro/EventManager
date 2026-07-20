@@ -24,5 +24,13 @@ namespace Events.Application.Repositories.Cache
         Task<Event> GetEventAsync(
             Guid id,
             CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Removes the specified key
+        /// </summary>
+        /// <returns></returns>
+        Task RemoveAsync(
+            string key,
+            CancellationToken cancellationToken);
     }
 }
