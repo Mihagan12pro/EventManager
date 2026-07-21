@@ -4,6 +4,16 @@ namespace Events.Application.Repositories.Cache
 {
     public interface ICacheRepository
     {
+        Task CacheEventAsync(
+            string key,
+            Event @event, 
+            CancellationToken cancellationToken);
+
+        Task CacheTopEventsAsync(
+            string key,
+            IEnumerable<Event> events,
+            CancellationToken cancellationToken);
+
         Task<IEnumerable<Event>> GetMostPopularAsync(
             int count,
             CancellationToken cancellationToken

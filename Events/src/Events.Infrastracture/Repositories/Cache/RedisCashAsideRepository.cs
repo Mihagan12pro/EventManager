@@ -54,6 +54,26 @@ namespace Events.Infrastracture.Repositories.Cache
             return value.HasValue;
         }
 
+        public async Task CacheEventAsync(
+            string key,
+            Event @event,
+            CancellationToken cancellationToken)
+        {
+            string serialized = JsonSerializer.Serialize(EventEntity.ExtractEntity(@event));
+
+            await _redis.StringSetAsync(key, serialized);
+        }
+
+        public async Task CacheTopEventsAsync(
+            string key,
+            IEnumerable<Event> events,
+            CancellationToken cancellationToken)
+        {
+            string serialized = JsonSerializer.Serialize(events.Select(e => EventEntity.ExtractEntity(e)));
+
+            await _redis.StringSetAsync(key, serialized);
+        }
+
         public RedisCashAsideRepository(
             IOptions<CacheKeysOptions> options,
             IConnectionMultiplexer connection

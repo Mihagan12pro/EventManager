@@ -1,12 +1,19 @@
 ﻿using Events.Application.Dtos;
 using Events.Application.Repositories.Cache;
+using Events.Application.Repositories.Events;
+using Events.Application.Singleton.Cache.Options;
+using Microsoft.Extensions.Options;
 using Shared.Objects.Interfaces;
 
 namespace Events.Application.Handlers.GetTop10Events
 {
     internal class GetTop10EventsHandler : ICommandHandler<IEnumerable<GetEventDto>, GetTop10EventsCommand>
     {
+        private readonly IReadEventsRepository _eventsRepository;
+
         private readonly ICacheRepository _cacheRepository;
+
+        private readonly CacheKeysOptions _cacheKeysOptions;
 
         public async Task<IEnumerable<GetEventDto>> HandleAsync(
             GetTop10EventsCommand command,
@@ -15,7 +22,15 @@ namespace Events.Application.Handlers.GetTop10Events
             var events = await _cacheRepository.GetMostPopularAsync(10, cancellationToken);
 
             if (events == null)
-                return null;
+            {
+                events = await _eventsRepository.GetMostPopularAsync(10, cancellationToken);
+
+                await _cacheRepository.CacheTopEventsAsync(
+                    _cacheKeysOptions.TopEventsKey.FormatKey(10),
+                    events,     
+                    cancellationToken
+                );
+            }
 
             return events.Select(e => new GetEventDto(
                 e.Id, 
@@ -28,9 +43,16 @@ namespace Events.Application.Handlers.GetTop10Events
             );
         }
 
-        public GetTop10EventsHandler(ICacheRepository cacheRepository)
+        public GetTop10EventsHandler(
+            ICacheRepository cacheRepository,
+            IReadEventsRepository eventsRepository,
+            IOptions<CacheKeysOptions> options)
         {
+            _cacheKeysOptions = options.Value;
+
             _cacheRepository = cacheRepository;
+
+            _eventsRepository = eventsRepository;
         }
     }
 }
