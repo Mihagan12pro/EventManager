@@ -1,9 +1,10 @@
-﻿using Events.Application.Singleton.Cache;
-using Events.Application.Singleton.Cache.Options;
+﻿using Events.Application.Singleton.Cache.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Objects.Interfaces;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Events.Unit")]
 namespace Events.Application
 {
     public static class DependenciesInjection
