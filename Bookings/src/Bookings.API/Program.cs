@@ -8,7 +8,7 @@ using Shared.Infrastructure.Security;
 
 public partial class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 

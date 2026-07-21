@@ -1,10 +1,13 @@
 ﻿using Confluent.Kafka;
+using Events.Application.Repositories.Cache;
 using Events.Application.Repositories.Events;
 using Events.Application.Repositories.Messages;
 using Events.Application.Repositories.OutboxMessages;
+using Events.Application.Singleton.Cache.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Shared.Failures.Exceptions.WebApi.ClientErrors;
 using Shared.Failures.Exceptions.WebApi.ServerErrors;
 using Shared.Messaging.Contracts.Bookings;
@@ -15,6 +18,7 @@ namespace Events.Infrastracture.Messaging.Consumers
 {
     internal class CancelledBookingsConsumer : BackgroundService
     {
+        private readonly CacheKeysOptions _cacheKeysOptions;
         private readonly ILogger<CancelledBookingsConsumer> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly KafkaOptions kafkaOptions = new KafkaOptions();
@@ -56,10 +60,15 @@ namespace Events.Infrastracture.Messaging.Consumers
                         {
                             try
                             {
-                                var eventsRepository = scoped.ServiceProvider.GetRequiredService<IReadEventsRepository>();
+                                var writeEventsRepository = scoped.ServiceProvider.GetRequiredService<IWriteEventsRepository>();
+                                var readEventsRepository = scoped.ServiceProvider.GetRequiredService<IReadEventsRepository>();
+                                var cacheRepository = scoped.ServiceProvider.GetRequiredService<ICacheRepository>();
 
-                                var @event = await eventsRepository.GetEventAsync(cancelledBooking.EventId, stoppingToken);
+                                var @event = await readEventsRepository.GetEventAsync(cancelledBooking.EventId, stoppingToken);
                                 @event.ReleaseSeats();
+
+                                await writeEventsRepository.UpdateAvaliableSeats(@event.Id, @event.AvailableSeats, stoppingToken);
+                                await cacheRepository.RemoveAsync(_cacheKeysOptions.GetEventKey.FormatKey(@event.Id), stoppingToken);
 
                                 var outboxRepository = scoped.ServiceProvider.GetRequiredService<IOutboxConfirmedMessagesRepository>();
                                 await outboxRepository.DeleteAsync(cancelledBooking.BookingId, stoppingToken);
@@ -91,9 +100,12 @@ namespace Events.Infrastracture.Messaging.Consumers
         }
 
         public CancelledBookingsConsumer(
+            IOptions<CacheKeysOptions> options,
             IServiceScopeFactory serviceScopeFactory,
             ILogger<CancelledBookingsConsumer> logger)
         {
+            _cacheKeysOptions = options.Value;
+
             _serviceScopeFactory = serviceScopeFactory;
 
             _logger = logger;

@@ -1,4 +1,5 @@
-﻿using Events.Application.Repositories.Events;
+﻿using Events.Application.Repositories.Cache;
+using Events.Application.Repositories.Events;
 using Events.Application.Repositories.OutboxMessages;
 using Events.Domain;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,7 @@ namespace Events.Application.Handlers.Cancel
         private readonly IPublisher _publisher;
         private readonly IWriteEventsRepository _writeEventsRepository;
         private readonly IReadEventsRepository _readEventsRepository;
+        private readonly ICacheRepository _cacheRepository;
         private readonly IOutboxConfirmedMessagesRepository _messagesRepository;
         private readonly ILogger<CancelEventHandler> _logger;
 
@@ -31,6 +33,8 @@ namespace Events.Application.Handlers.Cancel
 
                     await _messagesRepository.DeleteAllAsync(command.Id, cancellationToken);
 
+                    await _cacheRepository.RemoveAsync($"events:event:{command.Id}", cancellationToken);
+
                     await _publisher.PublishEventDeletedAsync(
                         new DeletedEvent()
                         {
@@ -49,11 +53,19 @@ namespace Events.Application.Handlers.Cancel
 
         public CancelEventHandler(
             ILogger<CancelEventHandler> logger,
+            
             IPublisher publisher,
+            
             IWriteEventsRepository writeEventsRepository,
+            
             IReadEventsRepository readEventsRepository,
-            IOutboxConfirmedMessagesRepository messagesRepository)
+            
+            IOutboxConfirmedMessagesRepository messagesRepository,
+
+            ICacheRepository cacheRepository)
         {
+            _cacheRepository = cacheRepository;
+
             _messagesRepository = messagesRepository;
 
             _logger = logger;

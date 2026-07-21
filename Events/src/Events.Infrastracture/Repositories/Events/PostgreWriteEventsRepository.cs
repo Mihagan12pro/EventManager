@@ -2,6 +2,7 @@
 using Events.Application.Repositories.Events;
 using Events.Domain;
 using Events.Domain.ValueObjects;
+using Events.Infrastracture.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Events.Infrastracture.Repositories.Events
@@ -14,22 +15,24 @@ namespace Events.Infrastracture.Repositories.Events
             Event @event,
             CancellationToken cancellationToken)
         {
-            await _dbContext.Events.AddAsync(@event, cancellationToken);
+            var entity = EventEntity.ExtractEntity(@event);
+
+            await _dbContext.Events.AddAsync(entity, cancellationToken);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return @event.Id;
+            return entity.Id;
         }
 
         public async Task DeleteAsync(
             Guid id, 
             CancellationToken cancellationToken)
         {
-            Event? @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+            EventEntity entity = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
-            if (@event != null)
+            if (entity != null)
             {
-                _dbContext.Events.Remove(@event);
+                _dbContext.Events.Remove(entity);
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
             }
@@ -40,10 +43,12 @@ namespace Events.Infrastracture.Repositories.Events
             UpdateEventDto updateEvent,
             CancellationToken cancellationToken)
         {
-            Event? @event = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+            EventEntity entity = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
-            if (@event != null)
+            if (entity != null)
             {
+                Event @event = EventEntity.ExtractEvent(entity);
+
                 EventNaming naming = new EventNaming(
                     @event.Title,
                     @event.Description);
@@ -61,6 +66,31 @@ namespace Events.Infrastracture.Repositories.Events
                     updateEvent.To);
 
                 @event.Validate();
+
+                entity.Update(@event);
+
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+        }
+
+        public async Task UpdateAvaliableSeats(
+            Guid id, 
+            int avaliableSeats,
+            CancellationToken cancellationToken)
+        {
+            EventEntity entity = await _dbContext.Events.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+
+            if (entity != null)
+            {
+                Event @event = EventEntity.ExtractEvent(entity);
+
+                Seats seats = new Seats(@event.TotalSeats, avaliableSeats);
+
+                @event.Seats = seats;
+
+                @event.Validate();
+
+                entity.Update(@event);
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
             }

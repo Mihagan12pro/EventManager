@@ -1,9 +1,11 @@
 ﻿using Events.Application;
+using Events.Application.Repositories.Cache;
 using Events.Application.Repositories.Events;
 using Events.Application.Repositories.Messages;
 using Events.Application.Repositories.OutboxMessages;
 using Events.Infrastracture.Messaging.Consumers;
 using Events.Infrastracture.Messaging.Publishers;
+using Events.Infrastracture.Repositories.Cache;
 using Events.Infrastracture.Repositories.Events;
 using Events.Infrastracture.Repositories.InboxMessages;
 using Events.Infrastracture.Repositories.OutboxMessages;
@@ -12,13 +14,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Infrastructure.Kafka;
 using Shared.Messaging.Contracts.Bookings;
-using Shared.Objects.Classes.Options;
+using StackExchange.Redis;
 
 namespace Events.Infrastracture
 {
     public static class DependenciesInjection
     {
-        public static IServiceCollection AddInfrastructure(
+        public static async Task<IServiceCollection> AddInfrastructure(
             this IServiceCollection services, 
             IConfiguration configuration)
         {
@@ -29,6 +31,8 @@ namespace Events.Infrastracture
 
             services.AddConsumers();
             services.AddPublishers();
+
+            await services.AddRedis(configuration);
 
             return services;
         }
@@ -69,6 +73,32 @@ namespace Events.Infrastracture
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
 
+
+            return services;
+        }
+
+        private static async Task<IServiceCollection> AddRedis(
+            this IServiceCollection services, 
+            IConfiguration configuration)
+        {
+            IConfigurationSection redisSection = configuration.GetRequiredSection("RedisOptions");
+
+            var redisOptions = new ConfigurationOptions()
+            {
+                ConnectTimeout = int.Parse(redisSection.GetRequiredSection("ConnectTimeout").Value),
+
+                SyncTimeout = int.Parse(redisSection.GetRequiredSection("SyncTimeout").Value),
+
+                AbortOnConnectFail = bool.Parse(redisSection.GetRequiredSection("AbortOnConnectFail").Value)
+            };
+
+            redisOptions.EndPoints.Add(redisSection.GetRequiredSection("EndPoint").Value);
+
+            services.AddSingleton<IConnectionMultiplexer>(
+                await ConnectionMultiplexer.ConnectAsync(redisOptions)   
+                );
+
+            services.AddScoped<ICacheRepository, RedisCashAsideRepository>();
 
             return services;
         }

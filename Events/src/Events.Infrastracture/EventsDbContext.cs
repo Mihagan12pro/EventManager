@@ -1,4 +1,4 @@
-﻿using Events.Domain;
+﻿using Events.Infrastracture.Entities;
 using Microsoft.EntityFrameworkCore;
 using Shared.Messaging.Contracts.Bookings;
 using System.Reflection;
@@ -12,7 +12,7 @@ namespace Events.Infrastracture
 
         }
 
-        public DbSet<Event> Events { get; set; }
+        public DbSet<EventEntity> Events { get; set; }
 
         public DbSet<PendingBooking> InboxPendingMessages { get; set; }
 

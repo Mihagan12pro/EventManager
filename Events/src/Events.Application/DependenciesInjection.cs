@@ -1,12 +1,34 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Shared.Objects.Classes.Options;
+﻿using Events.Application.Singleton.Cache.Options;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Shared.Objects.Interfaces;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Events.Unit")]
 namespace Events.Application
 {
     public static class DependenciesInjection
     {
-        public static IServiceCollection AddHandlers(this IServiceCollection services)
+        public static IServiceCollection AddApplication(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.AddCacheKeys(configuration);
+            services.AddHandlers();
+
+            return services;
+        }
+
+        private static IServiceCollection AddCacheKeys(
+            this IServiceCollection services, 
+            IConfiguration configuration)
+        {
+            services.Configure<CacheKeysOptions>(
+                configuration.GetRequiredSection(nameof(CacheKeysOptions)));
+
+            return services;
+        }
+
+        private static IServiceCollection AddHandlers(this IServiceCollection services)
         {
             var assembly = typeof(DependenciesInjection).Assembly;
 

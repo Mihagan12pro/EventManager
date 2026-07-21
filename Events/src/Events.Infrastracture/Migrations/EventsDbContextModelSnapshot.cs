@@ -22,7 +22,7 @@ namespace Events.Infrastracture.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Events.Domain.Event", b =>
+            modelBuilder.Entity("Events.Infrastracture.Entities.EventEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

@@ -22,7 +22,7 @@ namespace Users.Infrastructure.Postgre.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Users.Domain.UserEntity", b =>
+            modelBuilder.Entity("Users.Domain.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
