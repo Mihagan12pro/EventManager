@@ -7,11 +7,12 @@ namespace Events.API
 {
     public static class DependenciesInjection
     {
-        public static async Task<IServiceCollection> AddApplicationServices(
+        public static async Task<IServiceCollection> AddServices(
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddHandlers();
+            services.AddApplication(configuration);
+
             services.AddSharedSecurity();
             await services.AddInfrastructure(configuration);
 

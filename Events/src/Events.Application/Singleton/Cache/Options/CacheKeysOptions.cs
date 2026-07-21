@@ -2,8 +2,8 @@
 {
     public class CacheKeysOptions
     {
-        public readonly CacheKeyOptions TopEventsKey = new CacheKeyOptions();
+        public CacheKeyOptions TopEventsKey { get; set; }
 
-        public readonly CacheKeyOptions GetEventKey = new CacheKeyOptions();
+        public CacheKeyOptions GetEventKey { get; set; }
     }
 }

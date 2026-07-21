@@ -4,10 +4,12 @@ using Events.Application.Repositories.Cache;
 using Events.Application.Repositories.Events;
 using Events.Application.Repositories.Messages;
 using Events.Application.Repositories.OutboxMessages;
+using Events.Application.Singleton.Cache.Options;
 using Events.Domain.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Shared.Messaging.Contracts.Bookings;
 using Shared.Objects.Classes.Options;
 using System.Text.Json;
@@ -16,6 +18,7 @@ namespace Events.Infrastracture.Messaging.Consumers
 {
     internal class PendingBookingsConsumer : BackgroundService
     {
+        private readonly CacheKeysOptions _cacheKeysOptions;
         private readonly ILogger<PendingBookingsConsumer> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly KafkaOptions kafkaOptions = new KafkaOptions();
@@ -78,7 +81,7 @@ namespace Events.Infrastracture.Messaging.Consumers
                                         @event.ReverseSeats();
 
                                         await writeEventsRepository.UpdateAvaliableSeats(@event.Id, @event.AvailableSeats, stoppingToken);
-                                        await cacheRepository.RemoveAsync($"events:event:{@event.Id}", stoppingToken);
+                                        await cacheRepository.RemoveAsync(_cacheKeysOptions.GetEventKey.FormatKey(@event.Id), stoppingToken);
 
                                         ConfirmedBooking confirmedBooking = new ConfirmedBooking
                                         {
@@ -219,10 +222,12 @@ namespace Events.Infrastracture.Messaging.Consumers
         }
 
         public PendingBookingsConsumer(
+            IOptions<CacheKeysOptions> options,
             IPublisher publisher,
             IServiceScopeFactory serviceScopeFactory,
             ILogger<PendingBookingsConsumer> logger)
         {
+            _cacheKeysOptions = options.Value;
             _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
             _publisher = publisher;

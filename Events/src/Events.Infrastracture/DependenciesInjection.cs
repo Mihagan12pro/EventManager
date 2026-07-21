@@ -12,12 +12,9 @@ using Events.Infrastracture.Repositories.OutboxMessages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Shared.Infrastructure.Kafka;
 using Shared.Messaging.Contracts.Bookings;
-using Shared.Objects.Classes.Options;
 using StackExchange.Redis;
-using System.Text.Json;
 
 namespace Events.Infrastracture
 {

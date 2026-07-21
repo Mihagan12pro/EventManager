@@ -1,8 +1,5 @@
 using Events.API.Api;
-using Events.Application;
-using Shared.Infrastructure.Security;
 using Shared.AspNet.Extensions;
-using Microsoft.OpenApi;
 using Events.Infrastracture;
 using Microsoft.EntityFrameworkCore;
 using Events.API;
@@ -19,7 +16,7 @@ public partial class Program
             opt.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
         });
 
-        await builder.Services.AddApplicationServices(new ConfigurationBuilder()
+        await builder.Services.AddServices(new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json")
                     .Build());
 
