@@ -304,3 +304,21 @@ Features from the sprint 9:
 5. Add a lot of shared libraries (e.g. Shared.Objects, Shared.Validation and e.t.c.)
 
 
+Features from the sprint 10:
+1. Add new end point - events/top
+   This endpoint sends to client 10 most popular events.
+
+2. Implemented result caching for specific endpoints (`GET events/top` and `GET events/{id}`) using Redis.
+
+3. Modified the appsettings.json file in the Events.API project: add two new sections - CacheKeysOptions and RedisOptions.
+
+4. Added the ICacheRepository
+
+5. Created the RedisCashAsideRepository and RedisReadThrowRepository. These classes implement the ICacheRepository interface
+
+6. Implemented cache invalidation for the GET events/{id} endpoint.
+   Invalidation is performed by removing stale data.
+   This method was selected as one of the most reliable invalidation strategies.
+
+7. Modified the docker-compose.yml file (added a Redis container).
+

@@ -1,7 +1,6 @@
 ﻿using Events.Application.Dtos;
 using Events.Application.Handlers.CompleteUpdate;
 using Events.Application.Handlers.GetByIdEvent;
-using Events.Application.Repositories.Cache;
 using Events.Application.Repositories.Events;
 using Events.Application.Singleton.Cache.Options;
 using Events.Domain;
