@@ -26,7 +26,7 @@ namespace Events.Application.Handlers.GetByIdEvent
             {
                 @event = await _eventsRepository.GetEventAsync(command.Id, cancellationToken);
 
-                await _cacheRepository.CacheEventAsync(
+                await _cacheRepository.AddEventAsync(
                     _cacheKeysOptions.GetEventKey.FormatKey(@event.Id),
                     @event, 
                     cancellationToken

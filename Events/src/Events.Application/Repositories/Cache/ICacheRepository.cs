@@ -4,12 +4,12 @@ namespace Events.Application.Repositories.Cache
 {
     public interface ICacheRepository
     {
-        Task CacheEventAsync(
+        Task AddEventAsync(
             string key,
             Event @event, 
             CancellationToken cancellationToken);
 
-        Task CacheTopEventsAsync(
+        Task AddTopEventsAsync(
             string key,
             IEnumerable<Event> events,
             CancellationToken cancellationToken);

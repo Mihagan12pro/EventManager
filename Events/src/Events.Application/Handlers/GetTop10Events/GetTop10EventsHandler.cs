@@ -25,7 +25,7 @@ namespace Events.Application.Handlers.GetTop10Events
             {
                 events = await _eventsRepository.GetMostPopularAsync(10, cancellationToken);
 
-                await _cacheRepository.CacheTopEventsAsync(
+                await _cacheRepository.AddTopEventsAsync(
                     _cacheKeysOptions.TopEventsKey.FormatKey(10),
                     events,     
                     cancellationToken

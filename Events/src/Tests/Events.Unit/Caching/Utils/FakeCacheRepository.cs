@@ -7,13 +7,13 @@ namespace Events.Unit.Caching.Utils
     {
         public readonly Dictionary<string, Event> EventsCache = new ();
 
-        public async Task CacheEventAsync(
+        public async Task AddEventAsync(
             string key, 
             Event @event,
             CancellationToken cancellationToken)
                 => EventsCache.Add(key, @event);
 
-        public async Task CacheTopEventsAsync(
+        public async Task AddTopEventsAsync(
             string key,
             IEnumerable<Event> events,
             CancellationToken cancellationToken)

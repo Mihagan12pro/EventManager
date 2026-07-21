@@ -25,7 +25,7 @@ namespace Events.Infrastracture.Repositories.Cache
             if (cached.HasValue)
                 return JsonSerializer.Deserialize<IEnumerable<EventEntity>>(cached.ToString()).Select(e => EventEntity.ExtractEvent(e));
 
-            var events = await _eventsRepository.GetMostPopularAsync(10, cancellationToken);
+            var events = await _eventsRepository.GetMostPopularAsync(count, cancellationToken);
 
             if (events != null)
             {
@@ -77,24 +77,35 @@ namespace Events.Infrastracture.Repositories.Cache
             return value.HasValue;
         }
 
-        public async Task CacheEventAsync(
+        public async Task AddEventAsync(
             string key,
             Event @event,
             CancellationToken cancellationToken)
         {
-            string serialized = JsonSerializer.Serialize(EventEntity.ExtractEntity(@event));
+            string serialized = JsonSerializer.Serialize(
+                EventEntity.ExtractEntity(@event)
+            );
 
-            await _redis.StringSetAsync(key, serialized);
+            await _redis.StringSetAsync(
+                key,
+                serialized,
+                _cacheKeysOptions.GetEventKey.Expiry);
         }
 
-        public async Task CacheTopEventsAsync(
+        public async Task AddTopEventsAsync(
             string key,
             IEnumerable<Event> events,
             CancellationToken cancellationToken)
         {
-            string serialized = JsonSerializer.Serialize(events.Select(e => EventEntity.ExtractEntity(e)));
+            string serialized = JsonSerializer.Serialize(
+                events.Select(e => EventEntity.ExtractEntity(e))
+            );
 
-            await _redis.StringSetAsync(key, serialized);
+            await _redis.StringSetAsync(
+                key,
+                serialized,
+                _cacheKeysOptions.TopEventsKey.Expiry
+            );
         }
 
         public RedisReadThrowRepository(
