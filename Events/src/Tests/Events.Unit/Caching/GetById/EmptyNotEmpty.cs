@@ -7,13 +7,23 @@ using Events.Domain.ValueObjects;
 using Microsoft.Extensions.Options;
 using Moq;
 
-namespace Events.Unit.Caching
+namespace Events.Unit.Caching.GetById
 {
-    public class GetByIdCacheTests
+    public partial class GetByIdCacheTests
     {
         [Fact]
         public async Task Test_NotEmptyCache()
         {
+                        CacheKeysOptions cacheKeysOptions = new CacheKeysOptions()
+            {
+                GetEventKey = new CacheKeyOptions()
+                {
+                    TTL = 300,
+
+                    Key = "events:event:{0}"
+                }
+            };
+
             Event @event = new Event()
             {
                 Id = Guid.NewGuid(),
@@ -32,16 +42,6 @@ namespace Events.Unit.Caching
             mockEventsRepository.Setup(mock => mock.GetEventAsync(@event.Id, default)).ReturnsAsync(@event);
 
             GetByIdEventCommand command = new GetByIdEventCommand(@event.Id);
-
-            CacheKeysOptions cacheKeysOptions = new CacheKeysOptions()
-            {
-                GetEventKey = new CacheKeyOptions()
-                {
-                    TTL = 300,
-
-                    Key = "events:event:{0}"
-                }
-            };
 
             GetByIdEventHandler handler = new GetByIdEventHandler(
                 mockCacheRepository.Object,

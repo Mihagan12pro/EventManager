@@ -20,10 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Caching\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Events.Application\Events.Application.csproj" />
   </ItemGroup>
 
