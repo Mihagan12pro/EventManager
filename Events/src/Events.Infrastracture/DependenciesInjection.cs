@@ -98,7 +98,7 @@ namespace Events.Infrastracture
                 await ConnectionMultiplexer.ConnectAsync(redisOptions)   
                 );
 
-            services.AddScoped<ICacheRepository, RedisRepository>();
+            services.AddScoped<ICacheRepository, RedisCashAsideRepository>();
 
             return services;
         }

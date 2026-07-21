@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace Events.Infrastracture.Repositories.Cache
 {
-    internal class RedisRepository : ICacheRepository
+    internal class RedisReadThrowRepository : ICacheRepository
     {
         private readonly IDatabase _redis;
         private readonly IReadEventsRepository _eventsRepository;
@@ -77,7 +77,7 @@ namespace Events.Infrastracture.Repositories.Cache
             return value.HasValue;
         }
 
-        public RedisRepository(
+        public RedisReadThrowRepository(
             IOptions<CacheKeysOptions> options,
             IConnectionMultiplexer connection,
             IReadEventsRepository eventsRepository)
