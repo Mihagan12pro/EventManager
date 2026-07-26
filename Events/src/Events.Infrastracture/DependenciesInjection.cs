@@ -68,10 +68,22 @@ namespace Events.Infrastracture
 
         private static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
         {
+            var assembly = typeof(EventsDbContext).Assembly;
+
             services.AddDbContext<EventsDbContext>((options) =>
             {
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
+                npgsql =>
+                {
+                    var assemblyName = typeof(EventsDbContext)
+                       .Assembly
+                       .GetName()
+                       .Name;
+
+                    npgsql.MigrationsAssembly(assemblyName);
+                });
             });
+
 
 
             return services;

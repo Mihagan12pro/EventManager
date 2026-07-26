@@ -16,11 +16,24 @@ namespace Users.Infrastructure.Postgre
             return services;
         }
 
-        public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddDbContext(
+            this IServiceCollection services, 
+            IConfiguration configuration)
         {
+            var assembly = typeof(UsersDbContext).Assembly;
+
             services.AddDbContext<UsersDbContext>((options) =>
             {
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
+                npgsql =>
+                {
+                    var assemblyName = typeof(UsersDbContext)
+                       .Assembly
+                       .GetName()
+                       .Name;
+
+                    npgsql.MigrationsAssembly(assemblyName);
+                });
             });
 
 
