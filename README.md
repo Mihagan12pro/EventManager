@@ -15,7 +15,7 @@ II. After sprint 9
 	1. Open the projects's root folder (e.g. C:\EventManager) in terminal or cmd (on Windows)
 	2. Navigate to the Users folder.
 	3. Navigate to the Users.API folder.
-	4. Enter the command " dotnet run --launch-profile https" Press ENTER
+	4. Enter the command "dotnet run --launch-profile https" Press ENTER
 	5. Have fun with the Users microservice! 
 
 
