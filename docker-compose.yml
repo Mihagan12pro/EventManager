@@ -71,6 +71,13 @@ services:
       - postgres-users
       - postgres-events
       - postgres-bookings
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: eventapi-prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
 
   redis:
     image: redis:7.2-alpine
