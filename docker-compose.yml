@@ -71,6 +71,7 @@ services:
       - postgres-users
       - postgres-events
       - postgres-bookings
+
   prometheus:
     image: prom/prometheus:v2.51.0
     container_name: eventapi-prometheus
