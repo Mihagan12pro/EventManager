@@ -14,19 +14,10 @@ public partial class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Host.ConfigureLogging(options =>
-        {
-            options.SetMinimumLevel(LogLevel.Information);
-            options.AddSerilog();
-
-            options.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Error);
-            options.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
-        })
-        .UseSerilog();
-
         builder.Host.UseSerilog((ctx, cfg) =>
             cfg.ReadFrom.Configuration(ctx.Configuration)
-               .WriteTo.Console(new CompactJsonFormatter()));
+            .WriteTo.Console(new CompactJsonFormatter()));
+
 
         builder.Services.AddSwaggerGen(options =>
         {

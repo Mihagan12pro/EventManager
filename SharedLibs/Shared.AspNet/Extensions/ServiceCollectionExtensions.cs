@@ -49,8 +49,7 @@ namespace Shared.AspNet.Extensions
                                     options.BatchExportProcessorOptions.ScheduledDelayMilliseconds = jeagerOptions.BatchExportOptions.ScheduledDelayMilliseconds;
                                     options.BatchExportProcessorOptions.ExporterTimeoutMilliseconds = jeagerOptions.BatchExportOptions.ExporterTimeoutMilliseconds;
                                 })
-                               .AddHttpClientInstrumentation()
-                               .AddConsoleExporter();
+                               .AddHttpClientInstrumentation();
             });
 
             return services;

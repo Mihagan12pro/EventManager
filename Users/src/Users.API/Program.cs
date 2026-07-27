@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using OpenTelemetry.Metrics;
 using Serilog;
 using Serilog.Formatting.Compact;
+using Serilog.Formatting.Json;
 using Shared.AspNet.Extensions;
 using Users.API.Api;
 using Users.Application;
@@ -19,15 +19,10 @@ public partial class Program
 
         builder.Services.AddTelemetry("UsersService");
 
-        builder.Host.ConfigureLogging(options =>
-        {
-            options.SetMinimumLevel(LogLevel.Information);
-            options.AddSerilog();
+        builder.Host.UseSerilog((ctx, cfg) =>
+            cfg.ReadFrom.Configuration(ctx.Configuration)
+            .WriteTo.Console(new CompactJsonFormatter()));
 
-            options.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Error);
-            options.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
-        })
-       .UseSerilog();
 
 
         builder.Services.AddSwaggerGen(options =>
@@ -53,13 +48,6 @@ public partial class Program
 
         var app = builder.Build();
 
-        using (var scope = app.Services.CreateScope())
-        {
-            var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
-
-            db.Database.Migrate();
-        }
-
         app.UseSwaggerForDebugging();
         app.UseCustomHttpsRedirection();
         app.UseRouting();
@@ -70,6 +58,14 @@ public partial class Program
         app.AddApi();
 
         app.UseTelemetry();
+
+        using (var scope = app.Services.CreateScope())
+        {
+
+            var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
+
+            db.Database.Migrate();
+        }
 
         app.Run();
     }

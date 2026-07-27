@@ -17,9 +17,9 @@ namespace Shared.Failures
                 if (StatusCode < HttpStatusCode.BadRequest)
                     return ErrorType.None;
                 else if (StatusCode < HttpStatusCode.InternalServerError)
-                    return ErrorType.Server;
+                    return ErrorType.Client;
 
-                return ErrorType.Client;
+                return ErrorType.Server;
             }
         }
 

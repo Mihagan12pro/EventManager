@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Shared.Failures.Enums;
+using Shared.Failures.Errors.Factories;
 using Shared.Failures.Exceptions.WebApi;
-using System.Net;
+using Shared.Failures.Exceptions.WebApi.ClientErrors;
 using HttpError = Shared.Failures.HttpError;
 
 namespace Shared.AspNet.CustomMiddlewares.Exceptions
@@ -11,71 +11,93 @@ namespace Shared.AspNet.CustomMiddlewares.Exceptions
     {
         private readonly ILogger<WebApiExceptionMiddleware> _logger;
 
-        public override async Task InvokeAsync(HttpContext context)
+        public override async Task InvokeAsync(HttpContext httpContext)
         {
             try
             {
-                await next(context);
+                await next(httpContext);
             }
-            catch (WebApiException ex) 
-                when (ex.Error.ErrorType == ErrorType.Client)
+            catch(UniqueConstraitException ex)
             {
-                switch(ex.Error.StatusCode)
-                {
-                    case HttpStatusCode.Forbidden:
-                    case HttpStatusCode.NotFound:
-                        {
-                            LogWarning(ex, context);
+                LogWarning(ex, httpContext);
 
-                            break;
-                        }
-                    default:
-                        {
-                            LogInformation(ex, context);
-
-                            break;
-                        }
-                }
-
-                await ModifyResponse(context, ex.Error);
+                await ModifyResponse(httpContext, ex.Error);
             }
-            catch (WebApiException ex) 
-                when (ex.Error.ErrorType == ErrorType.Server)
+            catch (WebApiException ex)
+                when (ex is UniqueConstraitException
+                    || ex is NotFoundException
+                        || ex is ForbiddenException)
             {
-                LogError(ex, context);
+                LogWarning(ex, httpContext);
 
-                await ModifyResponse(context, ex.Error);
+                await ModifyResponse(httpContext, ex.Error);
+            }
+            catch (WebApiException ex)
+                when (ex is BadRequestException)
+            {
+                LogInformation(ex, httpContext);
+
+                await ModifyResponse(httpContext, ex.Error);
+            }
+            catch (ArgumentNullException ex)
+            {
+                LogError(ex, httpContext);
+
+                await ModifyResponse(httpContext, ClientErrorsFactory.NotFoundWorkbench.Craft("Not found!"));
+            }
+            catch (InvalidOperationException ex)
+            {
+                LogError(ex, httpContext);
+
+                await ModifyResponse(httpContext, ClientErrorsFactory.NotFoundWorkbench.Craft("Not found!"));
+            }
+            catch (Exception ex)
+            {
+                LogError(ex, httpContext);
+
+                await ModifyResponse(httpContext, ServerErrorsFactory.InternalServerErrorWorkbench.Craft("Internal server error!"));
             }
         }
 
         private void LogInformation(Exception ex, HttpContext httpContext)
         {
             _logger.LogInformation(
-                ex,
-                "Unhandled exception. Method={Method}, Path={Path}, RequestId={RequestId}",
+                "Unhandled exception: {message}. Method={Method}, Path={Path}, RequestId={RequestId}",
+                ex.Message,
                 httpContext.Request.Method,
                 httpContext.Request.Path,
-                httpContext.Request.Headers["x-request-id"]);
+                httpContext.Request.Headers["x-request-id"],
+                httpContext.TraceIdentifier);
         }
 
         private void LogWarning(Exception ex, HttpContext httpContext)
         {
             _logger.LogWarning(
-                ex,
-                "Unhandled exception. Method={Method}, Path={Path}, RequestId={RequestId}",
-                httpContext.Request.Method,
-                httpContext.Request.Path,
-                httpContext.Request.Headers["x-request-id"]);
+               "Unhandled exception: {message}. Method={Method}, Path={Path}, TraceId={TraceId}",
+               ex.Message,
+               httpContext.Request.Method,
+               httpContext.Request.Path,
+               httpContext.TraceIdentifier);
         }
 
         private void LogError(Exception ex, HttpContext httpContext)
         {
             _logger.LogError(
-                ex,
-                "Unhandled exception. Method={Method}, Path={Path}, RequestId={RequestId}",
+                "Unhandled exception: {message}. Method={Method}, Path={Path}, TraceId={TraceId}",
+                ex.Message,
                 httpContext.Request.Method,
                 httpContext.Request.Path,
-                httpContext.Request.Headers["x-request-id"]);
+                httpContext.TraceIdentifier);
+        }
+
+        private void LogCritical(Exception ex, HttpContext httpContext)
+        {
+            _logger.LogCritical(
+                ex,
+                "Unhandled exception. Method={Method}, Path={Path}, TraceId={TraceId}",
+                httpContext.Request.Method,
+                httpContext.Request.Path,
+                httpContext.TraceIdentifier);
         }
 
         private async Task ModifyResponse(HttpContext httpContext, HttpError error)

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Formatting.Compact;
 using Shared.AspNet.Extensions;
+using System.Net.Sockets;
 
 public partial class Program
 {
@@ -14,15 +15,9 @@ public partial class Program
 
         builder.Services.AddTelemetry("EventsService");
 
-        builder.Host.ConfigureLogging(options =>
-        {
-            options.SetMinimumLevel(LogLevel.Information);
-            options.AddSerilog();
-
-            options.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Error);
-            options.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
-        })
-        .UseSerilog();
+        builder.Host.UseSerilog((ctx, cfg) =>
+            cfg.ReadFrom.Configuration(ctx.Configuration)
+            .WriteTo.Console(new CompactJsonFormatter()));
 
 
         await builder.Services.AddServices(new ConfigurationBuilder()
