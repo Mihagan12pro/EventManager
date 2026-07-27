@@ -54,13 +54,13 @@ public partial class Program
         }
 
         app.UseSwaggerForDebugging();
-        app.UseHttpsRedirection();
+        app.UseCustomHttpsRedirection();
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseCustomMiddleware();
 
-        app.AddAuthEndPoints();
+        app.AddApi();
 
         app.UseTelemetry();
 

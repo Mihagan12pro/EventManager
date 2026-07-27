@@ -44,5 +44,20 @@ namespace Shared.AspNet.Extensions
 
             return app;
         }
+
+        public static IApplicationBuilder UseCustomHttpsRedirection(this IApplicationBuilder app)
+        {
+            if (app is WebApplication webApp)
+            {
+                app.UseWhen(context => !context.Request.Path.StartsWithSegments("/metrics"),
+                    appBuilder =>
+                    {
+                        appBuilder.UseHttpsRedirection();
+                    }
+                );
+            }
+
+            return app;
+        }
     }
 }

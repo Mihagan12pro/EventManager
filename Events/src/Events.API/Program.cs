@@ -10,6 +10,8 @@ public partial class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddTelemetry();
+
         builder.Host.ConfigureLogging(opt =>
         {
             opt.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Error);
@@ -23,7 +25,7 @@ public partial class Program
         var app = builder.Build();
 
         app.UseSwaggerForDebugging();
-        app.UseHttpsRedirection();
+        app.UseCustomHttpsRedirection();
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
@@ -38,6 +40,7 @@ public partial class Program
         app.UseCustomMiddleware();
 
         app.AddApi();
+        app.UseTelemetry();
 
         app.Run();
     }

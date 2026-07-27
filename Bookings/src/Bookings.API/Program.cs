@@ -46,6 +46,8 @@ public partial class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddValidation();
 
+        builder.Services.AddTelemetry();
+
         builder.Services.AddHandlers();
         builder.Services.AddInfrastructure(new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
@@ -67,7 +69,7 @@ public partial class Program
         }
 
         app.UseSwaggerForDebugging();
-        app.UseHttpsRedirection();
+        app.UseCustomHttpsRedirection();
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
@@ -75,6 +77,7 @@ public partial class Program
         app.UseCustomMiddleware();
 
         app.AddApi();
+        app.UseTelemetry();
 
         app.Run();
     }
