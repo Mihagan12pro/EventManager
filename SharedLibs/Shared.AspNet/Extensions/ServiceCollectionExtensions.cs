@@ -2,10 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using Shared.Objects.Classes.Options;
+using Shared.Objects.Classes.Options.Global;
 
 namespace Shared.AspNet.Extensions
 {
@@ -15,7 +16,8 @@ namespace Shared.AspNet.Extensions
             this IServiceCollection services,
             string serviceName)
         {
-                services.AddOpenTelemetry().WithMetrics(metrics =>
+   
+            services.AddOpenTelemetry().WithMetrics(metrics =>
                 {
                     metrics
                         .AddAspNetCoreInstrumentation()
@@ -39,7 +41,7 @@ namespace Shared.AspNet.Extensions
                                })
                                .AddHttpClientInstrumentation()
                                .AddConsoleExporter();
-                });
+            });
 
             return services;
         }

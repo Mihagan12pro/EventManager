@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using Shared.Failures.Exceptions.WebApi.ServerErrors;
 using Shared.Messaging.Contracts.Events;
 using Shared.Objects.Classes.Collections;
-using Shared.Objects.Classes.Options;
+using Shared.Objects.Classes.Options.Global;
 using System.Text.Json;
 
 namespace Bookings.Infrastructure.Messaging.Consumers

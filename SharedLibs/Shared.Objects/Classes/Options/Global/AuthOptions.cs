@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Text;
 
-namespace Shared.Objects.Classes.Options
+namespace Shared.Objects.Classes.Options.Global
 {
     public class AuthOptions : GlobalOptions
     {

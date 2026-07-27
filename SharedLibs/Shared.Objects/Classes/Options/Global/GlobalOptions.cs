@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Shared.Objects.Classes.Options
+namespace Shared.Objects.Classes.Options.Global
 {
     /// <summary>
     /// Extracts information from the global.json file

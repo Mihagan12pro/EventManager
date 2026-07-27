@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 using Shared.Failures.Exceptions.WebApi.ClientErrors;
 using Shared.Failures.Exceptions.WebApi.ServerErrors;
 using Shared.Messaging.Contracts.Bookings;
-using Shared.Objects.Classes.Options;
+using Shared.Objects.Classes.Options.Global;
 using System.Text.Json;
 
 namespace Events.Infrastracture.Messaging.Consumers

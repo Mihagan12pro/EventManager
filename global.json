@@ -12,5 +12,15 @@
 
   "KafkaOptions": {
     "BootstrapServers": "127.0.0.1:9092"
+  },
+  "JaegerOptions": {
+    "OtlpExporterOptions": {
+      "Endpoint": "http://localhost:4317",
+      "Protocol": "Grpc"
+    },
+    "BatchExportOptions": {
+      "ScheduledDelayMilliseconds": 2000,
+      "ExporterTimeoutMilliseconds": 3000
+    }
   }
 }

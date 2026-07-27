@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Shared.Objects.Classes.Options
+namespace Shared.Objects.Classes.Options.Global
 {
     /// <summary>
     /// Exctracts data from the Kafka section of the global.json file

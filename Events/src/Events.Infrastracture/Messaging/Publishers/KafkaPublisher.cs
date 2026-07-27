@@ -2,7 +2,7 @@
 using Events.Application;
 using Shared.Messaging.Contracts.Bookings;
 using Shared.Messaging.Contracts.Events;
-using Shared.Objects.Classes.Options;
+using Shared.Objects.Classes.Options.Global;
 using System.Text.Json;
 
 namespace Events.Infrastracture.Messaging.Publishers

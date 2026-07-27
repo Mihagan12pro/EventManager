@@ -1,8 +1,8 @@
 ﻿using Confluent.Kafka;
 using Shared.Messaging.Contracts.Bookings;
-using Shared.Objects.Classes.Options;
 using Bookings.Application.Publishers;
 using System.Text.Json;
+using Shared.Objects.Classes.Options.Global;
 
 namespace Bookings.Infrastructure.Messaging.Publishers
 {

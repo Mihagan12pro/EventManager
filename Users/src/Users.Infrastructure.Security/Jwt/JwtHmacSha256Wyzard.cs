@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Objects.Classes.Options;
+using Shared.Objects.Classes.Options.Global;
 using System.Security.Claims;
 using System.Text;
 using Users.Application.Dtos.Auth;
