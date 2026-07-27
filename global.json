@@ -15,7 +15,7 @@
   },
   "JaegerOptions": {
     "OtlpExporterOptions": {
-      "Endpoint": "http://localhost:4317",
+      "EndPoint": "http://localhost:4317",
       "Protocol": "Grpc"
     },
     "BatchExportOptions": {

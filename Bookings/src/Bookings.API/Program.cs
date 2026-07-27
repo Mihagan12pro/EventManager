@@ -3,6 +3,8 @@ using Bookings.Application;
 using Bookings.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
+using Serilog;
+using Serilog.Formatting.Compact;
 using Shared.AspNet.Extensions;
 using Shared.Infrastructure.Security;
 
@@ -18,6 +20,9 @@ public partial class Program
             opt.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
         });
 
+        builder.Host.UseSerilog((ctx, cfg) =>
+            cfg.ReadFrom.Configuration(ctx.Configuration)
+               .WriteTo.Console(new CompactJsonFormatter()));
 
         builder.Services.AddSwaggerGen(options =>
         {

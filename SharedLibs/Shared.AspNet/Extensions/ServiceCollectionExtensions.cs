@@ -6,6 +6,7 @@ using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Shared.AspNet.Options;
 using Shared.Objects.Classes.Options.Global;
 
 namespace Shared.AspNet.Extensions
@@ -26,9 +27,11 @@ namespace Shared.AspNet.Extensions
                 })
                 .WithTracing(tracerProviderBuilder =>
                 {
+                    JaegerOptions jeagerOptions = new JaegerOptions();
+
                     tracerProviderBuilder.SetResourceBuilder(
                                             ResourceBuilder.CreateDefault()
-                                            .AddService("OrderManagementService"))
+                                            .AddService(serviceName))
                                .AddAspNetCoreInstrumentation(options =>
                                {
                                      options.Filter = httpContext =>
@@ -39,6 +42,13 @@ namespace Shared.AspNet.Extensions
                                                 !path.StartsWithSegments("/metrics");
                                      };
                                })
+                                .AddOtlpExporter(options =>
+                                {
+                                    options.Endpoint = jeagerOptions.ExportOptions.EndPointUri;
+                                    options.Protocol = jeagerOptions.ExportOptions.Protocol;
+                                    options.BatchExportProcessorOptions.ScheduledDelayMilliseconds = jeagerOptions.BatchExportOptions.ScheduledDelayMilliseconds;
+                                    options.BatchExportProcessorOptions.ExporterTimeoutMilliseconds = jeagerOptions.BatchExportOptions.ExporterTimeoutMilliseconds;
+                                })
                                .AddHttpClientInstrumentation()
                                .AddConsoleExporter();
             });

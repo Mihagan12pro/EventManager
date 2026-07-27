@@ -1,7 +1,4 @@
 ﻿using OpenTelemetry.Exporter;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Shared.AspNet.Options
 {

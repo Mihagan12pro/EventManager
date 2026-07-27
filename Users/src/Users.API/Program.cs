@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Metrics;
+using Serilog;
+using Serilog.Formatting.Compact;
 using Shared.AspNet.Extensions;
 using Users.API.Api;
 using Users.Application;
@@ -22,6 +24,10 @@ public partial class Program
             opt.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Error);
             opt.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
         });
+
+        builder.Host.UseSerilog((ctx, cfg) =>
+           cfg.ReadFrom.Configuration(ctx.Configuration)
+              .WriteTo.Console(new CompactJsonFormatter()));
 
         builder.Services.AddSwaggerGen(options =>
         {

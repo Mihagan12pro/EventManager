@@ -52,6 +52,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
   jaeger:
     image: jaegertracing/all-in-one:1.56
     container_name: eventapi-jaeger

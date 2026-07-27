@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Shared.AspNet.Options
+﻿namespace Shared.AspNet.Options
 {
     internal class BatchExportOptions
     {
