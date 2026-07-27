@@ -15,7 +15,7 @@ public partial class Program
         builder.Services.AddJwtAuthentication();
         builder.Services.AddAuthorization();
 
-        builder.Services.AddTelemetry();
+        builder.Services.AddTelemetry("UsersService");
 
         builder.Host.ConfigureLogging(opt =>
         {

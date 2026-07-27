@@ -3,21 +3,43 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Shared.Objects.Classes.Options;
 
 namespace Shared.AspNet.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddTelemetry(this IServiceCollection services)
+        public static IServiceCollection AddTelemetry(
+            this IServiceCollection services,
+            string serviceName)
         {
-            services.AddOpenTelemetry().WithMetrics(metrics =>
-            {
-                metrics
-                    .AddAspNetCoreInstrumentation()
-                    .AddRuntimeInstrumentation()
-                    .AddPrometheusExporter();
-            });
+                services.AddOpenTelemetry().WithMetrics(metrics =>
+                {
+                    metrics
+                        .AddAspNetCoreInstrumentation()
+                        .AddRuntimeInstrumentation()
+                        .AddPrometheusExporter();
+                })
+                .WithTracing(tracerProviderBuilder =>
+                {
+                    tracerProviderBuilder.SetResourceBuilder(
+                                            ResourceBuilder.CreateDefault()
+                                            .AddService("OrderManagementService"))
+                               .AddAspNetCoreInstrumentation(options =>
+                               {
+                                     options.Filter = httpContext =>
+                                     {
+                                         var path = httpContext.Request.Path;
+
+                                         return !path.StartsWithSegments("/health") &&
+                                                !path.StartsWithSegments("/metrics");
+                                     };
+                               })
+                               .AddHttpClientInstrumentation()
+                               .AddConsoleExporter();
+                });
 
             return services;
         }

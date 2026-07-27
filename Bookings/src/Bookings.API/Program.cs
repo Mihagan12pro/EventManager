@@ -46,7 +46,7 @@ public partial class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddValidation();
 
-        builder.Services.AddTelemetry();
+        builder.Services.AddTelemetry("BookingsService");
 
         builder.Services.AddHandlers();
         builder.Services.AddInfrastructure(new ConfigurationBuilder()

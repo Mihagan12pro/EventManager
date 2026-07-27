@@ -10,7 +10,7 @@ public partial class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddTelemetry();
+        builder.Services.AddTelemetry("EventsService");
 
         builder.Host.ConfigureLogging(opt =>
         {
