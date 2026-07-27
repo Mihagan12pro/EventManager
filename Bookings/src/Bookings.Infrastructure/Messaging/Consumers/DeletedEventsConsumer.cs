@@ -87,7 +87,7 @@ namespace Bookings.Infrastructure.Messaging.Consumers
                 }
                 catch (OperationCanceledException ex)
                 {
-                    _logger.LogInformation("The operation in confirmed consumer has been cancelled!");
+                    _logger.LogInformation("The operation had been cancelled!");
                 }
             }
         }

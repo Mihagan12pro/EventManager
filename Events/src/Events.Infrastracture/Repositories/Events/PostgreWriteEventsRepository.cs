@@ -4,11 +4,14 @@ using Events.Domain;
 using Events.Domain.ValueObjects;
 using Events.Infrastracture.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Events.Infrastracture.Repositories.Events
 {
     internal class PostgreWriteEventsRepository : IWriteEventsRepository
     {
+        private readonly ILogger<PostgreWriteEventsRepository> _logger;
+
         private readonly EventsDbContext _dbContext;
 
         public async Task<Guid> AddAsync(
@@ -35,6 +38,8 @@ namespace Events.Infrastracture.Repositories.Events
                 _dbContext.Events.Remove(entity);
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
+
+                _logger.LogInformation("The event with id = {id} had been deleted", entity.Id);
             }
         }
 
@@ -70,11 +75,13 @@ namespace Events.Infrastracture.Repositories.Events
                 entity.Update(@event);
 
                 await _dbContext.SaveChangesAsync(cancellationToken);
+
+                _logger.LogInformation("Complete update of the event with id = {id}", @event.Id);
             }
         }
 
         public async Task UpdateAvaliableSeats(
-            Guid id, 
+            Guid id,
             int avaliableSeats,
             CancellationToken cancellationToken)
         {
@@ -82,6 +89,8 @@ namespace Events.Infrastracture.Repositories.Events
 
             if (entity != null)
             {
+                int oldAvaviableSeats = entity.AvailableSeats;
+
                 Event @event = EventEntity.ExtractEvent(entity);
 
                 Seats seats = new Seats(@event.TotalSeats, avaliableSeats);
@@ -92,13 +101,38 @@ namespace Events.Infrastracture.Repositories.Events
 
                 entity.Update(@event);
 
+                int currentAvaliableSeats = entity.AvailableSeats;
+
                 await _dbContext.SaveChangesAsync(cancellationToken);
+
+                if (oldAvaviableSeats > currentAvaliableSeats)
+                {
+                    _logger.LogInformation(
+                        "The number of avaliable seats for the event with id = {id} had been decreased from {oldAvaviableSeat} to {currentAvaliableSeats}",
+                        @event.Id, 
+                        oldAvaviableSeats, 
+                        currentAvaliableSeats
+                   );
+
+                    return;
+                }
+
+                _logger.LogInformation(
+                    "The number of avaliable seats for the event with id = {id}  had been increased from {oldAvaviableSeat} to {currentAvaliableSeats}", 
+                    @event.Id, 
+                    oldAvaviableSeats,
+                    currentAvaliableSeats
+                );
             }
         }
 
-        public PostgreWriteEventsRepository(EventsDbContext dbContext)
+        public PostgreWriteEventsRepository(
+            EventsDbContext dbContext,
+            ILogger<PostgreWriteEventsRepository> logger)
         {
             _dbContext = dbContext;
+
+            _logger = logger;
         }
     }
 }

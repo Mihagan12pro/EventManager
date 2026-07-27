@@ -2,13 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Shared.Failures.Exceptions.WebApi.ClientErrors;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Shared.AspNet.CustomMiddlewares.Exceptions
 {
-    public class DbExceptionsMiddleware : CustomMiddleware
+    public class DbExceptionsToWebApiMiddleware : CustomMiddleware
     {
         public override async Task InvokeAsync(HttpContext context)
         {
@@ -38,7 +35,7 @@ namespace Shared.AspNet.CustomMiddlewares.Exceptions
             }
         }
 
-        public DbExceptionsMiddleware(RequestDelegate next) : base(next)
+        public DbExceptionsToWebApiMiddleware(RequestDelegate next) : base(next)
         {
         }
     }

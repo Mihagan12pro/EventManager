@@ -1,6 +1,7 @@
 ﻿using Bookings.Application.Repositories;
 using Bookings.Domain.Enums;
 using Confluent.Kafka;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -70,7 +71,7 @@ namespace Bookings.Infrastructure.Messaging.Consumers
                 }
                 catch (OperationCanceledException ex)
                 {
-                    _logger.LogInformation("The operation in confirmed consumer has been cancelled!");
+                    _logger.LogWarning("The operation had been cancelled!");
                 }
             }
         }

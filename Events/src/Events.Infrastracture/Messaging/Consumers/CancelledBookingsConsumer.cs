@@ -94,7 +94,7 @@ namespace Events.Infrastracture.Messaging.Consumers
                 }
                 catch (OperationCanceledException ex)
                 {
-                    _logger.LogInformation("Operation cancelled!");
+                    _logger.LogInformation("The operation had been cancelled!");
                 }
             }
         }

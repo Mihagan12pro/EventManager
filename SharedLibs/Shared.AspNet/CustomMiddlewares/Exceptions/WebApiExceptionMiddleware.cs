@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Shared.Failures.Errors.Factories;
+using Shared.Failures.Enums;
 using Shared.Failures.Exceptions.WebApi;
-using System.Text.Json;
+using System.Net;
 using HttpError = Shared.Failures.HttpError;
 
 namespace Shared.AspNet.CustomMiddlewares.Exceptions
@@ -11,36 +11,61 @@ namespace Shared.AspNet.CustomMiddlewares.Exceptions
     {
         private readonly ILogger<WebApiExceptionMiddleware> _logger;
 
-        public override async Task InvokeAsync(HttpContext httpContext)
+        public override async Task InvokeAsync(HttpContext context)
         {
             try
             {
-                await next(httpContext);
+                await next(context);
             }
-            catch (WebApiException ex)
+            catch (WebApiException ex) 
+                when (ex.Error.ErrorType == ErrorType.Client)
             {
-                LogError(ex, httpContext);
+                switch(ex.Error.StatusCode)
+                {
+                    case HttpStatusCode.Forbidden:
+                    case HttpStatusCode.NotFound:
+                        {
+                            LogWarning(ex, context);
 
-                await ModifyResponse(httpContext, ex.Error);
+                            break;
+                        }
+                    default:
+                        {
+                            LogInformation(ex, context);
+
+                            break;
+                        }
+                }
+
+                await ModifyResponse(context, ex.Error);
             }
-            catch (ArgumentNullException ex)
+            catch (WebApiException ex) 
+                when (ex.Error.ErrorType == ErrorType.Server)
             {
-                LogError(ex, httpContext);
+                LogError(ex, context);
 
-                await ModifyResponse(httpContext, ClientErrorsFactory.NotFoundWorkbench.Craft("Not found!"));
+                await ModifyResponse(context, ex.Error);
             }
-            catch (InvalidOperationException ex)
-            {
-                LogError(ex, httpContext);
+        }
 
-                await ModifyResponse(httpContext, ClientErrorsFactory.NotFoundWorkbench.Craft("Not found!"));
-            }
-            catch (Exception ex)
-            {
-                LogError(ex, httpContext);
+        private void LogInformation(Exception ex, HttpContext httpContext)
+        {
+            _logger.LogInformation(
+                ex,
+                "Unhandled exception. Method={Method}, Path={Path}, RequestId={RequestId}",
+                httpContext.Request.Method,
+                httpContext.Request.Path,
+                httpContext.Request.Headers["x-request-id"]);
+        }
 
-                await ModifyResponse(httpContext, ServerErrorsFactory.InternalServerErrorWorkbench.Craft("Internal server error!"));
-            }
+        private void LogWarning(Exception ex, HttpContext httpContext)
+        {
+            _logger.LogWarning(
+                ex,
+                "Unhandled exception. Method={Method}, Path={Path}, RequestId={RequestId}",
+                httpContext.Request.Method,
+                httpContext.Request.Path,
+                httpContext.Request.Headers["x-request-id"]);
         }
 
         private void LogError(Exception ex, HttpContext httpContext)

@@ -28,7 +28,8 @@ namespace Shared.AspNet.Extensions
         public static IApplicationBuilder UseCustomMiddleware(this IApplicationBuilder app)
         {
             app.UseMiddleware<WebApiExceptionMiddleware>();
-            app.UseMiddleware<DbExceptionsMiddleware>();
+            app.UseMiddleware<DbExceptionsToWebApiMiddleware>();
+            app.UseMiddleware<SystemToWebApiExceptionsMiddleware>();
 
             return app;
         }
