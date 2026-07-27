@@ -22,13 +22,14 @@ II. After sprint 9
 
 Features from the sprint2:
 1. The EventsController.All has parameters:
-
+```C#
 	EventsController.All(
 		[FromQuery] string? title, 
 		[FromQuery] DateTime? from, 
 		[FromQuery] DateTime? to, 
 		[FromQuery] int page = 1,
-		[FromQuery] int pageSize = 10) 
+		[FromQuery] int pageSize = 10)
+```
 
 	More about EventsController.All new parameters. 
 	"title", "from" and "to" optional filers. In other words, these parameters can be null.
@@ -238,7 +239,7 @@ Features from the sprint 9:
 	   This service handles authorization and aythentification. 
 	   The service's database stores user data.
 	   The file and folder structure of this microservice is as follows:
-	   ```
+	```
 	   Users/
            ├─ Users.API/
            │  ├─ Connected Services/
@@ -268,13 +269,13 @@ Features from the sprint 9:
            ├─ Jwt/
            ├─ DependenciesInjection.cs
            └─ PasswordHasherSHA256.cs
-		 ```
+	```
 	
 	- Bookings
 		The service provides basic CRUD operations for the bookings.
 		The service's database stores bookings. Bookings has 4 statuses: Pending, Confirmed, Cancelled and Rejected.
 		The file and folder structure of this microservice is as follows:
-		 ```
+	```
 		Bookings/
             ├─ Bookings.API/
             │  ├─ Connected Services/
@@ -299,7 +300,7 @@ Features from the sprint 9:
                ├─ BookingsDbContext.cs
                ├─ BookingsDesignFactory.cs
                └─ DependenciesInjection.cs
-		 ```
+	```
 	
 2. Each microservice has its own database and migrations. All databases are run in a Docker container.
 
