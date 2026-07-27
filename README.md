@@ -204,33 +204,7 @@ Features from the sprint 9:
 	   1. Tables for storing domain entities (the Events table)
 	   2. Tables for storing Kafka messages (InboxPendingMessages, InboxCancelledMessages and OutboxConfirmedBookingsMessages). This enables the implementation of the Inbox and Outbox patterns.
 	   The file and folder structure of this microservice is as follows:
-	   Events/
-            ├─ Events.API/
-            │  ├─ Connected Services/
-            │  ├─ Properties/
-            │  ├─ Api/
-            │  ├─ Contracts/
-            │  ├─ Validators/
-            │  ├─ appsettings.json
-            │  └─ Program.cs
-            ├─ Events.Application/
-            │  ├─ Dtos/
-            │  ├─ Handlers/
-            │  ├─ Repositories/
-            │  ├─ DependenciesInjection.cs
-            │  └─ IPublisher.cs
-            ├─ Events.Domain/
-            │  ├─ Exceptions/
-            │  ├─ ValueObjects/
-            │  └─ EventEntity.cs
-            └─ Events.Infrastructure/
-               ├─ Configurations/
-               ├─ Messaging/
-               ├─ Migrations/
-               ├─ Repositories/
-               ├─ DependenciesInjection.cs
-               ├─ EventsDbContext.cs
-               └─ EventsDesignFactory.cs
+	   <img src="images/Arch/EventV1.png" alt="Events API" width="300">
 
 	b. Users
 	   This service handles authorization and aythentification. 
@@ -322,3 +296,5 @@ Features from the sprint 10:
 
 7. Modified the docker-compose.yml file (added a Redis container).
 
+
+Features from the sprint 11:
