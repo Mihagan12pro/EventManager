@@ -2,12 +2,26 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using OpenTelemetry.Metrics;
 using Shared.Objects.Classes.Options;
 
 namespace Shared.AspNet.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddTelemetry(this IServiceCollection services)
+        {
+            services.AddOpenTelemetry().WithMetrics(metrics =>
+            {
+                metrics
+                    .AddAspNetCoreInstrumentation()
+                    .AddRuntimeInstrumentation()
+                    .AddPrometheusExporter();
+            });
+
+            return services;
+        }
+
         public static IServiceCollection AddWebAbstractions(this IServiceCollection services)
         {
             services.AddHttpContextAccessor();

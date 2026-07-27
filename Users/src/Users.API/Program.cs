@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Metrics;
 using Shared.AspNet.Extensions;
 using Users.API.Api;
 using Users.Application;
@@ -13,6 +14,8 @@ public partial class Program
 
         builder.Services.AddJwtAuthentication();
         builder.Services.AddAuthorization();
+
+        builder.Services.AddTelemetry();
 
         builder.Host.ConfigureLogging(opt =>
         {
@@ -58,6 +61,8 @@ public partial class Program
         app.UseCustomMiddleware();
 
         app.AddAuthEndPoints();
+
+        app.UseTelemetry();
 
         app.Run();
     }

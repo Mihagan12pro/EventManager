@@ -34,5 +34,15 @@ namespace Shared.AspNet.Extensions
 
             return app;
         }
+
+        public static IApplicationBuilder UseTelemetry(this IApplicationBuilder app)
+        {
+            if (app is WebApplication webApp)
+            {
+                webApp.MapPrometheusScrapingEndpoint();
+            }
+
+            return app;
+        }
     }
 }
