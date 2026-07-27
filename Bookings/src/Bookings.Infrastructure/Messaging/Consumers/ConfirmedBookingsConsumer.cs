@@ -4,7 +4,7 @@ using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Shared.Messaging;
+using Serilog;
 using Shared.Messaging.Contracts.Bookings;
 using Shared.Objects.Classes.Options.Global;
 using System.Text.Json;

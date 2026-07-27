@@ -19,15 +19,16 @@ public partial class Program
 
         builder.Services.AddTelemetry("UsersService");
 
-        builder.Host.ConfigureLogging(opt =>
+        builder.Host.ConfigureLogging(options =>
         {
-            opt.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Error);
-            opt.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
-        });
+            options.SetMinimumLevel(LogLevel.Information);
+            options.AddSerilog();
 
-        builder.Host.UseSerilog((ctx, cfg) =>
-           cfg.ReadFrom.Configuration(ctx.Configuration)
-              .WriteTo.Console(new CompactJsonFormatter()));
+            options.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Error);
+            options.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
+        })
+       .UseSerilog();
+
 
         builder.Services.AddSwaggerGen(options =>
         {
