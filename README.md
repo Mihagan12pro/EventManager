@@ -238,6 +238,7 @@ Features from the sprint 9:
 	   This service handles authorization and aythentification. 
 	   The service's database stores user data.
 	   The file and folder structure of this microservice is as follows:
+	   ```
 	   Users/
            ├─ Users.API/
            │  ├─ Connected Services/
@@ -267,11 +268,13 @@ Features from the sprint 9:
            ├─ Jwt/
            ├─ DependenciesInjection.cs
            └─ PasswordHasherSHA256.cs
+		 ```
 	
 	- Bookings
 		The service provides basic CRUD operations for the bookings.
 		The service's database stores bookings. Bookings has 4 statuses: Pending, Confirmed, Cancelled and Rejected.
 		The file and folder structure of this microservice is as follows:
+		 ```
 		Bookings/
             ├─ Bookings.API/
             │  ├─ Connected Services/
@@ -296,6 +299,7 @@ Features from the sprint 9:
                ├─ BookingsDbContext.cs
                ├─ BookingsDesignFactory.cs
                └─ DependenciesInjection.cs
+		 ```
 	
 2. Each microservice has its own database and migrations. All databases are run in a Docker container.
 
