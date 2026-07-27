@@ -232,7 +232,7 @@ Features from the sprint 9:
 		   ├─ DependenciesInjection.cs
 		   ├─ EventsDbContext.cs
 		   └─ EventsDesignFactory.cs
-		```
+	```
 
 	b. Users
 	   This service handles authorization and aythentification. 
