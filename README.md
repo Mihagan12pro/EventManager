@@ -22,14 +22,14 @@ II. After sprint 9
 
 Features from the sprint2:
 1. The EventsController.All has parameters:
-```C#
+	```csharp
 	EventsController.All(
 		[FromQuery] string? title, 
 		[FromQuery] DateTime? from, 
 		[FromQuery] DateTime? to, 
 		[FromQuery] int page = 1,
 		[FromQuery] int pageSize = 10)
-```
+	```
 
 	More about EventsController.All new parameters. 
 	"title", "from" and "to" optional filers. In other words, these parameters can be null.
