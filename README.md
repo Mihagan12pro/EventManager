@@ -22,7 +22,7 @@ II. After sprint 9
 
 Features from the sprint2:
 1. The EventsController.All has parameters:
-	```csharp
+	```
 	EventsController.All(
 		[FromQuery] string? title, 
 		[FromQuery] DateTime? from, 
@@ -50,10 +50,12 @@ Features from the sprint2:
 				
 	Example of the response body:
 
+	```
 	{
        "statusCode": 404,
        "message": "Event with id = '00000000-0000-0000-0000-000000000000' was not found!"
     }
+	```
 
 	Fields of the response:
 	1. statusCode - contains http status code of the response (In this example 404 or not found)
@@ -86,11 +88,13 @@ Features from the sprint3:
     https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken?view=net-10.0) 
 				
 	Example of the response body:
+	```
 	{
       "id": "196dae0b-2673-4e4d-b3c2-99ba915f73e6",
       "message": "Your request is pending!",
       "url": "https://localhost:7199/bookings/196dae0b-2673-4e4d-b3c2-99ba915f73e6"
     }
+	```
 	
 	One important moment: status code is 202 (Accepted)
 
@@ -331,3 +335,8 @@ Features from the sprint 10:
 
 
 Features from the sprint 11:
+1. Add some tools for observability
+	-Prometheus collects metricts from each service. This application works on the 9090 port. The web interface for monitoring metrics is avaliable at localhost adress on 9090 port.
+	-Serilog library for structured logging.
+	-Jeager for distributed tracing. All services use a gRPC protocol for sending traces Jeager. The Jeager application uses 4317 port. The web interface for monitoring traces is avaliable at localhost on 16686 port
+	-Grafana for metrics visualization. This application is avaliable at localhost adress on 3000 port.
