@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Shared.Messaging.Contracts.Bookings;
-using Shared.Objects.Classes.Options.Global;
+using Shared.Objects.Classes.Options;
 using System.Text.Json;
 
 namespace Bookings.Infrastructure.Messaging.Consumers

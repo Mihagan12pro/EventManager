@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Shared.Messaging;
 using Shared.Messaging.Contracts.Bookings;
 using Shared.Messaging.Contracts.Events;
-using Shared.Objects.Classes.Options.Global;
+using Shared.Objects.Classes.Options;
 
 namespace Shared.Infrastructure.Kafka
 {

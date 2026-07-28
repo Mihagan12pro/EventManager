@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shared.Messaging.Contracts.Bookings;
-using Shared.Objects.Classes.Options.Global;
+using Shared.Objects.Classes.Options;
 using System.Text.Json;
 
 namespace Events.Infrastracture.Messaging.Consumers

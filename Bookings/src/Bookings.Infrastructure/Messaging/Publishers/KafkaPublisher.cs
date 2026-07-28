@@ -2,7 +2,7 @@
 using Shared.Messaging.Contracts.Bookings;
 using Bookings.Application.Publishers;
 using System.Text.Json;
-using Shared.Objects.Classes.Options.Global;
+using Shared.Objects.Classes.Options;
 
 namespace Bookings.Infrastructure.Messaging.Publishers
 {

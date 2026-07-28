@@ -416,3 +416,9 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+#Dynamic-linked livraries
+*.dll
+
+#Publish
+published/
