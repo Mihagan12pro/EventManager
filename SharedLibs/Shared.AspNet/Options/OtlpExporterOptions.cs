@@ -2,7 +2,7 @@
 
 namespace Shared.AspNet.Options
 {
-    internal class OtlpExportOptions
+    public class OtlpExporterOptions
     {
         public string EndPoint { get; set; }
 

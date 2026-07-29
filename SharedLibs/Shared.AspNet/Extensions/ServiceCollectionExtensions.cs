@@ -3,12 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Shared.AspNet.Options;
 using Shared.Objects.Classes.Options;
-using System.Runtime.Serialization;
 using System.Text.Json;
 
 namespace Shared.AspNet.Extensions
@@ -20,7 +20,7 @@ namespace Shared.AspNet.Extensions
             IConfiguration configuration,
             string serviceName)
         {
-   
+
             services.AddOpenTelemetry().WithMetrics(metrics =>
                 {
                     metrics
@@ -30,19 +30,34 @@ namespace Shared.AspNet.Extensions
                 })
                 .WithTracing(tracerProviderBuilder =>
                 {
-                    var jaegerSection = configuration.GetRequiredSection(
-                                 $"{nameof(JaegerOptions)}:{nameof(BatchExportOptions)}");
+                    var batchSection = configuration.GetRequiredSection(
+                        "JeagerOptions:BatchExportOptions"
+                    );
 
-                    JaegerOptions jeagerOptions = new JaegerOptions()
+                    var otlpSection = configuration.GetRequiredSection(
+                        "JeagerOptions:OtlpExporterOptions"
+                    );
+
+                    var jeagerOptions = new JeagerOptions
                     {
-                         BatchExportOptions = JsonSerializer.Deserialize<BatchExportOptions>(
-                             configuration.GetRequiredSection(
-                                 $"{nameof(JaegerOptions)}:{nameof(BatchExportOptions)}").Value)!,
+                        BatchExportOptions = new BatchExportOptions
+                        {
+                            ExporterTimeoutMilliseconds = int.Parse(
+                                 batchSection["ExporterTimeoutMilliseconds"]),
 
-                         OtlpExportOptions = JsonSerializer.Deserialize<OtlpExportOptions>(
-                             configuration.GetRequiredSection(
-                                 $"{nameof(JaegerOptions)}:{nameof(ExportOptions)}").Value!)!
+                            ScheduledDelayMilliseconds = int.Parse(
+                                 batchSection["ScheduledDelayMilliseconds"]),
+                        },
+
+                        OtlpExportOptions = new Options.OtlpExporterOptions
+                        {
+                            EndPoint = otlpSection["EndPoint"],
+
+                            Protocol = Enum.Parse<OtlpExportProtocol>(
+                                otlpSection["Protocol"])
+                        }
                     };
+
 
                     tracerProviderBuilder.SetResourceBuilder(
                                             ResourceBuilder.CreateDefault()
