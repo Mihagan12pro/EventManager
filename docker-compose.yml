@@ -1,4 +1,17 @@
 services:
+  bookig-service:
+   container_name: bookings-service
+   build:
+      context: .
+      dockerfile: Bookings/src/Bookings.API/Dockerfile
+   ports:
+      - "5265:5265"
+      - "7178:7178"
+   environment:
+    Otlp__Endpoint: http://jaeger:4317 
+
+  
+
   postgres-users:
     image: postgres:16-alpine
     container_name: postgres-users
