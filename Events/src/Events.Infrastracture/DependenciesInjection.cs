@@ -27,6 +27,7 @@ namespace Events.Infrastracture
             services.AddRepositories();
             services.AddDbContext(configuration);
 
+            services.Configure<Kafka>(configuration.GetRequiredSection("KafkaOptions"));
             services.AddHostedService<TopicInitializer>();
 
             services.AddConsumers();
