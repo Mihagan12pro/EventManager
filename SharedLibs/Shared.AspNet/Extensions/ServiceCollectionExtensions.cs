@@ -157,7 +157,6 @@ namespace Shared.AspNet.Extensions
                 var jwtSection = configuration.GetRequiredSection("JwtOptions");
 
                 jwtToken.Issuer = jwtSection.GetRequiredSection("Issuer").Value;
-                jwtToken.SecretKey = jwtSection.GetRequiredSection("SecretKey").Value;
                 jwtToken.ExpiredMinutes = jwtSection.GetRequiredSection("ExpiredMinutes").Value;
                 jwtToken.IssuerSigningKey = Encoding.UTF8.GetBytes(jwtSection.GetRequiredSection("SecretKey").Value);
                 jwtToken.Audiences = new List<string>();

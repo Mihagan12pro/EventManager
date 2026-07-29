@@ -39,21 +39,9 @@ namespace Shared.AspNet.CustomMiddlewares.Exceptions
 
                 await ModifyResponse(httpContext, ex.Error);
             }
-            catch (ArgumentNullException ex)
-            {
-                LogError(ex, httpContext);
-
-                await ModifyResponse(httpContext, ClientErrorsFactory.NotFoundWorkbench.Craft("Not found!"));
-            }
-            catch (InvalidOperationException ex)
-            {
-                LogError(ex, httpContext);
-
-                await ModifyResponse(httpContext, ClientErrorsFactory.NotFoundWorkbench.Craft("Not found!"));
-            }
             catch (Exception ex)
             {
-                LogError(ex, httpContext);
+                LogCritical(ex, httpContext);
 
                 await ModifyResponse(httpContext, ServerErrorsFactory.InternalServerErrorWorkbench.Craft("Internal server error!"));
             }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Shared.Failures.Exceptions.WebApi.ClientErrors;
 using Users.Application.Dtos.Auth;
 using Users.Application.Repositories.Auth;
 using Users.Domain;
@@ -16,9 +17,17 @@ namespace Users.Infrastructure.Postgre.Repositories.Auth
             LoginDto login, 
             CancellationToken cancellationToken)
         {
-            var user = await _dbContext.Users.FirstAsync(u => u.Login == login.Login && u.HashedPassword == login.Password);
+            User user = null;
+            try
+            {
+                user = await _dbContext.Users.FirstAsync(u => u.Login == login.Login && u.HashedPassword == login.Password);
 
-            _logger.LogInformation("The user with id = {id} has successfully logged in", user.Id);
+                _logger.LogInformation("The user with id = {id} has successfully logged in", user.Id);
+            }
+            catch(InvalidOperationException)
+            {
+                throw new NotFoundException("The user with id = {id} does not exists!");
+            }
 
             return user;
         }
