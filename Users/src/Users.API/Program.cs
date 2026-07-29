@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Formatting.Compact;
-using Serilog.Formatting.Json;
 using Shared.AspNet.Extensions;
 using Users.API.Api;
 using Users.Application;
@@ -14,10 +13,14 @@ public partial class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddJwtAuthentication();
+        IConfiguration configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        builder.Services.AddJwtAuthentication(configuration);
         builder.Services.AddAuthorization();
 
-        builder.Services.AddTelemetry("UsersService");
+        builder.Services.AddTelemetry(configuration, "UsersService");
 
         builder.Host.UseSerilog((ctx, cfg) =>
             cfg.ReadFrom.Configuration(ctx.Configuration)

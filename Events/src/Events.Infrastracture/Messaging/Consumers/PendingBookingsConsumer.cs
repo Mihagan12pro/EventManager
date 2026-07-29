@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Shared.Infrastructure.Kafka;
 using Shared.Messaging.Contracts.Bookings;
 using Shared.Objects.Classes.Options;
 using System.Text.Json;
@@ -21,7 +22,7 @@ namespace Events.Infrastracture.Messaging.Consumers
         private readonly CacheKeysOptions _cacheKeysOptions;
         private readonly ILogger<PendingBookingsConsumer> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly KafkaOptions kafkaOptions = new KafkaOptions();
+        private readonly Kafka _kafka;
 
         private readonly IPublisher _publisher;
 
@@ -29,7 +30,7 @@ namespace Events.Infrastracture.Messaging.Consumers
         {
             var config = new ConsumerConfig
             {
-                BootstrapServers = kafkaOptions.BootstrapServers,
+                BootstrapServers = _kafka.BootstrapServers,
                 GroupId = "event-service",
                 AutoOffsetReset = AutoOffsetReset.Earliest,
                 EnableAutoCommit = false
@@ -222,12 +223,15 @@ namespace Events.Infrastracture.Messaging.Consumers
         }
 
         public PendingBookingsConsumer(
-            IOptions<CacheKeysOptions> options,
+            IOptions<Kafka> kafkaOptions,
+            IOptions<CacheKeysOptions> cacheKeysOptions,
             IPublisher publisher,
             IServiceScopeFactory serviceScopeFactory,
             ILogger<PendingBookingsConsumer> logger)
         {
-            _cacheKeysOptions = options.Value;
+            _kafka = kafkaOptions.Value;
+            _cacheKeysOptions = cacheKeysOptions.Value;
+
             _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
             _publisher = publisher;

@@ -16,6 +16,10 @@ namespace Bookings.Infrastructure
             this IServiceCollection services, 
             IConfiguration configuration)
         {
+            services.Configure<Kafka>(
+                configuration.GetRequiredSection("KafkaOptions")
+            );
+
             services.AddHostedServices();
 
             services.AddPublishers();

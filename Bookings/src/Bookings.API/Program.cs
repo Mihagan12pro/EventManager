@@ -18,6 +18,9 @@ public partial class Program
             cfg.ReadFrom.Configuration(ctx.Configuration)
             .WriteTo.Console(new CompactJsonFormatter()));
 
+        IConfiguration configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
 
         builder.Services.AddSwaggerGen(options =>
         {
@@ -46,7 +49,7 @@ public partial class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddValidation();
 
-        builder.Services.AddTelemetry("BookingsService");
+        builder.Services.AddTelemetry(configuration, "BookingsService");
 
         builder.Services.AddHandlers();
         builder.Services.AddInfrastructure(new ConfigurationBuilder()
@@ -56,7 +59,7 @@ public partial class Program
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSharedSecurity();
 
-        builder.Services.AddJwtAuthentication();
+        builder.Services.AddJwtAuthentication(configuration);
         builder.Services.AddAuthorization();
 
         var app = builder.Build();

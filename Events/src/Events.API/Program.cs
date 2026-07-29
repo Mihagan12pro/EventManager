@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Formatting.Compact;
 using Shared.AspNet.Extensions;
-using System.Net.Sockets;
 
 public partial class Program
 {
@@ -13,16 +12,18 @@ public partial class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddTelemetry("EventsService");
+        IConfiguration configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+
+        builder.Services.AddTelemetry(configuration, "EventsService");
 
         builder.Host.UseSerilog((ctx, cfg) =>
             cfg.ReadFrom.Configuration(ctx.Configuration)
             .WriteTo.Console(new CompactJsonFormatter()));
 
 
-        await builder.Services.AddServices(new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.json")
-                    .Build());
+        await builder.Services.AddServices(configuration);
 
         var app = builder.Build();
 

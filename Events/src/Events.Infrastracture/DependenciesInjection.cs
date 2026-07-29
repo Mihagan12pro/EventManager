@@ -39,7 +39,6 @@ namespace Events.Infrastracture
 
         private static IServiceCollection AddConsumers(this IServiceCollection services)
         {
-
             services.AddHostedService<PendingBookingsConsumer>();
             services.AddHostedService<CancelledBookingsConsumer>();
 

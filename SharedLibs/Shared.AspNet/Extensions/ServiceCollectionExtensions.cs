@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Shared.AspNet.Options;
-using Shared.Objects.Classes.Options.Global;
+using Shared.Objects.Classes.Options;
+using System.Runtime.Serialization;
+using System.Text.Json;
 
 namespace Shared.AspNet.Extensions
 {
@@ -15,6 +17,7 @@ namespace Shared.AspNet.Extensions
     {
         public static IServiceCollection AddTelemetry(
             this IServiceCollection services,
+            IConfiguration configuration,
             string serviceName)
         {
    
@@ -27,7 +30,19 @@ namespace Shared.AspNet.Extensions
                 })
                 .WithTracing(tracerProviderBuilder =>
                 {
-                    JaegerOptions jeagerOptions = new JaegerOptions();
+                    var jaegerSection = configuration.GetRequiredSection(
+                                 $"{nameof(JaegerOptions)}:{nameof(BatchExportOptions)}");
+
+                    JaegerOptions jeagerOptions = new JaegerOptions()
+                    {
+                         BatchExportOptions = JsonSerializer.Deserialize<BatchExportOptions>(
+                             configuration.GetRequiredSection(
+                                 $"{nameof(JaegerOptions)}:{nameof(BatchExportOptions)}").Value)!,
+
+                         OtlpExportOptions = JsonSerializer.Deserialize<OtlpExportOptions>(
+                             configuration.GetRequiredSection(
+                                 $"{nameof(JaegerOptions)}:{nameof(ExportOptions)}").Value!)!
+                    };
 
                     tracerProviderBuilder.SetResourceBuilder(
                                             ResourceBuilder.CreateDefault()
@@ -44,8 +59,8 @@ namespace Shared.AspNet.Extensions
                                })
                                 .AddOtlpExporter(options =>
                                 {
-                                    options.Endpoint = jeagerOptions.ExportOptions.EndPointUri;
-                                    options.Protocol = jeagerOptions.ExportOptions.Protocol;
+                                    options.Endpoint = jeagerOptions.OtlpExportOptions.EndPointUri;
+                                    options.Protocol = jeagerOptions.OtlpExportOptions.Protocol;
                                     options.BatchExportProcessorOptions.ScheduledDelayMilliseconds = jeagerOptions.BatchExportOptions.ScheduledDelayMilliseconds;
                                     options.BatchExportProcessorOptions.ExporterTimeoutMilliseconds = jeagerOptions.BatchExportOptions.ExporterTimeoutMilliseconds;
                                 })
@@ -70,9 +85,11 @@ namespace Shared.AspNet.Extensions
             return services;
         }
 
-        public static IServiceCollection AddAuthorizationAuthentification(this IServiceCollection services)
+        public static IServiceCollection AddAuthorizationAuthentification(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
-            services.AddJwtAuthentication();
+            services.AddJwtAuthentication(configuration);
             services.AddAuthorization();
 
             return services;
@@ -107,7 +124,9 @@ namespace Shared.AspNet.Extensions
             return services;
         }
 
-        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
+        public static IServiceCollection AddJwtAuthentication(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddAuthentication(options =>
             {
@@ -116,7 +135,7 @@ namespace Shared.AspNet.Extensions
             })
             .AddJwtBearer(options =>
             {
-                var authOptions = new AuthOptions();
+                var authOptions = JsonSerializer.Deserialize<AuthOptions>(configuration.GetRequiredSection(nameof(AuthOptions)).Value);
 
                 options.MapInboundClaims = false;
 

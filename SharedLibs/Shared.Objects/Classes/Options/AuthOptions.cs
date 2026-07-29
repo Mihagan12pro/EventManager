@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Text;
-
-namespace Shared.Objects.Classes.Options
+﻿namespace Shared.Objects.Classes.Options
 {
     public class AuthOptions
     {
@@ -11,6 +8,6 @@ namespace Shared.Objects.Classes.Options
 
         public byte[] IssuerSigningKey { get; set; }
 
-        public Dictionary<string, string> Audiences { get; set; }
+        public IEnumerable<string> Audiences { get; set; }
     }
 }
