@@ -10,7 +10,6 @@ using Shared.Failures.Exceptions.WebApi.ServerErrors;
 using Shared.Infrastructure.Kafka;
 using Shared.Messaging.Contracts.Events;
 using Shared.Objects.Classes.Collections;
-using Shared.Objects.Classes.Options;
 using System.Text.Json;
 
 namespace Bookings.Infrastructure.Messaging.Consumers

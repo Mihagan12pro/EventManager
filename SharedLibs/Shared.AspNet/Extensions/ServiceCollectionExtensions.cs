@@ -8,7 +8,8 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Shared.AspNet.Options;
-using Shared.Objects.Classes.Options;
+using Shared.Objects.Classes;
+using System.Text;
 using System.Text.Json;
 
 namespace Shared.AspNet.Extensions
@@ -150,7 +151,21 @@ namespace Shared.AspNet.Extensions
             })
             .AddJwtBearer(options =>
             {
-                var authOptions = JsonSerializer.Deserialize<AuthOptions>(configuration.GetRequiredSection(nameof(AuthOptions)).Value);
+                var jwtToken = new JwtToken();
+
+
+                var jwtSection = configuration.GetRequiredSection("JwtOptions");
+
+                jwtToken.Issuer = jwtSection.GetRequiredSection("Issuer").Value;
+                jwtToken.SecretKey = jwtSection.GetRequiredSection("SecretKey").Value;
+                jwtToken.ExpiredMinutes = jwtSection.GetRequiredSection("ExpiredMinutes").Value;
+                jwtToken.IssuerSigningKey = Encoding.UTF8.GetBytes(jwtSection.GetRequiredSection("SecretKey").Value);
+                jwtToken.Audiences = new List<string>();
+
+                jwtToken.Audiences = new List<string>();
+
+                foreach (var section in jwtSection.GetRequiredSection("Audiences").GetChildren())
+                    ((List<string>)jwtToken.Audiences).Add(section.Value);
 
                 options.MapInboundClaims = false;
 
@@ -161,13 +176,13 @@ namespace Shared.AspNet.Extensions
                     ValidateLifetime = true,
 
                     ValidateIssuer = true,
-                    ValidIssuer = authOptions.Issuer,
+                    ValidIssuer = jwtToken.Issuer,
 
                     ValidateAudience = true,
-                    ValidAudiences = authOptions.Audiences,
+                    ValidAudiences = jwtToken.Audiences,
 
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(authOptions.IssuerSigningKey),
+                    IssuerSigningKey = new SymmetricSecurityKey(jwtToken.IssuerSigningKey),
 
                     RoleClaimType = "role"
                 };

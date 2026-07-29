@@ -43,11 +43,9 @@ public partial class Program
         builder.Services.AddValidation();
 
         builder.Services.AddAuthServises();
-        builder.Services.AddSecurity();
+        builder.Services.AddSecurity(configuration);
         builder.Services.AddRepositories();
-        builder.Services.AddDbContext(new ConfigurationBuilder()
-                        .AddJsonFile("appsettings.json")
-                        .Build());
+        builder.Services.AddDbContext(configuration);
 
         var app = builder.Build();
 
@@ -64,7 +62,6 @@ public partial class Program
 
         using (var scope = app.Services.CreateScope())
         {
-
             var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
 
             db.Database.Migrate();

@@ -2,7 +2,6 @@
 using Shared.Messaging.Contracts.Bookings;
 using Bookings.Application.Publishers;
 using System.Text.Json;
-using Shared.Objects.Classes.Options;
 using Shared.Infrastructure.Kafka;
 using Microsoft.Extensions.Options;
 

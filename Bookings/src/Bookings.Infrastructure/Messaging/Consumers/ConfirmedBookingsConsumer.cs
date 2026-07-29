@@ -1,15 +1,12 @@
 ﻿using Bookings.Application.Repositories;
 using Bookings.Domain.Enums;
 using Confluent.Kafka;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Serilog;
 using Shared.Infrastructure.Kafka;
 using Shared.Messaging.Contracts.Bookings;
-using Shared.Objects.Classes.Options;
 using System.Text.Json;
 
 namespace Bookings.Infrastructure.Messaging.Consumers

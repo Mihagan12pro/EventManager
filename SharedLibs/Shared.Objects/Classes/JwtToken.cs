@@ -1,6 +1,6 @@
-﻿namespace Shared.Objects.Classes.Options
+﻿namespace Shared.Objects.Classes
 {
-    public class AuthOptions
+    public class JwtToken
     {
         public string Issuer { get; set; }
         public string SecretKey { get; set; }

@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shared.Infrastructure.Kafka;
 using Shared.Messaging.Contracts.Bookings;
-using Shared.Objects.Classes.Options;
 using System.Text.Json;
 
 namespace Events.Infrastracture.Messaging.Consumers

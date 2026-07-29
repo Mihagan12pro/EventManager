@@ -12,7 +12,6 @@ using Shared.Failures.Exceptions.WebApi.ClientErrors;
 using Shared.Failures.Exceptions.WebApi.ServerErrors;
 using Shared.Infrastructure.Kafka;
 using Shared.Messaging.Contracts.Bookings;
-using Shared.Objects.Classes.Options;
 using System.Text.Json;
 
 namespace Events.Infrastracture.Messaging.Consumers
