@@ -1,7 +1,7 @@
 services:
   postgres-users:
     image: postgres:16-alpine
-    container_name: users
+    container_name: postgres-users
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -19,7 +19,7 @@ services:
 
   postgres-events:
     image: postgres:16-alpine
-    container_name: events
+    container_name: postgres-events
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -37,7 +37,7 @@ services:
 
   postgres-bookings:
     image: postgres:16-alpine
-    container_name: bookings
+    container_name: postgres-bookings
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
