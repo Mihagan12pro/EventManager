@@ -18,9 +18,7 @@ public partial class Program
             cfg.ReadFrom.Configuration(ctx.Configuration)
             .WriteTo.Console(new CompactJsonFormatter()));
 
-        IConfiguration configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .Build();
+        IConfiguration configuration = builder.Configuration;
 
         builder.Services.AddSwaggerGen(options =>
         {

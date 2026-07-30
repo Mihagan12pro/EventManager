@@ -32,14 +32,14 @@ namespace Shared.AspNet.Extensions
                 .WithTracing(tracerProviderBuilder =>
                 {
                     var batchSection = configuration.GetRequiredSection(
-                        "JeagerOptions:BatchExportOptions"
+                        "JaegerOptions:BatchExportOptions"
                     );
 
                     var otlpSection = configuration.GetRequiredSection(
-                        "JeagerOptions:OtlpExporterOptions"
+                        "JaegerOptions:OtlpExporterOptions"
                     );
 
-                    var jeagerOptions = new JeagerOptions
+                    var JaegerOptions = new JaegerOptions
                     {
                         BatchExportOptions = new BatchExportOptions
                         {
@@ -75,10 +75,10 @@ namespace Shared.AspNet.Extensions
                                })
                                 .AddOtlpExporter(options =>
                                 {
-                                    options.Endpoint = jeagerOptions.OtlpExportOptions.EndPointUri;
-                                    options.Protocol = jeagerOptions.OtlpExportOptions.Protocol;
-                                    options.BatchExportProcessorOptions.ScheduledDelayMilliseconds = jeagerOptions.BatchExportOptions.ScheduledDelayMilliseconds;
-                                    options.BatchExportProcessorOptions.ExporterTimeoutMilliseconds = jeagerOptions.BatchExportOptions.ExporterTimeoutMilliseconds;
+                                    options.Endpoint = JaegerOptions.OtlpExportOptions.EndPointUri;
+                                    options.Protocol = JaegerOptions.OtlpExportOptions.Protocol;
+                                    options.BatchExportProcessorOptions.ScheduledDelayMilliseconds = JaegerOptions.BatchExportOptions.ScheduledDelayMilliseconds;
+                                    options.BatchExportProcessorOptions.ExporterTimeoutMilliseconds = JaegerOptions.BatchExportOptions.ExporterTimeoutMilliseconds;
                                 })
                                .AddHttpClientInstrumentation();
             });

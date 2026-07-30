@@ -338,5 +338,5 @@ Features from the sprint 11:
 1. Add some tools for observability
 	-Prometheus collects metricts from each service. This application works on the 9090 port. The web interface for monitoring metrics is avaliable at localhost adress on 9090 port.
 	-Serilog library for structured logging.
-	-Jeager for distributed tracing. All services use a gRPC protocol for sending traces Jeager. The Jeager application uses 4317 port. The web interface for monitoring traces is avaliable at localhost on 16686 port
+	-Jaeger for distributed tracing. All services use a gRPC protocol for sending traces Jaeger. The Jaeger application uses 4317 port. The web interface for monitoring traces is avaliable at localhost on 16686 port
 	-Grafana for metrics visualization. This application is avaliable at localhost adress on 3000 port.

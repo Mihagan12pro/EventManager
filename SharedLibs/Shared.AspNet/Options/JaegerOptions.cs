@@ -1,6 +1,6 @@
 ﻿namespace Shared.AspNet.Options
 {
-    public class JeagerOptions
+    public class JaegerOptions
     {
         public required OtlpExporterOptions OtlpExportOptions { get; set; }
 
