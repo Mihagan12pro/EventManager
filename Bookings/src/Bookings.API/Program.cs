@@ -52,9 +52,15 @@ public partial class Program
         builder.Services.AddTelemetry(configuration, "BookingsService");
 
         builder.Services.AddHandlers();
-        builder.Services.AddInfrastructure(new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .Build());
+       
+        if (builder.Environment.IsEnvironment("Production"))
+        {
+            builder.Services.AddInfrastructure(new ConfigurationBuilder().AddJsonFile("appsettings.Production.json").Build());
+        }
+        else
+        {
+            builder.Services.AddInfrastructure(new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build());
+        }
 
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSharedSecurity();

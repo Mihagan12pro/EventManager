@@ -13,9 +13,7 @@ public partial class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        IConfiguration configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .Build();
+        IConfiguration configuration = builder.Configuration;
 
         builder.Services.AddJwtAuthentication(configuration);
         builder.Services.AddAuthorization();
@@ -38,6 +36,12 @@ public partial class Program
                 options.IncludeXmlComments(file.FullName);
             }
         });
+
+        Console.WriteLine(
+    $"ENV: {builder.Environment.EnvironmentName}");
+
+        Console.WriteLine(
+            $"CONNECTION: {builder.Configuration.GetConnectionString("DefaultConnection")}");
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddValidation();

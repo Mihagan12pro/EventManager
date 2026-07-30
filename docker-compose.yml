@@ -5,10 +5,22 @@ services:
       context: .
       dockerfile: Bookings/src/Bookings.API/Dockerfile
    ports:
-    - "7178:8080"
+    - "7179:8080"
    environment:
     Otlp__Endpoint: http://jaeger:4317 
+    ConnectionStrings__DefaultConnection: "Host=postgres-bookings;Port=5432;Database=bookingsDb;Username=postgres;Password=postgres"
 
+  users-service:
+   container_name: users-service
+   build:
+      context: .
+      dockerfile: Users/src/Users.API/Dockerfile
+   ports:
+    - "5295:8080"
+   environment:
+    Otlp__Endpoint: http://jaeger:4317
+    ASPNETCORE_ENVIRONMENT: Production
+    ConnectionStrings__DefaultConnection: "Host=postgres-users;Port=5432;Database=usersDb;Username=postgres;Password=postgres"
   
 
   postgres-users:
