@@ -2,7 +2,6 @@
 using Bookings.Application.Handlers.Cancel;
 using Bookings.Application.Handlers.Create;
 using Bookings.Application.Handlers.Get;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.AspNet.Utils;
 using Shared.Objects.Interfaces;
