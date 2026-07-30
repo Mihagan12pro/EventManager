@@ -49,6 +49,7 @@ public partial class Program
 
         builder.Services.AddTelemetry(configuration, "BookingsService");
 
+        builder.Services.AddInfrastructure(configuration);
         builder.Services.AddHandlers();
 
         builder.Services.AddHttpContextAccessor();

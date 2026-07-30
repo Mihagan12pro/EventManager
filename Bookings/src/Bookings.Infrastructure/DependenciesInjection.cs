@@ -62,15 +62,15 @@ namespace Bookings.Infrastructure
             services.AddDbContext<BookingsDbContext>((options) =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
-                npgsql =>
-                {
-                    var assemblyName = typeof(BookingsDbContext)
-                       .Assembly
-                       .GetName()
-                       .Name;
+                    npgsql =>
+                    {
+                        var assemblyName = typeof(BookingsDbContext)
+                           .Assembly
+                           .GetName()
+                           .Name;
 
-                    npgsql.MigrationsAssembly(assemblyName);
-                });
+                        npgsql.MigrationsAssembly(assemblyName);
+                    });
             });
 
             services.AddScoped<IBookingRepository, PostgreBookingsRepository>();
