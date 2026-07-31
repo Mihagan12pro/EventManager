@@ -21,7 +21,6 @@ namespace Shared.AspNet.Extensions
             IConfiguration configuration,
             string serviceName)
         {
-
             services.AddOpenTelemetry().WithMetrics(metrics =>
                 {
                     metrics
@@ -31,6 +30,8 @@ namespace Shared.AspNet.Extensions
                 })
                 .WithTracing(tracerProviderBuilder =>
                 {
+                    tracerProviderBuilder.AddConsoleExporter();
+
                     var batchSection = configuration.GetRequiredSection(
                         "JaegerOptions:BatchExportOptions"
                     );
@@ -81,7 +82,7 @@ namespace Shared.AspNet.Extensions
                                     options.BatchExportProcessorOptions.ExporterTimeoutMilliseconds = JaegerOptions.BatchExportOptions.ExporterTimeoutMilliseconds;
                                 })
                                .AddHttpClientInstrumentation();
-            });
+                });
 
             return services;
         }

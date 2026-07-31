@@ -37,12 +37,6 @@ public partial class Program
             }
         });
 
-        Console.WriteLine(
-    $"ENV: {builder.Environment.EnvironmentName}");
-
-        Console.WriteLine(
-            $"CONNECTION: {builder.Configuration.GetConnectionString("DefaultConnection")}");
-
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddValidation();
 

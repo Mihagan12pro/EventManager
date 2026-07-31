@@ -7,7 +7,7 @@ services:
    ports:
     - "7179:8080"
    environment:
-    Otlp__Endpoint: http://jaeger:4317 
+    JaegerOptions__OtlpExporterOptions__EndPoint: http://jaeger:4317
     ASPNETCORE_ENVIRONMENT: Production
     Kafka__BootstrapServers: kafka:9092
     ConnectionStrings__DefaultConnection: "Host=postgres-bookings;Port=5432;Database=bookingsDb;Username=postgres;Password=postgres"
@@ -20,7 +20,7 @@ services:
    ports:
     - "5295:8080"
    environment:
-    Otlp__Endpoint: http://jaeger:4317
+    JaegerOptions__OtlpExporterOptions__EndPoint: http://jaeger:4317
     ASPNETCORE_ENVIRONMENT: Production
     ConnectionStrings__DefaultConnection: "Host=postgres-users;Port=5432;Database=usersDb;Username=postgres;Password=postgres"
   
@@ -32,7 +32,7 @@ services:
     ports:
       - "5243:8080"
     environment:
-      Otlp__Endpoint: http://jaeger:4317
+      JaegerOptions__OtlpExporterOptions__EndPoint: http://jaeger:4317
       ASPNETCORE_ENVIRONMENT: Production
       Kafka__BootstrapServers: kafka:9092
       ConnectionStrings__DefaultConnection: "Host=postgres-events;Port=5432;Database=eventsDb;Username=postgres;Password=postgres"
