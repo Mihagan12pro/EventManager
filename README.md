@@ -342,3 +342,5 @@ Features from the sprint 11:
 	-Grafana for metrics visualization. This application is avaliable at localhost adress on 3300 port.
 
 2. Put services into docker containers. 
+
+3. Create and export first grafana dashboard (user service)
