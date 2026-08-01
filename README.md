@@ -344,40 +344,48 @@ Features from the sprint 11:
 2. Put services into docker containers. 
 
 3. Add Users service dashboard. This dashboard includes 6 panels:
-	- <u>Login dublicates<u/>
-		This panel analyzes the number of exceptions arising from user registrations with
-			duplicate usernames. A high frequency of such exceptions may indicate 
-			a need to review the registration. 
-			A times series chart is used to display metric values. 
+
+<ul>
+
+<li><strong>Login dublicates.</strong>
+	  This panel analyzes the number of exceptions arising from user registrations with
+	  duplicate usernames. A high frequency of such exceptions may indicate
+	  a need to review the registration.
+	  A times series chart is used to display metric values.
+</li>
+
+<li><strong>New users.</strong>
+     This panel analyzes the number of new registered users.
+     A times series chart is used to display metric values. 
+</li>
 	
 
-	- <u>New users</u>
-		This panel analyzes the number of new registered users.
-			A times series chart is used to display metric values. 
+<li><strong>Invalid login attempts.</strong>
+	 This panel analyzes the number of invilid attempts to login. 
+	 A high frequency of  invilid attempts  may indicate hackers 
+	 attack. For example, hacker is trying to steal users account 
+	 via a brute-force password detection.
+	 A times series chart is used to display metric values.
+</li>
 	
-
-	- <u>Invalid login attempts</u>
-		This panel analyzes the number of invilid attempts to login. 
-		A high frequency of  invilid attempts  may indicate hackers 
-		attack. For example, hacker is trying to steal users account 
-		via a brute-force password detection.
-		A times series chart is used to display metric values. 
-	
-
-	- <u>Latency</u>
-	   This panel analyzes the time spent processing requests (also known
-	   as latency).
-	   A times series chart is used to display metric values. 
+<li><strong>Latency.</strong>
+	This panel analyzes the time spent processing requests (also known
+	as latency).
+	A times series chart is used to display metric values. 
+</li>
 	
 	
-	- <u>Throughput</u>
-	  This panel analyzes the number of requests per seconds (RPS).
-	  A times series chart is used to display metric values. 
+<li><strong>Throughput.</strong>
+	This panel analyzes the number of requests per seconds (RPS).
+	A times series chart is used to display metric values. 
+</li>
 
-	-<u> Error Rate</u>
-	  This panel analyzes the number of server errors (also known as
-	  errors 5** with status codes).
-	  A times series chart is used to display metric values. 
+<li><strong>Error Rate.</strong>
+	This panel analyzes the number of server errors (also known as
+	errors 5** with status codes).
+	A times series chart is used to display metric values. 
+</li>
 
-	For using this dashboard import the <u>This text is also bold</u> file
-	into grafana. This file is located at <u>This text is also bold</u>.
+</ul>
+	For using this dashboard import the <strong>This text is also bold</strong> file
+	into grafana. This file is located at <strong>This text is also bold</strong>.
