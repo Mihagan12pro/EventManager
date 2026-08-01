@@ -22,7 +22,7 @@ II. After sprint 9
 
 Features from the sprint2:
 1. The EventsController.All has parameters:
-	```
+	```csharp
 	EventsController.All(
 		[FromQuery] string? title, 
 		[FromQuery] DateTime? from, 
@@ -50,7 +50,7 @@ Features from the sprint2:
 				
 	Example of the response body:
 
-	```
+	```json
 	{
        "statusCode": 404,
        "message": "Event with id = '00000000-0000-0000-0000-000000000000' was not found!"
@@ -88,7 +88,7 @@ Features from the sprint3:
     https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken?view=net-10.0) 
 				
 	Example of the response body:
-	```
+	```json
 	{
       "id": "196dae0b-2673-4e4d-b3c2-99ba915f73e6",
       "message": "Your request is pending!",
@@ -343,4 +343,41 @@ Features from the sprint 11:
 
 2. Put services into docker containers. 
 
-3. Create and export first grafana dashboard (user service)
+3. Add Users service dashboard. This dashboard includes 6 panels:
+	- <u>Login dublicates<u/>
+		This panel analyzes the number of exceptions arising from user registrations with
+			duplicate usernames. A high frequency of such exceptions may indicate 
+			a need to review the registration. 
+			A times series chart is used to display metric values. 
+	
+
+	- <u>New users</u>
+		This panel analyzes the number of new registered users.
+			A times series chart is used to display metric values. 
+	
+
+	- <u>Invalid login attempts</u>
+		This panel analyzes the number of invilid attempts to login. 
+		A high frequency of  invilid attempts  may indicate hackers 
+		attack. For example, hacker is trying to steal users account 
+		via a brute-force password detection.
+		A times series chart is used to display metric values. 
+	
+
+	- <u>Latency</u>
+	   This panel analyzes the time spent processing requests (also known
+	   as latency).
+	   A times series chart is used to display metric values. 
+	
+	
+	- <u>Throughput</u>
+	  This panel analyzes the number of requests per seconds (RPS).
+	  A times series chart is used to display metric values. 
+
+	-<u> Error Rate</u>
+	  This panel analyzes the number of server errors (also known as
+	  errors 5** with status codes).
+	  A times series chart is used to display metric values. 
+
+	For using this dashboard import the <u>This text is also bold</u> file
+	into grafana. This file is located at <u>This text is also bold</u>.
