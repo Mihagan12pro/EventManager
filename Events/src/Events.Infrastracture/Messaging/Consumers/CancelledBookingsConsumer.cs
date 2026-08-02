@@ -10,8 +10,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shared.Failures.Exceptions.WebApi.ClientErrors;
 using Shared.Failures.Exceptions.WebApi.ServerErrors;
+using Shared.Infrastructure.Kafka;
 using Shared.Messaging.Contracts.Bookings;
-using Shared.Objects.Classes.Options;
 using System.Text.Json;
 
 namespace Events.Infrastracture.Messaging.Consumers
@@ -21,13 +21,13 @@ namespace Events.Infrastracture.Messaging.Consumers
         private readonly CacheKeysOptions _cacheKeysOptions;
         private readonly ILogger<CancelledBookingsConsumer> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly KafkaOptions kafkaOptions = new KafkaOptions();
+        private readonly Kafka _kafka;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var config = new ConsumerConfig
             {
-                BootstrapServers = kafkaOptions.BootstrapServers,
+                BootstrapServers = _kafka.BootstrapServers,
                 GroupId = "event-service",
                 AutoOffsetReset = AutoOffsetReset.Earliest,
                 EnableAutoCommit = false
@@ -94,17 +94,20 @@ namespace Events.Infrastracture.Messaging.Consumers
                 }
                 catch (OperationCanceledException ex)
                 {
-                    _logger.LogInformation("Operation cancelled!");
+                    _logger.LogInformation("The operation had been cancelled!");
                 }
             }
         }
 
         public CancelledBookingsConsumer(
-            IOptions<CacheKeysOptions> options,
+            IOptions<Kafka> kafkaOptions,
+            IOptions<CacheKeysOptions> cachreKeysOptions,
             IServiceScopeFactory serviceScopeFactory,
             ILogger<CancelledBookingsConsumer> logger)
         {
-            _cacheKeysOptions = options.Value;
+            _kafka = kafkaOptions.Value;
+
+            _cacheKeysOptions = cachreKeysOptions.Value;
 
             _serviceScopeFactory = serviceScopeFactory;
 

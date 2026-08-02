@@ -5,10 +5,11 @@ using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Shared.Failures.Exceptions.WebApi.ServerErrors;
+using Shared.Infrastructure.Kafka;
 using Shared.Messaging.Contracts.Events;
 using Shared.Objects.Classes.Collections;
-using Shared.Objects.Classes.Options;
 using System.Text.Json;
 
 namespace Bookings.Infrastructure.Messaging.Consumers
@@ -18,13 +19,13 @@ namespace Bookings.Infrastructure.Messaging.Consumers
         private readonly ILogger<DeletedEventsConsumer> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        private readonly KafkaOptions kafkaOptions = new KafkaOptions();
+        private readonly Kafka _kafka;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var config = new ConsumerConfig
             {
-                BootstrapServers = kafkaOptions.BootstrapServers,
+                BootstrapServers = _kafka.BootstrapServers,
                 GroupId = "bookings-service",
                 AutoOffsetReset = AutoOffsetReset.Earliest,
                 EnableAutoCommit = false
@@ -87,18 +88,21 @@ namespace Bookings.Infrastructure.Messaging.Consumers
                 }
                 catch (OperationCanceledException ex)
                 {
-                    _logger.LogInformation("The operation in confirmed consumer has been cancelled!");
+                    _logger.LogInformation("The operation had been cancelled!");
                 }
             }
         }
 
         public DeletedEventsConsumer(
             ILogger<DeletedEventsConsumer> logger,
-            IServiceScopeFactory serviceScopeFactory)
+            IServiceScopeFactory serviceScopeFactory,
+            IOptions<Kafka> kafkaOptions)
         {
             _logger = logger;
 
             _serviceScopeFactory = serviceScopeFactory;
+
+            _kafka = kafkaOptions.Value;
         }
     }
 }

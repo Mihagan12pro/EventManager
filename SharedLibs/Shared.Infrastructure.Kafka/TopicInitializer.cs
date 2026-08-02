@@ -1,16 +1,16 @@
 ﻿using Confluent.Kafka;
 using Confluent.Kafka.Admin;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Shared.Messaging;
 using Shared.Messaging.Contracts.Bookings;
 using Shared.Messaging.Contracts.Events;
-using Shared.Objects.Classes.Options;
 
 namespace Shared.Infrastructure.Kafka
 {
     public class TopicInitializer : IMessagingInitializer
     {
-        private readonly KafkaOptions _kafkaOptions = new KafkaOptions();
+        private readonly Kafka _kafka;
 
         private readonly ILogger<TopicInitializer> _logger;
 
@@ -18,7 +18,7 @@ namespace Shared.Infrastructure.Kafka
         {
             var config = new AdminClientConfig
             {
-                BootstrapServers = _kafkaOptions.BootstrapServers
+                BootstrapServers = _kafka.BootstrapServers
             };
 
             using (var adminClient = new AdminClientBuilder(config).Build())
@@ -86,8 +86,11 @@ namespace Shared.Infrastructure.Kafka
         public Task StopAsync(CancellationToken cancellationToken)
             => Task.CompletedTask;
 
-        public TopicInitializer(ILogger<TopicInitializer> logger)
+        public TopicInitializer(
+            ILogger<TopicInitializer> logger,
+            IOptions<Kafka> kafkaOption)
         {
+            _kafka = kafkaOption.Value;
             _logger = logger;
         }
     }

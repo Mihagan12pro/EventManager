@@ -15,7 +15,9 @@ namespace Events.Infrastracture.Repositories.Events
             Guid eventId,
             CancellationToken token)
         {
-            Event @event = EventEntity.ExtractEvent(await _dbContext.Events.FirstAsync(e => e.Id == eventId, token));
+            Event @event = EventEntity.ExtractEvent(
+                await _dbContext.Events.FirstAsync(e => e.Id == eventId, token)
+            );
 
             return @event;
         }

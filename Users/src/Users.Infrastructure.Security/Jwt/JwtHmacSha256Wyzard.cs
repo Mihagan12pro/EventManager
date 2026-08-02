@@ -1,8 +1,8 @@
-﻿using Microsoft.IdentityModel.JsonWebTokens;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using Shared.Objects.Classes.Options;
+using Shared.Objects.Classes;
 using System.Security.Claims;
-using System.Text;
 using Users.Application.Dtos.Auth;
 using Users.Application.Security.Jwt;
 
@@ -10,7 +10,7 @@ namespace Users.Infrastructure.Security.Jwt
 {
     internal class JwtHmacSha256Wyzard : IJwtWizard
     {
-        private readonly AuthOptions _authOptions;
+        private readonly JwtToken _jwt;
 
         public string Create(CreateTokenDto createTokenDto)
         {
@@ -18,13 +18,13 @@ namespace Users.Infrastructure.Security.Jwt
             {
                 [JwtRegisteredClaimNames.Jti] = Guid.NewGuid().ToString(),
 
-                [JwtRegisteredClaimNames.Aud] = _authOptions.Audiences
+                [JwtRegisteredClaimNames.Aud] = _jwt.Audiences
             };
 
-            var key = new SymmetricSecurityKey(_authOptions.IssuerSigningKey);
+            var key = new SymmetricSecurityKey(_jwt.IssuerSigningKey);
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            int minutes = int.Parse(_authOptions.ExpiredMinutes);
+            int minutes = int.Parse(_jwt.ExpiredMinutes);
 
             var descriptor = new SecurityTokenDescriptor
             {
@@ -35,7 +35,7 @@ namespace Users.Infrastructure.Security.Jwt
                     new Claim("role", createTokenDto.Role.ToString())
                 }),
 
-                Issuer = _authOptions.Issuer,
+                Issuer = _jwt.Issuer,
                 Expires = DateTime.UtcNow.AddMinutes(minutes),
                 Claims = claims,
                 SigningCredentials = creds,
@@ -46,9 +46,9 @@ namespace Users.Infrastructure.Security.Jwt
             return tokenString;
         }
 
-        public JwtHmacSha256Wyzard()
+        public JwtHmacSha256Wyzard(IOptions<Shared.Objects.Classes.JwtToken> authOptions)
         {
-            _authOptions = new AuthOptions();
+            _jwt = authOptions.Value;
         }
     }
 }

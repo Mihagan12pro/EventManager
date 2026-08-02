@@ -16,6 +16,10 @@ namespace Bookings.Infrastructure
             this IServiceCollection services, 
             IConfiguration configuration)
         {
+            services.Configure<Kafka>(
+                configuration.GetRequiredSection("KafkaOptions")
+            );
+
             services.AddHostedServices();
 
             services.AddPublishers();
@@ -53,9 +57,20 @@ namespace Bookings.Infrastructure
             this IServiceCollection services, 
             IConfiguration configuration)
         {
+            var assembly = typeof(BookingsDbContext).Assembly;
+
             services.AddDbContext<BookingsDbContext>((options) =>
             {
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
+                    npgsql =>
+                    {
+                        var assemblyName = typeof(BookingsDbContext)
+                           .Assembly
+                           .GetName()
+                           .Name;
+
+                        npgsql.MigrationsAssembly(assemblyName);
+                    });
             });
 
             services.AddScoped<IBookingRepository, PostgreBookingsRepository>();

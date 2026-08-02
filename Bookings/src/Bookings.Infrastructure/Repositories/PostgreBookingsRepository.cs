@@ -2,6 +2,7 @@
 using Bookings.Domain;
 using Bookings.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Shared.Objects.Classes.Collections;
 
 namespace Bookings.Infrastructure.Repositories
@@ -9,6 +10,8 @@ namespace Bookings.Infrastructure.Repositories
     internal class PostgreBookingsRepository : IBookingRepository
     {
         private readonly BookingsDbContext _dbContext;
+
+        private readonly ILogger<PostgreBookingsRepository> _logger;
 
         public async Task<Guid> CreateAsync(
             Booking booking,
@@ -41,10 +44,18 @@ namespace Bookings.Infrastructure.Repositories
             CancellationToken cancellationToken)
         {
             Booking booking = await _dbContext.Bookings.FirstAsync(b => b.Id == id, cancellationToken);
+            var oldStatus = booking.Status;
             booking.ProcessedAt = processedAt;
             booking.Status = status;
 
             await _dbContext.SaveChangesAsync(cancellationToken);
+
+            _logger.LogInformation(
+                "The status of the booking with id = {id} has changed from '{oldStatus}' to '{status}'",
+                booking.Id,
+                oldStatus, 
+                status
+            );
         }
 
         public async Task<Booking> GetByIdAsync(
@@ -57,9 +68,11 @@ namespace Bookings.Infrastructure.Repositories
         }
 
         public PostgreBookingsRepository(
-            BookingsDbContext dbContext)
+            BookingsDbContext dbContext,
+            ILogger<PostgreBookingsRepository> logger) 
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
     }
 }

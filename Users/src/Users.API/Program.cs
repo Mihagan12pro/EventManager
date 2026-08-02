@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Formatting.Compact;
 using Shared.AspNet.Extensions;
 using Users.API.Api;
 using Users.Application;
@@ -11,14 +13,18 @@ public partial class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddJwtAuthentication();
+        IConfiguration configuration = builder.Configuration;
+
+        builder.Services.AddJwtAuthentication(configuration);
         builder.Services.AddAuthorization();
 
-        builder.Host.ConfigureLogging(opt =>
-        {
-            opt.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Error);
-            opt.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
-        });
+        builder.Services.AddTelemetry(configuration, "UsersService");
+
+        builder.Host.UseSerilog((ctx, cfg) =>
+            cfg.ReadFrom.Configuration(ctx.Configuration)
+            .WriteTo.Console(new CompactJsonFormatter()));
+
+
 
         builder.Services.AddSwaggerGen(options =>
         {
@@ -35,13 +41,22 @@ public partial class Program
         builder.Services.AddValidation();
 
         builder.Services.AddAuthServises();
-        builder.Services.AddSecurity();
+        builder.Services.AddSecurity(configuration);
         builder.Services.AddRepositories();
-        builder.Services.AddDbContext(new ConfigurationBuilder()
-                        .AddJsonFile("appsettings.json")
-                        .Build());
+        builder.Services.AddDbContext(configuration);
 
         var app = builder.Build();
+
+        app.UseSwaggerForDebugging();
+        app.UseCustomHttpsRedirection();
+        app.UseRouting();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.UseCustomMiddleware();
+
+        app.AddApi();
+
+        app.UseTelemetry();
 
         using (var scope = app.Services.CreateScope())
         {
@@ -49,15 +64,6 @@ public partial class Program
 
             db.Database.Migrate();
         }
-
-        app.UseSwaggerForDebugging();
-        app.UseHttpsRedirection();
-        app.UseRouting();
-        app.UseAuthentication();
-        app.UseAuthorization();
-        app.UseCustomMiddleware();
-
-        app.AddAuthEndPoints();
 
         app.Run();
     }

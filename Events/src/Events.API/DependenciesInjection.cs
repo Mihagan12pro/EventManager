@@ -17,7 +17,7 @@ namespace Events.API
             await services.AddInfrastructure(configuration);
 
             services.AddWebAbstractions();
-            services.AddAuthorizationAuthentification();
+            services.AddAuthorizationAuthentification(configuration);
             services.AddMinimalApi();
 
             services.AddSwagger();

@@ -1,7 +1,46 @@
 services:
+  bookings-service:
+   container_name: bookings-service
+   build:
+      context: .
+      dockerfile: Bookings/src/Bookings.API/Dockerfile
+   ports:
+    - "7179:8080"
+   environment:
+    JaegerOptions__OtlpExporterOptions__EndPoint: http://jaeger:4317
+    ASPNETCORE_ENVIRONMENT: Production
+    Kafka__BootstrapServers: kafka:9092
+    ConnectionStrings__DefaultConnection: "Host=postgres-bookings;Port=5432;Database=bookingsDb;Username=postgres;Password=postgres"
+
+  users-service:
+   container_name: users-service
+   build:
+      context: .
+      dockerfile: Users/src/Users.API/Dockerfile
+   ports:
+    - "5295:8080"
+   environment:
+    JaegerOptions__OtlpExporterOptions__EndPoint: http://jaeger:4317
+    ASPNETCORE_ENVIRONMENT: Production
+    ConnectionStrings__DefaultConnection: "Host=postgres-users;Port=5432;Database=usersDb;Username=postgres;Password=postgres"
+  
+  events-service:
+    container_name: events-service
+    build:
+      context: .
+      dockerfile: Events/src/Events.API/Dockerfile
+    ports:
+      - "5243:8080"
+    environment:
+      JaegerOptions__OtlpExporterOptions__EndPoint: http://jaeger:4317
+      ASPNETCORE_ENVIRONMENT: Production
+      Kafka__BootstrapServers: kafka:9092
+      ConnectionStrings__DefaultConnection: "Host=postgres-events;Port=5432;Database=eventsDb;Username=postgres;Password=postgres"
+
+
   postgres-users:
     image: postgres:16-alpine
-    container_name: users
+    container_name: postgres-users
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -19,7 +58,7 @@ services:
 
   postgres-events:
     image: postgres:16-alpine
-    container_name: events
+    container_name: postgres-events
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -37,7 +76,7 @@ services:
 
   postgres-bookings:
     image: postgres:16-alpine
-    container_name: bookings
+    container_name: postgres-bookings
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -52,6 +91,15 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.56
+    container_name: jaeger
+    ports:
+      - "16686:16686"   
+      - "4317:4317"     
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
 
   pgadmin:
     image: dpage/pgadmin4
@@ -72,9 +120,27 @@ services:
       - postgres-events
       - postgres-bookings
 
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:10.4.2
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+
   redis:
     image: redis:7.2-alpine
-    container_name: eventapi-redis
+    container_name: redis
     ports:
       - "6379:6379"
     healthcheck:
@@ -88,16 +154,25 @@ services:
     volumes:
       - kafka_data:/var/lib/kafka/data
     ports:
-      - "9092:9092"
+      - "29092:29092"
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://127.0.0.1:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:29092
+      
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+        
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      
       CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk 
 
 volumes:
@@ -106,3 +181,4 @@ volumes:
   pg_bookings_data:
   pgadmin_data:
   kafka_data:
+  grafana-data: 

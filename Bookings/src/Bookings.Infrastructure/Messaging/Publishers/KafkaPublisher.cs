@@ -1,15 +1,16 @@
 ﻿using Confluent.Kafka;
 using Shared.Messaging.Contracts.Bookings;
-using Shared.Objects.Classes.Options;
 using Bookings.Application.Publishers;
 using System.Text.Json;
+using Shared.Infrastructure.Kafka;
+using Microsoft.Extensions.Options;
 
 namespace Bookings.Infrastructure.Messaging.Publishers
 {
     internal class KafkaPublisher : IPublisher
     {
         private readonly IProducer<string, string> _producer;
-        private readonly KafkaOptions _kafkaOptions = new KafkaOptions();
+        private readonly Kafka _kafka;
 
         public async Task ProduceAsync(
             PendingBooking pendingBooking, 
@@ -39,11 +40,13 @@ namespace Bookings.Infrastructure.Messaging.Publishers
             await _producer.ProduceAsync(nameof(CancelledBooking), message, cancellationToken);
         }
 
-        public KafkaPublisher()
+        public KafkaPublisher(IOptions<Kafka> kafkaOptions)
         {
+            _kafka = kafkaOptions.Value;
+
             var config = new ProducerConfig
             {
-                BootstrapServers = _kafkaOptions.BootstrapServers
+                BootstrapServers = _kafka.BootstrapServers
             };
 
             _producer = new ProducerBuilder<string, string>(config).Build();

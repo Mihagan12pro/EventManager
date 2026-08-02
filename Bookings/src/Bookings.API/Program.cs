@@ -3,6 +3,8 @@ using Bookings.Application;
 using Bookings.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
+using Serilog;
+using Serilog.Formatting.Compact;
 using Shared.AspNet.Extensions;
 using Shared.Infrastructure.Security;
 
@@ -12,12 +14,11 @@ public partial class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Host.ConfigureLogging(opt =>
-        {
-            opt.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Error);
-            opt.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
-        });
+        builder.Host.UseSerilog((ctx, cfg) =>
+            cfg.ReadFrom.Configuration(ctx.Configuration)
+            .WriteTo.Console(new CompactJsonFormatter()));
 
+        IConfiguration configuration = builder.Configuration;
 
         builder.Services.AddSwaggerGen(options =>
         {
@@ -46,15 +47,15 @@ public partial class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddValidation();
 
+        builder.Services.AddTelemetry(configuration, "BookingsService");
+
+        builder.Services.AddInfrastructure(configuration);
         builder.Services.AddHandlers();
-        builder.Services.AddInfrastructure(new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .Build());
 
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSharedSecurity();
 
-        builder.Services.AddJwtAuthentication();
+        builder.Services.AddJwtAuthentication(configuration);
         builder.Services.AddAuthorization();
 
         var app = builder.Build();
@@ -67,7 +68,7 @@ public partial class Program
         }
 
         app.UseSwaggerForDebugging();
-        app.UseHttpsRedirection();
+        app.UseCustomHttpsRedirection();
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
@@ -75,6 +76,7 @@ public partial class Program
         app.UseCustomMiddleware();
 
         app.AddApi();
+        app.UseTelemetry();
 
         app.Run();
     }

@@ -6,5 +6,8 @@ namespace Shared.Failures.Errors.Factories
     {
         public static HttpErrorWorkbench InternalServerErrorWorkbench
            => new HttpErrorWorkbench(HttpStatusCode.InternalServerError);
+
+        public static HttpErrorWorkbench ServiceUnavailableWorkbench
+           => new HttpErrorWorkbench(HttpStatusCode.ServiceUnavailable);
     }
 }

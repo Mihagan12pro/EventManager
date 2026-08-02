@@ -1,8 +1,10 @@
+using Events.API;
 using Events.API.Api;
-using Shared.AspNet.Extensions;
 using Events.Infrastracture;
 using Microsoft.EntityFrameworkCore;
-using Events.API;
+using Serilog;
+using Serilog.Formatting.Compact;
+using Shared.AspNet.Extensions;
 
 public partial class Program
 {
@@ -10,20 +12,21 @@ public partial class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Host.ConfigureLogging(opt =>
-        {
-            opt.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Error);
-            opt.AddFilter("Microsoft.EntityFrameworkCore", LogLevel.Error);
-        });
+        IConfiguration configuration = builder.Configuration;
 
-        await builder.Services.AddServices(new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.json")
-                    .Build());
+        builder.Services.AddTelemetry(configuration, "EventsService");
+
+        builder.Host.UseSerilog((ctx, cfg) =>
+            cfg.ReadFrom.Configuration(ctx.Configuration)
+            .WriteTo.Console(new CompactJsonFormatter()));
+
+
+        await builder.Services.AddServices(configuration);
 
         var app = builder.Build();
 
         app.UseSwaggerForDebugging();
-        app.UseHttpsRedirection();
+        app.UseCustomHttpsRedirection();
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
@@ -38,6 +41,7 @@ public partial class Program
         app.UseCustomMiddleware();
 
         app.AddApi();
+        app.UseTelemetry();
 
         app.Run();
     }

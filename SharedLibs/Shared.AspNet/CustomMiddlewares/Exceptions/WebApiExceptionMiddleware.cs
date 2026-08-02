@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Shared.Failures.Errors.Factories;
 using Shared.Failures.Exceptions.WebApi;
-using System.Text.Json;
+using Shared.Failures.Exceptions.WebApi.ClientErrors;
 using HttpError = Shared.Failures.HttpError;
 
 namespace Shared.AspNet.CustomMiddlewares.Exceptions
@@ -17,40 +17,75 @@ namespace Shared.AspNet.CustomMiddlewares.Exceptions
             {
                 await next(httpContext);
             }
-            catch (WebApiException ex)
+            catch(UniqueConstraitException ex)
             {
-                LogError(ex, httpContext);
+                LogWarning(ex, httpContext);
 
                 await ModifyResponse(httpContext, ex.Error);
             }
-            catch (ArgumentNullException ex)
+            catch (WebApiException ex)
+                when (ex is UniqueConstraitException
+                    || ex is NotFoundException
+                        || ex is ForbiddenException)
             {
-                LogError(ex, httpContext);
+                LogWarning(ex, httpContext);
 
-                await ModifyResponse(httpContext, ClientErrorsFactory.NotFoundWorkbench.Craft("Not found!"));
+                await ModifyResponse(httpContext, ex.Error);
             }
-            catch (InvalidOperationException ex)
+            catch (WebApiException ex)
+                when (ex is BadRequestException)
             {
-                LogError(ex, httpContext);
+                LogInformation(ex, httpContext);
 
-                await ModifyResponse(httpContext, ClientErrorsFactory.NotFoundWorkbench.Craft("Not found!"));
+                await ModifyResponse(httpContext, ex.Error);
             }
             catch (Exception ex)
             {
-                LogError(ex, httpContext);
+                LogCritical(ex, httpContext);
 
                 await ModifyResponse(httpContext, ServerErrorsFactory.InternalServerErrorWorkbench.Craft("Internal server error!"));
             }
         }
 
+        private void LogInformation(Exception ex, HttpContext httpContext)
+        {
+            _logger.LogInformation(
+                "Unhandled exception: {message}. Method={Method}, Path={Path}, RequestId={RequestId}",
+                ex.Message,
+                httpContext.Request.Method,
+                httpContext.Request.Path,
+                httpContext.Request.Headers["x-request-id"],
+                httpContext.TraceIdentifier);
+        }
+
+        private void LogWarning(Exception ex, HttpContext httpContext)
+        {
+            _logger.LogWarning(
+               "Unhandled exception: {message}. Method={Method}, Path={Path}, TraceId={TraceId}",
+               ex.Message,
+               httpContext.Request.Method,
+               httpContext.Request.Path,
+               httpContext.TraceIdentifier);
+        }
+
         private void LogError(Exception ex, HttpContext httpContext)
         {
             _logger.LogError(
-                ex,
-                "Unhandled exception. Method={Method}, Path={Path}, RequestId={RequestId}",
+                "Unhandled exception: {message}. Method={Method}, Path={Path}, TraceId={TraceId}",
+                ex.Message,
                 httpContext.Request.Method,
                 httpContext.Request.Path,
-                httpContext.Request.Headers["x-request-id"]);
+                httpContext.TraceIdentifier);
+        }
+
+        private void LogCritical(Exception ex, HttpContext httpContext)
+        {
+            _logger.LogCritical(
+                ex,
+                "Unhandled exception. Method={Method}, Path={Path}, TraceId={TraceId}",
+                httpContext.Request.Method,
+                httpContext.Request.Path,
+                httpContext.TraceIdentifier);
         }
 
         private async Task ModifyResponse(HttpContext httpContext, HttpError error)

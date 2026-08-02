@@ -246,6 +246,7 @@ _pkginfo.txt
 !?*.[Cc]ache/
 
 # Others
+.idea/
 ClientBin/
 ~$*
 *~
@@ -416,3 +417,9 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+#Dynamic-linked livraries
+*.dll
+
+#Publish
+published/

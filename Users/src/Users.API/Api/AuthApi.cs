@@ -6,7 +6,7 @@ namespace Users.API.Api
 {
     public static class AuthApi
     {
-        public static WebApplication AddAuthEndPoints(this WebApplication app)
+        public static WebApplication AddApi(this WebApplication app)
         {
             var apiGroup = app.MapGroup("api/auth");
             apiGroup.MapPost("/login", async (

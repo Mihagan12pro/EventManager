@@ -2,13 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Shared.Failures.Exceptions.WebApi.ClientErrors;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Shared.Failures.Exceptions.WebApi.ServerErrors;
+using System.Net.Sockets;
 
 namespace Shared.AspNet.CustomMiddlewares.Exceptions
 {
-    public class DbExceptionsMiddleware : CustomMiddleware
+    public class DbExceptionsToWebApiMiddleware : CustomMiddleware
     {
         public override async Task InvokeAsync(HttpContext context)
         {
@@ -19,6 +18,11 @@ namespace Shared.AspNet.CustomMiddlewares.Exceptions
             catch (DbUpdateException ex)
             {
                 await HandleDbUpdateException(ex, context);
+            }
+            catch (NpgsqlException ex)
+                when (ex.InnerException.GetType() == typeof(SocketException))
+            {
+                throw new ServiceUnavailableException(ex.Message);
             }
         }
 
@@ -33,12 +37,12 @@ namespace Shared.AspNet.CustomMiddlewares.Exceptions
                 switch (npgSqlEx.SqlState)
                 {
                     case PostgresErrorCodes.UniqueViolation:
-                        throw new ConflictException("Unique constrait violation!");
+                        throw new ConflictException(npgSqlEx.Message);
                 }
             }
         }
 
-        public DbExceptionsMiddleware(RequestDelegate next) : base(next)
+        public DbExceptionsToWebApiMiddleware(RequestDelegate next) : base(next)
         {
         }
     }

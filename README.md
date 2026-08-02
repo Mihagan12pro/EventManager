@@ -15,20 +15,21 @@ II. After sprint 9
 	1. Open the projects's root folder (e.g. C:\EventManager) in terminal or cmd (on Windows)
 	2. Navigate to the Users folder.
 	3. Navigate to the Users.API folder.
-	4. Enter the command " dotnet run --launch-profile https" Press ENTER
+	4. Enter the command "dotnet run --launch-profile https" Press ENTER
 	5. Have fun with the Users microservice! 
 
 
 
 Features from the sprint2:
 1. The EventsController.All has parameters:
-
+	```csharp
 	EventsController.All(
 		[FromQuery] string? title, 
 		[FromQuery] DateTime? from, 
 		[FromQuery] DateTime? to, 
 		[FromQuery] int page = 1,
-		[FromQuery] int pageSize = 10) 
+		[FromQuery] int pageSize = 10)
+	```
 
 	More about EventsController.All new parameters. 
 	"title", "from" and "to" optional filers. In other words, these parameters can be null.
@@ -49,10 +50,12 @@ Features from the sprint2:
 				
 	Example of the response body:
 
+	```json
 	{
        "statusCode": 404,
        "message": "Event with id = '00000000-0000-0000-0000-000000000000' was not found!"
     }
+	```
 
 	Fields of the response:
 	1. statusCode - contains http status code of the response (In this example 404 or not found)
@@ -85,11 +88,13 @@ Features from the sprint3:
     https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken?view=net-10.0) 
 				
 	Example of the response body:
+	```json
 	{
       "id": "196dae0b-2673-4e4d-b3c2-99ba915f73e6",
       "message": "Your request is pending!",
       "url": "https://localhost:7199/bookings/196dae0b-2673-4e4d-b3c2-99ba915f73e6"
     }
+	```
 	
 	One important moment: status code is 202 (Accepted)
 
@@ -204,38 +209,41 @@ Features from the sprint 9:
 	   1. Tables for storing domain entities (the Events table)
 	   2. Tables for storing Kafka messages (InboxPendingMessages, InboxCancelledMessages and OutboxConfirmedBookingsMessages). This enables the implementation of the Inbox and Outbox patterns.
 	   The file and folder structure of this microservice is as follows:
-	   Events/
-            ├─ Events.API/
-            │  ├─ Connected Services/
-            │  ├─ Properties/
-            │  ├─ Api/
-            │  ├─ Contracts/
-            │  ├─ Validators/
-            │  ├─ appsettings.json
-            │  └─ Program.cs
-            ├─ Events.Application/
-            │  ├─ Dtos/
-            │  ├─ Handlers/
-            │  ├─ Repositories/
-            │  ├─ DependenciesInjection.cs
-            │  └─ IPublisher.cs
-            ├─ Events.Domain/
-            │  ├─ Exceptions/
-            │  ├─ ValueObjects/
-            │  └─ EventEntity.cs
-            └─ Events.Infrastructure/
-               ├─ Configurations/
-               ├─ Messaging/
-               ├─ Migrations/
-               ├─ Repositories/
-               ├─ DependenciesInjection.cs
-               ├─ EventsDbContext.cs
-               └─ EventsDesignFactory.cs
+	  ```
+		Events/
+		├─ Events.API/
+		│  ├─ Connected Services/
+		│  ├─ Properties/
+		│  ├─ Api/
+		│  ├─ Contracts/
+		│  ├─ Validators/
+		│  ├─ appsettings.json
+		│  └─ Program.cs
+		├─ Events.Application/
+		│  ├─ Dtos/
+		│  ├─ Handlers/
+		│  ├─ Repositories/
+		│  ├─ DependenciesInjection.cs
+		│  └─ IPublisher.cs
+		├─ Events.Domain/
+		│  ├─ Exceptions/
+		│  ├─ ValueObjects/
+		│  └─ EventEntity.cs
+		└─ Events.Infrastructure/
+		   ├─ Configurations/
+		   ├─ Messaging/
+		   ├─ Migrations/
+		   ├─ Repositories/
+		   ├─ DependenciesInjection.cs
+		   ├─ EventsDbContext.cs
+		   └─ EventsDesignFactory.cs
+	```
 
 	b. Users
 	   This service handles authorization and aythentification. 
 	   The service's database stores user data.
 	   The file and folder structure of this microservice is as follows:
+	```
 	   Users/
            ├─ Users.API/
            │  ├─ Connected Services/
@@ -265,11 +273,13 @@ Features from the sprint 9:
            ├─ Jwt/
            ├─ DependenciesInjection.cs
            └─ PasswordHasherSHA256.cs
+	```
 	
 	- Bookings
 		The service provides basic CRUD operations for the bookings.
 		The service's database stores bookings. Bookings has 4 statuses: Pending, Confirmed, Cancelled and Rejected.
 		The file and folder structure of this microservice is as follows:
+	```
 		Bookings/
             ├─ Bookings.API/
             │  ├─ Connected Services/
@@ -294,6 +304,7 @@ Features from the sprint 9:
                ├─ BookingsDbContext.cs
                ├─ BookingsDesignFactory.cs
                └─ DependenciesInjection.cs
+	```
 	
 2. Each microservice has its own database and migrations. All databases are run in a Docker container.
 
@@ -322,3 +333,59 @@ Features from the sprint 10:
 
 7. Modified the docker-compose.yml file (added a Redis container).
 
+
+Features from the sprint 11:
+1. Add some tools for observability
+	-Prometheus collects metricts from each service. This application works on the 9090 port. The web interface for monitoring metrics is avaliable at localhost adress on 9090 port.
+	-Serilog library for structured logging.
+	-Jaeger for distributed tracing. All services use a gRPC protocol for sending traces Jaeger. The Jaeger application uses 4317 port. The web interface for monitoring traces is avaliable at localhost on 16686 port
+	-Grafana for metrics visualization. This application is avaliable at localhost adress on 3300 port.
+
+2. Put services into docker containers. 
+
+3. Add Users service dashboard. This dashboard includes 6 panels:
+
+<ul>
+
+<li><strong>Login dublicates.</strong>
+	  This panel analyzes the number of exceptions arising from user registrations with
+	  duplicate usernames. A high frequency of such exceptions may indicate
+	  a need to review the registration.
+	  A times series chart is used to display metric values.
+</li>
+
+<li><strong>New users.</strong>
+     This panel analyzes the number of new registered users.
+     A times series chart is used to display metric values. 
+</li>
+	
+
+<li><strong>Invalid login attempts.</strong>
+	 This panel analyzes the number of invilid attempts to login. 
+	 A high frequency of  invilid attempts  may indicate hackers 
+	 attack. For example, hacker is trying to steal users account 
+	 via a brute-force password detection.
+	 A times series chart is used to display metric values.
+</li>
+	
+<li><strong>Latency.</strong>
+	This panel analyzes the time spent processing requests (also known
+	as latency).
+	A times series chart is used to display metric values. 
+</li>
+	
+	
+<li><strong>Throughput.</strong>
+	This panel analyzes the number of requests per seconds (RPS).
+	A times series chart is used to display metric values. 
+</li>
+
+<li><strong>Error Rate.</strong>
+	This panel analyzes the number of server errors (also known as
+	errors 5** with status codes).
+	A times series chart is used to display metric values. 
+</li>
+
+</ul>
+	For using this dashboard import the <strong>This text is also bold</strong> file
+	into grafana. This file is located at <strong>This text is also bold</strong>.

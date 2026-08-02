@@ -4,7 +4,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace Users.Infrastructure.Postgre
 {
-    internal class UsersDesignFactory : IDesignTimeDbContextFactory<UsersDbContext>
+    internal class UsersDesignFactory 
+        : IDesignTimeDbContextFactory<UsersDbContext>
     {
         public UsersDbContext CreateDbContext(string[] args)
         {

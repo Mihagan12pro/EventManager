@@ -1,8 +1,9 @@
 ﻿using Confluent.Kafka;
 using Events.Application;
+using Microsoft.Extensions.Options;
+using Shared.Infrastructure.Kafka;
 using Shared.Messaging.Contracts.Bookings;
 using Shared.Messaging.Contracts.Events;
-using Shared.Objects.Classes.Options;
 using System.Text.Json;
 
 namespace Events.Infrastracture.Messaging.Publishers
@@ -10,7 +11,7 @@ namespace Events.Infrastracture.Messaging.Publishers
     internal class KafkaPublisher : IPublisher
     {
         private readonly IProducer<string, string> _producer;
-        private readonly KafkaOptions _kafkaOptions = new KafkaOptions();
+        private readonly Kafka _kafka;
 
         public async Task PublishConfirmedAsync(
             ConfirmedBooking confirmed, 
@@ -54,11 +55,13 @@ namespace Events.Infrastracture.Messaging.Publishers
             await _producer.ProduceAsync(nameof(DeletedEvent), message, cancellationToken);
         }
 
-        public KafkaPublisher()
+        public KafkaPublisher(IOptions<Kafka> kafkaOptions)
         {
+            _kafka = kafkaOptions.Value;
+
             var config = new ProducerConfig
             {
-                BootstrapServers = _kafkaOptions.BootstrapServers
+                BootstrapServers = _kafka.BootstrapServers
             };
 
             _producer = new ProducerBuilder<string, string>(config).Build();
